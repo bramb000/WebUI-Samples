@@ -1,42 +1,47 @@
 # Web UI Samples
 
-This is a simple frontend practice project using Vue.js, TypeScript, and Storybook.
-It was set up with a "bare basics" approach, using standard CSS for styling.
+A portfolio of micro-interaction experiments built with **Vue.js**, **TypeScript**, and **Tailwind CSS v4**.
+
+Each project is a standalone page showcasing a different UI interaction pattern.
+
+## Micro Interactions
+
+| # | Name | Route | Description |
+|---|------|-------|-------------|
+| 1 | Login Screen | `/login-interaction-1` | Animated avatar that tracks email input and squints during password entry |
 
 ## Getting Started
 
-1.  install dependencies:
-    ```bash
-    npm install
-    ```
-
-2.  Run the development server:
-    ```bash
-    npm run dev
-    ```
-
-3.  Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-## Storybook
-
-This project includes Storybook for component development.
-
-To run Storybook:
-
 ```bash
-npm run storybook
+npm install
+npm run dev
 ```
 
-Open [http://localhost:6006](http://localhost:6006) to view your stories.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## Tech Stack
+
+- **Vue.js 3** — Composition API with `<script setup>`
+- **TypeScript**
+- **Tailwind CSS v4** — via `@tailwindcss/postcss`
+- **Lottie Web** — for vector animations
+- **Vue Router** — with dynamic layout support
+- **Vite** — dev server and bundler
+- **Storybook** — component development (`npm run storybook`)
 
 ## Project Structure
 
--   `src/components`: Reusable Vue components (and their stories).
--   `src/layouts`: Page layout components.
--   `src/views`: Top-level page components (Home, About, Projects).
--   `src/router`: Vue Router configuration.
--   `src/style.css`: Global styles.
+```
+src/
+├── assets/          # Lottie JSON files and static assets
+├── components/      # Micro-interaction pages (LoginAvatar.vue, etc.)
+├── layouts/         # Page layout components (DefaultLayout.vue)
+├── views/           # Portfolio pages (Home, Projects, About)
+├── router/          # Vue Router configuration
+└── style.css        # Tailwind import + global resets
+```
 
-## Notes
+## Architecture
 
--   Tailwind CSS was originally planned but removed to keep the project simple and dependency-free for learning purposes. Styles are written in standard CSS.
+- **Portfolio pages** use `DefaultLayout` with header/footer navigation.
+- **Micro-interaction pages** use a blank layout (`meta: { layout: 'blank' }`) for full creative control.

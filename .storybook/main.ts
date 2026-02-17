@@ -12,6 +12,10 @@ const config: StorybookConfig = {
     "@storybook/addon-docs",
     "@storybook/addon-onboarding"
   ],
-  "framework": "@storybook/vue3-vite"
+  "framework": "@storybook/vue3-vite",
+  viteFinal: async (config) => {
+    config.base = '/WebUI-Samples/storybook/';
+    return config;
+  }
 };
 export default config;
