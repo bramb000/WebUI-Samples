@@ -1,1 +1,0 @@
-import{_ as o,o as s,c as a,a as t}from"./index-CJqdTA5V.js";const n={},c={class:"p-8"};function r(l,e){return s(),a("div",c,[...e[0]||(e[0]=[t("h1",{class:"text-3xl font-bold mb-4"},"About Me",-1),t("p",{class:"mb-4"},"I am learning Web UI development with Vue.js, TypeScript, and Storybook.",-1)])])}const p=o(n,[["render",r]]);export{p as default};
