@@ -1,2 +1,0 @@
-Frame info: IP=0, OP=60, FR=60
---- Layers ---

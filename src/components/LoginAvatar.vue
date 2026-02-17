@@ -71,12 +71,13 @@ import avatarAnimation from '../assets/Avatar.json';
 // IP=0, OP=120
 // Idle: 0-1 (approx)
 // Look Left-Right range: 3-9 (User defined: 3=Left, 6=Center, 9=Right)
-// Close Eyes: 11-13
+// Close Eyes: 11-12, Squint (eyes squeezed): 13
+// Note: playSegments end is exclusive, so we use 14 to include frame 13
 const FRAME_IDLE = 0;
 const FRAME_LOOK_START = 3;
 const FRAME_LOOK_END = 9;
 const FRAME_CLOSE_EYES_START = 11;
-const FRAME_CLOSE_EYES_END = 13;
+const FRAME_SQUINT = 14; // End frame for playSegments (exclusive) to land on frame 13
 
 const lottieContainer = ref<HTMLElement | null>(null);
 const email = ref('');
@@ -127,13 +128,14 @@ const updateHeadPosition = (currentVal: number) => {
   anim.goToAndStop(frame, true);
 };
 
-// --- Password Logic (Close Eyes) ---
+// --- Password Logic (Close Eyes + Squint) ---
 
 const handlePasswordFocus = () => {
   if (!anim) return;
   currentSegment = 'PASSWORD';
-  // Play transition from 11 to 13 (Open -> Close)
-  anim.playSegments([FRAME_CLOSE_EYES_START, FRAME_CLOSE_EYES_END], true);
+  // Play transition from 11 to 13 (Open -> Squint)
+  // End frame is 14 (exclusive) so it plays through and stops on frame 13
+  anim.playSegments([FRAME_CLOSE_EYES_START, FRAME_SQUINT], true);
 };
 
 // --- Blur Logic (Return to Idle) ---
@@ -151,7 +153,7 @@ const handleBlur = () => {
     if (anim) {
       if (currentSegment === 'PASSWORD') {
           // If coming from password, animate EYES OPEN properly (13 -> 11)
-          anim.playSegments([FRAME_CLOSE_EYES_END, FRAME_CLOSE_EYES_START], true);
+          anim.playSegments([FRAME_SQUINT, FRAME_CLOSE_EYES_START], true);
       } else {
           // Normal return to Idle
           currentSegment = 'IDLE';
@@ -163,7 +165,7 @@ const handleBlur = () => {
 };
 
 const handleLogin = () => {
-  console.log('Login attempt (logic disabled)');
+  console.log('Login attempt');
 };
 
 onMounted(() => {
