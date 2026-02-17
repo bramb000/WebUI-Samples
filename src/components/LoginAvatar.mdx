@@ -5,7 +5,7 @@ import * as LoginAvatarStories from './LoginAvatar.stories';
 
 # LoginAvatar
 
-A playful login form featuring a **Lottie-animated bear avatar** that reacts to user input in real-time. Built with Vue 3 + TypeScript + lottie-web.
+A playful login form featuring a **Lottie-animated avatar** that reacts to user input in real-time. Built with Vue 3 + TypeScript + lottie-web.
 
 <Canvas of={LoginAvatarStories.Default} />
 
@@ -15,9 +15,9 @@ A playful login form featuring a **Lottie-animated bear avatar** that reacts to 
 
 The component renders a centred login card containing:
 
-1. A **Lottie animation** (rendered on `<canvas>`) of a bear character
-2. An **email input** — the bear's head tracks how much text you've typed
-3. A **password input** — the bear covers/squints its eyes for privacy
+1. A **Lottie animation** (rendered on `<canvas>`) of a human avatar character
+2. An **email input** — the avatar's head tracks how much text you've typed
+3. A **password input** — the avatar covers/squints its eyes for privacy
 4. A **submit button** and a "forgot password" link
 
 The entire component is **self-contained** — no props, no emitted events. All animation logic is encapsulated internally.
@@ -47,22 +47,76 @@ anim.goToAndStop(FRAME_IDLE, true); // park on frame 0
 
 The animation file contains **120 frames** (`ip=0, op=120`), but only a small subset is used for the micro-interactions:
 
-| Constant | Frame(s) | Visual State |
-|---|---|---|
-| `FRAME_IDLE` | 0 | Neutral / resting pose |
-| `FRAME_LOOK_START` | 3 | Head turned fully **left** |
-| (midpoint) | 6 | Head facing **centre** |
-| `FRAME_LOOK_END` | 9 | Head turned fully **right** |
-| `FRAME_CLOSE_EYES_START` | 11 | Eyes begin to close |
-| (midpoint) | 12 | Eyes fully closed |
-| `FRAME_SQUINT` | 13 (target) | Eyes **squeezed / squinting** |
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Frame(s)</th>
+      <th>Visual State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>FRAME_IDLE</code></td>
+      <td>0</td>
+      <td>Neutral / resting pose</td>
+    </tr>
+    <tr>
+      <td><code>FRAME_LOOK_START</code></td>
+      <td>3</td>
+      <td>Head turned fully <strong>left</strong></td>
+    </tr>
+    <tr>
+      <td>(midpoint)</td>
+      <td>6</td>
+      <td>Head facing <strong>centre</strong></td>
+    </tr>
+    <tr>
+      <td><code>FRAME_LOOK_END</code></td>
+      <td>9</td>
+      <td>Head turned fully <strong>right</strong></td>
+    </tr>
+    <tr>
+      <td><code>FRAME_CLOSE_EYES_START</code></td>
+      <td>11</td>
+      <td>Eyes begin to close</td>
+    </tr>
+    <tr>
+      <td>(midpoint)</td>
+      <td>12</td>
+      <td>Eyes fully closed</td>
+    </tr>
+    <tr>
+      <td><code>FRAME_SQUINT</code></td>
+      <td>13 (target)</td>
+      <td>Eyes <strong>squeezed / squinting</strong></td>
+    </tr>
+  </tbody>
+</table>
 
 ### Two Control Methods
 
-| Method | When Used | Purpose |
-|---|---|---|
-| `goToAndStop(frame, true)` | Email typing, idle reset | Jump instantly to a specific frame |
-| `playSegments([start, end], true)` | Password focus / blur | Animate smoothly between two frames |
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>When Used</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>goToAndStop(frame, true)</code></td>
+      <td>Email typing, idle reset</td>
+      <td>Jump instantly to a specific frame</td>
+    </tr>
+    <tr>
+      <td><code>playSegments([start, end], true)</code></td>
+      <td>Password focus / blur</td>
+      <td>Animate smoothly between two frames</td>
+    </tr>
+  </tbody>
+</table>
 
 > `playSegments` takes an **exclusive** end frame — passing `[11, 14]` plays frames 11 → 13 and stops.
 
@@ -111,10 +165,33 @@ When either field loses focus:
 
 ## Component API
 
-| Property | Value |
-|---|---|
-| **Props** | None |
-| **Events** | None |
-| **Slots** | None |
-| **Dependencies** | `lottie-web`, `Avatar.json` |
-| **Styling** | Tailwind CSS utility classes, self-contained `<style scoped>` |
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Props</strong></td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Events</strong></td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Slots</strong></td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td><strong>Dependencies</strong></td>
+      <td><code>lottie-web</code>, <code>Avatar.json</code></td>
+    </tr>
+    <tr>
+      <td><strong>Styling</strong></td>
+      <td>Tailwind CSS utility classes, self-contained <code>&lt;style scoped&gt;</code></td>
+    </tr>
+  </tbody>
+</table>

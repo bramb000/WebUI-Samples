@@ -3,8 +3,7 @@ import LoginAvatar from './LoginAvatar.vue';
 
 /**
  * The **LoginAvatar** component is a playful login form featuring a Lottie-animated
- * bear avatar that reacts to user input.
- *
+ * avatar that reacts to user input.
  * - When the **email** field is focused, the avatar's head tracks the text length
  *   (looking left → right across frames 3–9).
  * - When the **password** field is focused, the avatar closes and squints its eyes
