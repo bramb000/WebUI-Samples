@@ -1,0 +1,120 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as LoginAvatarStories from './LoginAvatar.stories';
+
+<Meta of={LoginAvatarStories} />
+
+# LoginAvatar
+
+A playful login form featuring a **Lottie-animated bear avatar** that reacts to user input in real-time. Built with Vue 3 + TypeScript + lottie-web.
+
+<Canvas of={LoginAvatarStories.Default} />
+
+---
+
+## Overview
+
+The component renders a centred login card containing:
+
+1. A **Lottie animation** (rendered on `<canvas>`) of a bear character
+2. An **email input** — the bear's head tracks how much text you've typed
+3. A **password input** — the bear covers/squints its eyes for privacy
+4. A **submit button** and a "forgot password" link
+
+The entire component is **self-contained** — no props, no emitted events. All animation logic is encapsulated internally.
+
+---
+
+## Animation Logic
+
+### Lottie Initialisation
+
+The animation is loaded from a bundled JSON file (`Avatar.json`) using `lottie-web`'s `loadAnimation`:
+
+```typescript
+anim = lottie.loadAnimation({
+  container: lottieContainer.value,
+  renderer: 'canvas',   // canvas ensures correct layer/mask rendering
+  loop: false,           // all transitions are driven programmatically
+  autoplay: false,       // starts at idle, awaiting user interaction
+  animationData: avatarAnimation,
+});
+anim.goToAndStop(FRAME_IDLE, true); // park on frame 0
+```
+
+> **Why canvas?** The SVG renderer can misrender complex masks in this particular Lottie file. Canvas produces pixel-perfect results.
+
+### Frame Map
+
+The animation file contains **120 frames** (`ip=0, op=120`), but only a small subset is used for the micro-interactions:
+
+| Constant | Frame(s) | Visual State |
+|---|---|---|
+| `FRAME_IDLE` | 0 | Neutral / resting pose |
+| `FRAME_LOOK_START` | 3 | Head turned fully **left** |
+| (midpoint) | 6 | Head facing **centre** |
+| `FRAME_LOOK_END` | 9 | Head turned fully **right** |
+| `FRAME_CLOSE_EYES_START` | 11 | Eyes begin to close |
+| (midpoint) | 12 | Eyes fully closed |
+| `FRAME_SQUINT` | 13 (target) | Eyes **squeezed / squinting** |
+
+### Two Control Methods
+
+| Method | When Used | Purpose |
+|---|---|---|
+| `goToAndStop(frame, true)` | Email typing, idle reset | Jump instantly to a specific frame |
+| `playSegments([start, end], true)` | Password focus / blur | Animate smoothly between two frames |
+
+> `playSegments` takes an **exclusive** end frame — passing `[11, 14]` plays frames 11 → 13 and stops.
+
+---
+
+## Interaction Behaviour
+
+### Email Focus — Head Tracking
+
+When the email field is focused, the avatar's head position maps linearly to the input text length:
+
+```
+progress = min(inputLength / 44, 1)
+frame    = 3 + (9 - 3) × progress     // result: 3.0 – 9.0
+```
+
+- **0 characters** → frame 3 (looking left)
+- **22 characters** → frame 6 (looking centre)
+- **44+ characters** → frame 9 (looking right)
+
+The magic number **44** approximates the visible character capacity of the 448px-wide input field.
+
+Each keystroke calls `goToAndStop(frame, true)` for an instant, smooth-feeling position update.
+
+### Password Focus — Eye Close + Squint
+
+On password focus, the avatar plays a short segment animation:
+
+```typescript
+anim.playSegments([11, 14], true);
+// 11 → 12 (eyes closing) → 13 (squint) — then stops
+```
+
+This gives a natural "I'm not looking!" effect.
+
+### Blur — Return to Idle
+
+When either field loses focus:
+
+1. A **50ms debounce** checks if focus moved to the *other* input (in which case, do nothing — let the new input's handler take over).
+2. If focus left the form entirely:
+   - From **password**: plays `[14, 11]` (squint → eyes open) before resetting.
+   - From **email**: jumps directly to frame 0 (idle).
+
+---
+
+## Component API
+
+| Property | Value |
+|---|---|
+| **Props** | None |
+| **Events** | None |
+| **Slots** | None |
+| **Dependencies** | `lottie-web`, `Avatar.json` |
+| **Styling** | Tailwind CSS utility classes, self-contained `<style scoped>` |
