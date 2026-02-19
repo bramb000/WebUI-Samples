@@ -12,7 +12,7 @@ import NodeGraphCanvas from './NodeGraphCanvas.vue';
  * - **Theming**: Built-in support for Light and Dark modes.
  */
 const meta = {
-    title: 'Node Graph/NodeGraphCanvas',
+    title: 'Node Graph/Full Canvas',
     component: NodeGraphCanvas,
     argTypes: {
         theme: {

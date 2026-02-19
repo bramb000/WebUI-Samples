@@ -2,9 +2,12 @@
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import type { ExamplesData } from '../../composables/useNodeGraph'
 
-defineProps<{
+const props = withDefaults(defineProps<{
   data: ExamplesData
-}>()
+  theme?: 'light' | 'dark'
+}>(), {
+  theme: 'light'
+})
 
 const emit = defineEmits<{
   (e: 'close'): void
@@ -57,6 +60,7 @@ onUnmounted(() => {
   <Teleport to="body">
     <div
       class="modal-backdrop"
+      :data-theme="theme"
       @click="onBackdropClick"
       role="dialog"
       aria-modal="true"
@@ -168,21 +172,56 @@ onUnmounted(() => {
   </Teleport>
 </template>
 
-<style scoped>
+/* ─── Theme Variables ─── */
+.modal-backdrop[data-theme="light"] {
+  --modal-bg: #FFFFFF;
+  --modal-backdrop: rgba(0, 0, 0, 0.4);
+  --modal-text: #1A1A2E;
+  --modal-sub: rgba(0, 0, 0, 0.6);
+  --visual-bg: rgba(0, 0, 0, 0.05); /* Light grey for syntax area */
+  --node-body: #2C2C2C; /* Match graph nodes (dark bodies) */
+  --node-text: #FFFFFF;
+  --wire-color: #AAAAAA;
+  --btn-close-bg: rgba(0, 0, 0, 0.05);
+  --btn-close-color: rgba(0, 0, 0, 0.5);
+  --btn-close-hover-bg: rgba(0, 0, 0, 0.1);
+  --btn-close-hover-color: #000;
+  --sn-value-border: #9C9A9A;
+  --sn-exec-poly: rgba(255, 255, 255, 0.35); /* Pins on dark nodes */
+}
+
+.modal-backdrop[data-theme="dark"] {
+  --modal-bg: #363636;
+  --modal-backdrop: rgba(0, 0, 0, 0.55);
+  --modal-text: #FFFFFF;
+  --modal-sub: rgba(255, 255, 255, 0.7);
+  --visual-bg: rgba(0, 0, 0, 0.2);
+  --node-body: #262626;
+  --node-text: #FFFFFF;
+  --wire-color: #AAAAAA;
+  --btn-close-bg: rgba(255, 255, 255, 0.08);
+  --btn-close-color: rgba(255, 255, 255, 0.7);
+  --btn-close-hover-bg: rgba(255, 255, 255, 0.15);
+  --btn-close-hover-color: #FFFFFF;
+  --sn-value-border: #9C9A9A;
+  --sn-exec-poly: rgba(255, 255, 255, 0.35);
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: var(--modal-backdrop, rgba(0, 0, 0, 0.55));
+  background: var(--modal-backdrop);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   animation: fadeInBackdrop 0.2s ease;
+  color: var(--modal-text); /* Global text color */
 }
 
 .modal-card {
   position: relative;
-  background: var(--modal-bg, #363636);
+  background: var(--modal-bg);
   border-radius: 5px;
   padding: 24px;
   width: 658px;
@@ -203,17 +242,17 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--btn-close-bg);
   border: none;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--btn-close-color);
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #FFFFFF;
+  background: var(--btn-close-hover-bg);
+  color: var(--btn-close-hover-color);
 }
 
 .modal-close:focus-visible {
@@ -228,14 +267,14 @@ onUnmounted(() => {
 .modal-title {
   font-size: 24px;
   font-weight: 400;
-  color: #FFFFFF;
+  color: var(--modal-text);
   margin: 0;
   line-height: 1.2;
 }
 
 .modal-subtitle {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--modal-sub);
   margin: 6px 0 0;
 }
 
@@ -250,13 +289,13 @@ onUnmounted(() => {
 .modal-section-title {
   font-size: 20px;
   font-weight: 400;
-  color: #FFFFFF;
+  color: var(--modal-text);
   margin: 0 0 10px;
 }
 
 /* ─── Syntax Visual ─── */
 .modal-syntax-visual {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--visual-bg);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -273,6 +312,11 @@ onUnmounted(() => {
   top: 16px;
   left: 16px;
   pointer-events: none;
+}
+/* Wires use stroke=currentColor via CSS or prop? The SVG uses hardcoded #AAA.
+   Let's target path inside SVG or set stroke=current on SVG and use CSS var. */
+.syntax-wires path {
+  stroke: var(--wire-color);
 }
 
 .syntax-node {
@@ -295,7 +339,7 @@ onUnmounted(() => {
 .sn-title {
   display: block;
   font-size: 12px;
-  color: #FFFFFF;
+  color: #FFFFFF; /* Available on both themes (headers are colored) */
   font-weight: 400;
 }
 
@@ -307,7 +351,7 @@ onUnmounted(() => {
 }
 
 .sn-body {
-  background: #262626;
+  background: var(--node-body);
   padding: 8px;
   display: flex;
   align-items: center;
@@ -322,8 +366,8 @@ onUnmounted(() => {
 
 .sn-value {
   font-size: 10px;
-  color: #FFFFFF;
-  border: 1px solid #9C9A9A;
+  color: var(--node-text);
+  border: 1px solid var(--sn-value-border);
   border-radius: 3px;
   padding: 1px 6px;
 }
@@ -332,13 +376,13 @@ onUnmounted(() => {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid #9C9A9A;
+  border: 2px solid var(--sn-value-border);
   flex-shrink: 0;
 }
 
 .sn-dot--filled {
-  background: #FFFFFF;
-  border-color: #FFFFFF;
+  background: var(--node-text);
+  border-color: var(--node-text);
 }
 
 .sn-pin-row {
@@ -357,16 +401,16 @@ onUnmounted(() => {
 
 .sn-label {
   font-size: 10px;
-  color: #FFFFFF;
+  color: var(--node-text);
 }
 
 .sn-exec-row {
-  background: #262626;
-  padding: 6px 8px 2px; /* Pad top/sides, less bottom */
+  background: var(--node-body);
+  padding: 6px 8px 2px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06); /* Match GraphNode separator */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   margin-bottom: 4px;
 }
 
@@ -380,7 +424,7 @@ onUnmounted(() => {
 }
 
 .sn-exec-pin svg polygon {
-  fill: rgba(255, 255, 255, 0.35); /* Match inactive pin color */
+  fill: var(--sn-exec-poly);
 }
 
 /* ─── Notes ─── */
@@ -392,7 +436,7 @@ onUnmounted(() => {
 
 .modal-note {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--modal-sub);
   margin: 0;
   line-height: 1.5;
 }

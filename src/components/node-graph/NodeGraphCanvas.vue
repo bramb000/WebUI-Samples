@@ -390,6 +390,7 @@ onUnmounted(() => {
     <ExamplesModal
       v-if="examplesModalData"
       :data="examplesModalData"
+      :theme="theme"
       @close="closeExamples"
     />
   </div>
