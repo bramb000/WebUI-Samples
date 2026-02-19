@@ -172,6 +172,7 @@ onUnmounted(() => {
   </Teleport>
 </template>
 
+<style scoped>
 /* ─── Theme Variables ─── */
 .modal-backdrop[data-theme="light"] {
   --modal-bg: #FFFFFF;
