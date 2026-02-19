@@ -40,3 +40,4 @@ export default defineConfig({
     }]
   }
 });
+// Trigger HMR update

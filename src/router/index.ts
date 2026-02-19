@@ -22,6 +22,12 @@ const routes = [
         name: 'LoginInteraction1',
         component: () => import('../views/LoginInteraction.vue'),
         meta: { layout: 'blank' }
+    },
+    {
+        path: '/node-graph',
+        name: 'NodeGraph',
+        component: () => import('../views/NodeGraphView.vue'),
+        meta: { layout: 'blank' }
     }
 ]
 

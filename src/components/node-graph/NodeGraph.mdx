@@ -1,0 +1,127 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as NodeGraphStories from './NodeGraph.stories';
+
+<Meta of={NodeGraphStories} />
+
+# NodeGraphCanvas
+
+A **visual node-based editor** for constructing logic flows. Supports data types, execution flow control, and real-time evaluation.
+
+<Canvas of={NodeGraphStories.LightMode} />
+
+---
+
+## Overview
+
+The `NodeGraphCanvas` provides a workspace for users to:
+
+1.  **View Nodes**: Logic blocks like `Integer`, `Add`, and `Subtract`.
+2.  **Connect Pins**: Drag wires between compatible input/output pins.
+3.  **Execute Logic**: Run the graph to see data flow and results.
+4.  **Manage Layout**: Drag nodes to organize, zoom/pan to navigate.
+
+---
+
+## Themes
+
+### Light Mode
+
+Standard appearance with high contrast against a light grey background.
+
+<Canvas of={NodeGraphStories.LightMode} />
+
+### Dark Mode
+
+Optimized for extended usage in low-light environments.
+
+<Canvas of={NodeGraphStories.DarkMode} />
+
+---
+
+## Interaction Guide
+
+### Mouse Controls
+
+<table>
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Gesture</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Pan Canvas</strong></td>
+      <td>Middle Click + Drag</td>
+      <td>Move the viewport</td>
+    </tr>
+    <tr>
+      <td><strong>Zoom</strong></td>
+      <td>Mouse Wheel</td>
+      <td>Zoom in/out (0.25x - 3x)</td>
+    </tr>
+    <tr>
+      <td><strong>Move Node</strong></td>
+      <td>Left Click Header + Drag</td>
+      <td>Reposition node</td>
+    </tr>
+    <tr>
+      <td><strong>Connect</strong></td>
+      <td>Left Click Pin + Drag</td>
+      <td>Create a wire connection</td>
+    </tr>
+    <tr>
+      <td><strong>Disconnect</strong></td>
+      <td>Alt + Click Pin</td>
+      <td>Remove connection</td>
+    </tr>
+  </tbody>
+</table>
+
+### Execution flow
+
+1.  **Data Flow**: Solid grey lines carry values (e.g., Integer to Add).
+2.  **Execution Flow**: Dashed white lines control the order of operations (e.g., Add then Subtract).
+3.  **Run**: Click the "Play" button (top right) to execute the graph.
+4.  **Result**: The final output value is displayed on the last node or in the result overlay.
+
+---
+
+## Accessibility
+
+> The graph is designed to be navigable via keyboard and assistive technologies.
+
+- **Keyboard Navigation**:
+    - `Tab` cycles through interactive elements (nodes, pins, buttons).
+    - `Enter` or `Space` activates buttons and toggles.
+- **Screen Readers**:
+    - Nodes have `aria-label` describing their function.
+    - Result announcements use `aria-live="polite"`.
+- **Reduced Motion**:
+    - Animation speed is respected; disabling animations in OS settings reduces transition effects.
+- **Contrast**:
+    - Both Light and Dark themes meet **WCAG 2.1 AA** contrast ratios for text and UI controls.
+
+---
+
+## Component API
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Props</strong></td>
+      <td><code>theme</code>: <code>'light' | 'dark'</code> (default <code>'light'</code>)</td>
+    </tr>
+    <tr>
+      <td><strong>Events</strong></td>
+      <td>None (State is internal via <code>useNodeGraph</code>)</td>
+    </tr>
+  </tbody>
+</table>
