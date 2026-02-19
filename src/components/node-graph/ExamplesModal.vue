@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import type { ExamplesData } from '../../composables/useNodeGraph'
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   data: ExamplesData
   theme?: 'light' | 'dark'
 }>(), {
