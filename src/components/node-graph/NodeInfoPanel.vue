@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DetailedInfo } from '../../composables/useNodeGraph'
 
-const props = defineProps<{
+defineProps<{
   info: DetailedInfo
 }>()
 

@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref, nextTick } from 'vue'
 import type { ExamplesData } from '../../composables/useNodeGraph'
 
-const props = defineProps<{
+defineProps<{
   data: ExamplesData
 }>()
 
