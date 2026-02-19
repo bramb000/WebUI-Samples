@@ -20,7 +20,7 @@ const routes = [
     {
         path: '/login-interaction-1',
         name: 'LoginInteraction1',
-        component: () => import('../components/LoginAvatar.vue'),
+        component: () => import('../views/LoginInteraction.vue'),
         meta: { layout: 'blank' }
     }
 ]

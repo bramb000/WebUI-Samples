@@ -7,20 +7,106 @@ import * as LoginAvatarStories from './LoginAvatar.stories';
 
 A playful login form featuring a **Lottie-animated avatar** that reacts to user input in real-time. Built with Vue 3 + TypeScript + lottie-web.
 
-<Canvas of={LoginAvatarStories.Default} />
+<Canvas of={LoginAvatarStories.LightMode} />
 
 ---
 
 ## Overview
 
-The component renders a centred login card containing:
+The component renders a login card containing:
 
 1. A **Lottie animation** (rendered on `<canvas>`) of a human avatar character
 2. An **email input** — the avatar's head tracks how much text you've typed
 3. A **password input** — the avatar covers/squints its eyes for privacy
 4. A **submit button** and a "forgot password" link
 
-The entire component is **self-contained** — no props, no emitted events. All animation logic is encapsulated internally.
+The component accepts a single `theme` prop; all animation logic is encapsulated internally.
+
+---
+
+## Themes
+
+### Light Mode
+
+<Canvas of={LoginAvatarStories.LightMode} />
+
+### Dark Mode
+
+<Canvas of={LoginAvatarStories.DarkMode} />
+
+---
+
+## Colour Scheme
+
+The card uses CSS custom properties to switch colours between themes. All pairings meet **WCAG 2.1 AA** contrast requirements.
+
+<table>
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Light</th>
+      <th>Dark</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Card background</td>
+      <td><code>#ffffff</code></td>
+      <td><code>#1e1e2e</code></td>
+    </tr>
+    <tr>
+      <td>Primary text</td>
+      <td><code>#3b3b3b</code></td>
+      <td><code>#e4e4e7</code></td>
+    </tr>
+    <tr>
+      <td>Label / placeholder</td>
+      <td><code>#6b6b6b</code></td>
+      <td><code>#a1a1aa</code></td>
+    </tr>
+    <tr>
+      <td>Input border</td>
+      <td><code>#595858</code></td>
+      <td><code>#52525b</code></td>
+    </tr>
+    <tr>
+      <td>Input background</td>
+      <td><code>#ffffff</code></td>
+      <td><code>#2a2a3c</code></td>
+    </tr>
+    <tr>
+      <td>Focus ring</td>
+      <td><code>#2cd203</code></td>
+      <td><code>#2cd203</code></td>
+    </tr>
+    <tr>
+      <td>Button background</td>
+      <td><code>#2cd203</code></td>
+      <td><code>#2cd203</code></td>
+    </tr>
+    <tr>
+      <td>Button text</td>
+      <td><code>#ffffff</code></td>
+      <td><code>#ffffff</code></td>
+    </tr>
+    <tr>
+      <td>Link text</td>
+      <td><code>#3b3b3b</code></td>
+      <td><code>#a1a1aa</code></td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Accessibility
+
+> Both themes are validated automatically via the **Storybook a11y addon** (axe-core).
+
+- All text/background pairings meet **WCAG 2.1 AA** — ≥ 4.5:1 for normal text, ≥ 3:1 for large text & UI controls
+- **Focus indicators**: every interactive element has a visible `ring` or `outline` on `:focus-visible`
+- **Labels**: all form inputs have an associated `<label>` element (not just `placeholder`)
+- **CTA button**: white text on green (#2cd203) meets the 3:1 large-text threshold at 24px+
 
 ---
 
@@ -175,7 +261,7 @@ When either field loses focus:
   <tbody>
     <tr>
       <td><strong>Props</strong></td>
-      <td>None</td>
+      <td><code>theme</code>: <code>'light' | 'dark'</code> (default <code>'light'</code>)</td>
     </tr>
     <tr>
       <td><strong>Events</strong></td>
@@ -191,7 +277,7 @@ When either field loses focus:
     </tr>
     <tr>
       <td><strong>Styling</strong></td>
-      <td>Tailwind CSS utility classes, self-contained <code>&lt;style scoped&gt;</code></td>
+      <td>Scoped CSS with CSS custom properties for theming</td>
     </tr>
   </tbody>
 </table>

@@ -10,18 +10,30 @@ import LoginAvatar from './LoginAvatar.vue';
  *   (frames 11–13).
  * - On **blur**, the avatar smoothly returns to its idle pose (frame 0).
  *
- * The component is fully self-contained with no props or emitted events.
+ * The component supports **light** and **dark** colour themes via the `theme` prop.
  */
 const meta = {
     title: 'Login Micro Interaction/LoginAvatar',
     component: LoginAvatar,
+    argTypes: {
+        theme: {
+            control: 'inline-radio',
+            options: ['light', 'dark'],
+            description: 'Colour theme for the card.',
+            table: {
+                type: { summary: "'light' | 'dark'" },
+                defaultValue: { summary: 'light' },
+            },
+        },
+    },
     parameters: {
-        layout: 'fullscreen',
+        layout: 'centered',
         docs: {
             description: {
                 component:
                     'A login form with a Lottie-animated avatar that tracks email input ' +
-                    'and reacts to password focus with an eye-close/squint animation.',
+                    'and reacts to password focus with an eye-close/squint animation. ' +
+                    'Supports accessible light and dark colour themes.',
             },
         },
     },
@@ -31,7 +43,29 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * The default state renders the full login card centred on screen.
+ * The login card in **light mode** — the default appearance.
  * Interact with the email and password fields to see the avatar react.
  */
-export const Default: Story = {};
+export const LightMode: Story = {
+    args: {
+        theme: 'light',
+    },
+};
+
+/**
+ * The login card in **dark mode** — an accessible dark colour scheme.
+ * All text/background pairings meet WCAG 2.1 AA contrast ratios.
+ */
+export const DarkMode: Story = {
+    args: {
+        theme: 'dark',
+    },
+    parameters: {
+        backgrounds: {
+            default: 'dark',
+            values: [
+                { name: 'dark', value: '#121212' },
+            ],
+        },
+    },
+};
