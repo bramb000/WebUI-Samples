@@ -7,7 +7,6 @@ import NodeInfoPanel from './NodeInfoPanel.vue'
 const props = defineProps<{
   node: GraphNodeData
   connections: Connection[]
-  isRunning: boolean
 }>()
 
 const emit = defineEmits<{
@@ -77,8 +76,7 @@ const nodeAriaLabel = computed(() => {
     class="graph-node"
     :class="{
       'graph-node--compact': isIntNode,
-      'graph-node--wide': !isIntNode,
-      'graph-node--running': isRunning
+      'graph-node--wide': !isIntNode
     }"
     :style="{
       left: node.position.x + 'px',
@@ -268,12 +266,7 @@ const nodeAriaLabel = computed(() => {
   z-index: 10;
 }
 
-.graph-node--running {
-  box-shadow:
-    0 0 0 2px var(--header-color),
-    0 0 16px color-mix(in srgb, var(--header-color) 30%, transparent),
-    0 4px 12px rgba(0, 0, 0, 0.15);
-}
+
 
 /* ─── Header ─── */
 .node-header {

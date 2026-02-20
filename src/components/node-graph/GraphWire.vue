@@ -7,7 +7,6 @@ import { getPinRelativePos } from '../../composables/useNodeGraph'
 const props = defineProps<{
   connection: Connection
   nodes: GraphNodeData[]
-  isRunning: boolean
 }>()
 
 const emit = defineEmits<{
@@ -97,7 +96,6 @@ function onDisconnect(event: MouseEvent) {
       :stroke="hovered ? 'var(--wire-hover, #999)' : 'var(--wire-color, #AAA)'"
       :stroke-width="hovered ? 3 : 2"
       stroke-linecap="round"
-      :class="{ running: isRunning }"
       :style="{ transition: 'stroke-width 0.15s ease, stroke 0.15s ease' }"
     />
 
@@ -120,19 +118,9 @@ function onDisconnect(event: MouseEvent) {
 </template>
 
 <style scoped>
-.graph-wire path.running {
-  stroke-dasharray: 8 4;
-  animation: flowDash 0.6s linear infinite;
-}
-
 /* Exec wires are slightly thinner and dashed when not running */
 .graph-wire--exec path:not(.running) {
   stroke-dasharray: 6 4;
-}
-
-@keyframes flowDash {
-  from { stroke-dashoffset: 12; }
-  to { stroke-dashoffset: 0; }
 }
 
 .disconnect-btn {
@@ -145,10 +133,6 @@ function onDisconnect(event: MouseEvent) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .graph-wire path.running {
-    animation: none;
-    stroke-dasharray: none;
-  }
   .disconnect-btn {
     animation: none;
   }

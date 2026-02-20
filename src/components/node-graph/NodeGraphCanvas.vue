@@ -11,9 +11,6 @@ const {
   connections,
   dragState,
   wireDrag,
-  executionResult,
-  isRunning,
-  executionError,
   startNodeDrag,
   onNodeDrag,
   endNodeDrag,
@@ -22,7 +19,6 @@ const {
   endWireDrag,
   removeConnection,
   updateNodeValue,
-  evaluate,
 } = useNodeGraph()
 
 // ─── Theme ─────────────────────────────────────────────────────────
@@ -194,12 +190,10 @@ function handlePinDrop(nodeId: string, pinId: string) {
 
 function handleDisconnect(connectionId: string) {
   removeConnection(connectionId)
-  executionResult.value = null
 }
 
 function handleUpdateValue(nodeId: string, value: number) {
   updateNodeValue(nodeId, value)
-  executionResult.value = null
 }
 
 // ─── Wire drag preview path ────────────────────────────────────────
@@ -229,9 +223,7 @@ const dragWirePath = computed(() => {
 
 // ─── Run execution ─────────────────────────────────────────────────
 
-function runGraph() {
-  evaluate()
-}
+
 
 // ─── Global listeners ──────────────────────────────────────────────
 
@@ -274,24 +266,14 @@ onUnmounted(() => {
 
     <!-- Toolbar -->
     <div class="canvas-toolbar" role="toolbar" aria-label="Node graph controls">
-      <div class="toolbar-left">
-        <div class="toolbar-title">
-          <svg width="20" height="20" viewBox="0 0 20 20" class="toolbar-icon" aria-hidden="true">
-            <rect x="2" y="2" width="6" height="6" rx="1" fill="#4F8EEE"/>
-            <rect x="12" y="2" width="6" height="6" rx="1" fill="#EE4F94"/>
-            <rect x="2" y="12" width="6" height="6" rx="1" fill="#EE4F94"/>
-            <rect x="12" y="12" width="6" height="6" rx="1" fill="#4F8EEE"/>
-          </svg>
-          <span>Node Graph</span>
-        </div>
-      </div>
+
 
       <div class="toolbar-actions">
-        <!-- Theme toggle -->
         <button
           class="theme-toggle"
           @click="toggleTheme"
           :aria-label="`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`"
+          title="Toggle Theme"
         >
           <svg v-if="theme === 'light'" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
             <circle cx="9" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -307,38 +289,6 @@ onUnmounted(() => {
             <path d="M15 10.5a6 6 0 01-7.5-7.5A6 6 0 1015 10.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-
-        <!-- Run button -->
-        <button
-          class="run-button"
-          :class="{ running: isRunning }"
-          @click="runGraph"
-          :disabled="isRunning"
-          :aria-label="isRunning ? 'Graph is running' : 'Run the node graph'"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-            <polygon points="2,1 12,7 2,13" fill="currentColor"/>
-          </svg>
-          {{ isRunning ? 'Running...' : 'Run' }}
-        </button>
-
-        <!-- Result / Error -->
-        <div
-          v-if="executionResult !== null"
-          class="result-badge"
-          role="status"
-          aria-live="polite"
-        >
-          Result: <strong>{{ executionResult }}</strong>
-        </div>
-        <div
-          v-if="executionError"
-          class="error-badge"
-          role="alert"
-          aria-live="assertive"
-        >
-          ⚠ {{ executionError }}
-        </div>
       </div>
     </div>
 
@@ -351,7 +301,6 @@ onUnmounted(() => {
           :key="conn.id"
           :connection="conn"
           :nodes="nodes"
-          :is-running="isRunning"
           @disconnect="handleDisconnect"
         />
       </svg>
@@ -362,7 +311,6 @@ onUnmounted(() => {
         :key="node.id"
         :node="node"
         :connections="connections"
-        :is-running="isRunning"
       @start-drag="handleStartDrag"
       @start-wire-drag="handleStartWireDrag"
       @pin-drop="handlePinDrop"
@@ -414,15 +362,6 @@ onUnmounted(() => {
   --hint-bg: rgba(0, 0, 0, 0.06);
   --hint-text: rgba(0, 0, 0, 0.45);
   --hint-border: rgba(0, 0, 0, 0.06);
-  --run-btn-bg: #16A34A;
-  --run-btn-hover: #15803D;
-  --run-btn-shadow: rgba(22, 163, 74, 0.25);
-  --result-bg: rgba(22, 163, 74, 0.1);
-  --result-color: #16A34A;
-  --result-border: rgba(22, 163, 74, 0.2);
-  --error-bg: rgba(220, 38, 38, 0.08);
-  --error-color: #DC2626;
-  --error-border: rgba(220, 38, 38, 0.2);
   --toggle-bg: rgba(0, 0, 0, 0.06);
   --toggle-hover: rgba(0, 0, 0, 0.1);
   --toggle-color: #555;
@@ -444,15 +383,6 @@ onUnmounted(() => {
   --hint-bg: rgba(22, 22, 40, 0.85);
   --hint-text: rgba(255, 255, 255, 0.45);
   --hint-border: rgba(255, 255, 255, 0.06);
-  --run-btn-bg: #22C55E;
-  --run-btn-hover: #16A34A;
-  --run-btn-shadow: rgba(34, 197, 94, 0.3);
-  --result-bg: rgba(0, 255, 136, 0.1);
-  --result-color: #4ADE80;
-  --result-border: rgba(0, 255, 136, 0.15);
-  --error-bg: rgba(255, 68, 68, 0.1);
-  --error-color: #F87171;
-  --error-border: rgba(255, 68, 68, 0.15);
   --toggle-bg: rgba(255, 255, 255, 0.08);
   --toggle-hover: rgba(255, 255, 255, 0.15);
   --toggle-color: #CCC;
@@ -461,11 +391,13 @@ onUnmounted(() => {
 /* ─── Canvas ─── */
 .node-graph-canvas {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: var(--canvas-bg);
   overflow: hidden;
   font-family: 'Inter', sans-serif;
+  /* Ensure it has a stacking context */
+  isolation: isolate;
 }
 
 .node-graph-canvas.is-panning {
@@ -501,170 +433,59 @@ onUnmounted(() => {
   height: 100%;
   pointer-events: none;
   z-index: 50;
-  overflow: visible; /* CRITICAL: Allow drawing outside the viewport-sized box */
+  overflow: visible;
 }
 
 .wire-layer {
-  overflow: visible; /* CRITICAL: Allow drawing outside */
+  overflow: visible;
 }
 
 /* ─── Toolbar ─── */
 .canvas-toolbar {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 52px;
-  background: var(--toolbar-bg);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--toolbar-border);
+  height: auto;
+  background: transparent;
+  border-bottom: none;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 16px;
   z-index: 100;
-}
-
-.toolbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.toolbar-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--toolbar-text);
-  letter-spacing: 0.3px;
-}
-
-.toolbar-icon {
-  opacity: 0.85;
+  pointer-events: none;
 }
 
 .toolbar-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0; /* Gap handled by internal groups */
+  pointer-events: auto;
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--toolbar-border);
+  padding: 4px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* ─── Theme toggle ─── */
-.theme-toggle {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--toggle-bg);
-  border: none;
-  border-radius: 8px;
-  color: var(--toggle-color);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.theme-toggle:hover {
-  background: var(--toggle-hover);
-}
-
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-/* ─── Run button ─── */
-.run-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--run-btn-bg);
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.2s ease;
-  letter-spacing: 0.3px;
-}
-
-.run-button:hover:not(:disabled) {
-  background: var(--run-btn-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px var(--run-btn-shadow);
-}
-
-.run-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.run-button:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.run-button.running {
-  background: #777;
-  cursor: wait;
-}
-
-.run-button:disabled {
-  opacity: 0.7;
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: currentColor;
+  opacity: 0.15;
+  margin: 0 12px;
 }
 
 /* ─── Result / Error badges ─── */
-.result-badge {
-  background: var(--result-bg);
-  color: var(--result-color);
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  border: 1px solid var(--result-border);
-  animation: fadeInBadge 0.3s ease;
-}
+/* Removed as part of simplification */
 
-.result-badge strong {
-  font-weight: 700;
-  margin-left: 2px;
-}
-
-.error-badge {
-  background: var(--error-bg);
-  color: var(--error-color);
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  border: 1px solid var(--error-border);
-  animation: fadeInBadge 0.3s ease;
-}
-
-@keyframes fadeInBadge {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ─── Wire layer ─── */
-.wire-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.wire-layer :deep(g) {
-  pointer-events: auto;
-}
+/* ... existing toolbar styles ... */
 
 /* ─── Hint ─── */
 .canvas-hint {
-  position: fixed;
+  position: absolute; /* Changed from fixed */
   bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
