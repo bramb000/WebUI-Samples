@@ -11,15 +11,14 @@ Each project is a standalone page showcasing a different UI interaction pattern.
 | # | Name | Route | Description |
 |---|------|-------|-------------|
 | 1 | Login Screen | `/login-interaction-1` | Animated avatar that tracks email input and squints during password entry |
+| 2 | Node Graph | `/node-graph` | A full visual programming interface with draggable nodes, wires, and execution flow |
 
-## Getting Started
+## Deployment
 
-```bash
-npm install
-npm run dev
-```
+This project is automatically deployed to **GitHub Pages**.
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+- **App**: [https://bramb000.github.io/WebUI-Samples/](https://bramb000.github.io/WebUI-Samples/)
+- **Storybook**: [https://bramb000.github.io/WebUI-Samples/storybook/](https://bramb000.github.io/WebUI-Samples/storybook/)
 
 ## Tech Stack
 
