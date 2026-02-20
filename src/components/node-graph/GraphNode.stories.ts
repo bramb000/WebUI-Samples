@@ -7,8 +7,6 @@ const meta: Meta<typeof GraphNode> = {
     component: GraphNode,
     tags: ['autodocs'],
     argTypes: {
-        isRunning: { control: 'boolean' },
-        // Events
         onStartDrag: { action: 'startDrag' },
         onStartWireDrag: { action: 'startWireDrag' },
         onPinDrop: { action: 'pinDrop' },
@@ -17,7 +15,6 @@ const meta: Meta<typeof GraphNode> = {
     },
     args: {
         connections: [],
-        isRunning: false,
     },
     decorators: [
         () => ({
@@ -86,12 +83,5 @@ export const ValueNode: Story = {
 export const FunctionNode: Story = {
     args: {
         node: addNode,
-    },
-}
-
-export const RunningState: Story = {
-    args: {
-        node: addNode,
-        isRunning: true,
     },
 }
