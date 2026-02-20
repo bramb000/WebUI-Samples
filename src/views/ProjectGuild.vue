@@ -71,29 +71,29 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </ProjectHero>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="max-w-4xl mx-auto space-y-8">
+    <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
       <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mb-1">Retention</div>
-          <div class="text-3xl font-extrabold text-red-900">+25% D7</div>
+        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
+          <div class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-1">Retention</div>
+          <div class="text-3xl font-extrabold">+25% D7</div>
         </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Revenue</div>
-          <div class="text-3xl font-extrabold text-gray-900">+12% D7 LTV</div>
+        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
+          <div class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-1">Revenue</div>
+          <div class="text-3xl font-extrabold">+12% D7 LTV</div>
         </div>
       </div>
-      <div class="space-y-6 text-lg font-sans leading-relaxed">
+      <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-red-700 mb-2">01. The Problem</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">01. The Problem</h4>
           <p>The game suffered from a lower than standard D7 retention. Users reported that they needed to play 3-4 times a day to maximise their progression when most users only had time to play 1-2 times a day, creating an ill fit for user lifestyle needs.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-red-700 mb-2">02. The Data</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">02. The Data</h4>
           <p>Using SQL (BigQuery), I identified that the most engaged users were pulling the average session/day metric up and that the average experience felt worse to most users compared to what the dashboards indicated. Most users were playing once a day and therefore lagging behind in a progression system that needed them to play 3 times a day for the best results.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-red-700 mb-2">03. The Solution</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">03. The Solution</h4>
           <ul class="list-disc pl-5 space-y-2">
             <li><strong>Shifting Player Emotions:</strong> Designed an "AFK Reward Feature" that accumulated rewards while the player was away, transforming the mental model from <em>"I'm missing out"</em> when not playing to <em>"I have a gift waiting for me."</em></li>
             <li><strong>Designing for Delight:</strong> Changing the game loop to reframe features that interrupted player focus to a loop that creates positive anticipation as a hook for long term retention.</li>

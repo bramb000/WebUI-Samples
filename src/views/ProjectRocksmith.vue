@@ -64,25 +64,25 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
     </ProjectHero>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="max-w-4xl mx-auto space-y-8">
+    <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
       <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-4xl font-extrabold text-red-900">5</div>
-          <div class="text-lg font-bold text-red-800">Platforms</div>
+        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
+          <div class="text-4xl font-extrabold text-[var(--color-accent-soft)]">5</div>
+          <div class="text-lg font-bold opacity-80">Platforms</div>
         </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-          <div class="text-4xl font-extrabold text-gray-900">1</div>
-          <div class="text-lg font-bold text-gray-800">UI System</div>
+        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
+          <div class="text-4xl font-extrabold text-[var(--color-accent-soft)]">1</div>
+          <div class="text-lg font-bold opacity-80">UI System</div>
         </div>
       </div>
-      <div class="space-y-6 text-lg font-sans leading-relaxed">
+      <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-red-700 mb-2">01. The Problem</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">01. The Problem</h4>
           <p><strong>Fragmentation:</strong> Rocksmith+ faced a massive scaling challenge: launching a PC-first MVP on Mobile and Console simultaneously. Without a unified framework, the team faced alienating users whose context would switch based on a device and burdening triple the maintenance cost for maintaining all the platforms.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-red-700 mb-2">02. The Solution</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">02. The Solution</h4>
           <p><strong>Building a responsive UI system:</strong> I architected a technical UI system in the Snowdrop engine that scaled responsive UI across different PC monitors, TVs, tablets, and mobiles. This <strong>ensured visual parity</strong> across devices ranging from 4:3 iPads to 21:9 Ultra-wide monitors without bespoke adjustments.</p>
           <p class="mt-4"><strong>Unified Input Philosophy:</strong> Mapped divergent inputs (Keyboard, Gamepad, Touch) to singular behavioral outcomes, <strong>reducing cognitive load</strong> for users switching between platforms.</p>
           <p class="mt-4"><strong>Driving Global Collaboration:</strong> Orchestrated design collaboration between India, Japan, and the US <strong>to share user insights and create a holistic understanding of user needs across all platforms.</strong></p>
