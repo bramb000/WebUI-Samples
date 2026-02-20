@@ -5,6 +5,10 @@
     --color-text-charcoal: #2A2A2A;
     --color-accent-soft: #E0D8D0;
 
+    /* Fixed-purpose colors: dark surface stays dark in BOTH modes */
+    --color-surface-dark: #2A2A2A;
+    --color-surface-light: #F7F4F0;
+
     --font-serif: Merriweather, serif;
     --font-sans: Inter, sans-serif;
 }
@@ -20,15 +24,24 @@
     --color-cream-bg: #1A1A1A;
     --color-text-charcoal: #EDEDED;
     --color-accent-soft: #A89B8C;
+
+    /* Surface colors stay the same in dark mode — they are fixed-purpose */
+    --color-surface-dark: #1E1E1E;
+    --color-surface-light: #EDEDED;
 }
 
 /* Smooth theme transition */
 html,
 body,
-nav,
-.fade-enter-active,
-.fade-leave-active {
+nav {
     transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+/* ─── Accessibility: boost low-opacity text ─── */
+/* Captions and muted text: ensure minimum 4.5:1 contrast */
+.opacity-60 {
+    opacity: 0.72 !important;
+    /* 0.60→0.72 bumps #2A2A2A on #F7F4F0 from 3.86 to ~5.5 */
 }
 
 /* Dark mode: stat cards and info boxes inside case studies */

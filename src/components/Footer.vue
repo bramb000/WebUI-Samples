@@ -1,9 +1,9 @@
 <template>
   <footer class="relative mt-24">
-    <!-- Curved Top SVG -->
-    <div class="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180 transform -translate-y-[99%]">
-      <svg class="relative block w-full h-[60px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M985.66,92.83C906.67,72,823.78,31,432.84,37.88a1231,1231,0,0,0-142.53,7.88c-57.16,6.38-115.11,13.91-173.31,21.57C105.7,69.68,58.37,73.57,11.42,77.34V120H1200V0A1195.26,1195.26,0,0,1,985.66,92.83Z" class="fill-[var(--color-text-charcoal)]"></path>
+    <!-- Curved Top -->
+    <div class="absolute top-0 left-0 w-full overflow-hidden leading-none -translate-y-[99%]">
+      <svg class="relative block w-full h-[40px] md:h-[80px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,80 Q720,0 1440,80 L1440,80 L0,80 Z" class="fill-[var(--color-text-charcoal)]" />
       </svg>
     </div>
 
