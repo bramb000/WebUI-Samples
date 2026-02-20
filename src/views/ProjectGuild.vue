@@ -11,7 +11,7 @@ import persona from '../assets/images/guild/tldr/011_persona-3.png';
 import gameLoopNegative from '../assets/images/guild/tldr/012_game-loop-negative-2.png';
 import gameLoopPositive from '../assets/images/guild/tldr/013_game-loop-positive.png';
 import wireframeFlow from '../assets/images/guild/tldr/014_frame-68.png';
-import handSketches from '../assets/images/guild/tldr/015_img-0528-1.PNG';
+import handSketches from '../assets/images/guild/tldr/015_img-0528-1.png';
 import afkTest1 from '../assets/images/guild/tldr/016_afk-rewards-test-1-thumbnail.webp';
 import afkTest2 from '../assets/images/guild/tldr/017_afk-rewards-test-2-thumbnail.webp';
 import wireframe from '../assets/images/guild/tldr/018_wireframe.png';

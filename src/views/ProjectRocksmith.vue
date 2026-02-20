@@ -24,7 +24,7 @@ import gallery6 from '../assets/images/rocksmith/solution/015_img-20251109-wa001
 import gallery7 from '../assets/images/rocksmith/solution/016_img-20251109-wa0005-thumbnail.webp';
 import gallery8 from '../assets/images/rocksmith/solution/017_img-20251109-wa0012-2-thumbnail.webp';
 // Solution
-import threeDto2dDiagram from '../assets/images/rocksmith/solution/018_img-0508.PNG';
+import threeDto2dDiagram from '../assets/images/rocksmith/solution/018_img-0508.png';
 import comparisonOther from '../assets/images/rocksmith/solution/019_frame-7.png';
 import comparisonRocksmith from '../assets/images/rocksmith/solution/020_frame-8.png';
 import responsiveGif from '../assets/images/rocksmith/solution/021_rocksmith-responsive-ui-gif.gif';
