@@ -66,7 +66,7 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
     </ProjectHero>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
+    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-8 shadow-sm">
       <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="5" label="Platforms" />
@@ -74,11 +74,11 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">01. The Problem</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">01. The Problem</h4>
           <p><strong>Fragmentation:</strong> Rocksmith+ faced a massive scaling challenge: launching a PC-first MVP on Mobile and Console simultaneously. Without a unified framework, the team faced alienating users whose context would switch based on a device and burdening triple the maintenance cost for maintaining all the platforms.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">02. The Solution</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">02. The Solution</h4>
           <p><strong>Building a responsive UI system:</strong> I architected a technical UI system in the Snowdrop engine that scaled responsive UI across different PC monitors, TVs, tablets, and mobiles. This <strong>ensured visual parity</strong> across devices ranging from 4:3 iPads to 21:9 Ultra-wide monitors without bespoke adjustments.</p>
           <p class="mt-4"><strong>Unified Input Philosophy:</strong> Mapped divergent inputs (Keyboard, Gamepad, Touch) to singular behavioral outcomes, <strong>reducing cognitive load</strong> for users switching between platforms.</p>
           <p class="mt-4"><strong>Driving Global Collaboration:</strong> Orchestrated design collaboration between India, Japan, and the US <strong>to share user insights and create a holistic understanding of user needs across all platforms.</strong></p>
@@ -382,14 +382,14 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
+    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-8 shadow-sm">
       <h2 class="text-4xl font-serif font-bold">Result</h2>
       <div class="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed opacity-90">
         <p>
           Rocksmith+ launched in open beta and swiftly followed a global launch in 2022. The mobile version was able to unlock a completely new market of on-the-go learners who did not have the money, time, or privilege of learning to play the guitar on a computer or a game console.
         </p>
         <p>
-          The new and improved accessibility feature set also garnered critical acclaim when Rocksmith+ won the <a href="https://www.gamespress.com/en-US/Winners-of-the-GAconf-Accessibility-Awards-announced" target="_blank" rel="noopener noreferrer" class="underline font-bold hover:opacity-70 transition-opacity text-[var(--color-accent-soft)]">Game's Accessibility Conference's award for Best physical / mobility accessibility</a>.
+          The new and improved accessibility feature set also garnered critical acclaim when Rocksmith+ won the <a href="https://www.gamespress.com/en-US/Winners-of-the-GAconf-Accessibility-Awards-announced" target="_blank" rel="noopener noreferrer" class="underline font-bold hover:opacity-70 transition-opacity text-emerald-700 dark:text-emerald-500">Game's Accessibility Conference's award for Best physical / mobility accessibility</a>.
         </p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

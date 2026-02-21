@@ -74,7 +74,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </ProjectHero>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
+    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-8 shadow-sm">
       <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
@@ -82,15 +82,15 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">01. The Problem</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">01. The Problem</h4>
           <p>The game suffered from a lower than standard D7 retention. Users reported that they needed to play 3-4 times a day to maximise their progression when most users only had time to play 1-2 times a day, creating an ill fit for user lifestyle needs.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">02. The Data</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">02. The Data</h4>
           <p>Using SQL (BigQuery), I identified that the most engaged users were pulling the average session/day metric up and that the average experience felt worse to most users compared to what the dashboards indicated. Most users were playing once a day and therefore lagging behind in a progression system that needed them to play 3 times a day for the best results.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-2">03. The Solution</h4>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">03. The Solution</h4>
           <ul class="list-disc pl-5 space-y-2">
             <li><strong>Shifting Player Emotions:</strong> Designed an "AFK Reward Feature" that accumulated rewards while the player was away, transforming the mental model from <em>"I'm missing out"</em> when not playing to <em>"I have a gift waiting for me."</em></li>
             <li><strong>Designing for Delight:</strong> Changing the game loop to reframe features that interrupted player focus to a loop that creates positive anticipation as a hook for long term retention.</li>
@@ -471,7 +471,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-12">
+    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-12 shadow-sm">
       <h2 class="text-4xl font-serif font-bold">Results</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />

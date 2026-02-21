@@ -1,48 +1,24 @@
-# Web UI Samples
+# Bramha's Portfolio
 
-A portfolio of micro-interaction experiments built with **Vue.js**, **TypeScript**, and **Tailwind CSS v4**.
+Welcome to my personal UX/UI design and engineering portfolio! This repository contains the source code for my complete portfolio website, showcasing my work on complex multi-platform applications and interactive web experiments.
 
-Each project is a standalone page showcasing a different UI interaction pattern.
+🔗 **[Live Portfolio](https://bramb000.github.io/WebUI-Samples/)**
+📖 **[Component Library (Storybook)](https://bramb000.github.io/WebUI-Samples/storybook/)**
 
-🔗 **[Live Portfolio](https://bramb000.github.io/WebUI-Samples/)** · 📖 **[Storybook](https://bramb000.github.io/WebUI-Samples/storybook/)**
+## Featured Case Studies
+- **[Guild of Guardians](https://bramb000.github.io/WebUI-Samples/#/work/guild-of-guardians)**: Designing progression systems and reward mechanics that uplifted D7 retention by 25%.
+- **[Rocksmith+](https://bramb000.github.io/WebUI-Samples/#/work/rocksmith)**: Architecting a responsive UI system and unified input philosophy across PC, Mobile, and Consoles.
 
-## Micro Interactions
-
-| # | Name | Route | Description |
-|---|------|-------|-------------|
-| 1 | Login Screen | `/login-interaction-1` | Animated avatar that tracks email input and squints during password entry |
-| 2 | Node Graph | `/node-graph` | A full visual programming interface with draggable nodes, wires, and execution flow |
-
-## Deployment
-
-This project is automatically deployed to **GitHub Pages**.
-
-- **App**: [https://bramb000.github.io/WebUI-Samples/](https://bramb000.github.io/WebUI-Samples/)
-- **Storybook**: [https://bramb000.github.io/WebUI-Samples/storybook/](https://bramb000.github.io/WebUI-Samples/storybook/)
+## Experiments & Micro-Interactions
+- **[Node Graph Engine](https://bramb000.github.io/WebUI-Samples/#/projects/node-graph)**: A visual programming interface with draggable nodes and execution logic.
+- **[Interactive Login Avatar](https://bramb000.github.io/WebUI-Samples/#/projects/login-interaction-1)**: An animated companion that squints and tracks user input.
 
 ## Tech Stack
+This portfolio is custom-built from the ground up to ensure high performance, accessibility, and pixel-perfect design control. 
 
-- **Vue.js 3** — Composition API with `<script setup>`
+- **Vue.js 3** (Composition API)
 - **TypeScript**
-- **Tailwind CSS v4** — via `@tailwindcss/postcss`
-- **Lottie Web** — for vector animations
-- **Vue Router** — with dynamic layout support
-- **Vite** — dev server and bundler
-- **Storybook** — component development (`npm run storybook`)
-
-## Project Structure
-
-```
-src/
-├── assets/          # Lottie JSON files and static assets
-├── components/      # Micro-interaction pages (LoginAvatar.vue, etc.)
-├── layouts/         # Page layout components (DefaultLayout.vue)
-├── views/           # Portfolio pages (Home, Projects, About)
-├── router/          # Vue Router configuration
-└── style.css        # Tailwind import + global resets
-```
-
-## Architecture
-
-- **Portfolio pages** use `DefaultLayout` with header/footer navigation.
-- **Micro-interaction pages** use a blank layout (`meta: { layout: 'blank' }`) for full creative control.
+- **Tailwind CSS v4**
+- **Vue Router**
+- **Vite**
+- **Storybook**
