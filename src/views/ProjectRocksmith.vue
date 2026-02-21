@@ -58,7 +58,7 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
       description="Releasing to 1 million new users on 5 platforms with a single, scalable UI system."
       role="UX Lead for Mobile & Multi-platform Interactions"
       timeline="~2 Years"
-      :tags="['Cross-Platform', 'Design Systems', 'Accessibility', 'Ubisoft']"
+      :tags="['PC Game', 'Console Game', 'Accessibility']"
     >
       <template #team>
         <p class="font-serif text-lg">UX Director | 2 UX Designers | 2 UI Artists | 2 UI Engineers</p>
