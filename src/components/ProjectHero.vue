@@ -12,8 +12,8 @@ defineProps<Props>();
 
 <template>
   <header class="py-12 md:py-24 space-y-8 md:space-y-12 border-b border-[var(--color-text-charcoal)]/10 mb-12">
-    <router-link to="/projects" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-4">
-      &larr; Back to Projects
+    <router-link to="/micro-projects" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-4">
+      &larr; Back to Micro-projects
     </router-link>
     <!-- Meta Info -->
     <div class="flex flex-wrap gap-4 text-sm font-sans uppercase tracking-widest opacity-60">

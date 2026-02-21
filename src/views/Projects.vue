@@ -50,7 +50,7 @@ const filteredProjects = computed(() => {
 
 <template>
   <div class="max-w-4xl mx-auto pt-12 mb-24 text-[var(--color-text-charcoal)] px-6 lg:px-0">
-    <h1 class="text-4xl font-serif font-bold mb-8">Projects & Experiments</h1>
+    <h1 class="text-4xl font-serif font-bold mb-8">Micro-projects</h1>
     
     <div class="flex flex-wrap gap-4 mb-12">
       <button 
