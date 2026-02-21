@@ -2,6 +2,8 @@
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
 import VideoEmbed from '../components/VideoEmbed.vue';
+import CaseMetric from '../components/CaseMetric.vue';
+import CaseInsight from '../components/CaseInsight.vue';
 
 // Rocksmith Assets
 import traditionalRocksmith from '../assets/images/rocksmith/executive-summary/000_traditional-rocksmith.webp';
@@ -67,14 +69,8 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
     <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
       <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
-          <div class="text-4xl font-extrabold text-[var(--color-accent-soft)]">5</div>
-          <div class="text-lg font-bold opacity-80">Platforms</div>
-        </div>
-        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
-          <div class="text-4xl font-extrabold text-[var(--color-accent-soft)]">1</div>
-          <div class="text-lg font-bold opacity-80">UI System</div>
-        </div>
+        <CaseMetric value="5" label="Platforms" />
+        <CaseMetric value="1" label="UI System" />
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
@@ -151,48 +147,41 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
         </div>
 
         <!-- Research statistics -->
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center space-y-4">
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~90% of potential new users</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Wanted a hassle free and wireless experience</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~5% of total responders</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Wanted a hardcore experience with all their gear. 77% of these were legacy Rocksmith users</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CaseInsight stat="~90%" statLabel="potential new users" theme="neutral">
+            <p>Wanted a hassle-free and wireless experience.</p>
+          </CaseInsight>
+          <CaseInsight stat="~5%" statLabel="of total responders" theme="neutral">
+            <p>Wanted a hardcore experience with all their gear. <em>77% of these were legacy Rocksmith users.</em></p>
+          </CaseInsight>
         </div>
 
         <p class="text-lg font-sans leading-relaxed">
           We also included questions related to eyesight. I wanted to know how many users suffered from eyesight issues including near/far sightedness and colour vision deficiency. <strong>I personally suffer from near sightedness and colour vision deficiency which impassioned my desire for an accessible UI.</strong>
         </p>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center space-y-4">
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~63% of total responders</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Suffered from at least 1 eyesight issue</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~31% of total responders</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Suffered from either near or far sightedness</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CaseInsight stat="~63%" statLabel="of total responders" theme="neutral">
+            <p>Suffered from at least 1 eyesight issue.</p>
+          </CaseInsight>
+          <CaseInsight stat="~31%" statLabel="of total responders" theme="neutral">
+            <p>Suffered from either near or far sightedness.</p>
+          </CaseInsight>
         </div>
 
         <!-- Multi-device insights -->
         <p class="text-lg font-sans leading-relaxed">
           I wanted to know how many contexts the general user stories would have and how many devices a user imagined themselves playing on.
         </p>
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center space-y-4">
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">87% correlation</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Between size of device and complexity of setup</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~63% responders</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Could see themselves using more than 2 devices, but not more than 2 setups</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~92% of new learners</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Said they would start with acoustic guitars and mobile phones</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <CaseInsight stat="87%" statLabel="correlation" theme="neutral">
+            <p>Between size of device and complexity of setup.</p>
+          </CaseInsight>
+          <CaseInsight stat="~63%" statLabel="of responders" theme="neutral">
+            <p>Could see themselves using more than 2 devices, but not more than 2 setups.</p>
+          </CaseInsight>
+          <CaseInsight stat="~92%" statLabel="of new learners" theme="neutral">
+            <p>Said they would start with acoustic guitars and mobile phones.</p>
+          </CaseInsight>
         </div>
 
         <p class="text-lg font-sans leading-relaxed">
@@ -287,23 +276,19 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
         <CaseImage :src="marketingOnHand" alt="One hand interface" imgClass="w-full h-auto rounded-xl max-w-xs mx-auto" />
 
         <!-- Research stats -->
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center space-y-4">
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">86% participants</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Wished the interactions were similar to Netflix or Spotify on mobile</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">only 16% participants</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Used Netflix or Spotify on their console — we could learn from these apps but not rely on their learnings for consoles</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">72% participants</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Found it difficult to move from mobile to console or PC due to lack of contextual input guides</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">~47% of participants</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Failed to recreate contextual outcomes (e.g. hovering for tooltips) when switching platforms</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CaseInsight stat="86%" statLabel="of participants" theme="neutral">
+            <p>Wished the interactions were similar to Netflix or Spotify on mobile.</p>
+          </CaseInsight>
+          <CaseInsight stat="16%" statLabel="of participants" theme="neutral">
+            <p>Used Netflix or Spotify on their console — we could learn from these apps but not rely on them for consoles.</p>
+          </CaseInsight>
+          <CaseInsight stat="72%" statLabel="of participants" theme="danger">
+            <p>Found it difficult to move from mobile to console or PC due to lack of contextual input guides.</p>
+          </CaseInsight>
+          <CaseInsight stat="47%" statLabel="of participants" theme="danger">
+            <p>Failed to recreate contextual outcomes (e.g., hovering for tooltips) when switching platforms.</p>
+          </CaseInsight>
         </div>
 
         <p class="text-lg font-sans leading-relaxed">
@@ -317,9 +302,10 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
         </p>
         <CaseImage :src="interactionMatrix" alt="Interaction matrix abstraction" caption="A sample abstraction of the complex interaction matrix" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="inputSystem" alt="Unified input system" caption="How 3 different actions consistently lead to the same outcome on any platform" imgClass="w-full h-auto rounded-xl" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center space-y-2">
-          <div class="text-2xl font-extrabold text-red-900">average 80% completion rate per user</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">of same activities on 2 platforms — basically they could consistently get what they want despite changing devices</div>
+        <div class="mt-8">
+          <CaseInsight stat="80%" statLabel="average completion rate per user" theme="success">
+            <p>Users could consistently achieve the same activities across platforms despite changing devices.</p>
+          </CaseInsight>
         </div>
       </div>
     </section>
@@ -339,9 +325,10 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
         <CaseImage :src="mobileComponent" alt="Mobile touch UI" caption="Touch focused UI rarely has arrows to scroll — the content extends slightly off-screen to hint at scrollability" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="pcInteractions" alt="PC carousel interactions" caption="On PC, carousel carets are critical for horizontal scrolling with a mouse that usually only supports vertical scroll" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="mobileInteractions" alt="Mobile scroll interactions" caption="Mobile scroll containers support free form horizontal and vertical scroll without buttons" imgClass="w-full h-auto rounded-xl" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-red-900">almost 90% of participants</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">Felt confident about the mobile UI because it looked similar to an app they already used (e.g. Netflix, Spotify)</div>
+        <div class="mt-8">
+          <CaseInsight stat="~90%" statLabel="of participants" theme="success">
+            <p>Felt confident about the mobile UI because it looked similar to an app they already used (e.g., Netflix, Spotify).</p>
+          </CaseInsight>
         </div>
       </div>
     </section>

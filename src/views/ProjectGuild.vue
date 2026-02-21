@@ -2,6 +2,9 @@
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
 import VideoEmbed from '../components/VideoEmbed.vue';
+import CaseMetric from '../components/CaseMetric.vue';
+import CaseInsight from '../components/CaseInsight.vue';
+import CaseBeforeAfter from '../components/CaseBeforeAfter.vue';
 
 // Guild of Guardians Assets
 import challengeGraphic from '../assets/images/guild/context/000_challenge-graphic-1.png';
@@ -74,14 +77,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-8">
       <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
-          <div class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-1">Retention</div>
-          <div class="text-3xl font-extrabold">+25% D7</div>
-        </div>
-        <div class="bg-white/10 border border-white/20 rounded-xl p-6 text-center">
-          <div class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] mb-1">Revenue</div>
-          <div class="text-3xl font-extrabold">+12% D7 LTV</div>
-        </div>
+        <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
+        <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="success" />
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
@@ -149,26 +146,20 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
       <h3 class="text-xl font-sans font-bold max-w-4xl mx-auto">Before & After — Quick Overview</h3>
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
       <VideoEmbed src="https://www.youtube.com/embed/nJ4OENCLzkE" title="Old User Flow" />
-      <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center max-w-xl mx-auto">
-        <div class="text-2xl font-extrabold text-gray-900">7-10 clicks and open app 3 times a day</div>
-        <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">to get rewards that you have already earned</div>
+      <div class="max-w-xl mx-auto py-4">
+        <CaseInsight stat="7-10 clicks and open app 3 times a day" statLabel="to get rewards that you have already earned" theme="neutral" />
       </div>
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">New user flow — rewards as soon you open the game:</p>
       <VideoEmbed src="https://www.youtube.com/embed/reWvwvFF8CQ" title="New User Flow" />
-      <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center max-w-xl mx-auto">
-        <div class="text-2xl font-extrabold text-red-900">2 clicks and open app 2 times a day</div>
-        <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">to get rewards that you have already earned</div>
+      <div class="max-w-xl mx-auto py-4">
+        <CaseInsight stat="2 clicks and open app 2 times a day" statLabel="to get rewards that you have already earned" theme="success" />
       </div>
-      <!-- Before/After Gallery Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <CaseImage :src="galBeforeGoal" alt="Before - No visual goal setting" caption="Before — No visual goal setting" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galAfterGoal" alt="After - Visual goal setting" caption="After — Visual goal setting" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galBeforeOffer" alt="Before - Lacklustre offers" caption="Before — Lacklustre offers" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galAfterOffer" alt="After - Lore driven offers" caption="After — Lore driven offers" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galBeforeRecs" alt="Before - No recommendations" caption="Before — No recommendations" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galAfterRecs" alt="After - Popular recommendations" caption="After — Popular recommendations" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galBeforeAnticipation" alt="Before - No anticipation" caption="Before — No anticipation" imgClass="w-full h-auto rounded-lg" />
-        <CaseImage :src="galAfterAnticipation" alt="After - Anticipation for next time" caption="After — Anticipation for next time" imgClass="w-full h-auto rounded-lg" />
+      <!-- Before/After Comparions -->
+      <div class="space-y-8">
+        <CaseBeforeAfter :beforeImage="galBeforeGoal" :afterImage="galAfterGoal" caption="Visual goal setting: Players clearly see their progression path." />
+        <CaseBeforeAfter :beforeImage="galBeforeOffer" :afterImage="galAfterOffer" caption="Monetisation Offers: Lore-driven context outperforms generic popups." />
+        <CaseBeforeAfter :beforeImage="galBeforeRecs" :afterImage="galAfterRecs" caption="Recommendations: Showing successful community teams increases win rates." />
+        <CaseBeforeAfter :beforeImage="galBeforeAnticipation" :afterImage="galAfterAnticipation" caption="Anticipation: A clear goal and timeline for the next session." />
       </div>
     </section>
 
@@ -227,9 +218,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           </div>
         </div>
 
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-gray-900">Even just 1 additional day</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">was 16% higher likelihood of retaining to 7 days</div>
+        <div class="py-4">
+          <CaseInsight stat="Even just 1 additional day" statLabel="was 16% higher likelihood of retaining to 7 days" theme="neutral" />
         </div>
 
         <p class="text-lg font-sans leading-relaxed">
@@ -248,56 +238,37 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           To make certain that I was chasing the correct lead, I ran a survey to understand the user stories behind the data.
         </p>
 
-        <div class="space-y-6">
-          <h4 class="font-bold text-lg underline">Insight 1</h4>
-          <p class="text-lg font-sans leading-relaxed"><strong>Responses overwhelmingly confirmed this game was "unstructured downtime" entertainment:</strong></p>
-          <ol class="list-decimal pl-5 space-y-1 text-base font-sans italic">
-            <li>"When I am picking up my child and waiting in the car"</li>
-            <li>"When I'm on the toilet"</li>
-            <li>"When I'm in my commute"</li>
-          </ol>
-          <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-            <div class="text-2xl font-extrabold text-gray-900">73%</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Responders played the game in-between life activities</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CaseInsight stat="73%" statLabel="played in-between life activities" theme="neutral">
+            <p><strong>Unstructured downtime entertainment:</strong></p>
+            <ul class="list-disc pl-5 mt-2 space-y-1 text-sm italic opacity-80">
+              <li>"When picking up my child"</li>
+              <li>"When I'm on the toilet"</li>
+              <li>"When commuting"</li>
+            </ul>
+          </CaseInsight>
+          <CaseInsight stat="54%" statLabel="Timers negatively impacted lifestyle" theme="neutral">
+            <p><strong>Game timers felt punishing and interrupted flow:</strong></p>
+            <ul class="list-disc pl-5 mt-2 space-y-1 text-sm italic opacity-80">
+              <li>"Punishes me for having a job"</li>
+              <li>"Interrupted just as it got good"</li>
+              <li>"Use lunch break for boring quests"</li>
+            </ul>
+          </CaseInsight>
+          <CaseInsight stat="21%" statLabel="did not think of game between sessions" theme="danger">
+            <p><strong>Driven by loss avoidance:</strong> Passive waiting rather than active consideration.</p>
+          </CaseInsight>
+          <CaseInsight stat="36%" statLabel="passively waited for timer notifications" theme="danger">
+            <p><strong>Negative anticipation:</strong></p>
+            <ul class="list-disc pl-5 mt-2 space-y-1 text-sm italic opacity-80">
+              <li>"Forget until notification reminds me"</li>
+              <li>"Burned a few times trying to time it"</li>
+              <li>"Anxiety trying to play at work"</li>
+            </ul>
+          </CaseInsight>
         </div>
-
-        <div class="space-y-6">
-          <h4 class="font-bold text-lg underline">Insight 2</h4>
-          <p class="text-lg font-sans leading-relaxed"><strong>Quotes about "Do you feel the game's timers fit in your day to day life" were quite revealing:</strong></p>
-          <ol class="list-decimal pl-5 space-y-1 text-base font-sans italic">
-            <li>"I feel the game punishes me for having a job"</li>
-            <li>"I spend 15-20 minutes to get to the good stuff and then just as I get to the juicy part the game tells me that I am out of energy"</li>
-            <li>"I use my lunch break to do all the boring quest stuff so I can actually play the fun parts later"</li>
-          </ol>
-          <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-            <div class="text-2xl font-extrabold text-gray-900">54%</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Responders did not feel the game timers matched their lifestyle</div>
-          </div>
-          <p class="text-lg font-sans leading-relaxed"><strong>Our game's energy system was practically interrupting users from getting into the flow state</strong> just as they were about to start enjoying their session.</p>
-        </div>
-
-        <div class="space-y-6">
-          <h4 class="font-bold text-lg underline">Insight 3</h4>
-          <p class="text-lg font-sans leading-relaxed"><strong>Responses to "do you think about Guild of Guardians when you are not playing":</strong></p>
-          <ol class="list-decimal pl-5 space-y-1 text-base font-sans italic">
-            <li>"I usually forget about the game till the notification reminds me that I have energy"</li>
-            <li>"I got burned a few times by trying to time so now I just put it aside till I have energy"</li>
-            <li>"I want to play as soon as my energy is full but I can't since I'm at work which raises my anxiety"</li>
-          </ol>
-          <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center space-y-4">
-            <div>
-              <div class="text-2xl font-extrabold text-gray-900">21%</div>
-              <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">absolutely did not think about the game in between sessions</div>
-            </div>
-            <div>
-              <div class="text-2xl font-extrabold text-gray-900">and 36%</div>
-              <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">just passively waited to be reminded a timer had reached 0</div>
-            </div>
-          </div>
-          <p class="text-lg font-sans leading-relaxed italic underline">These were all retained, active players. The experience felt worse to new players.</p>
-          <p class="text-lg font-sans leading-relaxed"><strong>The mismatch in the energy system and user lifestyle was creating negative feelings, and driving anticipation from loss rather than positive anticipation from expectation.</strong></p>
-        </div>
+        <p class="text-lg font-sans leading-relaxed italic underline">These were all retained, active players. The experience felt worse to new players.</p>
+        <p class="text-lg font-sans leading-relaxed"><strong>The mismatch in the energy system and user lifestyle was creating negative feelings, and driving anticipation from loss rather than positive anticipation from expectation.</strong></p>
 
         <!-- Persona -->
         <p class="text-lg font-sans leading-relaxed">
@@ -373,16 +344,10 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           <li>"It's nice to get all my rewards at the start and then just go into playing"</li>
           <li>"Thank god y'all removed the arbitrary timer"</li>
         </ol>
-        <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-red-900">72% responders</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">Completely agreed that this user flow improved the overall game</div>
-        </div>
-        <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-red-900">81% responders</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">Agreed that the new timers fit their lifestyle better</div>
-        </div>
+        <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white mb-6" />
+        <CaseInsight stat="72%" statLabel="Completely agreed that this flow improved the overall game" theme="success" />
+        <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white mt-8 mb-6" />
+        <CaseInsight stat="81%" statLabel="Agreed that the new timers fit their lifestyle better" theme="success" />
       </div>
     </section>
 
@@ -414,43 +379,29 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           I found through analysing further data that <strong>users would get stuck at specific dungeons and quit the game after trying a few more times</strong>. This was a highly correlated factor to low D7 retention.
         </p>
         <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center space-y-4">
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">46% of churned users</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">had attempted and lost at the same dungeon 2+ times in their first week</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-gray-900">22% of churned users</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">had attempted and lost 3+ times</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+          <CaseInsight stat="46% of churned users" statLabel="had attempted and lost at the same dungeon 2+ times in their first week" theme="neutral" />
+          <CaseInsight stat="22% of churned users" statLabel="had attempted and lost 3+ times" theme="neutral" />
         </div>
 
         <p class="text-lg font-sans leading-relaxed">
           After analysing what heroes they were using, <strong>it turned out they were using weaker strategic teams despite being at an adequate power level.</strong>
         </p>
         <CaseImage :src="guardianUsageData" alt="Guardian usage data" caption="Clear difference in heroes used by successful vs unsuccessful players" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-gray-900">about 50% users who quit</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Made no changes to their comp between attempt #1 and #2</div>
+        <div class="py-4">
+          <CaseInsight stat="about 50% users who quit" statLabel="Made no changes to their comp between attempt #1 and #2" theme="neutral" />
         </div>
 
         <p class="text-lg font-sans leading-relaxed">
           We arrived at adding a <strong>recommendation system</strong> using server-wide hero usage data.
         </p>
         <CaseImage :src="recommendedWireframe" alt="Recommended heroes wireframe" caption="Initial wireframe for recommended heroes" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="recsBeforeImg" alt="Before recommendations" caption="Before — players had no clue what heroes to use" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="recsAfterImg" alt="After recommendations" caption="After — recommendations based on other players' performance" imgClass="w-full h-auto rounded-lg" />
+        <div class="py-4">
+          <CaseBeforeAfter :beforeImage="recsBeforeImg" :afterImage="recsAfterImg" caption="Recommendations guiding players using community data without forcing teams." />
         </div>
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center space-y-4">
-          <div>
-            <div class="text-2xl font-extrabold text-red-900">~70% users</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">Changed their comp after loss #1 (up from 50%)</div>
-          </div>
-          <div>
-            <div class="text-2xl font-extrabold text-red-900">And 63% of those users</div>
-            <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">Completed the dungeon on Attempt #2</div>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+          <CaseInsight stat="~70% users" statLabel="Changed their comp after loss #1 (up from 50%)" theme="success" />
+          <CaseInsight stat="And 63% of those users" statLabel="Completed the dungeon on Attempt #2" theme="success" />
         </div>
       </div>
     </section>
@@ -465,9 +416,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           Players quit after losing because whenever they lost in a dungeon, they had to begin from the start. I collaborated directly with the game designer to add a new <strong>checkpoint dungeon progression system</strong>.
         </p>
         <CaseImage :src="progressionWireframe" alt="Visual progression wireframe" caption="Initial wireframe of visual goal setting" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="progBeforeImg" alt="Before progression" caption="Before — no sense of progression; lost at room 13, restart from the beginning" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="progAfterImg" alt="After progression" caption="After — clear progression path with checkpoints" imgClass="w-full h-auto rounded-lg" />
+        <div class="py-4">
+          <CaseBeforeAfter :beforeImage="progBeforeImg" :afterImage="progAfterImg" caption="A clear visual path with checkpoints replaced the old system where players start from the beginning." />
         </div>
 
         <!-- Daily Calendar -->
@@ -476,9 +426,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           I created a <strong>7 day reward letting players pick 1 legendary guardian</strong>, giving players choice and autonomy at the end of a long commitment. The UI was specifically designed as a countdown calendar.
         </p>
         <CaseImage :src="dailyCalendar" alt="Daily reward calendar" caption="Daily instant gratification rewards + a big delayed gratification reward at the end of the week" imgClass="w-full h-auto rounded-xl" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-red-900">+3% increase</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">in day 6 to day 7 retention</div>
+        <div class="py-4">
+          <CaseInsight stat="+3% increase" statLabel="in day 6 to day 7 retention" theme="success" />
         </div>
       </div>
     </section>
@@ -493,9 +442,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           I added an explicit scripted moment to get the first legendary hero after defeating the first boss — <strong>a moment of delight to feel celebratory and achieved</strong>. This decision was not informed by pre-prepared data, so <strong>we A/B tested this implementation.</strong>
         </p>
         <CaseImage :src="legendaryHero" alt="Legendary hero design" caption="I created this design in Figma with existing design system components" imgClass="w-full h-auto rounded-xl" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-red-900">+38% higher likelihood</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">A user who received the hero would retain compared to one who did not</div>
+        <div class="py-4">
+          <CaseInsight stat="+38% higher likelihood" statLabel="A user who received the hero would retain compared to one who did not" theme="success" />
         </div>
 
         <!-- Offer iterations -->
@@ -503,14 +451,12 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           After the success, I added an <strong>introductory offer</strong> paired with the delight moment. It performed <strong>162% better</strong> against the old offer and <strong>increased odds of a purchasing player retaining to D7 by 65%.</strong>
         </p>
         <CaseImage :src="oldOffer" alt="Old offer" caption="Before — The old offer had no context. 99% of players closed the popup in under 1 second" imgClass="w-full h-auto rounded-xl" />
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-gray-900">99.9% users</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-700 mt-1">Closed this popup instantly</div>
+        <div class="py-4">
+          <CaseInsight stat="99.9% users" statLabel="Closed this popup instantly" theme="danger" />
         </div>
         <CaseImage :src="newOffer" alt="New offer" caption="After — The new offer with context and clear value proposition" imgClass="w-full h-auto rounded-xl" />
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <div class="text-2xl font-extrabold text-red-900">More than double purchases</div>
-          <div class="text-xs font-bold uppercase tracking-wider text-red-700 mt-1">compared to the old offer</div>
+        <div class="py-4">
+          <CaseInsight stat="More than double purchases" statLabel="compared to the old offer" theme="success" />
         </div>
 
         <!-- Iteration stages -->
@@ -528,18 +474,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <section class="bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] p-12 rounded-3xl space-y-12">
       <h2 class="text-4xl font-serif font-bold">Results</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="space-y-2 text-center">
-          <div class="text-5xl font-bold font-sans text-[var(--color-accent-soft)]">+25%</div>
-          <p class="text-lg opacity-80">D7 Retention Uplift</p>
-        </div>
-        <div class="space-y-2 text-center">
-          <div class="text-5xl font-bold font-sans text-[var(--color-accent-soft)]">+200%</div>
-          <p class="text-lg opacity-80">Players collecting all rewards</p>
-        </div>
-        <div class="space-y-2 text-center">
-          <div class="text-5xl font-bold font-sans text-[var(--color-accent-soft)]">+12%</div>
-          <p class="text-lg opacity-80">D7 LTV (Revenue)</p>
-        </div>
+        <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />
+        <CaseMetric value="+200%" label="Players collecting all rewards" theme="success" />
+        <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="success" />
       </div>
       <div class="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed opacity-90">
         <p>

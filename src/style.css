@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
     --color-cream-bg: #F7F4F0;
@@ -42,57 +43,6 @@ nav {
 .opacity-60 {
     opacity: 0.72 !important;
     /* 0.60→0.72 bumps #2A2A2A on #F7F4F0 from 3.86 to ~5.5 */
-}
-
-/* Dark mode: stat cards and info boxes inside case studies */
-:root.dark .bg-gray-50 {
-    background-color: #2A2A2A;
-    border-color: #3D3D3D;
-}
-
-:root.dark .bg-red-50 {
-    background-color: rgba(127, 29, 29, 0.2);
-    border-color: rgba(185, 28, 28, 0.3);
-}
-
-:root.dark .text-gray-900 {
-    color: #EDEDED;
-}
-
-:root.dark .text-gray-800 {
-    color: #d4d4d4;
-}
-
-:root.dark .text-gray-700 {
-    color: #b0b0b0;
-}
-
-:root.dark .text-gray-600 {
-    color: #999;
-}
-
-:root.dark .text-red-900 {
-    color: #fca5a5;
-}
-
-:root.dark .text-red-800 {
-    color: #f87171;
-}
-
-:root.dark .text-red-700 {
-    color: #ef4444;
-}
-
-:root.dark .border-gray-200 {
-    border-color: #3D3D3D;
-}
-
-:root.dark .border-red-200 {
-    border-color: rgba(185, 28, 28, 0.3);
-}
-
-:root.dark .bg-white {
-    background-color: #2A2A2A;
 }
 
 body {
