@@ -38,6 +38,21 @@ const routes = [
         name: 'NodeGraph',
         component: () => import('../views/NodeGraphView.vue'),
 
+    },
+    {
+        path: '/experiment/patapon',
+        name: 'ExperimentPatapon',
+        component: () => import('../views/ExperimentPatapon.vue')
+    },
+    {
+        path: '/experiment/helldivers',
+        name: 'ExperimentHelldivers',
+        component: () => import('../views/ExperimentHelldivers.vue')
+    },
+    {
+        path: '/experiment/jedi',
+        name: 'ExperimentJedi',
+        component: () => import('../views/ExperimentJedi.vue')
     }
 ]
 
