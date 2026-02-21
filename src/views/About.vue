@@ -1,6 +1,129 @@
 <template>
-  <div class="max-w-[800px] mx-auto">
-    <h1 class="text-3xl font-bold mb-4 text-gray-800">About Me</h1>
-    <p class="text-gray-600 text-lg leading-relaxed">I am learning Web UI development with Vue.js, TypeScript, and Storybook.</p>
+  <div class="max-w-4xl mx-auto pt-12 md:pt-24 mb-24 px-6 md:px-12 text-[var(--color-text-charcoal)]">
+    <div class="space-y-16">
+      
+      <!-- Intro Section -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-balance">
+        <div class="space-y-8">
+          <h1 class="text-4xl md:text-6xl font-serif font-bold leading-tight">
+            More than just design.
+          </h1>
+          <div class="space-y-6">
+            <p class="text-xl md:text-2xl font-sans leading-relaxed opacity-80">
+              I enjoy cosplay, love Star Wars, and I’m passionate about people. I find joy when products that I build are enjoyed by customers or when I see my team members are growing and having a good time building them.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Photo Gallery Stack -->
+        <div class="relative w-full aspect-square md:aspect-[4/3] lg:aspect-auto lg:h-[500px] flex items-center justify-center pointer-events-none">
+          <!-- Back Photo (Cosplay) -->
+          <div class="absolute w-[60%] md:w-[50%] right-[10%] top-[5%] md:top-[10%] lg:right-0 lg:top-[5%] rotate-6 translate-x-4 shadow-xl rounded-2xl overflow-hidden border-4 border-white dark:border-zinc-800 transition-transform duration-700 pointer-events-auto hover:rotate-2 hover:scale-105 hover:z-20">
+            <img src="https://bramha.work/media/posts/14/gallery/20240921_125203-thumbnail.webp" alt="Cosplay photo" class="w-full h-full object-cover aspect-[3/4]" />
+          </div>
+          <!-- Front Photo (Speaking) -->
+          <div class="absolute w-[70%] md:w-[60%] left-[5%] bottom-[5%] md:bottom-[10%] lg:left-[10%] lg:bottom-[15%] -rotate-3 -translate-y-4 shadow-2xl rounded-2xl overflow-hidden border-4 border-[var(--color-cream-bg)] dark:border-zinc-900 transition-transform duration-700 pointer-events-auto hover:-rotate-1 hover:scale-105 hover:z-20">
+            <img src="https://bramha.work/media/posts/14/gallery/Bramha-Speaking-thumbnail.webp" alt="Bramha speaking on stage" class="w-full h-full object-cover aspect-[4/3]" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Process Section -->
+      <section class="space-y-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+        <h2 class="text-3xl font-serif font-bold">My Process</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Step 1 -->
+          <div class="group relative p-8 rounded-3xl border border-[var(--color-text-charcoal)]/10 bg-[var(--color-text-charcoal)]/[0.02] hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] hover:-translate-y-2 transition-all duration-500 overflow-hidden cursor-default shadow-sm hover:shadow-xl">
+            <!-- Large Background Number -->
+            <div class="absolute -right-4 -bottom-8 text-9xl font-serif font-black opacity-[0.03] group-hover:opacity-10 transition-opacity duration-500 select-none">
+              1
+            </div>
+            
+            <div class="relative z-10 flex flex-col h-full space-y-4">
+              <div class="w-12 h-12 rounded-full bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] group-hover:bg-[var(--color-cream-bg)] group-hover:text-[var(--color-text-charcoal)] flex items-center justify-center font-serif text-xl font-bold transition-colors duration-500">
+                01
+              </div>
+              <h3 class="text-2xl font-serif font-bold pt-2">Research</h3>
+              <p class="font-sans text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-500 flex-grow">
+                Obsessing over understanding the user and the core problem before jumping into pixels.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="group relative p-8 rounded-3xl border border-[var(--color-text-charcoal)]/10 bg-[var(--color-text-charcoal)]/[0.02] hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] hover:-translate-y-2 transition-all duration-500 overflow-hidden cursor-default shadow-sm hover:shadow-xl md:translate-y-4 hover:md:translate-y-2">
+            <!-- Large Background Number -->
+            <div class="absolute -right-4 -bottom-8 text-9xl font-serif font-black opacity-[0.03] group-hover:opacity-10 transition-opacity duration-500 select-none">
+              2
+            </div>
+            
+            <div class="relative z-10 flex flex-col h-full space-y-4">
+              <div class="w-12 h-12 rounded-full bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] group-hover:bg-[var(--color-cream-bg)] group-hover:text-[var(--color-text-charcoal)] flex items-center justify-center font-serif text-xl font-bold transition-colors duration-500">
+                02
+              </div>
+              <h3 class="text-2xl font-serif font-bold pt-2">Validate</h3>
+              <p class="font-sans text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-500 flex-grow">
+                Testing solutions rapidly and aligning cross-functional teams with high-fidelity prototypes.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="group relative p-8 rounded-3xl border border-[var(--color-text-charcoal)]/10 bg-[var(--color-text-charcoal)]/[0.02] hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] hover:-translate-y-2 transition-all duration-500 overflow-hidden cursor-default shadow-sm hover:shadow-xl md:translate-y-8 hover:md:translate-y-6">
+            <!-- Large Background Number -->
+            <div class="absolute -right-4 -bottom-8 text-9xl font-serif font-black opacity-[0.03] group-hover:opacity-10 transition-opacity duration-500 select-none">
+              3
+            </div>
+            
+            <div class="relative z-10 flex flex-col h-full space-y-4">
+              <div class="w-12 h-12 rounded-full bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] group-hover:bg-[var(--color-cream-bg)] group-hover:text-[var(--color-text-charcoal)] flex items-center justify-center font-serif text-xl font-bold transition-colors duration-500">
+                03
+              </div>
+              <h3 class="text-2xl font-serif font-bold pt-2">Execute</h3>
+              <p class="font-sans text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-500 flex-grow">
+                Deriving execution speed by building empathy—understanding them, talking to them, and becoming a power user myself.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonial Section -->
+      <section class="group relative bg-[var(--color-text-charcoal)]/[0.02] backdrop-blur-xl border border-[var(--color-text-charcoal)]/5 p-8 md:p-14 rounded-[2.5rem] overflow-hidden cursor-default transition-all duration-700 hover:border-[var(--color-text-charcoal)]/10 hover:shadow-2xl hover:-translate-y-1">
+        <!-- Dynamic Gradient Glow (Matte style effect) -->
+        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-br from-[var(--color-text-charcoal)]/[0.03] to-transparent transition-opacity duration-1000 pointer-events-none"></div>
+
+        <!-- Decorative quote mark -->
+        <div class="absolute -top-8 -left-2 text-[12rem] font-serif leading-none opacity-5 group-hover:opacity-10 group-hover:-translate-y-2 group-hover:rotate-6 transition-all duration-700 select-none pointer-events-none text-[var(--color-text-charcoal)]">
+          "
+        </div>
+
+        <div class="relative z-10 space-y-6">
+          <blockquote class="text-xl md:text-2xl font-serif italic leading-relaxed opacity-70 group-hover:opacity-[0.85] transition-opacity duration-500 text-[var(--color-text-charcoal)]">
+            "If there was a challenge that needed solving, Bramha was always willing to step in and try to solve it with curiosity, grit, and determination. If you're looking for someone who will challenge the status quo, ask the right questions, and search for the best answers, Bramha is someone I'd recommend."
+          </blockquote>
+          
+          <div class="font-sans flex items-center gap-4 pt-2">
+            <div class="h-[1px] bg-[var(--color-text-charcoal)]/20 group-hover:bg-[var(--color-text-charcoal)]/60 transition-all duration-700 ease-out w-8 group-hover:w-16"></div>
+            <div>
+              <p class="font-bold uppercase tracking-widest text-sm opacity-80 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-0 group-hover:translate-x-1">Chris Clay</p>
+              <p class="text-sm opacity-50 group-hover:opacity-80 transition-all duration-300 delay-100 transform translate-x-0 group-hover:translate-x-1">VP of Design, Immutable</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="pt-8 flex flex-col items-start gap-6">
+        <p class="text-xl font-sans opacity-80">
+          If you've reached here, why not read a few case studies?
+        </p>
+        <router-link to="/work" class="px-8 py-3 bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] rounded-full text-lg font-sans font-medium hover:bg-opacity-90 transition-all">
+          View Case Studies
+        </router-link>
+      </section>
+
+    </div>
   </div>
 </template>

@@ -184,34 +184,34 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         </p>
 
         <!-- Regression details -->
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-4">
-          <h4 class="text-sm font-bold uppercase tracking-wider text-gray-600">Logistic Regression Analysis</h4>
-          <p class="text-base font-sans leading-relaxed">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong>24% of the variance</strong> in a complex model like retention.</p>
+        <div class="bg-[var(--color-text-charcoal)]/[0.03] border border-[var(--color-text-charcoal)]/10 rounded-xl p-6 space-y-4">
+          <h4 class="text-sm font-bold uppercase tracking-wider opacity-60">Logistic Regression Analysis</h4>
+          <p class="text-base font-sans leading-relaxed">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong class="font-bold">24% of the variance</strong> in a complex model like retention.</p>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="border-b">
-                  <th class="text-left p-2">Metric</th>
-                  <th class="text-left p-2">Coefficient (β)</th>
-                  <th class="text-left p-2">Odds Ratio</th>
-                  <th class="text-left p-2">T-Statistic</th>
-                  <th class="text-left p-2">R²</th>
+                <tr class="border-b border-[var(--color-text-charcoal)]/20">
+                  <th class="text-left p-2 font-bold opacity-60">Metric</th>
+                  <th class="text-left p-2 font-bold opacity-60">Coefficient (β)</th>
+                  <th class="text-left p-2 font-bold opacity-60">Odds Ratio</th>
+                  <th class="text-left p-2 font-bold opacity-60">T-Statistic</th>
+                  <th class="text-left p-2 font-bold opacity-60">R²</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="border-b">
-                  <td class="p-2">Intercept (β₀)</td>
-                  <td class="p-2">0.00334</td>
-                  <td class="p-2">N/A</td>
-                  <td class="p-2">N/A</td>
-                  <td class="p-2">N/A</td>
+                <tr class="border-b border-[var(--color-text-charcoal)]/10 hover:bg-[var(--color-text-charcoal)]/[0.02] transition-colors">
+                  <td class="p-2 font-medium opacity-80">Intercept (β₀)</td>
+                  <td class="p-2 opacity-80">0.00334</td>
+                  <td class="p-2 opacity-50">N/A</td>
+                  <td class="p-2 opacity-50">N/A</td>
+                  <td class="p-2 opacity-50">N/A</td>
                 </tr>
-                <tr>
-                  <td class="p-2">Sessions/Day (β₁)</td>
-                  <td class="p-2">0.1501</td>
-                  <td class="p-2">1.162</td>
-                  <td class="p-2">98.78</td>
-                  <td class="p-2">0.2416</td>
+                <tr class="hover:bg-[var(--color-text-charcoal)]/[0.02] transition-colors">
+                  <td class="p-2 font-medium opacity-80">Sessions/Day (β₁)</td>
+                  <td class="p-2 font-bold text-emerald-600 dark:text-emerald-400">0.1501</td>
+                  <td class="p-2 opacity-80">1.162</td>
+                  <td class="p-2 opacity-80">98.78</td>
+                  <td class="p-2 font-bold text-emerald-600 dark:text-emerald-400">0.2416</td>
                 </tr>
               </tbody>
             </table>
