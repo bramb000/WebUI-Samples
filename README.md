@@ -2,9 +2,8 @@
 
 Welcome to my personal UX/UI design and engineering portfolio! This repository contains the source code for my complete portfolio website, showcasing my work on complex multi-platform applications and interactive web experiments.
 
-🔗 **[Live Portfolio](https://bramb000.github.io/bramha-personal-portfolio/)**
-📖 **[Component Library (Storybook)](https://bramb000.github.io/bramha-personal-portfolio/storybook/)**
-
+🔗 **[Live Portfolio](https://bramha.work/)**
+📖 **[Component Library (Storybook)](https://bramha.work/storybook/)**
 
 ## Tech Stack
 This portfolio is custom-built from the ground up to ensure high performance, accessibility, and pixel-perfect design control. 

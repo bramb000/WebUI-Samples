@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import cosplayImage from '../assets/images/about/Bramha about 1.jpg';
+import speakingImage from '../assets/images/about/Bramha about 2.png';
+</script>
+
 <template>
   <div class="max-w-4xl mx-auto pt-12 md:pt-24 mb-24 px-6 md:px-12 text-[var(--color-text-charcoal)]">
     <div class="space-y-16">
@@ -19,11 +24,11 @@
         <div class="relative w-full aspect-square md:aspect-[4/3] lg:aspect-auto lg:h-[500px] flex items-center justify-center pointer-events-none">
           <!-- Back Photo (Cosplay) -->
           <div class="absolute w-[60%] md:w-[50%] right-[10%] top-[5%] md:top-[10%] lg:right-0 lg:top-[5%] rotate-6 translate-x-4 shadow-xl rounded-2xl overflow-hidden border-4 border-white dark:border-zinc-800 transition-transform duration-700 pointer-events-auto hover:rotate-2 hover:scale-105 hover:z-20">
-            <img src="https://bramha.work/media/posts/14/gallery/20240921_125203-thumbnail.webp" alt="Cosplay photo" class="w-full h-full object-cover aspect-[3/4]" />
+            <img :src="cosplayImage" alt="Cosplay photo" class="w-full h-full object-cover aspect-[3/4]" />
           </div>
           <!-- Front Photo (Speaking) -->
           <div class="absolute w-[70%] md:w-[60%] left-[5%] bottom-[5%] md:bottom-[10%] lg:left-[10%] lg:bottom-[15%] -rotate-3 -translate-y-4 shadow-2xl rounded-2xl overflow-hidden border-4 border-[var(--color-cream-bg)] dark:border-zinc-900 transition-transform duration-700 pointer-events-auto hover:-rotate-1 hover:scale-105 hover:z-20">
-            <img src="https://bramha.work/media/posts/14/gallery/Bramha-Speaking-thumbnail.webp" alt="Bramha speaking on stage" class="w-full h-full object-cover aspect-[4/3]" />
+            <img :src="speakingImage" alt="Bramha speaking on stage" class="w-full h-full object-cover aspect-[4/3]" />
           </div>
         </div>
       </section>
