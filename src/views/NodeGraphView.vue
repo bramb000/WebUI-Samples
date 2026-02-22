@@ -2,7 +2,7 @@
   <ExperimentWrapper
     title="Node Graph Experiment"
     :tags="['Vue 3', 'SVG & Mouse Events', 'State Management']"
-    storybook-id="components-nodegraph-nodegraph--default"
+    storybook-id="node-graph-full-canvas--light-mode"
     footer-note="Tip: Use the scroll wheel to zoom and middle-mouse button to pan."
     container-class="h-[75vh] min-h-[600px] relative"
   >
