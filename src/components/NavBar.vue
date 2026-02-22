@@ -1,9 +1,35 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useTheme } from '../composables/useTheme';
 
 const isMenuOpen = ref(false);
 const { theme, toggle } = useTheme();
+
+const showNavbar = ref(true);
+const lastScrollPosition = ref(0);
+
+const handleScroll = () => {
+  const currentScrollPosition = window.scrollY;
+  if (currentScrollPosition < 0) return;
+  
+  // Add some buffer to avoid jitter
+  if (Math.abs(currentScrollPosition - lastScrollPosition.value) < 60 && currentScrollPosition > 100) return;
+
+  if (currentScrollPosition <= 60) {
+    showNavbar.value = true;
+  } else {
+    showNavbar.value = currentScrollPosition < lastScrollPosition.value;
+  }
+  lastScrollPosition.value = currentScrollPosition;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true });
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 
 const navLinks = [
   { name: 'Work', href: '/work' },
@@ -11,69 +37,76 @@ const navLinks = [
   { name: 'About', href: '/about' },
 ];
 </script>
-
 <template>
-  <nav class="w-full py-6 px-6 md:px-12 flex justify-between md:justify-center items-center bg-[var(--color-cream-bg)] text-[var(--color-text-charcoal)] relative z-50">
+  <nav 
+    :class="[
+      'w-full py-6 px-6 md:px-12 flex justify-between md:justify-center items-center bg-[var(--color-cream-bg)] text-[var(--color-text-charcoal)] sticky top-0 z-50',
+      showNavbar ? 'translate-y-0' : '-translate-y-full'
+    ]"
+    style="transition: background-color 0.35s ease, color 0.35s ease, transform 0.3s ease;"
+  >
     
     <!-- Mobile Logo (Only visible on mobile) -->
-    <router-link to="/" class="md:hidden text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity">
+    <router-link to="/" class="md:hidden text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity" @click="isMenuOpen = false">
       bramha.
     </router-link>
 
-    <!-- Desktop Centered Menu -->
-    <div class="hidden md:flex items-center gap-10">
-      <!-- Logo as first item (left as home) -->
-      <router-link to="/" class="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity">
-        bramha.
-      </router-link>
-
-      <!-- Nav Links -->
-      <div class="flex gap-8 items-center">
-        <router-link 
-          v-for="link in navLinks" 
-          :key="link.name" 
-          :to="link.href"
-          class="text-sm font-sans uppercase tracking-widest hover:text-[var(--color-accent-soft)] transition-colors relative group"
-        >
-          {{ link.name }}
-          <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-text-charcoal)] transition-all group-hover:w-full"></span>
+    <!-- Desktop Unified Center -->
+    <div class="hidden md:flex items-center justify-center w-full">
+      <div class="flex items-center">
+        <!-- Logo -->
+        <router-link to="/" class="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity mr-12">
+          bramha.
         </router-link>
+
+        <!-- Nav Links -->
+        <div class="flex gap-8 items-center bg-[var(--color-text-charcoal)]/5 px-6 py-2.5 rounded-full">
+          <router-link 
+            v-for="link in navLinks" 
+            :key="link.name" 
+            :to="link.href"
+            class="text-sm font-sans uppercase tracking-widest hover:text-[var(--color-accent-soft)] transition-colors relative group"
+          >
+            {{ link.name }}
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-text-charcoal)] transition-all group-hover:w-full"></span>
+          </router-link>
+        </div>
+
+        <!-- Desktop Actions -->
+        <div class="flex gap-4 items-center ml-8">
+          <!-- Theme Toggle -->
+          <button 
+            @click="toggle" 
+            class="clean-btn p-2 rounded-full hover:bg-[var(--color-text-charcoal)]/10 transition-colors"
+            :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            <!-- Sun icon -->
+            <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <!-- Moon icon -->
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+
+          <a href="https://www.linkedin.com/in/bramha-dalvi/" target="_blank" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
+            Let's Talk
+          </a>
+        </div>
       </div>
     </div>
 
-    <!-- Desktop Right Actions -->
-    <div class="hidden md:flex gap-6 items-center absolute right-6 md:right-12">
-      <!-- Theme Toggle -->
-      <button 
-        @click="toggle" 
-        class="clean-btn p-2 rounded-full hover:bg-[var(--color-text-charcoal)]/10 transition-colors"
-        :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
-      >
-        <!-- Sun icon -->
-        <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/>
-          <line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/>
-          <line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <!-- Moon icon -->
-        <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
-
-      <a href="https://www.linkedin.com/in/bramha-dalvi/" target="_blank" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
-        Let's Talk
-      </a>
-    </div>
-
     <!-- Mobile Menu Button -->
-    <div class="flex md:hidden gap-4 items-center">
+    <div class="flex md:hidden gap-4 items-center relative z-50">
       <!-- Mobile Theme Toggle -->
       <button 
         @click="toggle" 

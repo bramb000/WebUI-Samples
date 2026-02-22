@@ -2,13 +2,27 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-cream-bg: #F7F4F0;
-    --color-text-charcoal: #2A2A2A;
-    --color-accent-soft: #E0D8D0;
+    /* County Green Base Palette */
+    --color-county-green-50: #effef1;
+    --color-county-green-100: #dbfde1;
+    --color-county-green-200: #b9f9c3;
+    --color-county-green-300: #82f396;
+    --color-county-green-400: #44e460;
+    --color-county-green-500: #1bcc3b;
+    --color-county-green-600: #10a92c;
+    --color-county-green-700: #118426;
+    --color-county-green-800: #136823;
+    --color-county-green-900: #11561f;
+    --color-county-green-950: #043910;
+
+    /* Semantic Mappings */
+    --color-cream-bg: var(--color-county-green-50);
+    --color-text-charcoal: var(--color-county-green-950);
+    --color-accent-soft: var(--color-county-green-200);
 
     /* Fixed-purpose colors: dark surface stays dark in BOTH modes */
-    --color-surface-dark: #2A2A2A;
-    --color-surface-light: #F7F4F0;
+    --color-surface-dark: var(--color-county-green-900);
+    --color-surface-light: var(--color-county-green-50);
 
     --font-serif: Merriweather, serif;
     --font-sans: Inter, sans-serif;
@@ -22,13 +36,13 @@
 
 /* ─── Dark Mode Overrides ─── */
 :root.dark {
-    --color-cream-bg: #1A1A1A;
-    --color-text-charcoal: #EDEDED;
-    --color-accent-soft: #A89B8C;
+    --color-cream-bg: var(--color-county-green-950);
+    --color-text-charcoal: var(--color-county-green-50);
+    --color-accent-soft: var(--color-county-green-800);
 
     /* Surface colors stay the same in dark mode — they are fixed-purpose */
-    --color-surface-dark: #1E1E1E;
-    --color-surface-light: #EDEDED;
+    --color-surface-dark: var(--color-county-green-900);
+    --color-surface-light: var(--color-county-green-100);
 }
 
 /* Smooth theme transition */
