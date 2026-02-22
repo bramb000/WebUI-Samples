@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import CaseImage from './CaseImage.vue';
+
 defineProps<{
   beforeImage: string;
   afterImage: string;
@@ -16,10 +18,10 @@ defineProps<{
         <div class="text-xs font-bold uppercase tracking-wider text-gray-500 text-center md:text-left">
           Before
         </div>
-        <img 
+        <CaseImage 
           :src="beforeImage" 
           :alt="beforeAlt || 'Before Image'" 
-          class="w-full h-auto rounded-lg border border-gray-200 shadow-sm object-cover"
+          img-class="w-full h-auto rounded-lg border border-gray-200 shadow-sm object-cover"
         />
       </div>
 
@@ -28,10 +30,10 @@ defineProps<{
         <div class="text-xs font-bold uppercase tracking-wider text-[var(--color-accent-soft)] text-center md:text-left">
           After
         </div>
-        <img 
+        <CaseImage 
           :src="afterImage" 
           :alt="afterAlt || 'After Image'" 
-          class="w-full h-auto rounded-lg border-2 border-[var(--color-accent-soft)]/50 shadow-md object-cover"
+          img-class="w-full h-auto rounded-lg border-2 border-[var(--color-accent-soft)]/50 shadow-md object-cover"
         />
       </div>
     </div>
