@@ -119,7 +119,7 @@
         <p class="text-xl font-sans opacity-80">
           If you've reached here, why not read a few case studies?
         </p>
-        <router-link to="/work" class="px-8 py-3 bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] rounded-full text-lg font-sans font-medium hover:bg-opacity-90 transition-all">
+        <router-link to="/work" class="px-8 py-3 bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans font-medium hover:bg-[var(--color-cream-bg)] hover:text-[var(--color-text-charcoal)] hover:scale-105 hover:shadow-lg transition-all duration-300">
           View Case Studies
         </router-link>
       </section>

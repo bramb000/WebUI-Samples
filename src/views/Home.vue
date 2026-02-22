@@ -38,14 +38,6 @@ const navigateTo = (path: string) => {
       <p class="text-xl md:text-2xl font-sans leading-relaxed opacity-80 max-w-2xl">
         I sit at the intersection of <span class="font-serif italic text-[var(--color-text-charcoal)]">user experience</span>, <span class="font-serif italic text-[var(--color-text-charcoal)]">game design</span>, and <span class="font-serif italic text-[var(--color-text-charcoal)]">tech</span> to create fulfilling and delightful experiences that increase retention and revenue.
       </p>
-      <div class="flex gap-4 pt-4">
-         <a href="#work" class="px-8 py-3 bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)] rounded-full text-lg font-sans font-medium hover:bg-opacity-90 transition-all">
-          View Work
-        </a>
-         <router-link to="/about" class="px-8 py-3 border border-[var(--color-text-charcoal)] text-[var(--color-text-charcoal)] rounded-full text-lg font-sans font-medium hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-all">
-          About Me
-        </router-link>
-      </div>
     </section>
 
     <!-- Selected Work Grid -->
@@ -87,6 +79,13 @@ const navigateTo = (path: string) => {
             </p>
           </div>
         </article>
+      </div>
+
+      <!-- More Work Link -->
+      <div class="flex justify-center pt-12">
+        <router-link to="/work" class="text-lg font-serif italic border-b border-[var(--color-text-charcoal)] hover:opacity-70 transition-opacity">
+          View more work &rarr;
+        </router-link>
       </div>
     </section>
 
