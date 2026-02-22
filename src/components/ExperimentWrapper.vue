@@ -22,7 +22,7 @@
         <!-- Storybook Button -->
         <a 
           v-if="storybookId"
-          :href="`/WebUI-Samples/storybook/?path=/story/${storybookId}`"
+          :href="`/storybook/?path=/story/${storybookId}`"
           target="_blank"
           class="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider border border-[var(--color-text-charcoal)]/30 rounded-full hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors"
           title="Open isolated component in Storybook"
