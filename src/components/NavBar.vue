@@ -98,7 +98,7 @@ const navLinks = [
             </svg>
           </button>
 
-          <a href="https://www.linkedin.com/in/bramha-dalvi/" target="_blank" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
+          <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
             Let's Talk
           </a>
         </div>
@@ -149,7 +149,7 @@ const navLinks = [
       >
         {{ link.name }}
       </router-link>
-       <a href="https://www.linkedin.com/in/bramha-dalvi/" target="_blank" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
+       <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
         Let's Talk
       </a>
     </div>

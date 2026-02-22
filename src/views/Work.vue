@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png'
+import guildHero from '../assets/images/guild/guild-hero.jpg'
 
 const activeFilter = ref('All')
 const filters = ['All', 'Mobile Game', 'PC Game', 'Console Game']
@@ -11,7 +13,7 @@ const caseStudies = [
     title: 'Guild of Guardians',
     description: 'Increasing D7 Retention by 25% through Data-Driven UX',
     tags: ['Mobile Game', 'UX Research', 'Data Analysis'],
-    image: '', // To be filled in Phase 2
+    image: guildHero,
     link: '/work/guild-of-guardians'
   },
   {
@@ -19,7 +21,7 @@ const caseStudies = [
     title: 'Rocksmith+',
     description: 'Releasing to 1 million new users on 5 Platforms with 1 UI system',
     tags: ['PC Game', 'Console Game', 'Accessibility'],
-    image: '', // To be filled in Phase 2
+    image: rocksmithOutdoors,
     link: '/work/rocksmith'
   }
 ]
@@ -64,12 +66,12 @@ const filteredProjects = computed(() => {
       >
         <!-- Thumbnail Placeholder -->
         <div class="w-full aspect-[4/3] bg-[#E5E5E5] rounded-2xl overflow-hidden relative border border-[var(--color-accent-soft)]">
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-[var(--color-text-charcoal)]/10 backdrop-blur-sm">
+          <img v-if="project.image" :src="project.image" :alt="project.title" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-[var(--color-text-charcoal)]/30 backdrop-blur-sm">
             <span class="bg-[var(--color-cream-bg)] text-[var(--color-text-charcoal)] px-6 py-2 rounded-full font-sans font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
               View Case Study
             </span>
           </div>
-          <!-- Image will go here -->
         </div>
 
         <!-- Content -->
