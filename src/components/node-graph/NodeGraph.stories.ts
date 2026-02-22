@@ -25,6 +25,11 @@ const meta = {
             },
         },
     },
+    decorators: [
+        () => ({
+            template: '<div style="width: 100vw; height: 100vh; overflow: hidden;"><story /></div>',
+        }),
+    ],
     parameters: {
         layout: 'fullscreen', // Canvas takes full space
         docs: {
