@@ -14,7 +14,7 @@ const config: StorybookConfig = {
   ],
   "framework": "@storybook/vue3-vite",
   viteFinal: async (config) => {
-    config.base = '/WebUI-Samples/storybook/';
+    config.base = '/storybook/';
     return config;
   }
 };
