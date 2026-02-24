@@ -58,6 +58,11 @@ const routes = [
         path: '/experiment/jedi',
         name: 'ExperimentJedi',
         component: () => import('../views/ExperimentJedi.vue')
+    },
+    {
+        path: '/micro-projects/sales-modal',
+        name: 'SalesModal',
+        component: () => import('../views/SalesModalView.vue')
     }
 ]
 

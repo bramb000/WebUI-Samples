@@ -226,7 +226,8 @@ onUnmounted(() => {
 .login-card {
   width: 100%;
   max-width: 800px;
-  min-height: 600px;
+  min-height: auto;
+  max-height: 90vh; /* Responsive constraint */
   background: var(--card-bg);
   border-radius: 20px;
   display: flex;
@@ -235,7 +236,7 @@ onUnmounted(() => {
   justify-content: center;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto; /* Enable internal scrolling if extremely squished, but prefer flex compression */
   padding: 1.5rem;
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--card-text);
@@ -249,26 +250,29 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -1.5rem;
+  margin-top: -1rem;
+  flex-shrink: 1; /* Allow avatar area to compress if needed */
+  max-height: 25vh; /* Prevent the avatar from overtaking the screen */
 }
 
 @media (min-width: 640px) {
   .login-card__avatar {
-    margin-top: -2.5rem;
+    margin-top: -1.5rem;
   }
 }
 
 .login-card__title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
   color: var(--card-text);
+  flex-shrink: 0;
 }
 
 @media (min-width: 640px) {
   .login-card__title {
-    font-size: 36px;
+    font-size: 32px;
   }
 }
 
@@ -276,21 +280,22 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .login-card__input-group {
   width: 100%;
   max-width: 448px;
-  height: 60px;
+  height: 52px;
   border: 1px solid var(--card-input-border);
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 6px 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
+  gap: 2px;
   background: var(--card-input-bg);
   transition: background 0.3s ease, border-color 0.3s ease,
               box-shadow 0.15s ease;
@@ -326,14 +331,14 @@ onUnmounted(() => {
 .login-card__button {
   width: 100%;
   max-width: 448px;
-  height: 60px;
+  height: 52px;
   background: #2cd203;
   color: #ffffff;
-  font-size: 24px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 500;
   border: none;
   border-radius: 60px;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -352,7 +357,8 @@ onUnmounted(() => {
 
 @media (min-width: 640px) {
   .login-card__button {
-    font-size: 32px;
+    font-size: 24px;
+    height: 60px;
   }
 }
 

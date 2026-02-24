@@ -2,22 +2,29 @@
 import { ref, computed } from 'vue'
 
 const activeFilter = ref('All')
-const filters = ['All', 'Website Design', 'Game Design']
+const filters = ['All', 'Web Design', 'Game Design']
 
 const projects = [
+  {
+    id: 'sales-modal',
+    title: 'Component-Driven Sales Modal',
+    description: 'A beautifully responsive, isolated pricing modal highlighting dynamic, contextual data-driven banners.',
+    route: '/micro-projects/sales-modal',
+    category: 'Web Design'
+  },
   {
     id: 'login',
     title: 'Login Micro-Interaction',
     description: 'A playful login screen featuring a Rive-style animated avatar that tracks your input.',
     route: '/login-interaction-1',
-    category: 'Website Design'
+    category: 'Web Design'
   },
   {
     id: 'node-graph',
     title: 'Node Graph Visual Scripting',
     description: 'UE Blueprint-inspired node graph with interactive tooltips and live execution.',
     route: '/node-graph',
-    category: 'Website Design'
+    category: 'Web Design'
   },
   {
     id: 'patapon',
