@@ -1,7 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import SalesPricingCard from './SalesPricingCard.vue';
 
-const meta: Meta<typeof SalesPricingCard> = {
+/**
+ * **SalesPricingCard** is the complete composition of badges, buttons, and feature lists representing a single tier in the grid.
+ *
+ * ### Animations & Layout Physics
+ * - **Rolling Numbers**: The integers for `price` and `badgeBaseCost` do not snap instantly. When the component mounts, a native `requestAnimationFrame` loop mathematically lerps the numbers from 0 to the target value using an `easeOutExpo` curve over 1.5 seconds.
+ * - **Card Topology**: The card uses a rigid `112px` height boundary on the price header container. This completely isolates dynamic element heights from pushing the Actions Buttons out of sync, guaranteeing that all CTA buttons align perfectly on the same Y-axis regardless of how much text is in the price block.
+ * - **Visual Design**: Uses a subtle inner-ring inset on the dark background (`bg-[#0b0b12] ring-white/10`) which glows Indigo when mathematically selected via the `buttonVariant="selected"` prop.
+ */
+const meta = {
     title: 'Sales Modal/Pricing Card',
     component: SalesPricingCard,
     tags: ['autodocs'],
@@ -24,12 +32,12 @@ const meta: Meta<typeof SalesPricingCard> = {
             return { args };
         },
         template: `
-      <div class="max-w-sm bg-gray-50 p-8 rounded-xl">
+      <div class="max-w-sm bg-[#0b0b12] p-8 rounded-xl border border-white/5">
         <SalesPricingCard v-bind="args" />
       </div>
     `,
     }),
-};
+} satisfies Meta<typeof SalesPricingCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

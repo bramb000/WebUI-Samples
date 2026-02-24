@@ -167,9 +167,6 @@ watch(targetPrice, (newVal) => {
       <div class="flex flex-col gap-4 w-full z-10 relative mb-4">
         <ul class="flex flex-col gap-3 w-full">
           <li v-for="(feature, index) in features" :key="index" class="flex items-start gap-3 w-full relative z-20">
-            <!-- Subtle light background flare for features -->
-            <div class="absolute -inset-y-3 -inset-x-4 bg-gradient-to-r from-white/[0.03] to-transparent rounded-lg -z-10 pointer-events-none"></div>
-
             <Star v-if="feature.isHighlighted" class="w-5 h-5 shrink-0 mt-0.5 text-amber-400 fill-amber-400" />
             <Check v-else class="w-5 h-5 shrink-0 mt-0.5 text-purple-600" />
             

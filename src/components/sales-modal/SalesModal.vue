@@ -27,8 +27,11 @@ onMounted(() => {
   }
 });
 
+const isNarrow = computed(() => wrapperWidth.value > 0 && wrapperWidth.value < 1024);
+const isScalingActive = computed(() => props.inline && !isNarrow.value);
+
 const scaleStyle = computed(() => {
-  if (!props.inline) return {};
+  if (!isScalingActive.value) return {};
   const targetWidth = 1440; // Simulate 1440px desktop so max-w-7xl sits comfortably without wrapping overlap
   const scale = wrapperWidth.value / targetWidth;
   return {
@@ -39,7 +42,7 @@ const scaleStyle = computed(() => {
 });
 
 const wrapperStyle = computed(() => {
-  if (!props.inline) return {};
+  if (!isScalingActive.value) return {};
   const targetWidth = 1440;
   const scale = wrapperWidth.value / targetWidth;
   return {
@@ -138,12 +141,12 @@ const plans: CardProps[] = [
 </script>
 
 <template>
-  <div :class="inline ? 'w-full bg-[#0a0a0f] relative rounded-xl' : 'fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#030305]/80 backdrop-blur-3xl w-full text-left'" ref="wrapperRef" :style="inline ? wrapperStyle : {}">
-    <div :style="inline ? scaleStyle : {}" :class="inline ? 'absolute top-0 left-0 flex items-center justify-center p-8' : 'w-full h-full flex items-center justify-center'">
+  <div :class="inline ? 'w-full bg-[#0a0a0f] relative rounded-xl overflow-hidden' : 'fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 sm:p-6 bg-[#030305]/80 backdrop-blur-3xl w-full text-left overflow-y-auto'" ref="wrapperRef" :style="wrapperStyle">
+    <div :style="scaleStyle" :class="isScalingActive ? 'absolute top-0 left-0 flex items-center justify-center p-8' : (inline ? 'w-full p-4 sm:p-8' : 'w-full py-10')">
       <!-- Modal Container -->
       <div 
-        class="bg-[#0b0b12]/90 rounded-3xl shadow-[0_0_80px_rgba(112,56,224,0.15)] ring-1 ring-white/10 w-full max-w-7xl relative flex flex-col p-6 sm:p-8 gap-8 border border-white/5 pointer-events-auto" 
-        :class="inline ? 'h-[716px]' : 'max-h-[90vh]'"
+        class="bg-[#0b0b12]/90 rounded-3xl shadow-[0_0_80px_rgba(112,56,224,0.15)] ring-1 ring-white/10 w-full max-w-7xl relative flex flex-col p-6 sm:p-8 gap-8 border border-white/5 pointer-events-auto mx-auto" 
+        :class="isScalingActive ? 'h-[716px]' : 'h-auto max-h-none'"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"

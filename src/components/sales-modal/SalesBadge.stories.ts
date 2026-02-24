@@ -1,20 +1,37 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import SalesBadge from './SalesBadge.vue';
 
-const meta: Meta<typeof SalesBadge> = {
-    title: 'Sales Modal/Atomic/Badge',
+/**
+ * **SalesBadge** is a polished, glassmorphic insight container used to highlight key metrics or recommendations inside the Pricing Cards.
+ *
+ * ### Animations & Interactions
+ * - Uses a premium frosted glass effect (`backdrop-blur-md` with `bg-gradient-to-br`).
+ * - Features a sweeping light flare (`before:absolute`) that sweeps across the badge on hover.
+ * - The icon container scales up and rotates (`scale-110 rotate-3`) on layout hover for micro-interaction delight.
+ * - The border utilizes dynamic opacity and inset shadows to simulate a physical glass tile reflecting ambient light.
+ */
+const meta = {
+    title: 'Sales Modal/Atomic/Insight Badge',
     component: SalesBadge,
     tags: ['autodocs'],
     argTypes: {
         variant: {
             control: 'select',
             options: ['success', 'warning', 'info'],
+            description: 'The semantic color theme of the badge icon and text highlights.',
         },
         icon: {
             control: 'select',
             options: ['lightbulb', 'info', 'none'],
+            description: 'The Lucide icon rendered inside the glass circle.',
         },
     },
+    // The sales modal context is inherently dark. Ensure the atomic badge is visible by wrapping it in a dark container.
+    decorators: [
+        () => ({
+            template: '<div class="bg-[#0b0b12] p-8 rounded-xl"><story /></div>',
+        }),
+    ],
     render: (args) => ({
         components: { SalesBadge },
         setup() {
@@ -28,11 +45,14 @@ const meta: Meta<typeof SalesBadge> = {
       </div>
     `,
     }),
-};
+} satisfies Meta<typeof SalesBadge>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * The **Success** variant is used for positive projections, like estimated savings or feature recommendations.
+ */
 export const SuccessProjection: Story = {
     args: {
         variant: 'success',
@@ -41,6 +61,9 @@ export const SuccessProjection: Story = {
     },
 };
 
+/**
+ * The **Warning** variant is used for social proof or critical limits, leaning on attention-grabbing amber tones.
+ */
 export const WarningSocialProof: Story = {
     args: {
         variant: 'warning',
