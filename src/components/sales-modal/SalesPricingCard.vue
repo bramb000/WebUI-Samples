@@ -122,9 +122,6 @@ watch(targetPrice, (newVal) => {
   animationFrameId = requestAnimationFrame(animate);
 }, { immediate: true });
 
-const emit = defineEmits<{
-  (e: 'select'): void
-}>();
 </script>
 
 <template>

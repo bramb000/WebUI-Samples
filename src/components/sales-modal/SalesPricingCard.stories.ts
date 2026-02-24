@@ -43,16 +43,14 @@ export const ProPlan: Story = {
         buttonText: 'Upgrade',
         buttonVariant: 'primary',
         badgeType: 'success',
-        badgeText: 'You completed 2000 actions in 23 days last month. We project you may need 2900 actions per month based on your workflows.',
+        badgePrefix: 'You completed 2000 actions in 23 days last month. We project you may need 2900 actions per month based on your workflows.',
         headerImageClass: 'bg-[url(https://placehold.co/400x150/e2e8f0/64748b?text=Helmet)] bg-cover bg-center',
         features: [
             { name: 'Everything in Free' },
             { name: '3,000 actions / month total' },
             { name: 'Privileged support' },
-            { name: 'Bring your own LLM & compute' }
-        ],
-        highlightFeatures: [
-            { name: '10,000 credits (+9000)', tooltip: 'Bonus credits for being a pro user.' }
+            { name: 'Bring your own LLM & compute' },
+            { name: '10,000 credits (+9000)', tooltip: 'Bonus credits for being a pro user.', isHighlighted: true }
         ]
     },
 };
