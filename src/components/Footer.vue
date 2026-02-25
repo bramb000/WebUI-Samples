@@ -46,8 +46,8 @@
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-sans opacity-60">
           <p>&copy; {{ new Date().getFullYear() }} Bramha Dalvi. All rights reserved.</p>
           <div class="flex gap-6">
-             <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="hover:text-[var(--color-cream-bg)] hover:opacity-100 transition-all">LinkedIn</a>
-             <a href="mailto:hello@bramha.work" class="hover:text-[var(--color-cream-bg)] hover:opacity-100 transition-all">Email</a>
+             <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="hover:text-[var(--color-cream-bg)] hover:opacity-100 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-text-charcoal)] focus-visible:ring-[var(--color-cream-bg)] rounded-sm">LinkedIn</a>
+             <a href="mailto:hello@bramha.work" class="hover:text-[var(--color-cream-bg)] hover:opacity-100 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-text-charcoal)] focus-visible:ring-[var(--color-cream-bg)] rounded-sm">Email</a>
           </div>
         </div>
 

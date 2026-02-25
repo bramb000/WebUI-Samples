@@ -47,7 +47,7 @@ const navLinks = [
   >
     
     <!-- Mobile Logo (Only visible on mobile) -->
-    <router-link to="/" class="md:hidden text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity" @click="isMenuOpen = false">
+    <router-link to="/" class="md:hidden text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm" @click="isMenuOpen = false">
       bramha.
     </router-link>
 
@@ -55,7 +55,7 @@ const navLinks = [
     <div class="hidden md:flex items-center justify-center w-full">
       <div class="flex items-center">
         <!-- Logo -->
-        <router-link to="/" class="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity mr-12">
+        <router-link to="/" class="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity mr-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm">
           bramha.
         </router-link>
 
@@ -65,10 +65,10 @@ const navLinks = [
             v-for="link in navLinks" 
             :key="link.name" 
             :to="link.href"
-            class="text-sm font-sans uppercase tracking-widest hover:text-[var(--color-accent-soft)] transition-colors relative group"
+            class="text-sm font-sans uppercase tracking-widest transition-colors relative group hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm"
           >
             {{ link.name }}
-            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-text-charcoal)] transition-all group-hover:w-full"></span>
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-text-charcoal)] transition-all group-hover:w-full group-focus-visible:w-full"></span>
           </router-link>
         </div>
 
@@ -77,7 +77,7 @@ const navLinks = [
           <!-- Theme Toggle -->
           <button 
             @click="toggle" 
-            class="clean-btn p-2 rounded-full hover:bg-[var(--color-text-charcoal)]/10 transition-colors"
+            class="clean-btn p-2 rounded-full hover:bg-[var(--color-text-charcoal)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]"
             :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
           >
             <!-- Sun icon -->
@@ -98,7 +98,7 @@ const navLinks = [
             </svg>
           </button>
 
-          <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
+          <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]">
             Let's Talk
           </a>
         </div>
@@ -110,7 +110,7 @@ const navLinks = [
       <!-- Mobile Theme Toggle -->
       <button 
         @click="toggle" 
-        class="clean-btn p-2"
+        class="clean-btn p-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]"
         :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
       >
         <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -129,7 +129,7 @@ const navLinks = [
         </svg>
       </button>
 
-      <button @click="isMenuOpen = !isMenuOpen" class="focus:outline-none clean-btn">
+      <button @click="isMenuOpen = !isMenuOpen" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm clean-btn p-1">
         <div class="space-y-1.5">
           <span :class="{'rotate-45 translate-y-2': isMenuOpen}" class="block w-8 h-0.5 bg-[var(--color-text-charcoal)] transition-transform duration-300"></span>
           <span :class="{'opacity-0': isMenuOpen}" class="block w-8 h-0.5 bg-[var(--color-text-charcoal)] transition-opacity duration-300"></span>
@@ -145,11 +145,11 @@ const navLinks = [
         :key="link.name" 
         :to="link.href"
         @click="isMenuOpen = false"
-        class="text-3xl font-serif hover:italic transition-all"
+        class="text-3xl font-serif hover:italic transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm px-2 py-1"
       >
         {{ link.name }}
       </router-link>
-       <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors">
+       <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]">
         Let's Talk
       </a>
     </div>
