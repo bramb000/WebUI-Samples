@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useTheme } from '../composables/useTheme';
 
 const isMenuOpen = ref(false);
+
+watch(isMenuOpen, (isOpen) => {
+  if (isOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
 const { theme, toggle } = useTheme();
 
 const showNavbar = ref(true);
@@ -139,20 +147,24 @@ const navLinks = [
     </div>
 
     <!-- Mobile Menu Overlay -->
-    <div v-if="isMenuOpen" class="fixed inset-0 bg-[var(--color-cream-bg)] flex flex-col items-center justify-center gap-8 z-40 transition-opacity duration-300">
-       <router-link 
-        v-for="link in navLinks" 
-        :key="link.name" 
-        :to="link.href"
-        @click="isMenuOpen = false"
-        class="text-3xl font-serif hover:italic transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm px-2 py-1"
-      >
-        {{ link.name }}
-      </router-link>
-       <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]">
-        Let's Talk
-      </a>
-    </div>
+    <Teleport to="body">
+      <transition name="fade">
+        <div v-if="isMenuOpen" class="fixed inset-0 bg-[var(--color-cream-bg)] flex flex-col items-center justify-center gap-8 z-40 pt-24">
+           <router-link 
+            v-for="link in navLinks" 
+            :key="link.name" 
+            :to="link.href"
+            @click="isMenuOpen = false"
+            class="text-3xl font-serif hover:italic transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm px-2 py-1"
+          >
+            {{ link.name }}
+          </router-link>
+           <a href="https://www.linkedin.com/in/bramdal/" target="_blank" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]">
+            Let's Talk
+          </a>
+        </div>
+      </transition>
+    </Teleport>
   </nav>
 </template>
 

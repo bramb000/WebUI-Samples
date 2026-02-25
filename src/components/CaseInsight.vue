@@ -10,7 +10,7 @@ withDefaults(defineProps<{
 
 <template>
   <div 
-    class="border rounded-xl p-6 transition-all duration-300 hover:shadow-md w-full"
+    class="border rounded-xl p-6 transition-all duration-300 hover:shadow-md w-full min-w-0"
     :class="{
       'bg-gray-50 dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100': theme === 'neutral',
       'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/50 text-emerald-900 dark:text-emerald-100': theme === 'success',
@@ -20,7 +20,7 @@ withDefaults(defineProps<{
     <div v-if="stat || statLabel" class="text-center mb-4 space-y-1">
       <div 
         v-if="stat"
-        class="text-2xl font-extrabold"
+        class="text-2xl font-extrabold break-words"
         :class="{
           'text-gray-900 dark:text-white': theme === 'neutral',
           'text-emerald-900 dark:text-emerald-300': theme === 'success',
@@ -31,7 +31,7 @@ withDefaults(defineProps<{
       </div>
       <div 
         v-if="statLabel"
-        class="text-xs font-bold uppercase tracking-wider"
+        class="text-xs font-bold uppercase tracking-wider break-words"
         :class="{
           'text-gray-700 dark:text-zinc-400': theme === 'neutral',
           'text-emerald-700 dark:text-emerald-400/80': theme === 'success',

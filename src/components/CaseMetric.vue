@@ -11,7 +11,7 @@ withDefaults(defineProps<{
 <template>
   <div class="relative group h-full">
     <div 
-      class="border rounded-xl p-6 text-center h-full flex flex-col justify-center transition-transform hover:-translate-y-1 hover:shadow-md"
+      class="border rounded-xl p-6 text-center h-full flex flex-col justify-center transition-transform hover:-translate-y-1 hover:shadow-md min-w-0"
       :class="{
         'bg-gray-50 dark:bg-zinc-900 border-gray-200 dark:border-zinc-800': theme === 'neutral',
         'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/50': theme === 'success',
@@ -19,7 +19,7 @@ withDefaults(defineProps<{
       }"
     >
       <div 
-        class="text-4xl font-extrabold mb-2"
+        class="text-4xl font-extrabold mb-2 break-words"
         :class="{
           'text-gray-900 dark:text-white': theme === 'neutral',
           'text-emerald-900 dark:text-emerald-300': theme === 'success',
@@ -29,7 +29,7 @@ withDefaults(defineProps<{
         {{ value }}
       </div>
       <div 
-        class="text-sm font-bold uppercase tracking-wider"
+        class="text-sm font-bold uppercase tracking-wider break-words"
         :class="{
           'text-gray-700 dark:text-zinc-400': theme === 'neutral',
           'text-emerald-700 dark:text-emerald-400/80': theme === 'success',
