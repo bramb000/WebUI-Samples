@@ -12,7 +12,7 @@ import NodeGraphCanvas from './NodeGraphCanvas.vue';
  * - **Theming**: Built-in support for Light and Dark modes.
  */
 const meta = {
-    title: 'Node Graph/Full Canvas',
+    title: 'Portfolio / Node Graph System / Canvas',
     component: NodeGraphCanvas,
     argTypes: {
         theme: {
@@ -64,11 +64,6 @@ export const DarkMode: Story = {
         theme: 'dark',
     },
     parameters: {
-        backgrounds: {
-            default: 'dark',
-            values: [
-                { name: 'dark', value: '#1e1e1e' },
-            ],
-        },
+        backgrounds: { default: 'dark' },
     },
 };

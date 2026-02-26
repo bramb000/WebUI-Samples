@@ -3,9 +3,13 @@ import * as LoginAvatarStories from './LoginAvatar.stories';
 
 <Meta of={LoginAvatarStories} />
 
-# LoginAvatar
+# Login Avatar
 
 A playful login form featuring a **Lottie-animated avatar** that reacts to user input in real-time. Built with Vue 3 + TypeScript + lottie-web.
+
+## Handover Notes for Engineers
+- **Theme Prop Integration**: This component strictly expects either `'light'` or `'dark'` passed to the `theme` prop. The internal CSS automatically flips the custom properties based on this string. If the container background requires a different shade, do not override the CSS vars individually; ensure the container background matches either `#f3f4f6` (light) or `#0b0b12` (dark) for seamless blending.
+- **Canvas Rendering Requirement**: `lottie-web` is explicitly initialized with `renderer: 'canvas'`. The source SVG `Avatar.json` contains complex masking layers that **fail to render correctly** if you switch this to the default SVG renderer. Do not alter the renderer!
 
 <Canvas of={LoginAvatarStories.LightMode} />
 

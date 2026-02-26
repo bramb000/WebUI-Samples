@@ -9,9 +9,8 @@ import SalesModal from './SalesModal.vue';
  * - **Inline Mode**: Pass `inline: true` to embed the modal natively in a page flow. On desktop sizes, it mathematically transforms scale to mimic 1440px desktop layouts within constrained containers. On mobile viewports under 1024px, the scale lock disables, restoring native fluid `flex-col` stacking!
  */
 const meta = {
-    title: 'Sales Modal/Full View',
+    title: 'Portfolio / Sales Modal / Modal',
     component: SalesModal,
-    tags: ['autodocs'],
     parameters: {
         layout: 'fullscreen',
     },

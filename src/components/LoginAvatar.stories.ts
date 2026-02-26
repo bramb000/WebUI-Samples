@@ -13,7 +13,7 @@ import LoginAvatar from './LoginAvatar.vue';
  * The component supports **light** and **dark** colour themes via the `theme` prop.
  */
 const meta = {
-    title: 'Login Micro Interaction/LoginAvatar',
+    title: 'Portfolio / Login Interaction / Avatar',
     component: LoginAvatar,
     argTypes: {
         theme: {
@@ -61,11 +61,6 @@ export const DarkMode: Story = {
         theme: 'dark',
     },
     parameters: {
-        backgrounds: {
-            default: 'dark',
-            values: [
-                { name: 'dark', value: '#121212' },
-            ],
-        },
+        backgrounds: { default: 'dark' },
     },
 };

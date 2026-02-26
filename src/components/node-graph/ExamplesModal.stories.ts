@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import ExamplesModal from './ExamplesModal.vue'
 
 const meta: Meta<typeof ExamplesModal> = {
-    title: 'Node Graph/Components/Contextual Help (ExamplesModal)',
+    title: 'Portfolio / Node Graph System / Examples Modal',
     component: ExamplesModal,
     tags: ['autodocs'],
     argTypes: {

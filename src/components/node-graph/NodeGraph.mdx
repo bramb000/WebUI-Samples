@@ -5,7 +5,14 @@ import * as NodeGraphStories from './NodeGraph.stories';
 
 # NodeGraphCanvas
 
+# Node Graph Canvas
+
 A **visual node-based editor** for constructing logic flows. Supports data types, execution flow control, and real-time evaluation.
+
+## Handover Notes for Engineers
+- **State Management**: The entire graph state (nodes, connections, execution flow) is encapsulated within the `useNodeGraph` composable. The `NodeGraphCanvas` component acts purely as a consumer/renderer of this state.
+- **Node Component Modularity**: Individual nodes (`GraphNode`) and connection splines (`ConnectionLine`) are completely decoupled and receive their drawing coordinates and port logic directly from the Canvas wrapper via props.
+- **Theming**: Setting the `theme="dark"` prop cascades CSS variables downwards through all child nodes. The global background must be managed by the parent container wrapping `NodeGraphCanvas` (recommended: `#0b0b12` for dark).
 
 <Canvas of={NodeGraphStories.LightMode} />
 

@@ -11,7 +11,7 @@ import SalesBadge from './SalesBadge.vue';
  * - The border utilizes dynamic opacity and inset shadows to simulate a physical glass tile reflecting ambient light.
  */
 const meta = {
-    title: 'Sales Modal/Atomic/Insight Badge',
+    title: 'Portfolio / Sales Modal / Atomic / Insight Badge',
     component: SalesBadge,
     tags: ['autodocs'],
     argTypes: {

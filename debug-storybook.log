@@ -1,10 +1,10 @@
-[09:06:44.590] [INFO] storybook v10.2.8
-[09:06:45.147] [DEBUG] Getting package.json info for D:/WebUI Samples/package.json...
-[09:06:46.563] [DEBUG] Serving static files from [36mnode_modules/@chromatic-com/storybook/assets[39m at [36m/addon-visual-tests-assets[39m
-[09:06:46.563] [INFO] Starting...
-[09:06:46.884] [DEBUG] Starting preview..
-[09:06:47.129] [WARN] 🚨 Unable to index ./src/components/LoginAvatar.mdx,./src/components/LoginAvatar.stories.ts:
-  Error: You created a component docs page for 'Login Micro Interaction/LoginAvatar', but also tagged the CSF file with 'autodocs'. This is probably a mistake.
+[20:19:40.899] [INFO] storybook v10.2.8
+[20:19:42.528] [DEBUG] Getting package.json info for D:/WebUI Samples/package.json...
+[20:19:44.972] [DEBUG] Serving static files from [36mnode_modules/@chromatic-com/storybook/assets[39m at [36m/addon-visual-tests-assets[39m
+[20:19:44.973] [INFO] Starting...
+[20:19:45.755] [DEBUG] Starting preview..
+[20:19:46.206] [WARN] 🚨 Unable to index ./src/components/sales-modal/SalesModal.mdx,./src/components/sales-modal/SalesModal.stories.ts:
+  Error: You created a component docs page for 'Portfolio / Sales Modal / Modal', but also tagged the CSF file with 'autodocs'. This is probably a mistake.
     at _StoryIndexGenerator.chooseDuplicate (file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:6048:15)
     at file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:6087:52
     at Array.forEach (<anonymous>)
@@ -15,8 +15,8 @@
     at async Module.start (file:///D:/WebUI%20Samples/node_modules/@storybook/builder-vite/dist/index.js:1923:17)
     at async storybookDevServer (file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:7207:83)
     at async buildOrThrow (file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:4504:12)
-[09:06:47.137] [ERROR] Failed to build the preview
-[09:06:47.138] [ERROR] Error: Unable to index ./src/components/LoginAvatar.mdx,./src/components/LoginAvatar.stories.ts
+[20:19:46.225] [ERROR] Failed to build the preview
+[20:19:46.227] [ERROR] Error: Unable to index ./src/components/sales-modal/SalesModal.mdx,./src/components/sales-modal/SalesModal.stories.ts
     at _StoryIndexGenerator.getIndexAndStats (file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:6092:15)
     at async _StoryIndexGenerator.getIndex (file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:6071:13)
     at async getOptimizeDeps (file:///D:/WebUI%20Samples/node_modules/@storybook/builder-vite/dist/index.js:1862:15)
@@ -27,5 +27,5 @@
     at async buildDevStandalone (file:///D:/WebUI%20Samples/node_modules/storybook/dist/core-server/index.js:7577:66)
     at async withTelemetry (file:///D:/WebUI%20Samples/node_modules/storybook/dist/_node-chunks/chunk-KIOKJLL5.js:218:12)
     at async dev (file:///D:/WebUI%20Samples/node_modules/storybook/dist/bin/core.js:2734:3)
-[09:06:47.142] [WARN] Broken build, fix the error above.
+[20:19:46.236] [WARN] Broken build, fix the error above.
 You may need to refresh the browser.

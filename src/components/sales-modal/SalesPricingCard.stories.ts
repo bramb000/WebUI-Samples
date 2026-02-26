@@ -10,7 +10,7 @@ import SalesPricingCard from './SalesPricingCard.vue';
  * - **Visual Design**: Uses a subtle inner-ring inset on the dark background (`bg-[#0b0b12] ring-white/10`) which glows Indigo when mathematically selected via the `buttonVariant="selected"` prop.
  */
 const meta = {
-    title: 'Sales Modal/Pricing Card',
+    title: 'Portfolio / Sales Modal / Pricing Card',
     component: SalesPricingCard,
     tags: ['autodocs'],
     argTypes: {

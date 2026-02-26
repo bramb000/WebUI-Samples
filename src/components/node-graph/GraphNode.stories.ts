@@ -3,7 +3,7 @@ import GraphNode from './GraphNode.vue'
 import type { GraphNodeData } from '../../composables/useNodeGraph'
 
 const meta: Meta<typeof GraphNode> = {
-    title: 'Node Graph/Components/GraphNode',
+    title: 'Portfolio / Node Graph System / Graph Node',
     component: GraphNode,
     tags: ['autodocs'],
     argTypes: {

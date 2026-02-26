@@ -9,7 +9,7 @@ import SalesButton from './SalesButton.vue';
  * - **Spring Physics**: All buttons utilize a tightly tuned spring-like cubic bezier transition (`duration-300 cubic-bezier(0.34, 1.56, 0.64, 1)`) for satisfying `active:scale-[0.97]` clicks.
  */
 const meta = {
-    title: 'Sales Modal/Atomic/Call to Action',
+    title: 'Portfolio / Sales Modal / Atomic / Call to Action',
     component: SalesButton,
     tags: ['autodocs'],
     argTypes: {

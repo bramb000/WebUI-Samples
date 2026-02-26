@@ -11,7 +11,7 @@ import SalesToggle from './SalesToggle.vue';
  * - The entire component sits inside a glassmorphic well (`bg-white/5` with `shadow-inner`).
  */
 const meta = {
-    title: 'Sales Modal/Atomic/Billing Toggle',
+    title: 'Portfolio / Sales Modal / Atomic / Billing Toggle',
     component: SalesToggle,
     tags: ['autodocs'],
     argTypes: {

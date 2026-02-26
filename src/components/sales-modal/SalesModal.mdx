@@ -1,0 +1,49 @@
+import { Meta, Canvas, Story } from '@storybook/addon-docs/blocks';
+import * as SalesModalStories from './SalesModal.stories';
+
+<Meta of={SalesModalStories} />
+
+# Sales Modal System
+
+A highly responsive, component-driven pricing modal. Features dynamic user-specific banner alerts for 'Pro' and 'Team' tiers, interactive billing toggles, and atomic sub-components designed for high reusability.
+
+<Canvas of={SalesModalStories.FullScreen} />
+
+---
+
+## Engineering Handover Notes
+
+### Complex Responsive Behaviors
+The \`SalesModal\` serves as the primary orchestrator for the card grid. It implements several complex responsive layers:
+
+1. **Inline vs. Fullscreen Rendering**
+   - The component accepts an \`inline\` boolean prop.
+   - **Fullscreen (\`inline: false\`)**: Default behavior. Yields a \`fixed inset-0\` overlay with a heavy `backdrop-blur` takeover.
+   - **Inline (\`inline: true\`)**: Embeds natively in a page.
+
+2. **Binary Grid Layout (Container Queries)**
+   - The pricing tier grid strictly enforces a **binary shape state** to prevent claustrophobic layout squishing.
+   - Using Tailwind Container Queries (\`@container\` on parent wrappers), the grid uses \`grid-cols-1 @[1100px]:grid-cols-4\`.
+   - Ensure the parent wrapper has an \`@container\` class (this is already provided in the \`ExperimentWrapper\` component)!
+   - **Result**: The cards are either perfectly stacked into 1 vertical column, or fully spread into 4 horizontal columns. There are intentionally zero intermediate 2 or 3 column breakpoint states.
+
+3. **Horizontal Row Alignment Lock**
+   - To guarantee that all action buttons and numerical prices perfectly align horizontally on the Y-axis across the 4 cards, the \`SalesPricingCard\` applies strict absolute heights to textual containers (\`h-[88px]\` for Header, \`h-[140px]\` for Price). 
+   - Modifying padding within these cards must be done carefully to ensure the absolute height bounds are not broken by expanded text content.
+
+---
+
+## Component Suite
+The Sales Modal is decomposed into several atomic pieces for maintainability.
+
+### SalesPricingCard
+The structural body of each tier. Houses the lerping numerical animations (via \`requestAnimationFrame\`) and feature lists.
+
+### SalesToggle
+A highly polished, dark-mode native segmented controller for explicitly toggling between Annual and Monthly billing cycles. Includes a permanent "15% off" conversion badge.
+
+### SalesBadge
+Glassmorphic insight containers rendered inside the cards. They dynamically scale to accommodate varying string lengths (like "You completed 2000 actions...").
+
+### SalesButton
+A resilient CTA component with heavily tuned cubic-bezier spring physics on click (\`active:scale-[0.97]\`) and a sweeping glass flare gradient on layout hover.
