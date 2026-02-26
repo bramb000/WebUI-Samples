@@ -131,13 +131,13 @@ watch(targetPrice, (newVal) => {
     <div class="flex flex-col flex-1 h-full select-none">
       
       <!-- Headers -->
-      <div class="flex flex-col gap-2 items-start justify-start w-full mb-6 shrink-0 z-10 flex-1 min-h-[64px]">
+      <div class="flex flex-col gap-2 items-start justify-start w-full mb-6 shrink-0 z-10 h-[88px]">
         <h3 class="text-xl @sm:text-2xl font-medium font-['Outfit'] text-white leading-tight">{{ title }}</h3>
         <p class="text-sm font-normal font-['Outfit'] text-slate-400 leading-snug text-left max-w-xs">{{ subtitle }}</p>
       </div>
 
       <!-- Price -->
-      <div class="flex flex-col items-start justify-start w-full text-left mb-8 shrink-0 z-10 min-h-[96px]">
+      <div class="flex flex-col items-start justify-start w-full text-left mb-8 shrink-0 z-10 h-[140px]">
         <div class="flex items-start justify-start w-full leading-none mb-2 mt-1 relative">
           <span v-if="!isCustom" class="text-xl font-medium font-['Outfit'] text-white mt-1.5 mr-0.5">$</span>
           <span v-if="!isCustom" class="text-5xl @sm:text-7xl font-semibold font-['Outfit'] text-white tracking-tighter tabular-nums">{{ formattedPrice }}</span>

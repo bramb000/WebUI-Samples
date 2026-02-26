@@ -4,7 +4,7 @@ import SalesToggle from './SalesToggle.vue';
 import SalesPricingCard from './SalesPricingCard.vue';
 import type { Props as CardProps } from './SalesPricingCard.vue';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   inline?: boolean;
 }>(), {
   inline: false
