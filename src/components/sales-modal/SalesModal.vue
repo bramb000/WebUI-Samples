@@ -125,7 +125,7 @@ const plans: CardProps[] = [
       <!-- Scrollable content area -->
       <div :class="['flex-1 flex flex-col gap-6 custom-scrollbar w-full', inline ? 'overflow-y-auto overflow-x-hidden pr-2' : '']">
         <!-- Grid layout for cards -->
-        <div class="grid grid-cols-1 @xl:grid-cols-2 @[1100px]:grid-cols-4 gap-6 items-stretch w-full pb-4">
+        <div class="grid grid-cols-1 @[1100px]:grid-cols-4 gap-6 items-stretch w-full pb-4 pr-1">
           <SalesPricingCard
             v-for="(plan, index) in plans"
             :key="index"
