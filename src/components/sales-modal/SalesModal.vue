@@ -103,11 +103,12 @@ const plans: CardProps[] = [
 </script>
 
 <template>
-  <div :class="inline ? 'w-full h-full bg-[#0a0a0f] relative rounded-xl overflow-hidden' : 'fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 sm:p-6 bg-[#030305]/80 backdrop-blur-3xl w-full text-left overflow-y-auto'">
-    <div :class="inline ? 'w-full h-full flex flex-col p-2 @sm:p-8 items-center justify-center' : 'w-full py-10'">
+  <div :class="inline ? 'w-full h-full bg-[#0a0a0f] relative rounded-xl overflow-hidden' : 'fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-[#030305]/80 backdrop-blur-3xl w-full text-left flex flex-col'">
+    <div :class="inline ? 'w-full h-full flex flex-col p-2 @sm:p-8 items-center justify-center' : 'w-full min-h-full flex items-center justify-center shrink-0'">
       <!-- Modal Container -->
       <div 
-        class="bg-[#0b0b12]/90 rounded-3xl shadow-[0_0_80px_rgba(112,56,224,0.15)] ring-1 ring-white/10 w-full max-w-7xl relative flex flex-col p-4 @md:p-6 @xl:p-8 gap-5 @md:gap-6 border border-white/5 pointer-events-auto mx-auto max-h-full overflow-hidden" 
+        class="bg-[#0b0b12]/90 rounded-3xl shadow-[0_0_80px_rgba(112,56,224,0.15)] ring-1 ring-white/10 w-full max-w-7xl relative flex flex-col p-5 @md:p-8 @xl:p-10 gap-6 @md:gap-8 border border-white/5 pointer-events-auto mx-auto my-auto" 
+        :class="inline ? 'max-h-full overflow-hidden' : 'shrink-0'"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -122,13 +123,13 @@ const plans: CardProps[] = [
       </div>
 
       <!-- Scrollable content area -->
-      <div class="flex-1 overflow-hidden flex flex-col gap-6 -mx-1 px-1">
-        <!-- Horizontal scrolling flex layout for cards -->
-        <div class="flex flex-row overflow-x-auto overflow-y-visible snap-x snap-mandatory gap-4 @md:gap-6 items-stretch w-full pb-6 pt-2 custom-scrollbar pr-4">
+      <div :class="['flex-1 flex flex-col gap-6 custom-scrollbar w-full', inline ? 'overflow-y-auto overflow-x-hidden pr-2' : '']">
+        <!-- Grid layout for cards -->
+        <div class="grid grid-cols-1 @xl:grid-cols-2 @[1100px]:grid-cols-4 gap-6 items-stretch w-full pb-4">
           <SalesPricingCard
             v-for="(plan, index) in plans"
             :key="index"
-            class="h-full w-[85vw] max-w-[320px] shrink-0 snap-center @2xl:w-auto @2xl:flex-1"
+            class="h-full w-full"
             v-bind="plan"
             :billing-cycle="billingCycle"
             :buttonVariant="selectedPlan === plan.title ? 'selected' : plan.buttonVariant"

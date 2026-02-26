@@ -131,28 +131,28 @@ watch(targetPrice, (newVal) => {
     <div class="flex flex-col flex-1 h-full select-none">
       
       <!-- Headers -->
-      <div class="flex flex-col gap-1.5 items-start justify-center w-full mb-4 h-[72px] shrink-0 z-10">
-        <h3 class="text-lg @sm:text-xl font-medium font-['Outfit'] text-white leading-tight">{{ title }}</h3>
-        <p class="text-xs @sm:text-sm font-normal font-['Outfit'] text-slate-400 leading-snug text-left max-w-xs">{{ subtitle }}</p>
+      <div class="flex flex-col gap-2 items-start justify-start w-full mb-6 shrink-0 z-10 flex-1 min-h-[64px]">
+        <h3 class="text-xl @sm:text-2xl font-medium font-['Outfit'] text-white leading-tight">{{ title }}</h3>
+        <p class="text-sm font-normal font-['Outfit'] text-slate-400 leading-snug text-left max-w-xs">{{ subtitle }}</p>
       </div>
 
       <!-- Price -->
-      <div class="flex flex-col items-start justify-center w-full text-left mb-6 h-[104px] shrink-0 z-10">
-        <div class="flex items-start justify-start w-full leading-none mb-2 mt-1">
-          <span v-if="!isCustom" class="text-lg font-medium font-['Outfit'] text-white mt-1 mr-0.5">$</span>
-          <span v-if="!isCustom" class="text-5xl @sm:text-6xl font-semibold font-['Outfit'] text-white tracking-tighter tabular-nums">{{ formattedPrice }}</span>
-          <span v-else class="text-3xl @sm:text-4xl font-semibold font-['Outfit'] text-white tracking-tight">{{ formattedPrice }}</span>
-          <span v-if="!isCustom" class="ml-2 text-xs @sm:text-sm font-normal font-['Outfit'] text-slate-500 self-center mt-2">/month</span>
+      <div class="flex flex-col items-start justify-start w-full text-left mb-8 shrink-0 z-10 min-h-[96px]">
+        <div class="flex items-start justify-start w-full leading-none mb-2 mt-1 relative">
+          <span v-if="!isCustom" class="text-xl font-medium font-['Outfit'] text-white mt-1.5 mr-0.5">$</span>
+          <span v-if="!isCustom" class="text-5xl @sm:text-7xl font-semibold font-['Outfit'] text-white tracking-tighter tabular-nums">{{ formattedPrice }}</span>
+          <span v-else class="text-3xl @sm:text-5xl font-semibold font-['Outfit'] text-white tracking-tight leading-tight">{{ formattedPrice }}</span>
+          <span v-if="!isCustom" class="ml-2 text-sm font-normal font-['Outfit'] text-slate-500 self-center mt-3">/month</span>
         </div>
         <p class="text-[11px] @sm:text-xs font-normal font-['Outfit'] text-slate-500 leading-tight whitespace-pre-wrap text-left max-w-[200px]">{{ billingSubtext }}</p>
       </div>
 
       <!-- Action Button -->
-      <div class="w-full flex items-center justify-center mb-5 z-10 shrink-0">
+      <div class="w-full flex items-center justify-center mb-6 z-10 shrink-0">
         <SalesButton 
           :variant="buttonVariant" 
-          size="md"
-          class="h-10 @sm:h-12 w-full text-xs @sm:text-sm"
+          size="lg"
+          class="h-12 w-full text-sm font-semibold"
           fullWidth
           @click="$emit('select')"
         >
@@ -161,7 +161,7 @@ watch(targetPrice, (newVal) => {
       </div>
 
       <!-- Divider -->
-      <hr class="w-full border-white/5 mb-5 z-10" />
+      <hr class="w-full border-white/5 mb-6 z-10" />
 
       <!-- Features List -->
       <div class="flex flex-col gap-4 w-full z-10 relative mb-4">
