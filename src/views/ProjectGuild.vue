@@ -69,7 +69,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
       title="AFK Rewards for Guild of Guardians"
       description="How data-driven UX design increased D7 retention by 25% and D7 LTV by 12% for a live mobile RPG."
       role="Feature Owner & Lead UX Designer"
-      timeline="Multiple Months"
+      timeline="6 months"
       :tags="['Mobile RPG', 'Data Analysis', 'Feature Design', 'Live Product']"
     >
       <template #team>
