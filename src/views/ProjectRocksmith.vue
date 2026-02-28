@@ -49,6 +49,12 @@ import vertScroll from '../assets/images/rocksmith/solution/036_r-vertical-scrol
 import vertScrollNonUniform from '../assets/images/rocksmith/solution/037_r-vert-scroll-non-uniform.gif';
 import controlSchemeConsole from '../assets/images/rocksmith/solution/038_rocksmith-screenshot-2025-12-24-07-50-27-43.png';
 import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksmith-screenshot-2025-12-24-09-01-25-06.png';
+
+// Accessibility Colorblind Profiles
+import accessibilityColorblind1 from '../assets/images/rocksmith/accessibility/img-20251109-wa0014-2.webp';
+import accessibilityColorblind2 from '../assets/images/rocksmith/accessibility/img-20251109-wa0017-3.webp';
+import accessibilityColorblind3 from '../assets/images/rocksmith/accessibility/img_0459-1.webp';
+import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/img_0460-1.webp';
 </script>
 
 <template>
@@ -262,6 +268,14 @@ import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksm
         <p class="text-lg font-sans leading-relaxed">
           <strong>This customisation system was easy to build as my team had already worked on a dynamic system to make our 3D UI responsive.</strong> The original system, being built on solid technical foundations, meant that users could change their configuration at run time — whenever they wanted and however many times they wanted.
         </p>
+
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <CaseImage :src="accessibilityColorblind1" alt="Colorblind accessibility profile 1" imgClass="w-full h-auto rounded-xl object-cover" />
+          <CaseImage :src="accessibilityColorblind2" alt="Colorblind accessibility profile 2" imgClass="w-full h-auto rounded-xl object-cover" />
+          <CaseImage :src="accessibilityColorblind3" alt="Colorblind accessibility profile 3" imgClass="w-full h-auto rounded-xl object-cover" />
+          <CaseImage :src="accessibilityColorblind4" alt="Colorblind accessibility profile 4" imgClass="w-full h-auto rounded-xl object-cover" />
+        </div>
       </div>
     </section>
 
