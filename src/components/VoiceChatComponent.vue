@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
 type ChatState = 'idle' | 'idle_hint' | 'listening' | 'processing' | 'speaking' | 'navigating' | 'cooking' | 'booking' | 'confused'
 
+const props = defineProps<{
+    forceState?: ChatState
+}>()
+
 const currentState = ref<ChatState>('idle')
+const displayState = computed(() => props.forceState || currentState.value)
+
 const isSpeaking = ref(false)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const isHovering = ref(false)
@@ -439,14 +445,14 @@ const renderCanvas = (time: number) => {
   
   // Create a simulated audio level that bounces
   let audioLevel = 0
-  if (currentState.value === 'listening' || isSpeaking.value) {
+  if (displayState.value === 'listening' || isSpeaking.value) {
       // smooth random noise for audio level
       audioLevel = (Math.sin(time * 0.01) * 0.5 + 0.5) * (Math.random() * 0.5 + 0.5) * 20
   }
 
   particles.forEach(p => {
-    p.update(currentState.value, time, cx, cy, audioLevel)
-    p.draw(ctx, audioLevel, currentState.value, time)
+    p.update(displayState.value, time, cx, cy, audioLevel)
+    p.draw(ctx, audioLevel, displayState.value, time)
   })
 
   animationFrameId = requestAnimationFrame(renderCanvas)
@@ -528,7 +534,7 @@ onUnmounted(() => {
         <div 
           class="neumorphic-orb relative rounded-full flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)] shrink-0"
           :class="[
-            currentState !== 'idle' ? 'active-inset scale-95' : 'idle-outset scale-100',
+            displayState !== 'idle' ? 'active-inset scale-95' : 'idle-outset scale-100',
             'w-56 h-56 md:w-72 md:h-72'
           ]"
           @click="handleAction"
@@ -536,7 +542,7 @@ onUnmounted(() => {
            @mouseleave="isHovering = false"
           @mousemove="handleMouseMove"
           role="button"
-          :aria-label="(currentState === 'idle' || currentState === 'idle_hint') ? 'Start listening' : 'Stop interaction'"
+          :aria-label="(displayState === 'idle' || displayState === 'idle_hint') ? 'Start listening' : 'Stop interaction'"
         >
           <!-- Canvas for the floating braille marks -->
           <canvas 
@@ -548,10 +554,10 @@ onUnmounted(() => {
           <div 
             class="absolute inset-x-0 inset-y-0 rounded-full transition-opacity duration-1000 mix-blend-screen"
             :class="{
-                'opacity-0': currentState === 'idle' || currentState === 'idle_hint',
-                'opacity-40 bg-cyan-400/20 blur-xl': currentState === 'listening',
-                'opacity-50 bg-fuchsia-400/20 blur-xl': currentState === 'processing',
-                'opacity-60 bg-cyan-300/30 blur-2xl': currentState === 'speaking'
+                'opacity-0': displayState === 'idle' || displayState === 'idle_hint',
+                'opacity-40 bg-cyan-400/20 blur-xl': displayState === 'listening',
+                'opacity-50 bg-fuchsia-400/20 blur-xl': displayState === 'processing',
+                'opacity-60 bg-cyan-300/30 blur-2xl': displayState === 'speaking'
             }"
           ></div>
         </div>
@@ -559,12 +565,12 @@ onUnmounted(() => {
         <!-- Status Text -->
         <div class="mt-6 md:mt-8 h-8 text-center flex flex-col items-center justify-center">
             <p class="font-sans text-xs tracking-[0.2em] uppercase font-bold transition-all duration-500"
-               :class="(currentState === 'idle' || currentState === 'idle_hint') ? 'opacity-30' : 'opacity-100 text-cyan-500 drop-shadow-md scale-105'">
-                <span v-if="currentState === 'idle' || currentState === 'idle_hint'">
+               :class="(displayState === 'idle' || displayState === 'idle_hint') ? 'opacity-30' : 'opacity-100 text-cyan-500 drop-shadow-md scale-105'">
+                <span v-if="displayState === 'idle' || displayState === 'idle_hint'">
                     {{ isMobile ? 'Tap to awaken me' : 'Click to awaken me' }}
                 </span>
                 <span v-else>
-                    {{ currentState }}
+                    {{ displayState }}
                 </span>
             </p>
         </div>
@@ -581,7 +587,7 @@ onUnmounted(() => {
         <div class="flex-1 max-w-[240px] flex justify-center min-h-[44px]">
             <transition name="fade" mode="out-in">
                 <button 
-                    v-if="(currentState === 'idle' || currentState === 'idle_hint') && !isTyping"
+                    v-if="(displayState === 'idle' || displayState === 'idle_hint') && !isTyping"
                     @click="isTyping = true; resetIdleHintTimer()"
                     class="neo-btn rounded-full px-6 py-2 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold opacity-70 hover:opacity-100 transition-all w-full"
                 >

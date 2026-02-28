@@ -1,0 +1,132 @@
+import { Meta, Canvas, Story } from '@storybook/addon-docs/blocks';
+import * as VoiceChatStories from './VoiceChatComponent.stories';
+
+<Meta of={VoiceChatStories} />
+
+# AI Voice Chat Orb
+
+A premium, Skeumorphic conversational orb featuring fluid animated "ethereal braille marks" rendered on an HTML `<canvas>`. It mimics a live AI assistant by reacting to voice input, parsing custom conversational intents, and morphing into dynamic SVG icons. Built with Vue 3 + TypeScript.
+
+## Handover Notes for Engineers
+- **Canvas Rendering Requirement**: The heavy lifting for the 800+ particle coordinate system runs inside a `requestAnimationFrame` loop drawing directly to a transparent `<canvas>`. Ensure the parent container does not enforce CSS `transform: scale()` properties that heavily distort the aspect ratio, as it will stretch the pixel buffer.
+- **Microphone Permissions**: The component uses the native Web Speech API (`SpeechRecognition`). Browsers will natively block or request permissions when `startListening()` is called. No external API keys are required for Chrome/Edge/Safari.
+- **Theming**: The layout forces a **Neumorphic Dark Theme** regardless of the surrounding environment to ensure the neon particles (using `mix-blend-screen`) are legible. Overriding `--neo-bg` directly is not recommended without also tuning the `active-inset` lighting shadows.
+
+---
+
+## Overview
+
+The component acts as a futuristic AI avatar interface:
+
+1. **Top Nudges:** Interactive chips that auto-populate intents (e.g., "Make an omelette").
+2. **Center Orb:** A Neumorphic container housing the `<canvas>` particle physics engine.
+3. **Bottom Action Bar:** Houses interactive FAB settings and the Keyboard Fallback mechanism for users without microphones.
+
+The component manages its own complex state machine natively (`idle` -> `listening` -> `processing` -> `intent_resolution`), but exposes a `forceState` prop purely for isolated Storybook previewing.
+
+---
+
+## State Gallery
+
+### Idle & Hint Tapping
+By default, the 800 glowing dots drift slowly in an ambient hover. After 6 seconds of strict inactivity, the engine morphs the dots into a pointing Hand SVG and visually "presses" into the z-axis to teach the user it's interactive.
+
+<Canvas>
+  <Story of={VoiceChatStories.Idle} />
+  <Story of={VoiceChatStories.IdleHintTapping} />
+</Canvas>
+
+### Audio Reactivity (Listening & Speaking)
+During active audio playback or microphone capture, the component renders a smooth glowing gradient via CSS `mix-blend-screen` and simulates an audio frequency using mathematical sine waves that scale the physical footprint of the particles.
+
+<Canvas>
+  <Story of={VoiceChatStories.Listening} />
+  <Story of={VoiceChatStories.Speaking} />
+</Canvas>
+
+### Intent Resolution (Processing & SVG Rendering)
+Once the query is captured, it processes the intent. When successfully routed to an intent (like asking for directions or a recipe), the Canvas engine parses a raw path `d` string and snaps the particles exactly along the mathematical curve to draw a crisp icon.
+
+<Canvas>
+  <Story of={VoiceChatStories.Processing} />
+</Canvas>
+
+<Canvas>
+  <Story of={VoiceChatStories.RouteNavigating} />
+  <Story of={VoiceChatStories.RouteCooking} />
+  <Story of={VoiceChatStories.RouteBooking} />
+  <Story of={VoiceChatStories.RouteConfused} />
+</Canvas>
+
+---
+
+## Accessibility
+
+> Designed with high contrast and multimodal fallbacks.
+
+- **Keyboard Fallback**: Users without microphone hardware or speech capabilities can click the centered `Use text instead` button to reveal a fully accessible text input form. Forms manage their own `@submit.prevent` lifecycles and autofocus properly on reveal.
+- **ARIA Labels**: The main Neumorphic orb acts as a large hit area button labeled with dynamic `aria-label` tags (`Start listening` vs `Stop interaction`) depending on the `currentState`.
+- **Contrast**: The dark Neumorphic surfaces (#1e2024) and the brightly glowing cyan strings (#00f0ff) ensure comfortable VCAG AA readability for the status text and icons.
+
+---
+
+## Animation Logic & Physics Engine
+
+### The Coordinate System
+The particle engine does not use an external library like Three.js. It iterates through an array of `Particle` classes.
+
+```typescript
+particles.forEach(p => {
+    p.update(displayState.value, time, cx, cy, audioLevel)
+    p.draw(ctx, audioLevel, displayState.value, time)
+})
+```
+
+### Wander Noise vs Crisp Resolutions
+To make the orb feel like "fluid sand", each individual particle computes a `wanderX` and `wanderY` modifier using `Math.sin(time)` with a unique, randomized offset. 
+
+- In **Idle Mode**, the `wanderIntensity` is set to `10px`, allowing them to drift wildly.
+- When drawing a **Strict SVG Shape**, the `wanderIntensity` is geometrically clamped to `1.5px`. This microscopic vibration allows the silhouette to remain crystal clear, instead of blurring into an unrecognizable fuzz.
+
+### SVG Path Parsing
+When a state like `'cooking'` is initialized, the script extracts the raw `d` string of a Chef's Hat from Lucide Icons:
+
+```typescript
+const path = new Path2D(SVG_PATHS.chefHat)
+// 1. We split the path by the "M" Move command to support disconnected shapes (like dots in a ?)
+// 2. We sum the total lengths of all sub-paths.
+// 3. We use native getPointAtLength(p) to plot evenly spaced coordinates along the curve.
+```
+
+The system calculates proportion weights so that complicated, multi-segment SVGs distribute exactly the correct density of dots to long lines vs short lines.
+
+---
+
+## Component API
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Props</strong></td>
+      <td><code>forceState</code>: <code>ChatState</code> (Optional override for Storybook testing)</td>
+    </tr>
+    <tr>
+      <td><strong>Events</strong></td>
+      <td>None (State is encapsulated)</td>
+    </tr>
+    <tr>
+      <td><strong>Dependencies</strong></td>
+      <td><code>HTML5 Canvas</code>, <code>SpeechRecognition API</code></td>
+    </tr>
+    <tr>
+      <td><strong>Styling</strong></td>
+      <td>Scoped CSS mapping <code>--neo-bg</code> CSS variables.</td>
+    </tr>
+  </tbody>
+</table>
