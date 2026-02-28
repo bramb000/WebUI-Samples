@@ -208,7 +208,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Solution: Responsive UI</h2>
+        <h2 class="text-2xl font-serif font-bold sticky top-24">Responsive UI</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
