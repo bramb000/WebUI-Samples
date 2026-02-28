@@ -22,28 +22,28 @@ const projects = [
   {
     id: 'node-graph',
     title: 'Node Graph Visual Scripting',
-    description: 'UE Blueprint-inspired node graph with interactive tooltips and live execution.',
+    description: 'Visual Scripting UI with Excel inspired help section.',
     route: '/node-graph',
     category: 'Web Design'
   },
   {
     id: 'patapon',
     title: 'Designing rhythm-combat to feel fun',
-    description: 'Walk with me as I breakdown the interaction and combat design of Patapon to recreate the entire core gameplay interaction system in Unity.',
+    description: 'Breakdown of interaction and combat design of Patapon to recreate the entire core gameplay interaction system in Unity.',
     route: '/experiment/patapon',
     category: 'Game Design'
   },
   {
     id: 'helldivers',
     title: 'Making the UI come to life - Inspired by Helldivers 2',
-    description: 'Built a UI component in Unreal Engine to treat 3D skeletal meshes as responsive 2D UI components.',
+    description: 'Bringing UI to life with responsive 2D componenet built with 3D assets. Inspired by Helldivers 2.',
     route: '/experiment/helldivers',
     category: 'Game Design'
   },
   {
     id: 'jedi',
     title: 'Feel like a Jedi - combat design and interaction',
-    description: 'Deconstruct interactions, analyse "game feel" and "game juice" to make my own interpretation on how it would feel to be a jedi in Unity.',
+    description: 'Deconstruct interactions, analyse game feel and game juice to make my own interpretation on how it would feel to be a jedi in Unity.',
     route: '/experiment/jedi',
     category: 'Game Design'
   }
