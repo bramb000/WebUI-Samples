@@ -3,7 +3,7 @@
     title="AI Voice Chat Simulation"
     description="A Neumorphic exploration of ethereal braille micro-interactions. The central UI features fluid 'braille marks' that represent an AI's state. These marks merge and shape themselves based on listening, processing, and speaking states, while remaining independently animated like floating sand."
     :tags="['Vue 3', 'HTML Canvas', 'Neumorphism', 'Web Speech API']"
-    storybook-id="none"
+    storybook-id="portfolio-voice-chat-default--docs"
     container-class="h-full w-full"
     full-screen-class="h-screen w-screen"
   >
