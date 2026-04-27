@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { useTheme } from '../composables/useTheme';
 import posthog from 'posthog-js';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
 
@@ -13,7 +12,6 @@ watch(isMenuOpen, (isOpen) => {
     document.body.style.overflow = '';
   }
 });
-const { theme, toggle } = useTheme();
 
 const showNavbar = ref(true);
 const lastScrollPosition = ref(0);
@@ -109,15 +107,6 @@ const trackContactClick = (source: string) => {
 
         <!-- Actions -->
         <div class="flex items-center gap-3">
-          <!-- Material Switcher: ALUM ↔ CFRP -->
-          <button
-            @click="toggle"
-            class="material-switcher focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
-            :title="theme === 'dark' ? 'Switch to Aluminium (light mode)' : 'Switch to Carbon Fibre (dark mode)'"
-          >
-            <span class="material-swatch" :class="theme === 'dark' ? 'swatch-carbon' : 'swatch-alum'"></span>
-            <span class="material-label" style="transform: rotate(2deg); display: inline-block;">{{ theme === 'dark' ? 'CFRP' : 'ALUM' }}</span>
-          </button>
 
           <!-- Let's Talk CTA -->
           <a
@@ -138,15 +127,6 @@ const trackContactClick = (source: string) => {
 
     <!-- Mobile Controls -->
     <div class="flex md:hidden items-center gap-3 relative z-50">
-      <!-- Mobile Material Switcher -->
-      <button
-        @click="toggle"
-        class="material-switcher focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
-        :title="theme === 'dark' ? 'Switch to Aluminium' : 'Switch to Carbon Fibre'"
-      >
-        <span class="material-swatch" :class="theme === 'dark' ? 'swatch-carbon' : 'swatch-alum'"></span>
-        <span class="material-label">{{ theme === 'dark' ? 'CFRP' : 'ALUM' }}</span>
-      </button>
 
       <!-- Hamburger -->
       <button

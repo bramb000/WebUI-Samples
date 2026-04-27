@@ -21,105 +21,105 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
-  uniform float u_time;
-  uniform vec2 u_resolution;
-  uniform vec2 u_position;
-  uniform vec2 u_size;
-  uniform float u_hoverIntensity;
-  uniform float u_clickIntensity;
-  uniform float u_seed;
+      precision highp float;
+      
+      uniform float u_time;
+      uniform vec2 u_resolution;
+      uniform vec2 u_position;
+      uniform vec2 u_size;
+      uniform float u_hoverIntensity;
+      uniform float u_clickIntensity;
+      uniform float u_seed;
 
-  varying vec2 vUv;
+      varying vec2 vUv;
 
-  float hash(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
-  
-  float noise(vec2 x) {
-    vec2 i = floor(x); vec2 f = fract(x);
-    float a = hash(i); float b = hash(i + vec2(1.0, 0.0));
-    float c = hash(i + vec2(0.0, 1.0)); float d = hash(i + vec2(1.0, 1.0));
-    vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-  }
-  
-  float fbm(vec2 x) {
-    float v = 0.0; float a = 0.5;
-    vec2 shift = vec2(100.0);
-    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
-    for (int i = 0; i < 4; ++i) {
-      v += a * noise(x);
-      x = rot * x * 2.0 + shift;
-      a *= 0.5;
-    }
-    return v;
-  }
-
-  void main() {
-      if (u_hoverIntensity < 0.01) {
-          gl_FragColor = vec4(0.0);
-          return;
+      float getT() { return floor(u_time * 12.0) / 12.0; }
+      
+      float hash(vec2 p) { 
+          p = fract(p * vec2(123.34, 456.21)); 
+          p += dot(p, p + 45.32); 
+          return fract(p.x * p.y); 
+      }
+      
+      float noise(vec2 p) {
+          vec2 i = floor(p); vec2 f = fract(p);
+          float a = hash(i); float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0)); float d = hash(i + vec2(1.0, 1.0));
+          vec2 u = f * f * (3.0 - 2.0 * f);
+          return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
+      
+      float fbm(vec2 p) {
+          float v = 0.0; float a = 0.5;
+          for (int i = 0; i < 4; i++) { 
+              v += a * noise(p); 
+              p *= 2.2; 
+              a *= 0.5; 
+          }
+          return v;
+      }
+      
+      float sdLine(vec2 p, vec2 a, vec2 b) {
+          vec2 pa = p - a, ba = b - a;
+          float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+          return length(pa - ba * h);
       }
 
-      // 1. TIME QUANTIZATION (12fps)
-      float fpsTime = floor(u_time * 12.0) / 12.0;
+      void main() {
+          if (u_hoverIntensity < 0.01) {
+              gl_FragColor = vec4(0.0);
+              return;
+          }
 
-      // 2. COORDINATE MAPPING (Global Canvas -> Local Button UVs)
-      vec2 pixelCoords = vUv * u_resolution;
-      vec2 center = vec2(u_position.x + u_size.x * 0.5, (u_resolution.y - u_position.y) - u_size.y * 0.5);
-      vec2 offset = pixelCoords - center;
-      
-      float pulseScale = 1.0 - (u_clickIntensity * 0.15);
-      offset *= pulseScale;
+          // 1. COORDINATE SYSTEM
+          // We have a full-screen canvas. We need to map coordinates so they match the reference's local canvas behavior.
+          vec2 pixelCoords = vUv * u_resolution;
+          vec2 centerScreen = vec2(u_position.x + u_size.x * 0.5, (u_resolution.y - u_position.y) - u_size.y * 0.5);
+          vec2 offset = pixelCoords - centerScreen;
+          
+          // In the reference, the canvas was button size + 200px padding.
+          float virtualCanvasHeight = u_size.y + 200.0;
+          
+          // Normalize so that 1.0 = half the virtual canvas height (matches uv = vUv * 2.0 - 1.0)
+          vec2 uv = offset / (virtualCanvasHeight * 0.5);
+          
+          float t = getT();
 
-      // nPos acts as the local 'uv' from -1 to 1 based on button size + bleed room
-      // We expand the bounding box by 2.0 to give plenty of room for the wisp
-      vec2 nPos = offset / (u_size * 0.8);
+          // 2. THE EXTENSION LOGIC (Adapted from reference)
+          // Calculate base button diagonal in UV units
+          vec2 bSize = u_size / virtualCanvasHeight; 
+          
+          // Pushing the anchor points 25% further than the actual corners, animating on hover
+          float extension = 1.25 * mix(0.5, 1.0, u_hoverIntensity); 
+          vec2 pA = vec2(-bSize.x * 0.5, -bSize.y * 0.5) * extension;
+          vec2 pB = vec2(bSize.x * 0.5, bSize.y * 0.5) * extension;
 
-      // 3. THE CONTAINER MASK
-      // Creates a horizontal pill shape fading at the edges
-      float maskY = smoothstep(0.9, 0.1, abs(nPos.y)); 
-      float maskX = smoothstep(1.0, 0.3, abs(nPos.x));
-      
-      // Add jagged distortion to the mask itself so it isn't a perfect oval
-      float shapeDistort = fbm(nPos * 2.0 + fpsTime + u_seed) * 0.5;
-      float baseMask = smoothstep(0.4, 0.6, (maskY * maskX) + shapeDistort);
+          vec2 pa = uv - pA, ba = pB - pA;
+          float progress = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
 
-      // 4. THE FLUID PANNING
-      // Pan two noise layers in slightly different directions
-      vec2 flow1 = vec2(fpsTime * 1.5, fpsTime * 0.2);
-      vec2 flow2 = vec2(fpsTime * 0.8, -fpsTime * 0.1);
+          // Warp increases as it moves toward the 'trail' (top-right)
+          float warpScale = mix(0.3, 1.4, progress) * u_hoverIntensity; 
+          vec2 warp = vec2(
+              fbm(uv * 1.1 + vec2(t * 0.8, t * 0.2 + u_seed)),
+              fbm(uv * 1.4 - vec2(t * 0.4, t * 0.6 - u_seed))
+          );
+          
+          vec2 distortedUv = uv + (warp - 0.5) * warpScale;
+          float d = sdLine(distortedUv, pA, pB);
 
-      float n1 = fbm(nPos * 4.0 - flow1 + u_seed);
-      float n2 = fbm(nPos * 5.0 - flow2 + u_seed * 2.0);
+          // 3. FRESH GREEN COLOR (From reference)
+          vec3 freshSpectral = vec3(0.3, 1.0, 0.6); 
+          
+          // Sharpened edge without the wide smoky halo
+          float core = 1.0 - smoothstep(0.12, 0.15, d);
 
-      // Combine them to create fluid tearing/merging
-      float fluid = n1 * n2;
-
-      // 5. THE THRESHOLD (The Hard Ink)
-      // If the fluid * mask is above 0.2, make it solid ink. Otherwise, transparent.
-      float inkShape = step(0.2, fluid * baseMask);
-
-      // 6. INTERNAL GRIT
-      // Generate tiny flowing specs to overlay on the ink
-      float grit = step(0.65, fbm(nPos * 40.0 - vec2(fpsTime * 2.0, 0.0) + u_seed));
-      
-      // Spectral Green (#45F0D1 => RGB 0.27, 0.94, 0.82)
-      vec3 inkColor = vec3(0.27, 0.94, 0.82);
-      
-      // Darken the ink where the grit particles are
-      inkColor -= grit * 0.4;
-
-      // Chromatic Aberration at edges (red/blue fringing)
-      float edgeR = step(0.18, fluid * baseMask) - inkShape;
-      float edgeB = step(0.22, fluid * baseMask) - inkShape;
-      
-      inkColor.r += edgeR * 0.8;
-      inkColor.b += edgeB * 0.8;
-
-      float inkAlpha = inkShape * u_hoverIntensity;
-
-      gl_FragColor = vec4(inkColor * inkAlpha, inkAlpha);
-  }
-`;
+          // Blend alpha and color
+          float finalAlpha = core * u_hoverIntensity;
+          vec3 finalColor = mix(freshSpectral * 0.8, freshSpectral * 1.5, progress);
+          
+          gl_FragColor = vec4(finalColor, finalAlpha);
+      }
+    `;
 
 onMounted(() => {
   if (!canvasRef.value) return;
@@ -170,17 +170,32 @@ onMounted(() => {
   updateSize();
 
   const clock = new THREE.Clock();
+  let lastHoveredId: string | null = null;
 
   const animate = () => {
     animationFrameId = requestAnimationFrame(animate);
     
     material.uniforms.u_time.value = clock.getElapsedTime();
     
+    // Determine a unique ID for the current hovered element (using href or just identity)
+    const currentHoverId = wispState.hoveredElement ? (wispState.hoveredElement as any).href || wispState.hoveredElement.innerText : null;
+    
+    // If we changed to a NEW button, instantly reset the visual opacity to 0
+    if (currentHoverId !== lastHoveredId && wispState.hoverIntensity > 0) {
+      material.uniforms.u_hoverIntensity.value = 0;
+      lastHoveredId = currentHoverId;
+    }
+    
+    if (wispState.hoverIntensity === 0 && !wispState.hoveredElement) {
+       lastHoveredId = null;
+    }
+    
     if (wispState.hoverIntensity > 0) {
-      material.uniforms.u_position.value.x += (wispState.rect.x - material.uniforms.u_position.value.x) * 0.2;
-      material.uniforms.u_position.value.y += (wispState.rect.y - material.uniforms.u_position.value.y) * 0.2;
-      material.uniforms.u_size.value.x += (wispState.rect.width - material.uniforms.u_size.value.x) * 0.2;
-      material.uniforms.u_size.value.y += (wispState.rect.height - material.uniforms.u_size.value.y) * 0.2;
+      // Snap instantly to the new button position so it spawns rather than translates
+      material.uniforms.u_position.value.x = wispState.rect.x;
+      material.uniforms.u_position.value.y = wispState.rect.y;
+      material.uniforms.u_size.value.x = wispState.rect.width;
+      material.uniforms.u_size.value.y = wispState.rect.height;
     }
     
     material.uniforms.u_hoverIntensity.value += (wispState.hoverIntensity - material.uniforms.u_hoverIntensity.value) * 0.15;

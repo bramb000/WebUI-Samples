@@ -10,6 +10,9 @@ export const wispState = reactive({
 
 export function setWispHover(el: HTMLElement | null) {
   if (el) {
+    if (wispState.hoveredElement !== el) {
+      wispState.hoverIntensity = 0;
+    }
     const rect = el.getBoundingClientRect();
     wispState.hoveredElement = el;
     wispState.rect = {
