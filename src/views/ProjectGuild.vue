@@ -64,8 +64,17 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <div class="xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
       <div class="xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
-        <!-- ─── HERO ─── -->
-    <ProjectHero
+    <!-- ─── HERO ─── -->
+    <div class="relative">
+      <!-- Decorative Tinkerer Etching -->
+      <svg class="absolute right-0 top-0 opacity-10 pointer-events-none w-64 h-64 text-[var(--color-accent)] mix-blend-screen transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
+        <circle cx="50" cy="50" r="40" stroke-dasharray="2 4" />
+        <circle cx="50" cy="50" r="30" />
+        <path d="M 50 10 L 50 90 M 10 50 L 90 50 M 21 21 L 79 79 M 21 79 L 79 21" stroke-dasharray="1 6" />
+        <rect x="35" y="35" width="30" height="30" transform="rotate(45 50 50)" />
+      </svg>
+      
+      <ProjectHero
       title="AFK Rewards for Guild of Guardians"
       description="How data-driven UX design increased D7 retention by 25% and D7 LTV by 12% for a live mobile RPG."
       role="Feature Owner & Lead UX Designer"
@@ -73,28 +82,29 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
       :tags="['Mobile RPG', 'Data Analysis', 'Feature Design', 'Live Product']"
     >
       <template #team>
-        <p class="font-serif text-lg">1 UI Artist | 1 UI Engineer | 1 Full Stack Engineer</p>
+        <p class="font-mono text-sm uppercase tracking-wider opacity-75">1 UI Artist &middot; 1 UI Engineer &middot; 1 Full Stack Engineer</p>
       </template>
     </ProjectHero>
+    </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-8 shadow-sm">
-      <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
+    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
+      <h2 class="font-mono font-black text-3xl uppercase tracking-widest" style="color:var(--color-accent)">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
         <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="success" />
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">01. The Problem</h4>
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">01. The Problem</h4>
           <p>The game suffered from a lower than standard D7 retention. Users reported that they needed to play 3-4 times a day to maximise their progression when most users only had time to play 1-2 times a day, creating an ill fit for user lifestyle needs.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">02. The Data</h4>
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">02. The Data</h4>
           <p>Using SQL (BigQuery), I identified that the most engaged users were pulling the average session/day metric up and that the average experience felt worse to most users compared to what the dashboards indicated. Most users were playing once a day and therefore lagging behind in a progression system that needed them to play 3 times a day for the best results.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">03. The Solution</h4>
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">03. The Solution</h4>
           <ul class="list-disc pl-5 space-y-2">
             <li><strong>Shifting Player Emotions:</strong> Designed an "AFK Reward Feature" that accumulated rewards while the player was away, transforming the mental model from <em>"I'm missing out"</em> when not playing to <em>"I have a gift waiting for me."</em></li>
             <li><strong>Designing for Delight:</strong> Changing the game loop to reframe features that interrupted player focus to a loop that creates positive anticipation as a hook for long term retention.</li>
@@ -108,7 +118,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── CONTEXT ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Context</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Context</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-xl font-sans leading-relaxed">
@@ -126,9 +136,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── ACTION: TLDR ─── -->
-    <section class="max-w-4xl mx-auto space-y-6 border-t border-[var(--color-text-charcoal)]/10 pt-16">
-      <h2 class="text-3xl font-serif font-bold">Action</h2>
-      <h3 class="text-xl font-sans font-bold">TLDR</h3>
+    <section class="max-w-4xl mx-auto space-y-6 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-black text-3xl uppercase tracking-wide">Action</h2>
+      <h3 class="font-mono font-black text-sm uppercase tracking-widest" style="color:var(--color-accent)">TLDR</h3>
       <p class="text-lg font-sans leading-relaxed">Problems analysed through a mixture of quantitative and qualitative data analysis:</p>
       <ol class="list-decimal pl-5 space-y-1 text-lg font-sans">
         <li>Poor structure of sessions → it always ended on a negative note</li>
@@ -147,7 +157,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── BEFORE / AFTER GALLERY ─── -->
     <section class="space-y-6">
-      <h3 class="text-xl font-sans font-bold max-w-4xl mx-auto">Before & After — Quick Overview</h3>
+      <h3 class="font-mono font-black text-sm uppercase tracking-widest max-w-4xl mx-auto" style="color:var(--color-accent)">Before &amp; After — Quick Overview</h3>
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
       <VideoEmbed src="https://www.youtube.com/embed/nJ4OENCLzkE" title="Old User Flow" />
       <div class="max-w-xl mx-auto py-4">
@@ -170,7 +180,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── DATA DEEP DIVE ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">The Data</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">The Data</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -182,40 +192,40 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         <p class="text-lg font-sans leading-relaxed">
           What was surprising was that we had K-shaped behaviour — <strong>the players who retained were playing so much that they pulled the average up</strong> and practically blindsided the team.
         </p>
-        <CaseImage :src="kShapeProblem" alt="K-shaped distribution of player sessions" caption="K-shaped behaviour: very few players had the 'average' experience" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="kShapeProblem" alt="K-shaped distribution of player sessions" caption="K-shaped behaviour: very few players had the 'average' experience" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <p class="text-lg font-sans leading-relaxed">
           In nerd terms, this is a bimodal distribution and very few players are actually having the "average" experience. Those below the average were definitely not sticking around, which was a clear indicator why having 1.3 sessions per day still resulted in such poor D7 retention.
         </p>
 
         <!-- Regression details -->
-        <div class="bg-[var(--color-text-charcoal)]/[0.03] border border-[var(--color-text-charcoal)]/10 rounded-xl p-6 space-y-4">
-          <h4 class="text-sm font-bold uppercase tracking-wider opacity-60">Logistic Regression Analysis</h4>
+        <div class="panel-recessed p-6 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-text-muted)">Logistic Regression Analysis</h4>
           <p class="text-base font-sans leading-relaxed">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong class="font-bold">24% of the variance</strong> in a complex model like retention.</p>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="border-b border-[var(--color-text-charcoal)]/20">
-                  <th class="text-left p-2 font-bold opacity-60">Metric</th>
-                  <th class="text-left p-2 font-bold opacity-60">Coefficient (β)</th>
-                  <th class="text-left p-2 font-bold opacity-60">Odds Ratio</th>
-                  <th class="text-left p-2 font-bold opacity-60">T-Statistic</th>
-                  <th class="text-left p-2 font-bold opacity-60">R²</th>
+                <tr style="border-bottom:1px solid var(--color-border)">
+                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">Metric</th>
+                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">Coefficient (β)</th>
+                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">Odds Ratio</th>
+                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">T-Statistic</th>
+                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">R²</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="border-b border-[var(--color-text-charcoal)]/10 hover:bg-[var(--color-text-charcoal)]/[0.02] transition-colors">
+                <tr style="border-bottom:1px solid var(--color-border)" class="hover:bg-black/5 transition-colors">
                   <td class="p-2 font-medium opacity-80">Intercept (β₀)</td>
                   <td class="p-2 opacity-80">0.00334</td>
                   <td class="p-2 opacity-50">N/A</td>
                   <td class="p-2 opacity-50">N/A</td>
                   <td class="p-2 opacity-50">N/A</td>
                 </tr>
-                <tr class="hover:bg-[var(--color-text-charcoal)]/[0.02] transition-colors">
+                <tr class="hover:bg-black/5 transition-colors">
                   <td class="p-2 font-medium opacity-80">Sessions/Day (β₁)</td>
-                  <td class="p-2 font-bold text-emerald-600 dark:text-emerald-400">0.1501</td>
+                  <td class="p-2 font-bold" style="color:var(--color-accent)">0.1501</td>
                   <td class="p-2 opacity-80">1.162</td>
                   <td class="p-2 opacity-80">98.78</td>
-                  <td class="p-2 font-bold text-emerald-600 dark:text-emerald-400">0.2416</td>
+                  <td class="p-2 font-bold" style="color:var(--color-accent)">0.2416</td>
                 </tr>
               </tbody>
             </table>
@@ -235,7 +245,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── SURVEY INSIGHTS ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Survey Research</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Survey Research</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -283,19 +293,19 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── AFK REWARDS DESIGN ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">AFK Rewards Design</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">AFK Rewards Design</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           <strong>In the original flow, users had to come back to take an action and be rewarded.</strong> This did not generate any anticipation or excitement at the end of your previous session.
         </p>
-        <CaseImage :src="gameLoopNegative" alt="Before game loop" caption="Before — an energy system creates a forced action that discourages returning behaviour" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="gameLoopNegative" alt="Before game loop" caption="Before — an energy system creates a forced action that discourages returning behaviour" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <p class="text-lg font-sans leading-relaxed">
           I redesigned the game loop to start sessions on a happy note and <strong>end sessions on moments of anticipation for future rewards.</strong>
         </p>
-        <CaseImage :src="gameLoopPositive" alt="After game loop" caption="After — a positive loop that encourages habit formation" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="gameLoopPositive" alt="After game loop" caption="After — a positive loop that encourages habit formation" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
 
         <p class="text-lg font-sans leading-relaxed">
           <strong>My proposal was to reposition the current energy system into an AFK (away from keyboard) reward system</strong> that collects resources while the user is away. When they are ready to leave the game, we seed the anticipation by telling users they will have rewards waiting for them.
@@ -308,7 +318,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           <CaseImage :src="afkTest1" alt="Information heavy concept" caption="Pushing information heavy concepts" imgClass="w-full h-auto rounded-lg" />
           <CaseImage :src="afkTest2" alt="Iterating on variants" caption="Iterating on variants" imgClass="w-full h-auto rounded-lg" />
         </div>
-        <CaseImage :src="wireframe" alt="Final candidate wireframe" caption="One of the final candidate wireframes" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="wireframe" alt="Final candidate wireframe" caption="One of the final candidate wireframes" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
 
         <!-- High fidelity -->
         <CaseImage :src="afkMockupFinal" alt="High fidelity AFK rewards mockup" caption="After — An AFK feature that helps users keep getting rewards while they are away. Created in Figma" imgClass="w-full h-auto rounded-xl" />
@@ -340,7 +350,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         <p class="text-sm font-sans text-center opacity-60">The complete AFK Rewards experience</p>
 
         <!-- Post-launch survey -->
-        <h3 class="text-xl font-sans font-bold pt-8">Post-Launch Survey</h3>
+        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">Post-Launch Survey</h3>
         <p class="text-lg font-sans leading-relaxed"><span class="underline">Question 1 — "What do you think of the new AFK Rewards?"</span></p>
         <ol class="list-decimal pl-5 space-y-1 text-base font-sans italic">
           <li>"I don't have to think about this game during work, which means I can fully focus on it after work"</li>
@@ -348,17 +358,17 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
           <li>"It's nice to get all my rewards at the start and then just go into playing"</li>
           <li>"Thank god y'all removed the arbitrary timer"</li>
         </ol>
-        <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white mb-6" />
+        <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="w-full h-auto rounded-xl panel-recessed p-4 mb-6" />
         <CaseInsight stat="72%" statLabel="Completely agreed that this flow improved the overall game" theme="success" />
-        <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white mt-8 mb-6" />
+        <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="w-full h-auto rounded-xl panel-recessed p-4 mt-8 mb-6" />
         <CaseInsight stat="81%" statLabel="Agreed that the new timers fit their lifestyle better" theme="success" />
       </div>
     </section>
 
     <!-- ─── EXIT SCREEN ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Exit Screen & Anticipation</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Exit Screen &amp; Anticipation</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -374,15 +384,15 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Recommendation System</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Recommendation System</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           I found through analysing further data that <strong>users would get stuck at specific dungeons and quit the game after trying a few more times</strong>. This was a highly correlated factor to low D7 retention.
         </p>
-        <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
           <CaseInsight stat="46% of churned users" statLabel="had attempted and lost at the same dungeon 2+ times in their first week" theme="neutral" />
           <CaseInsight stat="22% of churned users" statLabel="had attempted and lost 3+ times" theme="neutral" />
@@ -391,7 +401,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         <p class="text-lg font-sans leading-relaxed">
           After analysing what heroes they were using, <strong>it turned out they were using weaker strategic teams despite being at an adequate power level.</strong>
         </p>
-        <CaseImage :src="guardianUsageData" alt="Guardian usage data" caption="Clear difference in heroes used by successful vs unsuccessful players" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="guardianUsageData" alt="Guardian usage data" caption="Clear difference in heroes used by successful vs unsuccessful players" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="py-4">
           <CaseInsight stat="about 50% users who quit" statLabel="Made no changes to their comp between attempt #1 and #2" theme="neutral" />
         </div>
@@ -399,7 +409,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         <p class="text-lg font-sans leading-relaxed">
           We arrived at adding a <strong>recommendation system</strong> using server-wide hero usage data.
         </p>
-        <CaseImage :src="recommendedWireframe" alt="Recommended heroes wireframe" caption="Initial wireframe for recommended heroes" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="recommendedWireframe" alt="Recommended heroes wireframe" caption="Initial wireframe for recommended heroes" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="py-4">
           <CaseBeforeAfter :beforeImage="recsBeforeImg" :afterImage="recsAfterImg" caption="Recommendations guiding players using community data without forcing teams." />
         </div>
@@ -411,21 +421,21 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── VISUAL PROGRESSION ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Visual Progression & Goal Setting</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Visual Progression &amp; Goal Setting</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Players quit after losing because whenever they lost in a dungeon, they had to begin from the start. I collaborated directly with the game designer to add a new <strong>checkpoint dungeon progression system</strong>.
         </p>
-        <CaseImage :src="progressionWireframe" alt="Visual progression wireframe" caption="Initial wireframe of visual goal setting" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="progressionWireframe" alt="Visual progression wireframe" caption="Initial wireframe of visual goal setting" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="py-4">
           <CaseBeforeAfter :beforeImage="progBeforeImg" :afterImage="progAfterImg" caption="A clear visual path with checkpoints replaced the old system where players start from the beginning." />
         </div>
 
         <!-- Daily Calendar -->
-        <h3 class="text-xl font-sans font-bold pt-8">7-Day Reward Calendar</h3>
+        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">7-Day Reward Calendar</h3>
         <p class="text-lg font-sans leading-relaxed">
           I created a <strong>7 day reward letting players pick 1 legendary guardian</strong>, giving players choice and autonomy at the end of a long commitment. The UI was specifically designed as a countdown calendar.
         </p>
@@ -437,9 +447,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Moments of Delight & Monetisation</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Moments of Delight &amp; Monetisation</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -464,7 +474,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         </div>
 
         <!-- Iteration stages -->
-        <h3 class="text-xl font-sans font-bold pt-8">Iteration Process</h3>
+        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">Iteration Process</h3>
         <CaseImage :src="offerWireframe" alt="Stage 1 wireframe" caption="Stage 1 — Low fidelity wireframes focusing on user flow and value proposition" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="offerIteration2" alt="Stage 2 iteration" caption="Stage 2 — Polished by UI artist. We did not release this iteration" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="offerIteration3" alt="Stage 3 iteration" caption="Stage 3 — 61% better than old offer, but I wanted more lore and context" imgClass="w-full h-auto rounded-xl" />
@@ -475,8 +485,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-12 shadow-sm">
-      <h2 class="text-4xl font-serif font-bold">Results</h2>
+    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-12">
+      <h2 class="font-mono font-black text-4xl uppercase tracking-wide" style="color:var(--color-accent)">Results</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />
         <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="success" />
@@ -495,7 +505,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── LEARNINGS ─── -->
     <section class="max-w-4xl mx-auto space-y-6">
-      <h2 class="text-3xl font-serif font-bold">Learnings</h2>
+      <h2 class="font-mono font-black text-3xl uppercase tracking-wide">Learnings</h2>
       <p class="text-lg font-sans leading-relaxed">
         <strong>This was a major block of work that took multiple months and was shipped over multiple releases.</strong> The discovery phase started by understanding what users are lacking is beyond the screen — it's a mismatch of the game's user experience and their habits and lifestyle.
       </p>
@@ -508,17 +518,17 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="border-t border-[var(--color-text-charcoal)]/10 pt-16">
-      <h2 class="text-3xl font-serif font-bold text-center mb-12">What My Colleagues Say</h2>
+    <section class="border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-black text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-        <div class="space-y-4 text-center">
-          <h4 class="font-serif italic text-sm">Josiah Wallace, Senior Game Design Manager</h4>
+        <div class="panel-recessed p-8 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Josiah Wallace, Senior Game Design Manager</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Data driven design is now a keystone in modern game development and there are few others like Bramha who combine the UX and Game Design know-how with the Data Analysis process &amp; procedure as well as he does. The decisions, features, and projects he stands behind always produce measurable results, drive revenue growth, and increase player retention."
           </blockquote>
         </div>
-        <div class="space-y-4 text-center">
-          <h4 class="font-serif italic text-sm">Daniel Paez, Executive Producer</h4>
+        <div class="panel-recessed p-8 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Daniel Paez, Executive Producer</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions."
           </blockquote>

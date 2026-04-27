@@ -62,8 +62,17 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     <div class="xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
       <div class="xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
-        <!-- ─── HERO ─── -->
-    <ProjectHero
+    <!-- ─── HERO ─── -->
+    <div class="relative">
+      <!-- Decorative Alchemist Etching -->
+      <svg class="absolute right-0 top-0 opacity-10 pointer-events-none w-64 h-64 text-[var(--color-accent)] mix-blend-screen transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
+        <polygon points="50,10 90,90 10,90" stroke-dasharray="2 4" />
+        <circle cx="50" cy="65" r="25" />
+        <path d="M 20 40 Q 50 10 80 40 T 50 90 Z" />
+        <circle cx="50" cy="50" r="45" stroke-dasharray="1 6" />
+      </svg>
+      
+      <ProjectHero
       title="Rocksmith+"
       description="Releasing to 1 million new users on 5 platforms with a single, scalable UI system."
       role="UX Lead for Mobile & Multi-platform Interactions"
@@ -71,24 +80,25 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
       :tags="['PC Game', 'Console Game', 'Accessibility']"
     >
       <template #team>
-        <p class="font-serif text-lg">UX Director | 2 UX Designers | 2 UI Artists | 2 UI Engineers</p>
+        <p class="font-mono text-sm uppercase tracking-wider opacity-75">UX Director &middot; 2 UX Designers &middot; 2 UI Artists &middot; 2 UI Engineers</p>
       </template>
     </ProjectHero>
+    </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-8 shadow-sm">
-      <h2 class="text-3xl font-serif font-bold">Executive Summary</h2>
+    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
+      <h2 class="font-mono font-black text-3xl uppercase tracking-widest" style="color:var(--color-accent)">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="5" label="Platforms" />
         <CaseMetric value="1" label="UI System" />
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">01. The Problem</h4>
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">01. The Problem</h4>
           <p><strong>Fragmentation:</strong> Rocksmith+ faced a massive scaling challenge: launching a PC-first MVP on Mobile and Console simultaneously. Without a unified framework, the team faced alienating users whose context would switch based on a device and burdening triple the maintenance cost for maintaining all the platforms.</p>
         </div>
         <div>
-          <h4 class="text-sm font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-500 mb-2">02. The Solution</h4>
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">02. The Solution</h4>
           <p><strong>Building a responsive UI system:</strong> I architected a technical UI system in the Snowdrop engine that scaled responsive UI across different PC monitors, TVs, tablets, and mobiles. This <strong>ensured visual parity</strong> across devices ranging from 4:3 iPads to 21:9 Ultra-wide monitors without bespoke adjustments.</p>
           <p class="mt-4"><strong>Unified Input Philosophy:</strong> Mapped divergent inputs (Keyboard, Gamepad, Touch) to singular behavioral outcomes, <strong>reducing cognitive load</strong> for users switching between platforms.</p>
           <p class="mt-4"><strong>Driving Global Collaboration:</strong> Orchestrated design collaboration between India, Japan, and the US <strong>to share user insights and create a holistic understanding of user needs across all platforms.</strong></p>
@@ -106,7 +116,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     <!-- ─── CONTEXT ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Context</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Context</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-xl font-sans leading-relaxed">
@@ -122,9 +132,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── RESEARCH ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Research</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Research</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -206,9 +216,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Responsive UI</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Responsive UI</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -241,7 +251,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
         <CaseImage :src="gpdWin4" alt="Rocksmith on GPD Win4" caption="Fun fact — the UI system worked so well that one user got it working on their GPD Win4 handheld gaming machine" imgClass="w-full h-auto rounded-xl max-w-sm mx-auto" />
 
         <!-- Testing gallery -->
-        <h3 class="text-xl font-sans font-bold pt-4">User Testing Gallery</h3>
+        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-4" style="color:var(--color-accent)">User Testing Gallery</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
           <CaseImage :src="gallery1" alt="User testing photo 1" imgClass="w-full h-auto rounded-lg" />
           <CaseImage :src="gallery2" alt="User testing photo 2" imgClass="w-full h-auto rounded-lg" />
@@ -256,9 +266,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── ACCESSIBILITY ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Accessibility & UI Scaling</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Accessibility &amp; UI Scaling</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -280,9 +290,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── UNIFIED INPUT ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Unified Input System</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Unified Input System</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -329,9 +339,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── COMPONENT ADAPTATIONS ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Platform-Specific Component Adaptations</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Platform-Specific Component Adaptations</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -352,15 +362,15 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── CONSOLE NAVIGATION ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-[var(--color-text-charcoal)]/10 pt-16">
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="text-2xl font-serif font-bold sticky top-24">Console Navigation Challenge</h2>
+        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Console Navigation Challenge</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Another major issue <strong>I tackled was menu navigation for consoles.</strong> The original prototypes included expanders with nested scrolls to hide secondary information. While common on desktop and mobile, on consoles this created a major issue.
         </p>
-        <CaseImage :src="nestedScroll" alt="Nested scroll problem" caption="An example of nested scroll — two scroll bars denoting independent scrollable containers" imgClass="w-full h-auto rounded-xl border border-gray-200 p-4 bg-white" />
+        <CaseImage :src="nestedScroll" alt="Nested scroll problem" caption="An example of nested scroll — two scroll bars denoting independent scrollable containers" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <p class="text-lg font-sans leading-relaxed">
           <strong>On consoles, you cannot independently focus on a separate item</strong> — all directional input is mapped to the item in focus. You can only scroll the expanded container all the way up till you reach the header to close it.
         </p>
@@ -400,14 +410,14 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="bg-white dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 p-12 rounded-3xl space-y-8 shadow-sm">
-      <h2 class="text-4xl font-serif font-bold">Result</h2>
+    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
+      <h2 class="font-mono font-black text-4xl uppercase tracking-wide" style="color:var(--color-accent)">Result</h2>
       <div class="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed opacity-90">
         <p>
           Rocksmith+ launched in open beta and swiftly followed a global launch in 2022. The mobile version was able to unlock a completely new market of on-the-go learners who did not have the money, time, or privilege of learning to play the guitar on a computer or a game console.
         </p>
         <p>
-          The new and improved accessibility feature set also garnered critical acclaim when Rocksmith+ won the <a href="https://www.gamespress.com/en-US/Winners-of-the-GAconf-Accessibility-Awards-announced" target="_blank" rel="noopener noreferrer" class="underline font-bold hover:opacity-70 transition-opacity text-emerald-700 dark:text-emerald-500">Game's Accessibility Conference's award for Best physical / mobility accessibility</a>.
+          The new and improved accessibility feature set also garnered critical acclaim when Rocksmith+ won the <a href="https://www.gamespress.com/en-US/Winners-of-the-GAconf-Accessibility-Awards-announced" target="_blank" rel="noopener noreferrer" class="underline font-bold hover:opacity-70 transition-opacity" style="color:var(--color-accent)">Game's Accessibility Conference's award for Best physical / mobility accessibility</a>.
         </p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -418,7 +428,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
 
     <!-- ─── LEARNINGS ─── -->
     <section class="max-w-4xl mx-auto space-y-6">
-      <h2 class="text-3xl font-serif font-bold">Learnings</h2>
+      <h2 class="font-mono font-black text-3xl uppercase tracking-wide">Learnings</h2>
       <p class="text-lg font-sans leading-relaxed">
         Working in a global team based out of San Francisco, Osaka, and Pune, I quickly learnt that project-wide impact on accessibility and a multi-device philosophy won't automatically result in a great product simply with my personal contributions. A large part of team alignment came from <strong>rooting discussion in user needs and coaching the team what a truly multi-device experience means</strong> — which included numerous coaching and workshop sessions on mobile interactions and games.
       </p>
@@ -428,29 +438,29 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="border-t border-[var(--color-text-charcoal)]/10 pt-16">
-      <h2 class="text-3xl font-serif font-bold text-center mb-12">What My Colleagues Say</h2>
+    <section class="border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-black text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-        <div class="space-y-4 text-center">
-          <h4 class="font-serif italic text-sm">Hiroshi Ogawa, Lead UI Engineer, Ubisoft</h4>
+        <div class="panel-recessed p-8 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Hiroshi Ogawa, Lead UI Engineer, Ubisoft</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Bramha made the foundation of Multi-platform UI, which was one of the biggest challenges in the project. His knowledge and insight always pushed our discussion forward. A clear design-based dialogue was productive and helpful in the cross-studio project in Japan and India. I respect his courage to accept the change, which is UX/UI design's most challenging part of improving the game while managing our resources."
           </blockquote>
         </div>
-        <div class="space-y-4 text-center">
-          <h4 class="font-serif italic text-sm">Kaiwen Young, Director of User Experience, Ubisoft</h4>
+        <div class="panel-recessed p-8 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Kaiwen Young, Director of User Experience, Ubisoft</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Bramha's passion, knowledge and communication style contributed greatly to the quality of our project and team UX culture."
           </blockquote>
         </div>
-        <div class="space-y-4 text-center">
-          <h4 class="font-serif italic text-sm">Rohit Suvarna, Senior Game Designer, Ubisoft</h4>
+        <div class="panel-recessed p-8 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Rohit Suvarna, Senior Game Designer, Ubisoft</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Bramha has a deep understanding of how to design user interfaces that are intuitive, effective and visually appealing. He is also an expert in user experience research and knows how to use data to drive his designs."
           </blockquote>
         </div>
-        <div class="space-y-4 text-center">
-          <h4 class="font-serif italic text-sm">Utkarsh Bagade, Senior Engineer, Ubisoft</h4>
+        <div class="panel-recessed p-8 space-y-4">
+          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Utkarsh Bagade, Senior Engineer, Ubisoft</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Bramha's approach to designing complex game systems always put UX at the highest priority. I'm very impressed by his ability to understand the tech (tools and engine) and designing features that take advantage of the current frameworks and help improve them."
           </blockquote>

@@ -42,63 +42,208 @@ const filteredProjects = computed(() => {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto pt-12 mb-24 px-6 md:px-12 text-[var(--color-text-charcoal)]">
-    <div class="flex justify-between items-baseline border-b border-[var(--color-text-charcoal)] pb-4 mb-8">
-      <h1 class="text-4xl md:text-5xl font-serif font-bold">Work</h1>
-      <span class="font-sans text-sm tracking-widest uppercase opacity-60">Case Studies</span>
-    </div>
-    
-    <div class="flex flex-wrap gap-4 mb-16">
-      <button 
-        v-for="filter in filters" 
-        :key="filter"
-        @click="activeFilter = filter"
-        class="px-5 py-2 rounded-full border border-[var(--color-text-charcoal)] transition-all text-sm font-bold tracking-wider uppercase"
-        :class="activeFilter === filter ? 'bg-[var(--color-text-charcoal)] text-[var(--color-cream-bg)]' : 'hover:bg-[var(--color-text-charcoal)]/5 text-[var(--color-text-charcoal)]/70 hover:text-[var(--color-text-charcoal)]'"
-      >
-        {{ filter }}
-      </button>
+  <div class="page-work">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title text-sweep-reveal">Work</h1>
+      <span class="label-segment">Case Studies</span>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
-      <article 
-        v-for="project in filteredProjects" 
-        :key="project.id" 
+    <!-- Filter Strip -->
+    <div class="filter-row">
+      <div class="deadlock-filter-strip">
+        <button
+          v-for="filter in filters"
+          :key="filter"
+          @click="activeFilter = filter"
+          :class="['deadlock-filter-tab', activeFilter === filter ? 'active' : '']"
+        >
+          <span>{{ filter }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Project Grid -->
+    <div class="project-grid">
+      <article
+        v-for="project in filteredProjects"
+        :key="project.id"
         @click="navigateTo(project.link, project.id)"
-        class="group cursor-pointer space-y-4"
+        class="project-card deadlock-card-container"
       >
-        <!-- Thumbnail Placeholder -->
-        <div class="w-full aspect-[4/3] bg-[#E5E5E5] rounded-2xl overflow-hidden relative border border-[var(--color-accent-soft)]">
-          <img v-if="project.image" :src="project.image" :alt="project.title" class="w-full h-full object-cover" />
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-[var(--color-text-charcoal)]/30 backdrop-blur-sm">
-            <span class="bg-[var(--color-cream-bg)] text-[var(--color-text-charcoal)] px-6 py-2 rounded-full font-sans font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-              View Case Study
-            </span>
+        <!-- Thumbnail -->
+        <div class="project-thumb">
+          <img v-if="project.image" :src="project.image" :alt="project.title" class="project-img deadlock-hero-art" />
+          <div class="project-overlay">
+            <span class="deadlock-action-btn px-6 py-2.5"><span>View Case Study</span></span>
           </div>
         </div>
 
         <!-- Content -->
-        <div class="space-y-2">
-          <div class="flex flex-wrap gap-2">
-            <span v-for="tag in project.tags" :key="tag" class="text-xs font-sans uppercase tracking-wider opacity-60 border border-[var(--color-text-charcoal)]/30 px-2 py-1 rounded-md">
-              {{ tag }}
-            </span>
+        <div class="project-content">
+          <div class="project-tags">
+            <span v-for="tag in project.tags" :key="tag" class="label-segment">{{ tag }}</span>
           </div>
-          <h3 class="text-2xl font-serif font-bold group-hover:text-[var(--color-text-charcoal)]/70 transition-colors">
-            {{ project.title }}
-          </h3>
-          <p class="font-sans text-lg opacity-80 line-clamp-2">
-            {{ project.description }}
-          </p>
+          <h3 class="project-title">{{ project.title }}</h3>
+          <p class="project-desc">{{ project.description }}</p>
         </div>
       </article>
     </div>
 
-    <!-- More Projects Link -->
-    <div class="flex justify-center pt-12">
-      <router-link to="/micro-projects" class="text-lg font-serif italic border-b border-[var(--color-text-charcoal)] hover:opacity-70 transition-opacity">
-        View more micro-projects &rarr;
+    <!-- More Link -->
+    <div class="more-row">
+      <router-link to="/micro-projects" class="deadlock-action-btn more-btn">
+        <span>View micro-projects &rarr;</span>
       </router-link>
     </div>
   </div>
 </template>
+
+<style scoped>
+.page-work {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 48px;
+  padding-bottom: 96px;
+  color: var(--color-text);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+}
+/* H1 — Cinzel display */
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(48px, 10vw, 84px);
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  margin: 0;
+  border-left: 8px solid var(--color-accent);
+  padding-left: 16px;
+  text-shadow: 0 0 40px rgba(197, 168, 114, 0.3);
+  line-height: 0.9;
+}
+
+.filter-row {
+  margin-bottom: 40px;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .project-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.project-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  animation: dealCard 0.6s var(--ease-te-slide) both;
+  transition:
+    box-shadow 220ms var(--ease-mechanical-spring),
+    transform  220ms var(--ease-mechanical-spring),
+    border-color 220ms ease;
+}
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-border-hi) !important;
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 16px 40px rgba(0, 0, 0, 0.7),
+    var(--dl-glow-global);
+}
+
+/* Staggered deal animation */
+.project-card:nth-child(1) { animation-delay: 0.05s; }
+.project-card:nth-child(2) { animation-delay: 0.10s; }
+.project-card:nth-child(3) { animation-delay: 0.15s; }
+.project-card:nth-child(4) { animation-delay: 0.20s; }
+.project-card:nth-child(5) { animation-delay: 0.25s; }
+.project-card:nth-child(6) { animation-delay: 0.30s; }
+.project-card:nth-child(7) { animation-delay: 0.35s; }
+.project-card:nth-child(8) { animation-delay: 0.40s; }
+.project-card:nth-child(9) { animation-delay: 0.45s; }
+.project-card:nth-child(10) { animation-delay: 0.50s; }
+.project-card:nth-child(11) { animation-delay: 0.55s; }
+.project-card:nth-child(12) { animation-delay: 0.60s; }
+
+.project-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 2px 2px 0 0;
+  background: var(--color-elevated);
+}
+.project-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 400ms ease, filter 400ms ease;
+}
+.project-card:hover .project-img {
+  transform: scale(1.04);
+  filter: brightness(0.55) saturate(0.8);
+}
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(17,17,19,0.92) 0%, rgba(17,17,19,0.4) 60%, transparent 100%);
+  opacity: 0;
+  transition: opacity 200ms var(--ease-te-slide);
+}
+.project-card:hover .project-overlay { opacity: 1; }
+
+.project-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.project-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.project-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.3;
+  transition: color 150ms ease;
+}
+.project-card:hover .project-title {
+  color: var(--color-border-hi);
+  text-shadow: 0 0 12px rgba(197, 168, 114, 0.3);
+}
+.project-desc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: 0;
+  opacity: 0.85;
+}
+
+.more-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+.more-btn { padding: 11px 28px; font-size: 11px; }
+</style>

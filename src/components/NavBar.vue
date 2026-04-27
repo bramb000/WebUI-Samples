@@ -21,7 +21,6 @@ const handleScroll = () => {
   const currentScrollPosition = window.scrollY;
   if (currentScrollPosition < 0) return;
   
-  // Add some buffer to avoid jitter
   if (Math.abs(currentScrollPosition - lastScrollPosition.value) < 60 && currentScrollPosition > 100) return;
 
   if (currentScrollPosition <= 60) {
@@ -50,123 +49,134 @@ const trackContactClick = (source: string) => {
   posthog.capture('contact_clicked', { source });
 };
 </script>
+
 <template>
   <nav 
     :class="[
-      'w-full py-6 px-6 md:px-12 flex justify-between md:justify-center items-center bg-[var(--color-cream-bg)] text-[var(--color-text-charcoal)] sticky top-0 z-50',
+      'nav-rail w-full flex justify-between md:justify-center items-center sticky top-0 z-50',
       showNavbar ? 'translate-y-0' : '-translate-y-full'
     ]"
-    style="transition: background-color 0.35s ease, color 0.35s ease, transform 0.3s ease;"
+    style="transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), transform 0.3s ease;"
   >
-    
-    <!-- Mobile Logo (Only visible on mobile) -->
-    <router-link to="/" class="md:hidden text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm" @click="isMenuOpen = false">
+    <!-- Mobile Logo -->
+    <router-link
+      to="/"
+      class="md:hidden nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
+      @click="isMenuOpen = false"
+    >
       bramha.
     </router-link>
 
-    <!-- Desktop Unified Center -->
+    <!-- Desktop Layout -->
     <div class="hidden md:flex items-center justify-center w-full">
-      <div class="flex items-center">
+      <div class="flex items-center gap-6">
+
         <!-- Logo -->
-        <router-link to="/" class="text-2xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity mr-12 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm">
+        <router-link
+          to="/"
+          class="nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
+        >
           bramha.
         </router-link>
 
-        <!-- Nav Links -->
-        <div class="flex gap-8 items-center bg-[var(--color-text-charcoal)]/5 px-6 py-2.5 rounded-full">
-          <router-link 
-            v-for="link in navLinks" 
-            :key="link.name" 
+        <!-- Segmented Nav Strip -->
+        <div class="seg-strip">
+          <router-link
+            v-for="link in navLinks"
+            :key="link.name"
             :to="link.href"
-            class="text-sm font-sans uppercase tracking-widest transition-colors relative group hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm"
+            custom
+            v-slot="{ isActive, navigate }"
           >
-            {{ link.name }}
-            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-text-charcoal)] transition-all group-hover:w-full group-focus-visible:w-full"></span>
+            <button
+              @click="navigate"
+              :class="['seg-btn', isActive ? 'active' : '']"
+              :title="link.name"
+            >
+              {{ link.name }}
+            </button>
           </router-link>
         </div>
 
-        <!-- Desktop Actions -->
-        <div class="flex gap-4 items-center ml-8">
-          <!-- Theme Toggle -->
-          <button 
-            @click="toggle" 
-            class="clean-btn p-2 rounded-full hover:bg-[var(--color-text-charcoal)]/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]"
-            :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Material Switcher: ALUM ↔ CFRP -->
+          <button
+            @click="toggle"
+            class="material-switcher focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
+            :title="theme === 'dark' ? 'Switch to Aluminium (light mode)' : 'Switch to Carbon Fibre (dark mode)'"
           >
-            <!-- Sun icon -->
-            <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"/>
-              <line x1="12" y1="1" x2="12" y2="3"/>
-              <line x1="12" y1="21" x2="12" y2="23"/>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-              <line x1="1" y1="12" x2="3" y2="12"/>
-              <line x1="21" y1="12" x2="23" y2="12"/>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-            <!-- Moon icon -->
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
+            <span class="material-swatch" :class="theme === 'dark' ? 'swatch-carbon' : 'swatch-alum'"></span>
+            <span class="material-label" style="transform: rotate(2deg); display: inline-block;">{{ theme === 'dark' ? 'CFRP' : 'ALUM' }}</span>
           </button>
 
-          <a href="https://www.linkedin.com/in/bramdal/" target="_blank" @click="trackContactClick('navbar_desktop')" class="px-5 py-2 border border-[var(--color-text-charcoal)] rounded-full text-sm font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]">
-            Let's Talk
+          <!-- Let's Talk CTA -->
+          <a
+            href="https://www.linkedin.com/in/bramdal/"
+            target="_blank"
+            @click="trackContactClick('navbar_desktop')"
+            class="deadlock-action-btn px-8 py-3 focus-visible:outline-none"
+          >
+            <span>Let's Talk</span>
           </a>
         </div>
+
       </div>
     </div>
 
-    <!-- Mobile Menu Button -->
-    <div class="flex md:hidden gap-4 items-center relative z-50">
-      <!-- Mobile Theme Toggle -->
-      <button 
-        @click="toggle" 
-        class="clean-btn p-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]"
-        :title="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+    <!-- Mobile Controls -->
+    <div class="flex md:hidden items-center gap-3 relative z-50">
+      <!-- Mobile Material Switcher -->
+      <button
+        @click="toggle"
+        class="material-switcher focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
+        :title="theme === 'dark' ? 'Switch to Aluminium' : 'Switch to Carbon Fibre'"
       >
-        <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/>
-          <line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/>
-          <line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
+        <span class="material-swatch" :class="theme === 'dark' ? 'swatch-carbon' : 'swatch-alum'"></span>
+        <span class="material-label">{{ theme === 'dark' ? 'CFRP' : 'ALUM' }}</span>
       </button>
 
-      <button @click="isMenuOpen = !isMenuOpen" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm clean-btn p-1">
-        <div class="space-y-1.5">
-          <span :class="{'rotate-45 translate-y-2': isMenuOpen}" class="block w-8 h-0.5 bg-[var(--color-text-charcoal)] transition-transform duration-300"></span>
-          <span :class="{'opacity-0': isMenuOpen}" class="block w-8 h-0.5 bg-[var(--color-text-charcoal)] transition-opacity duration-300"></span>
-          <span :class="{'-rotate-45 -translate-y-2': isMenuOpen}" class="block w-8 h-0.5 bg-[var(--color-text-charcoal)] transition-transform duration-300"></span>
-        </div>
+      <!-- Hamburger -->
+      <button
+        @click="isMenuOpen = !isMenuOpen"
+        class="hamburger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm p-1"
+        :aria-label="isMenuOpen ? 'Close menu' : 'Open menu'"
+      >
+        <span :class="{'rotate-45 translate-y-[7px]': isMenuOpen}" class="ham-bar"></span>
+        <span :class="{'opacity-0': isMenuOpen}" class="ham-bar"></span>
+        <span :class="{'-rotate-45 -translate-y-[7px]': isMenuOpen}" class="ham-bar"></span>
       </button>
     </div>
 
     <!-- Mobile Menu Overlay -->
     <Teleport to="body">
-      <transition name="fade">
-        <div v-if="isMenuOpen" class="fixed inset-0 bg-[var(--color-cream-bg)] flex flex-col items-center justify-center gap-8 z-40 pt-24">
-           <router-link 
-            v-for="link in navLinks" 
-            :key="link.name" 
-            :to="link.href"
-            @click="isMenuOpen = false"
-            class="text-3xl font-serif hover:italic transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)] rounded-sm px-2 py-1"
-          >
-            {{ link.name }}
-          </router-link>
-           <a href="https://www.linkedin.com/in/bramdal/" target="_blank" @click="trackContactClick('navbar_mobile')" class="px-8 py-3 border border-[var(--color-text-charcoal)] rounded-full text-lg font-sans uppercase hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-[var(--color-text-charcoal)]">
-            Let's Talk
-          </a>
+      <transition name="mobile-menu">
+        <div v-if="isMenuOpen" class="mobile-overlay noise-overlay">
+          <!-- Seam detail at top -->
+          <div class="mobile-seam"></div>
+
+          <nav class="flex flex-col items-center justify-center gap-2 w-full h-full pt-24 pb-12">
+            <router-link
+              v-for="link in navLinks"
+              :key="link.name"
+              :to="link.href"
+              @click="isMenuOpen = false"
+              class="mobile-nav-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-sm px-4 py-2"
+            >
+              {{ link.name }}
+            </router-link>
+
+            <div class="mt-8">
+              <a
+                href="https://www.linkedin.com/in/bramdal/"
+                target="_blank"
+                @click="trackContactClick('navbar_mobile')"
+                class="btn-extruded px-8 py-3 text-sm"
+              >
+                Let's Talk
+              </a>
+            </div>
+          </nav>
         </div>
       </transition>
     </Teleport>
@@ -174,10 +184,165 @@ const trackContactClick = (source: string) => {
 </template>
 
 <style scoped>
-.clean-btn {
+/* ── Nav Rail ── */
+.nav-rail {
+  background: linear-gradient(180deg, #1A1A1D 0%, #0D0D0F 100%);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 2px 5px rgba(0,0,0,0.8);
+  padding: 10px 24px;
+}
+
+/* ── Logo: Cinzel occult display ── */
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-border-hi);
+  text-decoration: none;
+  transition: color 150ms var(--ease-te-snap), text-shadow 150ms var(--ease-te-snap);
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(197, 168, 114, 0.3);
+}
+.nav-logo:hover {
+  color: var(--color-text);
+  text-shadow: 0 0 20px rgba(197, 168, 114, 0.55);
+}
+
+/* ── Occult Gauge Indicator — decorative, toggle() still fires ── */
+.material-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--dl-border-radius);
+  padding: 4px 10px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 4px rgba(0, 0, 0, 0.6),
+    var(--dl-glow-global);
+  transition: all 100ms var(--ease-te-snap);
+}
+.material-switcher:hover {
+  border-color: var(--color-border-hi);
+  box-shadow:
+    inset 0 1px 4px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(197, 168, 114, 0.2);
+}
+.material-switcher:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.material-swatch {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.swatch-alum {
+  background: var(--color-border-hi);
+  box-shadow: 0 0 4px var(--color-accent);
+  animation: glow-pulse 2.5s ease-in-out infinite alternate;
+}
+.swatch-carbon {
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
+  animation: glow-pulse 1.2s ease-in-out infinite alternate;
+}
+
+.material-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--color-border-hi);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── Hamburger ── */
+.hamburger {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.ham-bar {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background: var(--color-border-hi);
+  border-radius: 1px;
+  transition: transform 200ms var(--ease-te-slide), opacity 150ms linear;
+}
+
+/* ── Mobile Overlay — full obsidian panel ── */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 40;
+  box-shadow: inset 0 4px 24px rgba(0,0,0,0.9);
+}
+.mobile-seam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  box-shadow: 0 0 14px var(--color-accent);
+  animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 2px;
+  transition: all 100ms var(--ease-te-snap);
+  border: 1px solid transparent;
+  width: 280px;
+  text-align: center;
+}
+.mobile-nav-link:hover {
+  color: var(--color-border-hi);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  text-shadow: 0 0 12px rgba(197, 168, 114, 0.4);
+}
+.mobile-nav-link.router-link-active {
+  color: var(--color-accent);
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  text-shadow: 0 0 16px var(--color-accent);
+}
+
+/* ── Mobile Menu Transition ── */
+.mobile-menu-enter-active {
+  transition: opacity 0.15s var(--ease-te-slide), transform 0.15s var(--ease-te-slide);
+}
+.mobile-menu-leave-active {
+  transition: opacity 0.08s var(--ease-te-snap), transform 0.08s var(--ease-te-snap);
+}
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 </style>

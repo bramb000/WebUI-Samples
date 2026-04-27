@@ -9,42 +9,98 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <div 
-    class="border rounded-xl p-6 transition-all duration-300 hover:shadow-md w-full min-w-0"
-    :class="{
-      'bg-gray-50 dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100': theme === 'neutral',
-      'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/50 text-emerald-900 dark:text-emerald-100': theme === 'success',
-      'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800/50 text-red-900 dark:text-red-100': theme === 'danger'
-    }"
-  >
-    <div v-if="stat || statLabel" class="text-center mb-4 space-y-1">
-      <div 
-        v-if="stat"
-        class="text-2xl font-extrabold break-words"
-        :class="{
-          'text-gray-900 dark:text-white': theme === 'neutral',
-          'text-emerald-900 dark:text-emerald-300': theme === 'success',
-          'text-red-900 dark:text-red-400': theme === 'danger'
-        }"
-      >
-        {{ stat }}
+  <div class="insight-wrap panel-recessed noise-overlay">
+
+    <!-- Stat badge (if provided) -->
+    <div v-if="stat || statLabel" class="insight-stat-block">
+      <div class="insight-stat lcd-data">
+        <span class="insight-stat-value">{{ stat }}</span>
       </div>
-      <div 
-        v-if="statLabel"
-        class="text-xs font-bold uppercase tracking-wider break-words"
-        :class="{
-          'text-gray-700 dark:text-zinc-400': theme === 'neutral',
-          'text-emerald-700 dark:text-emerald-400/80': theme === 'success',
-          'text-red-700 dark:text-red-400/80': theme === 'danger'
-        }"
-      >
-        {{ statLabel }}
+      <div v-if="statLabel" class="insight-stat-label">
+        <span class="indicator-dot" :class="{ 'dot-success': theme === 'success', 'dot-danger': theme === 'danger' }"></span>
+        <span class="stat-label-text">{{ statLabel }}</span>
       </div>
     </div>
-    
+
     <!-- Content Slot -->
-    <div class="text-base font-sans leading-relaxed" :class="{'text-center': !statLabel && stat}">
+    <div class="insight-body">
       <slot></slot>
     </div>
   </div>
 </template>
+
+<style scoped>
+.insight-wrap {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  transition:
+    box-shadow 200ms var(--ease-mechanical-spring),
+    transform  200ms var(--ease-mechanical-spring);
+}
+.insight-wrap:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.12),
+    0 10px 24px rgba(0, 0, 0, 0.18),
+    0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.insight-stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.insight-stat {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+.insight-stat-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--color-lcd-text);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.insight-stat-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stat-label-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+.dot-success { background: #4caf50; box-shadow: 0 0 4px rgba(76,175,80,0.6); }
+.dot-danger  { background: #f44336; box-shadow: 0 0 4px rgba(244,67,54,0.6); }
+
+.insight-body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text);
+  opacity: 0.85;
+  position: relative;
+  z-index: 1;
+}
+</style>
