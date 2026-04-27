@@ -29,14 +29,40 @@ useCaseTheme();
 
     <Footer v-if="!isFullScreen" />
 
-    <!-- Deadlock UI FX: Arcane Ignition Filter -->
+    <!-- Deadlock UI Global Filters -->
     <svg style="visibility: hidden; position: absolute;" width="0" height="0">
-      <filter id="deadlock-flicker">
-        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="1">
-          <animate attributeName="seed" from="1" to="100" dur="2s" repeatCount="indefinite" />
-        </feTurbulence>
-        <feDisplacementMap in="SourceGraphic" scale="7" />
-      </filter>
+      <defs>
+        <!-- Unstable Magic/Heat Flicker -->
+        <filter id="deadlock-flicker">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="1">
+            <animate attributeName="seed" from="1" to="100" dur="2s" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" scale="7" />
+        </filter>
+
+        <!-- Noir Grain Displacement -->
+        <filter id="noir-grain">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" seed="5">
+            <animate attributeName="seed" from="5" to="500" dur="1s" steps="12" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" scale="4" />
+        </filter>
+
+        <!-- Deadlock Living Ink (Smooth Organic Flow) -->
+        <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+          <filter id="deadlock-ink-boil" x="-50%" y="-50%" width="200%" height="200%">
+            <!-- Static noise field -->
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+            <!-- Smoothly slide the noise field to create correlated organic morphing -->
+            <feOffset in="noise" result="movingNoise">
+              <animate attributeName="dx" from="0" to="60" dur="3s" repeatCount="indefinite" />
+              <animate attributeName="dy" from="0" to="30" dur="4s" repeatCount="indefinite" />
+            </feOffset>
+            <!-- Apply displacement -->
+            <feDisplacementMap in="SourceGraphic" in2="movingNoise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
+      </defs>
     </svg>
   </div>
 </template>

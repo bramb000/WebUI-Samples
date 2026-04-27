@@ -25,13 +25,13 @@ const trackEmailClick = () => {
           <p class="footer-subheading">Ready to improve your retention or monetisation metrics? Contact me</p>
         </div>
 
-        <!-- Skill Tags (PCB component labels) -->
+        <!-- Skill Tags (Metal Plaques) -->
         <div class="footer-tags">
-          <span class="label-segment">User Research</span>
-          <span class="label-segment">UX Design</span>
-          <span class="label-segment">Web Design</span>
-          <span class="label-segment">App Design</span>
-          <span class="label-segment">Game Design</span>
+          <span class="dl-plaque dl-plaque-game">User Research</span>
+          <span class="dl-plaque dl-plaque-web">UX Design</span>
+          <span class="dl-plaque dl-plaque-web">Web Design</span>
+          <span class="dl-plaque dl-plaque-mobile">App Design</span>
+          <span class="dl-plaque dl-plaque-game">Game Design</span>
         </div>
       </div>
 
@@ -41,9 +41,9 @@ const trackEmailClick = () => {
           href="https://www.linkedin.com/in/bramdal/"
           target="_blank"
           @click="trackSocialClick('linkedin_footer_cta')"
-          class="btn-extruded footer-cta-btn"
+          class="deadlock-action-btn footer-cta-btn"
         >
-          Get in touch
+          <span>Get in touch</span>
         </a>
       </div>
 
@@ -82,12 +82,12 @@ const trackEmailClick = () => {
 /* ── Obsidian Mounting Plate ── */
 .footer-plate {
   margin-top: 96px;
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+  background: #111113; /* Void Black */
+  border-top: 2px solid #222;
   box-shadow:
-    inset 0 6px 24px rgba(0, 0, 0, 0.8),
-    0 -1px 0 rgba(197, 168, 114, 0.08),
-    var(--dl-glow-global);
+    inset 0 10px 30px rgba(0, 0, 0, 0.9),
+    0 -1px 0 rgba(139, 115, 71, 0.2),
+    0 -5px 15px rgba(0, 0, 0, 0.5);
 }
 
 /* Brass accent seam — occult gradient, not flat orange */
@@ -130,11 +130,7 @@ const trackEmailClick = () => {
   font-size: clamp(26px, 4.5vw, 46px);
   letter-spacing: 0.06em;
   line-height: 1.15;
-  color: var(--color-text);
   margin: 0 0 12px 0;
-  text-shadow:
-    0 0 24px rgba(197, 168, 114, 0.15),
-    0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .footer-subheading {
@@ -152,8 +148,7 @@ const trackEmailClick = () => {
 .footer-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  max-width: 280px;
+  gap: 12px;
 }
 
 /* ── CTA Button Row ── */

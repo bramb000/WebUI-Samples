@@ -53,7 +53,7 @@ const trackContactClick = (source: string) => {
 <template>
   <nav 
     :class="[
-      'nav-rail w-full flex justify-between md:justify-center items-center sticky top-0 z-50',
+      'dl-nav-ledge w-full flex justify-between md:justify-center items-center sticky top-0 z-50',
       showNavbar ? 'translate-y-0' : '-translate-y-full'
     ]"
     style="transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), transform 0.3s ease;"
@@ -64,7 +64,7 @@ const trackContactClick = (source: string) => {
       class="md:hidden nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
       @click="isMenuOpen = false"
     >
-      bramha.
+      <span>bramha.</span>
     </router-link>
 
     <!-- Desktop Layout -->
@@ -76,7 +76,7 @@ const trackContactClick = (source: string) => {
           to="/"
           class="nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
         >
-          bramha.
+          <span>bramha.</span>
         </router-link>
 
         <!-- Segmented Nav Strip -->
@@ -93,7 +93,7 @@ const trackContactClick = (source: string) => {
               :class="['seg-btn', isActive ? 'active' : '']"
               :title="link.name"
             >
-              {{ link.name }}
+              <span>{{ link.name }}</span>
             </button>
           </router-link>
         </div>
@@ -163,7 +163,7 @@ const trackContactClick = (source: string) => {
               @click="isMenuOpen = false"
               class="mobile-nav-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-sm px-4 py-2"
             >
-              {{ link.name }}
+              <span>{{ link.name }}</span>
             </router-link>
 
             <div class="mt-8">
@@ -171,9 +171,9 @@ const trackContactClick = (source: string) => {
                 href="https://www.linkedin.com/in/bramdal/"
                 target="_blank"
                 @click="trackContactClick('navbar_mobile')"
-                class="btn-extruded px-8 py-3 text-sm"
+                class="deadlock-action-btn px-8 py-3 text-sm"
               >
-                Let's Talk
+                <span>Let's Talk</span>
               </a>
             </div>
           </nav>
@@ -184,15 +184,7 @@ const trackContactClick = (source: string) => {
 </template>
 
 <style scoped>
-/* ── Nav Rail ── */
-.nav-rail {
-  background: linear-gradient(180deg, #1A1A1D 0%, #0D0D0F 100%);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 2px 5px rgba(0,0,0,0.8);
-  padding: 10px 24px;
-}
-
-/* ── Logo: Cinzel occult display ── */
+/* Scoped Nav Component Styles */
 .nav-logo {
   font-family: var(--font-display);
   font-weight: 700;

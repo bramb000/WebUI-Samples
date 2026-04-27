@@ -97,7 +97,7 @@ const getThemeColor = (category: string) => {
           @click="activeFilter = filter"
           :class="['deadlock-filter-tab', activeFilter === filter ? 'active' : '']"
         >
-          <span>{{ filter }}</span>
+          {{ filter }}
         </button>
       </div>
     </div>
