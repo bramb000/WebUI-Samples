@@ -372,18 +372,7 @@ h3, h4, h5, h6 {
   line-height: 1.6;
 }
 
-/* ── Indicator Dot — brass LED ── */
-.indicator-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow:
-    0 0 6px var(--color-accent),
-    inset 0 1px 1px rgba(255, 255, 255, 0.4);
-  flex-shrink: 0;
-}
+
 
 /* ── Glow Pulse Animation — for accent bars in ProjectHero ── */
 @keyframes glow-pulse {

@@ -32,21 +32,18 @@ defineProps<Props>();
     <div class="hero-meta-grid panel-recessed">
       <div class="hero-meta-cell">
         <div class="meta-label">
-          <span class="indicator-dot"></span>
           <span class="meta-label-text">Role</span>
         </div>
         <p class="meta-value">{{ role }}</p>
       </div>
       <div class="hero-meta-cell">
         <div class="meta-label">
-          <span class="indicator-dot"></span>
           <span class="meta-label-text">Timeline</span>
         </div>
         <p class="meta-value">{{ timeline }}</p>
       </div>
       <div class="hero-meta-cell hero-meta-cell--wide">
         <div class="meta-label">
-          <span class="indicator-dot"></span>
           <span class="meta-label-text">Team</span>
         </div>
         <div class="meta-value">

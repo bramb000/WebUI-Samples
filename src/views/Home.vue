@@ -35,14 +35,9 @@ const navigateTo = (path: string, projectId: string) => {
 
 <template>
   <div class="space-y-24">
-
     <!-- ── Hero ── -->
-    <section class="hero-section pt-12 md:pt-20">
-      <div class="hero-eyebrow">
-        <span class="indicator-dot"></span>
-        <span class="hero-eyebrow-text">Available for work</span>
-      </div>
-      <h1 class="hero-title">Hi, I'm<br>Bramha.</h1>
+    <section class="hero-section pt-12 md:pt-20 max-w-4xl">
+      <h1 class="hero-title mb-6">Hi, I'm<br>Bramha.</h1>
       <p class="hero-body">
         I sit at the intersection of
         <span class="hero-keyword">user experience</span>,
@@ -51,17 +46,17 @@ const navigateTo = (path: string, projectId: string) => {
         to create fulfilling and delightful experiences that increase retention and revenue.
       </p>
       <!-- Hard rule below hero -->
-      <div class="hero-rule"></div>
+      <div class="hero-rule mt-12"></div>
     </section>
 
     <!-- ── Selected Work ── -->
     <section id="selected-work" class="mb-24">
-      <div class="section-header">
+      <div class="section-header flex justify-between items-baseline border-b border-[var(--color-border)] pb-3.5 mb-10">
         <h2 class="section-title">Selected Work</h2>
         <span class="label-segment">Featured</span>
       </div>
 
-      <div class="project-grid">
+      <div class="project-grid grid grid-cols-1 md:grid-cols-2 gap-6">
         <article
           v-for="project in caseStudies.slice(0, 3)"
           :key="project.id"
@@ -78,8 +73,8 @@ const navigateTo = (path: string, projectId: string) => {
           </div>
 
           <!-- Content -->
-          <div class="project-content">
-            <div class="project-tags">
+          <div class="project-content p-5 flex flex-col gap-2.5 flex-1">
+            <div class="project-tags flex flex-wrap gap-1.5">
               <span v-for="tag in project.tags" :key="tag" class="label-segment">{{ tag }}</span>
             </div>
             <h3 class="project-title">{{ project.title }}</h3>
@@ -89,7 +84,7 @@ const navigateTo = (path: string, projectId: string) => {
       </div>
 
       <!-- More Work Link -->
-      <div class="more-work-row">
+      <div class="more-work-row flex justify-center pt-10">
         <router-link to="/work" class="btn-extruded more-work-btn">
           View more work &rarr;
         </router-link>
@@ -101,15 +96,6 @@ const navigateTo = (path: string, projectId: string) => {
 
 <style scoped>
 /* ── Hero ── */
-.hero-section {
-  max-width: 900px;
-}
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-}
 .hero-eyebrow-text {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -127,7 +113,6 @@ const navigateTo = (path: string, projectId: string) => {
   letter-spacing: 0.04em;
   line-height: 1.0;
   color: var(--color-text);
-  margin: 0 0 24px 0;
   text-shadow: 0 0 40px rgba(197, 168, 114, 0.1);
 }
 .hero-body {
@@ -147,21 +132,12 @@ const navigateTo = (path: string, projectId: string) => {
   font-style: normal;
 }
 .hero-rule {
-  margin-top: 48px;
   border-top: 1px solid var(--color-border);
   opacity: 0.35;
   box-shadow: 0 0 8px rgba(197, 168, 114, 0.1);
 }
 
 /* ── Section Header ── */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 14px;
-  margin-bottom: 40px;
-}
 .section-title {
   font-family: var(--font-display);
   font-weight: 700;
@@ -169,16 +145,6 @@ const navigateTo = (path: string, projectId: string) => {
   letter-spacing: 0.1em;
   color: var(--color-text);
   margin: 0;
-}
-
-/* ── Project Grid ── */
-.project-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-}
-@media (min-width: 768px) {
-  .project-grid { grid-template-columns: 1fr 1fr; }
 }
 
 /* ── Project Card ── */
@@ -232,18 +198,6 @@ const navigateTo = (path: string, projectId: string) => {
 }
 .project-card:hover .project-overlay { opacity: 1; }
 
-.project-content {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
 .project-title {
   font-family: var(--font-display);
   font-weight: 600;
@@ -268,11 +222,6 @@ const navigateTo = (path: string, projectId: string) => {
 }
 
 /* ── More Work ── */
-.more-work-row {
-  display: flex;
-  justify-content: center;
-  padding-top: 40px;
-}
 .more-work-btn {
   padding: 11px 28px;
   font-size: 11px;

@@ -4,16 +4,13 @@ import speakingImage from '../assets/images/about/about-2.webp';
 </script>
 
 <template>
-  <div class="page-about">
+  <div class="page-about flex flex-col gap-16 pt-12 pb-24 text-[var(--color-text)]">
 
     <!-- ── Intro ── -->
-    <section class="intro-grid">
+    <section class="intro-grid grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div class="intro-text">
-        <div class="intro-eyebrow">
-          <span class="indicator-dot"></span>
-          <span class="eyebrow-label">About me</span>
-        </div>
-        <h1 class="intro-title">More than just design.</h1>
+
+        <h1 class="intro-title mb-5">More than just design.</h1>
         <p class="intro-body">
           I enjoy cosplay, love Star Wars, and I'm passionate about people. I find joy when products that I build are enjoyed by customers or when I see my team members are growing and having a good time building them.
         </p>
@@ -32,11 +29,11 @@ import speakingImage from '../assets/images/about/about-2.webp';
 
     <!-- ── Process ── -->
     <section class="process-section">
-      <div class="section-header">
+      <div class="section-header border-b border-[var(--color-border)] pb-3 mb-7">
         <h2 class="section-title">My Process</h2>
       </div>
 
-      <div class="process-grid">
+      <div class="process-grid grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Step 1 -->
         <div class="process-card panel-recessed noise-overlay">
           <div class="bg-step-num">1</div>
@@ -70,7 +67,7 @@ import speakingImage from '../assets/images/about/about-2.webp';
     </section>
 
     <!-- ── Testimonial ── -->
-    <section class="testimonial-block panel-recessed noise-overlay">
+    <section class="testimonial-block p-10 md:p-14 overflow-hidden border-l-[3px] border-[var(--color-accent)] panel-recessed noise-overlay relative">
       <!-- Decorative quote mark -->
       <div class="quote-mark" aria-hidden="true">"</div>
 
@@ -90,7 +87,7 @@ import speakingImage from '../assets/images/about/about-2.webp';
     </section>
 
     <!-- ── CTA ── -->
-    <section class="cta-section">
+    <section class="cta-section flex flex-col items-start gap-5">
       <p class="cta-text">If you've reached here, why not read a few case studies?</p>
       <router-link to="/work" class="btn-extruded cta-btn">View Case Studies</router-link>
     </section>
@@ -99,34 +96,6 @@ import speakingImage from '../assets/images/about/about-2.webp';
 </template>
 
 <style scoped>
-.page-about {
-  max-width: 900px;
-  margin: 0 auto;
-  padding-top: 48px;
-  padding-bottom: 96px;
-  color: var(--color-text);
-  display: flex;
-  flex-direction: column;
-  gap: 64px;
-}
-
-/* ── Intro ── */
-.intro-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 48px;
-  align-items: center;
-}
-@media (min-width: 1024px) {
-  .intro-grid { grid-template-columns: 1fr 1fr; }
-}
-
-.intro-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
-}
 .eyebrow-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -144,7 +113,6 @@ import speakingImage from '../assets/images/about/about-2.webp';
   letter-spacing: 0.06em;
   line-height: 1.1;
   color: var(--color-text);
-  margin: 0 0 20px 0;
   text-shadow: 0 0 30px rgba(197, 168, 114, 0.08);
 }
 .intro-body {
@@ -199,12 +167,6 @@ import speakingImage from '../assets/images/about/about-2.webp';
 .photo-front:hover { transform: rotate(-1deg) scale(1.04); z-index: 3; }
 .photo-img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
 
-/* ── Section Header ── */
-.section-header {
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 12px;
-  margin-bottom: 28px;
-}
 /* H2 — Cinzel */
 .section-title {
   font-family: var(--font-display);
@@ -213,16 +175,6 @@ import speakingImage from '../assets/images/about/about-2.webp';
   letter-spacing: 0.1em;
   color: var(--color-text);
   margin: 0;
-}
-
-/* ── Process Grid ── */
-.process-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-@media (min-width: 768px) {
-  .process-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 .process-card {
@@ -308,14 +260,6 @@ import speakingImage from '../assets/images/about/about-2.webp';
   opacity: 0.9;
 }
 
-/* ── Testimonial — occult panel with brass rule ── */
-.testimonial-block {
-  padding: 40px;
-  overflow: hidden;
-  border-left: 3px solid var(--color-accent);
-}
-@media (min-width: 768px) { .testimonial-block { padding: 56px; } }
-
 .quote-mark {
   position: absolute;
   top: -32px;
@@ -380,13 +324,6 @@ import speakingImage from '../assets/images/about/about-2.webp';
   opacity: 0.7;
 }
 
-/* ── CTA ── */
-.cta-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-}
 .cta-text {
   font-family: var(--font-sans);
   font-size: 13px;

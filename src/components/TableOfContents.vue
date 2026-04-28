@@ -77,7 +77,6 @@ function scrollTo(id: string) {
 <template>
   <nav class="toc-panel panel-recessed noise-overlay">
     <div class="toc-header">
-      <span class="indicator-dot"></span>
       <h4 class="toc-title">Contents</h4>
     </div>
     <ul class="toc-list">

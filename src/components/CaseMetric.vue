@@ -28,7 +28,6 @@ withDefaults(defineProps<{
 
     <!-- Label row -->
     <div class="metric-label">
-      <span class="indicator-dot" :class="{ 'dot-success': theme === 'success', 'dot-danger': theme === 'danger' }"></span>
       <span class="metric-label-text">{{ label }}</span>
     </div>
   </div>
@@ -126,6 +125,5 @@ withDefaults(defineProps<{
   letter-spacing: 0.2em;
   color: var(--color-text-muted);
 }
-.dot-success { background: #4caf50; box-shadow: 0 0 4px rgba(76,175,80,0.6); }
-.dot-danger  { background: #f44336; box-shadow: 0 0 4px rgba(244,67,54,0.6); }
+
 </style>

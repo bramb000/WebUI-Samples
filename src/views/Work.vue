@@ -42,16 +42,16 @@ const filteredProjects = computed(() => {
 </script>
 
 <template>
-  <div class="page-work">
+  <div class="page-work pt-12 pb-24 text-[var(--color-text)]">
 
     <!-- Page Header -->
-    <div class="page-header">
+    <div class="page-header flex justify-between items-baseline border-b border-[var(--color-border)] pb-3.5 mb-7">
       <h1 class="page-title text-sweep-reveal">Work</h1>
       <span class="label-segment">Case Studies</span>
     </div>
 
     <!-- Filter Strip -->
-    <div class="filter-row">
+    <div class="filter-row mb-10">
       <div class="deadlock-filter-strip">
         <button
           v-for="filter in filters"
@@ -65,7 +65,7 @@ const filteredProjects = computed(() => {
     </div>
 
     <!-- Project Grid -->
-    <div class="project-grid">
+    <div class="project-grid grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
       <article
         v-for="project in filteredProjects"
         :key="project.id"
@@ -81,8 +81,8 @@ const filteredProjects = computed(() => {
         </div>
 
         <!-- Content -->
-        <div class="project-content">
-          <div class="project-tags">
+        <div class="project-content p-5 flex flex-col gap-2.5">
+          <div class="project-tags flex flex-wrap gap-1.5">
             <span v-for="tag in project.tags" :key="tag" class="label-segment">{{ tag }}</span>
           </div>
           <h3 class="project-title">{{ project.title }}</h3>
@@ -92,7 +92,7 @@ const filteredProjects = computed(() => {
     </div>
 
     <!-- More Link -->
-    <div class="more-row">
+    <div class="more-row flex justify-center pt-10">
       <router-link to="/micro-projects" class="deadlock-action-btn more-btn">
         <span>View micro-projects &rarr;</span>
       </router-link>
@@ -101,22 +101,6 @@ const filteredProjects = computed(() => {
 </template>
 
 <style scoped>
-.page-work {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding-top: 48px;
-  padding-bottom: 96px;
-  color: var(--color-text);
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: 14px;
-  margin-bottom: 28px;
-}
 /* H1 — Cinzel display */
 .page-title {
   font-family: var(--font-display);
@@ -129,20 +113,6 @@ const filteredProjects = computed(() => {
   padding-left: 16px;
   text-shadow: 0 0 40px rgba(197, 168, 114, 0.3);
   line-height: 0.9;
-}
-
-.filter-row {
-  margin-bottom: 40px;
-}
-
-.project-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  width: 100%;
-}
-@media (min-width: 768px) {
-  .project-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .project-card {
@@ -210,13 +180,6 @@ const filteredProjects = computed(() => {
 }
 .project-card:hover .project-overlay { opacity: 1; }
 
-.project-content {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.project-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 .project-title {
   font-family: var(--font-display);
   font-weight: 600;
@@ -240,10 +203,5 @@ const filteredProjects = computed(() => {
   opacity: 0.85;
 }
 
-.more-row {
-  display: flex;
-  justify-content: center;
-  padding-top: 40px;
-}
 .more-btn { padding: 11px 28px; font-size: 11px; }
 </style>

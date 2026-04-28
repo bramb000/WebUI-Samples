@@ -81,15 +81,15 @@ const getThemeColor = (category: string) => {
 </script>
 
 <template>
-  <div class="page-projects">
+  <div class="page-projects pt-12 pb-24 text-[var(--color-text)]">
 
     <!-- Page Header -->
-    <div class="page-header">
+    <div class="page-header mb-7">
       <h1 class="page-title text-sweep-reveal">Micro-projects</h1>
     </div>
 
     <!-- Filter Strip -->
-    <div class="filter-row">
+    <div class="filter-row mb-12">
       <div class="deadlock-filter-strip">
         <button
           v-for="filter in filters"
@@ -103,7 +103,7 @@ const getThemeColor = (category: string) => {
     </div>
 
     <!-- Layered Sprite Architecture Project Tiles -->
-    <div class="tile-grid">
+    <div class="tile-grid grid grid-cols-1 md:grid-cols-2 gap-8">
       <router-link
         v-for="(project, index) in filteredProjects"
         :key="project.id"
@@ -148,18 +148,6 @@ const getThemeColor = (category: string) => {
 </template>
 
 <style scoped>
-.page-projects {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-top: 48px;
-  padding-bottom: 96px;
-  color: var(--color-text);
-}
-
-.page-header {
-  margin-bottom: 28px;
-}
-
 .page-title {
   font-family: var(--font-display);
   font-weight: 900;
@@ -172,18 +160,6 @@ const getThemeColor = (category: string) => {
   text-shadow: 0 0 40px rgba(197, 168, 114, 0.3);
   clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
   line-height: 0.9;
-}
-
-.filter-row { margin-bottom: 48px; }
-
-/* ── Tile Grid ── */
-.tile-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-}
-@media (min-width: 768px) {
-  .tile-grid { grid-template-columns: 1fr 1fr; }
 }
 
 /* ==========================================================================

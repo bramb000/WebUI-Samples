@@ -64,7 +64,6 @@ const trackEmailClick = () => {
             @click="trackSocialClick('linkedin')"
             class="footer-link"
           >
-            <span class="indicator-dot"></span>
             LinkedIn
           </a>
           <a
@@ -72,7 +71,6 @@ const trackEmailClick = () => {
             @click="trackEmailClick"
             class="footer-link"
           >
-            <span class="indicator-dot"></span>
             Email
           </a>
         </div>

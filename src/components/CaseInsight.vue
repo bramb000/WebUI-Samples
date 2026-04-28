@@ -17,7 +17,6 @@ withDefaults(defineProps<{
         <span class="insight-stat-value">{{ stat }}</span>
       </div>
       <div v-if="statLabel" class="insight-stat-label">
-        <span class="indicator-dot" :class="{ 'dot-success': theme === 'success', 'dot-danger': theme === 'danger' }"></span>
         <span class="stat-label-text">{{ statLabel }}</span>
       </div>
     </div>
@@ -91,8 +90,7 @@ withDefaults(defineProps<{
   letter-spacing: 0.2em;
   color: var(--color-text-muted);
 }
-.dot-success { background: #4caf50; box-shadow: 0 0 4px rgba(76,175,80,0.6); }
-.dot-danger  { background: #f44336; box-shadow: 0 0 4px rgba(244,67,54,0.6); }
+
 
 .insight-body {
   font-family: var(--font-sans);
