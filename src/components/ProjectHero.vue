@@ -19,7 +19,7 @@ defineProps<Props>();
 
     <!-- Tags row -->
     <div class="hero-tags">
-      <span v-for="tag in tags" :key="tag" class="label-segment">{{ tag }}</span>
+      <span v-for="tag in tags" :key="tag" class="dl-plaque">{{ tag }}</span>
     </div>
 
     <!-- Title & Intro -->
@@ -92,6 +92,19 @@ defineProps<Props>();
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.dl-plaque {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 4px 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
 
 .hero-title-block {

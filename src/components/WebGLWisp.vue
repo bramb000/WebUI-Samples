@@ -31,38 +31,41 @@ const fragmentShader = `
       uniform float u_clickIntensity;
       uniform float u_seed;
 
+      // Comic Flame Parameters
+      uniform float u_sharpness;
+      uniform float u_outline;
+      uniform float u_taper;
+      uniform float u_complexity;
+      uniform float u_distortion;
+      uniform float u_speed;
+
       varying vec2 vUv;
 
-      float getT() { return floor(u_time * 12.0) / 12.0; }
-      
-      float hash(vec2 p) { 
-          p = fract(p * vec2(123.34, 456.21)); 
-          p += dot(p, p + 45.32); 
-          return fract(p.x * p.y); 
+      float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
       }
-      
-      float noise(vec2 p) {
-          vec2 i = floor(p); vec2 f = fract(p);
-          float a = hash(i); float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0)); float d = hash(i + vec2(1.0, 1.0));
+
+      float noise(in vec2 x) {
+          vec2 i = floor(x);
+          vec2 f = fract(x);
+          float a = hash(i);
+          float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0));
+          float d = hash(i + vec2(1.0, 1.0));
           vec2 u = f * f * (3.0 - 2.0 * f);
           return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
       }
-      
+
       float fbm(vec2 p) {
-          float v = 0.0; float a = 0.5;
-          for (int i = 0; i < 4; i++) { 
-              v += a * noise(p); 
-              p *= 2.2; 
-              a *= 0.5; 
+          float value = 0.0;
+          float amplitude = 0.5;
+          float frequency = u_complexity;
+          for (int i = 0; i < 4; i++) {
+              value += amplitude * noise(p * frequency);
+              p *= 2.0;
+              amplitude *= 0.5;
           }
-          return v;
-      }
-      
-      float sdLine(vec2 p, vec2 a, vec2 b) {
-          vec2 pa = p - a, ba = b - a;
-          float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-          return length(pa - ba * h);
+          return value;
       }
 
       void main() {
@@ -71,53 +74,68 @@ const fragmentShader = `
               return;
           }
 
-          // 1. COORDINATE SYSTEM
-          // We have a full-screen canvas. We need to map coordinates so they match the reference's local canvas behavior.
+          // 1. COORDINATE SYSTEM MAPPING
           vec2 pixelCoords = vUv * u_resolution;
           vec2 centerScreen = vec2(u_position.x + u_size.x * 0.5, (u_resolution.y - u_position.y) - u_size.y * 0.5);
           vec2 offset = pixelCoords - centerScreen;
           
-          // In the reference, the canvas was button size + 200px padding.
-          float virtualCanvasHeight = u_size.y + 200.0;
+          // CRITICAL FIX: Absolute Noise Scale + Proportional Mask
+          // To ensure the "parameters" (complexity, chunkiness, thresholds) look identical to the codepen,
+          // the noise coordinates (st) MUST map to absolute pixels, not relative UVs.
+          // If st scales with the button, smaller buttons get "zoomed out" high-frequency noise that 
+          // gets completely eaten by the u_sharpness threshold, leaving only a tiny puddle!
           
-          // Normalize so that 1.0 = half the virtual canvas height (matches uv = vUv * 2.0 - 1.0)
-          vec2 uv = offset / (virtualCanvasHeight * 0.5);
+          // 1. Calculate a virtual canvas that is strictly proportional to the button size.
+          // By removing the forced 2.4 Aspect Ratio, we ensure the mask gradients (the taper, the belly) 
+          // map to the exact same relative positions on EVERY button, making the flame shape perfectly consistent.
+          // Wide buttons won't get a massive vertical belly, and narrow buttons won't get squished.
+          float vWidth = u_size.x * 1.8;
+          float vHeight = u_size.y * 2.5;
+          vec2 virtualSize = vec2(vWidth, vHeight);
           
-          float t = getT();
+          // 2. Mask coordinates are relative to the virtual canvas so the flame wraps the button
+          vec2 centered = offset / virtualSize;
+          
+          // 3. Noise coordinates MUST be absolute to maintain the exact same physical parameters (complexity/scale)
+          // In the 720x300 codepen, st = uv * vec2(4.0, 2.0). 
+          // 720 / 4.0 = 180px per cycle. 300 / 2.0 = 150px per cycle.
+          vec2 st = vec2(offset.x / 180.0, offset.y / 150.0) + vec2(2.0, 1.0);
+          
+          vec2 scroll = vec2(u_time * u_speed, 0.0);
+          
+          // Organic distortion
+          float distNoise = fbm(st + scroll * 0.5);
+          vec2 distortedSt = st - scroll + vec2(distNoise * u_distortion);
+          
+          float n = fbm(distortedSt);
+          
+          // Exact taper logic
+          float maskY = smoothstep(0.4, 0.0, abs(centered.y + 0.05)); 
+          float maskX = smoothstep(-0.4, -0.2, centered.x) * smoothstep(0.5, 0.5 - u_taper, centered.x);
+          float mask = maskY * maskX;
+          
+          // Map component uniform
+          float u_hover = u_hoverIntensity;
+          
+          float flame = n * mask * (u_hover * 2.5);
+          
+          // Sparks logic
+          float sparkNoise = fbm((st - scroll * 1.2) * 2.0);
+          float sparks = sparkNoise * mask * (u_hover * 1.8);
+          
+          // Outer edge for black outline
+          float outerEdge = step(u_sharpness - u_outline, max(flame, sparks));
+          
+          // Inner edge for green fill
+          float innerEdge = step(u_sharpness, max(flame, sparks));
+          
+          vec3 outlineColor = vec3(0.05, 0.08, 0.06); 
+          vec3 fillColor = vec3(0.3, 0.85, 0.52);     
+          
+          vec3 finalColor = mix(outlineColor, fillColor, innerEdge);
+          float alpha = outerEdge * smoothstep(0.0, 0.1, u_hover);
 
-          // 2. THE EXTENSION LOGIC (Adapted from reference)
-          // Calculate base button diagonal in UV units
-          vec2 bSize = u_size / virtualCanvasHeight; 
-          
-          // Pushing the anchor points 25% further than the actual corners, animating on hover
-          float extension = 1.25 * mix(0.5, 1.0, u_hoverIntensity); 
-          vec2 pA = vec2(-bSize.x * 0.5, -bSize.y * 0.5) * extension;
-          vec2 pB = vec2(bSize.x * 0.5, bSize.y * 0.5) * extension;
-
-          vec2 pa = uv - pA, ba = pB - pA;
-          float progress = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-
-          // Warp increases as it moves toward the 'trail' (top-right)
-          float warpScale = mix(0.3, 1.4, progress) * u_hoverIntensity; 
-          vec2 warp = vec2(
-              fbm(uv * 1.1 + vec2(t * 0.8, t * 0.2 + u_seed)),
-              fbm(uv * 1.4 - vec2(t * 0.4, t * 0.6 - u_seed))
-          );
-          
-          vec2 distortedUv = uv + (warp - 0.5) * warpScale;
-          float d = sdLine(distortedUv, pA, pB);
-
-          // 3. FRESH GREEN COLOR (From reference)
-          vec3 freshSpectral = vec3(0.3, 1.0, 0.6); 
-          
-          // Sharpened edge without the wide smoky halo
-          float core = 1.0 - smoothstep(0.12, 0.15, d);
-
-          // Blend alpha and color
-          float finalAlpha = core * u_hoverIntensity;
-          vec3 finalColor = mix(freshSpectral * 0.8, freshSpectral * 1.5, progress);
-          
-          gl_FragColor = vec4(finalColor, finalAlpha);
+          gl_FragColor = vec4(finalColor, alpha);
       }
     `;
 
@@ -156,7 +174,14 @@ onMounted(() => {
       u_size: { value: new THREE.Vector2(0, 0) },
       u_hoverIntensity: { value: 0.0 },
       u_clickIntensity: { value: 0.0 },
-      u_seed: { value: 0.0 }
+      u_seed: { value: 0.0 },
+      // Comic Flame Parameters (User provided values)
+      u_sharpness: { value: 0.44 },
+      u_outline: { value: 0.12 },
+      u_taper: { value: 0.82 },
+      u_complexity: { value: 2.10 },
+      u_distortion: { value: 0.95 },
+      u_speed: { value: 0.60 }
     },
     transparent: true,
     depthWrite: false,
@@ -177,7 +202,7 @@ onMounted(() => {
     
     material.uniforms.u_time.value = clock.getElapsedTime();
     
-    // Determine a unique ID for the current hovered element (using href or just identity)
+    // Determine a unique ID for the current hovered element
     const currentHoverId = wispState.hoveredElement ? (wispState.hoveredElement as any).href || wispState.hoveredElement.innerText : null;
     
     // If we changed to a NEW button, instantly reset the visual opacity to 0

@@ -21,7 +21,10 @@ useCaseTheme();
     <WebGLWisp v-if="!isFullScreen" />
     <NavBar v-if="!isFullScreen" />
     
-    <main :class="['flex-grow w-full', !isFullScreen ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : '']">
+    <main :class="[
+      'flex-grow w-full', 
+      (!isFullScreen && !route.path.startsWith('/work/')) ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : ''
+    ]">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
