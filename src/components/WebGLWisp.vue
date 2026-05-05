@@ -38,6 +38,11 @@ const fragmentShader = `
       uniform float u_complexity;
       uniform float u_distortion;
       uniform float u_speed;
+      
+      uniform vec2 u_offset;
+      uniform vec2 u_qbc_p1;
+      uniform vec2 u_qbc_p2;
+      uniform vec3 u_outline_color;
 
       varying vec2 vUv;
 
@@ -93,13 +98,24 @@ const fragmentShader = `
           float vHeight = u_size.y * 2.5;
           vec2 virtualSize = vec2(vWidth, vHeight);
           
-          // 2. Mask coordinates are relative to the virtual canvas so the flame wraps the button
-          vec2 centered = offset / virtualSize;
+          // 2. Base relative coordinates
+          vec2 uv = (offset / virtualSize) + vec2(0.5);
           
-          // 3. Noise coordinates MUST be absolute to maintain the exact same physical parameters (complexity/scale)
-          // In the 720x300 codepen, st = uv * vec2(4.0, 2.0). 
-          // 720 / 4.0 = 180px per cycle. 300 / 2.0 = 150px per cycle.
-          vec2 st = vec2(offset.x / 180.0, offset.y / 150.0) + vec2(2.0, 1.0);
+          // 3. Apply QBC Flow Warping to the UV coordinates
+          float t = uv.x;
+          vec2 qbc_bend = 2.0 * (1.0 - t) * t * u_qbc_p1 + (t * t) * u_qbc_p2;
+          
+          vec2 warpedUv = uv - u_offset - qbc_bend;
+          vec2 warpedCentered = warpedUv - vec2(0.5);
+          
+          // 4. Uniform Proportional Noise Scaling
+          // To ensure the flame has the identical level of detail (chunkiness) on small buttons without squishing:
+          // We lock the vertical noise to exactly 2.0 cycles across the virtual height.
+          // We then scale the horizontal noise proportionally to maintain the codepen's exact 1.2 noise aspect ratio.
+          vec2 st = vec2(
+              (warpedCentered.x * vWidth) / (vHeight * 0.6) + 2.0,
+              (warpedCentered.y * 2.0) + 1.0
+          );
           
           vec2 scroll = vec2(u_time * u_speed, 0.0);
           
@@ -110,8 +126,8 @@ const fragmentShader = `
           float n = fbm(distortedSt);
           
           // Exact taper logic
-          float maskY = smoothstep(0.4, 0.0, abs(centered.y + 0.05)); 
-          float maskX = smoothstep(-0.4, -0.2, centered.x) * smoothstep(0.5, 0.5 - u_taper, centered.x);
+          float maskY = smoothstep(0.4, 0.0, abs(warpedCentered.y + 0.05)); 
+          float maskX = smoothstep(-0.4, -0.2, warpedCentered.x) * smoothstep(0.5, 0.5 - u_taper, warpedCentered.x);
           float mask = maskY * maskX;
           
           // Map component uniform
@@ -129,10 +145,9 @@ const fragmentShader = `
           // Inner edge for green fill
           float innerEdge = step(u_sharpness, max(flame, sparks));
           
-          vec3 outlineColor = vec3(0.05, 0.08, 0.06); 
           vec3 fillColor = vec3(0.3, 0.85, 0.52);     
           
-          vec3 finalColor = mix(outlineColor, fillColor, innerEdge);
+          vec3 finalColor = mix(u_outline_color, fillColor, innerEdge);
           float alpha = outerEdge * smoothstep(0.0, 0.1, u_hover);
 
           gl_FragColor = vec4(finalColor, alpha);
@@ -176,12 +191,16 @@ onMounted(() => {
       u_clickIntensity: { value: 0.0 },
       u_seed: { value: 0.0 },
       // Comic Flame Parameters (User provided values)
-      u_sharpness: { value: 0.44 },
-      u_outline: { value: 0.12 },
-      u_taper: { value: 0.82 },
-      u_complexity: { value: 2.10 },
-      u_distortion: { value: 0.95 },
-      u_speed: { value: 0.60 }
+      u_sharpness: { value: 0.45 },
+      u_outline: { value: 0.11 },
+      u_taper: { value: 0.81 },
+      u_complexity: { value: 2.40 },
+      u_distortion: { value: 0.60 },
+      u_speed: { value: 0.90 },
+      u_offset: { value: new THREE.Vector2(0.08, 0.06) },
+      u_qbc_p1: { value: new THREE.Vector2(0.08, -0.09) },
+      u_qbc_p2: { value: new THREE.Vector2(0.06, 0.14) },
+      u_outline_color: { value: new THREE.Color('#18251c') }
     },
     transparent: true,
     depthWrite: false,
@@ -196,11 +215,20 @@ onMounted(() => {
 
   const clock = new THREE.Clock();
   let lastHoveredId: string | null = null;
+  let steppedTime = 0;
+  let lastTime = 0;
 
   const animate = () => {
     animationFrameId = requestAnimationFrame(animate);
     
-    material.uniforms.u_time.value = clock.getElapsedTime();
+    // 24 FPS discrete time stepping for comic aesthetic
+    const now = clock.getElapsedTime();
+    if (now - lastTime > 1.0 / 24.0) {
+      steppedTime += (1.0 / 24.0);
+      lastTime = now;
+    }
+    
+    material.uniforms.u_time.value = steppedTime;
     
     // Determine a unique ID for the current hovered element
     const currentHoverId = wispState.hoveredElement ? (wispState.hoveredElement as any).href || wispState.hoveredElement.innerText : null;
@@ -254,6 +282,6 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 45; /* Below Nav ledge (50) but above page content */
+  z-index: 0; /* Render behind buttons but above backgrounds in the current stacking context */
 }
 </style>

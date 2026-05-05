@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import posthog from 'posthog-js';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
+import WebGLWisp from './WebGLWisp.vue';
 
 const isMenuOpen = ref(false);
 
@@ -51,17 +52,20 @@ const trackContactClick = (source: string) => {
 
 <template>
   <div
-    class="dl-nav-ledge-bg fixed top-0 w-full z-40"
-    :class="showNavbar ? 'translate-y-0' : '-translate-y-full'"
-    style="height: 72px; transition: transform 0.3s ease;"
+    class="dl-nav-ledge-bg fixed w-full z-40"
+    :class="showNavbar ? 'top-0' : 'top-[-72px]'"
+    style="height: 72px; transition: top 0.3s ease;"
   ></div>
   <nav 
     :class="[
-      'w-full flex justify-between md:justify-center items-center sticky top-0 z-50 py-4 px-6 md:px-12',
-      showNavbar ? 'translate-y-0' : '-translate-y-full'
+      'w-full flex justify-between md:justify-center items-center sticky z-50 py-4 px-6 md:px-12',
+      showNavbar ? 'top-0' : 'top-[-72px]'
     ]"
-    style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), transform 0.3s ease;"
+    style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), top 0.3s ease;"
   >
+    <!-- WebGL Wisp Effect (Rendered inside Nav so it sits between strip background and buttons) -->
+    <WebGLWisp style="z-index: 0;" />
+    
     <!-- Mobile Logo -->
     <router-link
       to="/"

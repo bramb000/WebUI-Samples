@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 import Footer from './components/Footer.vue';
-import WebGLWisp from './components/WebGLWisp.vue';
 import { useCaseTheme } from './composables/useCaseTheme';
 
 const route = useRoute();
@@ -17,8 +16,6 @@ useCaseTheme();
   <div :class="[
     'flex flex-col min-h-screen font-sans',
     isFullScreen ? 'bg-white h-screen overflow-hidden' : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-border-hi)] selection:text-[#111113]'
-  ]">
-    <WebGLWisp v-if="!isFullScreen" />
     <NavBar v-if="!isFullScreen" />
     
     <main :class="[
