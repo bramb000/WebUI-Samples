@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import cosplayImage from '../assets/images/about/about-1.webp';
 import speakingImage from '../assets/images/about/about-2.webp';
+import PrimaryButton from '../components/PrimaryButton.vue';
 </script>
 
 <template>
@@ -89,7 +90,7 @@ import speakingImage from '../assets/images/about/about-2.webp';
     <!-- ── CTA ── -->
     <section class="cta-section flex flex-col items-start gap-5">
       <p class="cta-text">If you've reached here, why not read a few case studies?</p>
-      <router-link to="/work" class="btn-extruded cta-btn">View Case Studies</router-link>
+      <PrimaryButton to="/work" class="cta-btn">View Case Studies</PrimaryButton>
     </section>
 
   </div>

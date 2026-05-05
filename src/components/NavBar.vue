@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 import posthog from 'posthog-js';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
 import WebGLWisp from './WebGLWisp.vue';
+import PrimaryButton from './PrimaryButton.vue';
 
 const isMenuOpen = ref(false);
 
@@ -113,17 +114,17 @@ const trackContactClick = (source: string) => {
         <div class="flex items-center gap-3">
 
           <!-- Let's Talk CTA -->
-          <a
+          <PrimaryButton
             href="https://www.linkedin.com/in/bramdal/"
             target="_blank"
             @click="trackContactClick('navbar_desktop')"
             @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
             @mouseleave="() => setWispHover(null)"
             @mousedown="triggerWispClick"
-            class="deadlock-action-btn px-8 py-3 focus-visible:outline-none"
+            class="px-8 py-3 focus-visible:outline-none"
           >
-            <span>Let's Talk</span>
-          </a>
+            Let's Talk
+          </PrimaryButton>
         </div>
 
       </div>
@@ -163,14 +164,14 @@ const trackContactClick = (source: string) => {
             </router-link>
 
             <div class="mt-8">
-              <a
+              <PrimaryButton
                 href="https://www.linkedin.com/in/bramdal/"
                 target="_blank"
                 @click="trackContactClick('navbar_mobile')"
-                class="deadlock-action-btn px-8 py-3 text-sm"
+                class="px-8 py-3 text-sm"
               >
-                <span>Let's Talk</span>
-              </a>
+                Let's Talk
+              </PrimaryButton>
             </div>
           </nav>
         </div>

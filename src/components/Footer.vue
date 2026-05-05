@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import posthog from 'posthog-js'
 import { setWispHover, triggerWispClick } from '../composables/wispState'
+import PrimaryButton from './PrimaryButton.vue';
 
 const trackSocialClick = (platform: string) => {
   posthog.capture('social_clicked', { platform, source: 'footer' })
@@ -38,17 +39,17 @@ const trackEmailClick = () => {
 
       <!-- CTA Button -->
       <div class="footer-cta-btn-row">
-        <a
+        <PrimaryButton
           href="https://www.linkedin.com/in/bramdal/"
           target="_blank"
           @click="trackSocialClick('linkedin_footer_cta')"
           @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
           @mouseleave="() => setWispHover(null)"
           @mousedown="triggerWispClick"
-          class="deadlock-action-btn footer-cta-btn"
+          class="footer-cta-btn"
         >
-          <span>Get in touch</span>
-        </a>
+          Get in touch
+        </PrimaryButton>
       </div>
 
       <!-- Divider -->

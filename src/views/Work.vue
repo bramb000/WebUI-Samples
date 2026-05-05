@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png'
 import guildHero from '../assets/images/guild/guild-hero.jpg'
+import PrimaryButton from '../components/PrimaryButton.vue';
 
 const activeFilter = ref('All')
 const filters = ['All', 'Mobile Game', 'PC Game', 'Console Game']
@@ -76,7 +77,7 @@ const filteredProjects = computed(() => {
         <div class="project-thumb">
           <img v-if="project.image" :src="project.image" :alt="project.title" class="project-img deadlock-hero-art" />
           <div class="project-overlay">
-            <span class="deadlock-action-btn px-6 py-2.5"><span>View Case Study</span></span>
+            <PrimaryButton class="px-6 py-2.5" aria-hidden="true" tabindex="-1">View Case Study</PrimaryButton>
           </div>
         </div>
 
@@ -93,9 +94,7 @@ const filteredProjects = computed(() => {
 
     <!-- More Link -->
     <div class="more-row flex justify-center pt-10">
-      <router-link to="/micro-projects" class="deadlock-action-btn more-btn">
-        <span>View micro-projects &rarr;</span>
-      </router-link>
+      <PrimaryButton to="/micro-projects" class="more-btn">View micro-projects &rarr;</PrimaryButton>
     </div>
   </div>
 </template>

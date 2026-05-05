@@ -13,9 +13,14 @@ useCaseTheme();
 </script>
 
 <template>
-  <div :class="[
-    'flex flex-col min-h-screen font-sans',
-    isFullScreen ? 'bg-white h-screen overflow-hidden' : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-border-hi)] selection:text-[#111113]'
+  <div
+    :class="[
+      'flex flex-col min-h-screen font-sans',
+      isFullScreen
+        ? 'bg-white h-screen overflow-hidden'
+        : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-border-hi)] selection:text-[#111113]',
+    ]"
+  >
     <NavBar v-if="!isFullScreen" />
     
     <main :class="[

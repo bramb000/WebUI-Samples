@@ -215,9 +215,35 @@ h3, h4, h5, h6 {
   background: #EBE6E0;
 }
 
+.btn-extruded:hover,
+.deadlock-action-btn:hover,
+.dl-button-master:hover,
+.btn-extruded.active {
+  color: #111113;
+}
+
 .btn-extruded:hover span,
 .deadlock-action-btn:hover span,
 .dl-button-master:hover span {
+  color: #111113;
+}
+
+.btn-extruded:focus-visible,
+.deadlock-action-btn:focus-visible,
+.dl-button-master:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-accent) 85%, white);
+  outline-offset: 3px;
+}
+
+.btn-extruded:focus-visible::after,
+.deadlock-action-btn:focus-visible::after,
+.dl-button-master:focus-visible::after {
+  background: #EBE6E0;
+}
+
+.btn-extruded:focus-visible,
+.deadlock-action-btn:focus-visible,
+.dl-button-master:focus-visible {
   color: #111113;
 }
 

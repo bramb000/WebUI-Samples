@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import posthog from 'posthog-js'
+import PrimaryButton from '../components/PrimaryButton.vue';
 
 const activeFilter = ref('All')
 const filters = ['All', 'Web Design', 'Game Design']
@@ -139,7 +140,7 @@ const getThemeColor = (category: string) => {
 
           <!-- CTA -->
           <div class="tile-cta">
-            <span class="deadlock-action-btn"><span>Initiate &rarr;</span></span>
+            <PrimaryButton aria-hidden="true" tabindex="-1">View &rarr;</PrimaryButton>
           </div>
         </div>
       </router-link>

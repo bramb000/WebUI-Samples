@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 
 import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png';
 import guildHero from '../assets/images/guild/guild-hero.jpg';
+import PrimaryButton from '../components/PrimaryButton.vue';
 
 const caseStudies = [
   {
@@ -68,7 +69,7 @@ const navigateTo = (path: string, projectId: string) => {
             <img v-if="project.image" :src="project.image" :alt="project.title" class="project-img" />
             <!-- Hover overlay -->
             <div class="project-overlay">
-              <span class="btn-extruded px-6 py-2.5 text-[11px]">View Case Study</span>
+              <PrimaryButton class="px-6 py-2.5 text-[11px]" aria-hidden="true" tabindex="-1">View Case Study</PrimaryButton>
             </div>
           </div>
 
@@ -85,9 +86,7 @@ const navigateTo = (path: string, projectId: string) => {
 
       <!-- More Work Link -->
       <div class="more-work-row flex justify-center pt-10">
-        <router-link to="/work" class="btn-extruded more-work-btn">
-          View more work &rarr;
-        </router-link>
+        <PrimaryButton to="/work" class="more-work-btn">View more work &rarr;</PrimaryButton>
       </div>
     </section>
 
