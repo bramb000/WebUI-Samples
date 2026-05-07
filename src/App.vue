@@ -40,7 +40,7 @@ useCaseTheme();
 
     <Footer v-if="!isFullScreen && !isHeroSelect" />
 
-    <!-- Deadlock UI Global Filters -->
+    <!-- Global SVG filters -->
     <svg style="visibility: hidden; position: absolute;" width="0" height="0">
       <defs>
         <!-- Demo: procedural aged paper dim overlay -->
@@ -56,7 +56,7 @@ useCaseTheme();
         </filter>
 
         <!-- Unstable Magic/Heat Flicker -->
-        <filter id="deadlock-flicker">
+        <filter id="ui-flicker">
           <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="1">
             <animate attributeName="seed" from="1" to="100" dur="2s" repeatCount="indefinite" />
           </feTurbulence>

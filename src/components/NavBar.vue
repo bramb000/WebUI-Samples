@@ -65,7 +65,7 @@ const trackContactClick = (source: string) => {
     style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), top 0.3s ease;"
   >
     <!-- WebGL Wisp Effect (Rendered inside Nav so it sits between strip background and buttons) -->
-    <WebGLWisp style="z-index: 0;" />
+    <WebGLWisp />
     
     <!-- Mobile Logo -->
     <router-link

@@ -271,7 +271,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="wisp-canvas"></canvas>
+  <Teleport to="body">
+    <canvas ref="canvasRef" class="wisp-canvas"></canvas>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -282,6 +284,7 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 0; /* Render behind buttons but above backgrounds in the current stacking context */
+  /* Between nav ledge bg (40) and nav content (50). */
+  z-index: 45;
 }
 </style>

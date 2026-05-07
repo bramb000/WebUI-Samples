@@ -53,12 +53,12 @@ const filteredProjects = computed(() => {
 
     <!-- Filter Strip -->
     <div class="filter-row mb-10">
-      <div class="deadlock-filter-strip">
+      <div class="ui-filter-strip">
         <button
           v-for="filter in filters"
           :key="filter"
           @click="activeFilter = filter"
-          :class="['deadlock-filter-tab', activeFilter === filter ? 'active' : '']"
+          :class="['ui-filter-tab', activeFilter === filter ? 'active' : '']"
         >
           {{ filter }}
         </button>
@@ -71,11 +71,11 @@ const filteredProjects = computed(() => {
         v-for="project in filteredProjects"
         :key="project.id"
         @click="navigateTo(project.link, project.id)"
-        class="project-card deadlock-card-container"
+        class="project-card ui-card-container"
       >
         <!-- Thumbnail -->
         <div class="project-thumb">
-          <img v-if="project.image" :src="project.image" :alt="project.title" class="project-img deadlock-hero-art" />
+          <img v-if="project.image" :src="project.image" :alt="project.title" class="project-img ui-hero-art" />
           <div class="project-overlay">
             <PrimaryButton class="px-6 py-2.5" aria-hidden="true" tabindex="-1">View Case Study</PrimaryButton>
           </div>

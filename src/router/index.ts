@@ -20,7 +20,7 @@ const routes = [
     {
         path: '/micro-projects',
         name: 'Projects',
-        component: () => import('../views/DeadlockHeroSelect.vue')
+        component: () => import('../views/ProjectSelect.vue')
     },
     {
         path: '/micro-projects/list',
@@ -79,11 +79,7 @@ const routes = [
         name: 'VoiceChatSimulation',
         component: () => import('../views/VoiceChatSimulation.vue')
     },
-    {
-        path: '/micro-projects/deadlock-hero-select',
-        name: 'DeadlockHeroSelect',
-        component: () => import('../views/DeadlockHeroSelect.vue')
-    }
+    // legacy route removed (previously pointed at the project select screen)
 ]
 
 import { setupAnalytics } from '../analytics'

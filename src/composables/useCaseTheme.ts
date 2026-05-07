@@ -2,7 +2,7 @@ import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 /**
- * Maps route names to their Deadlock Hero theme token.
+ * Maps route names to their case-study theme token.
  * Add new case studies here as the portfolio grows.
  */
 const ROUTE_THEME_MAP: Record<string, string> = {

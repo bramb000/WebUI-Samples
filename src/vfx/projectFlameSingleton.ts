@@ -23,7 +23,6 @@ void main() {
 }
 `
 
-// Matches the demo: local UV space flame with a global opacity fade.
 const fragmentShader = `
 precision highp float;
 
@@ -134,29 +133,24 @@ function init() {
   flameWrapper.appendChild(renderer.domElement)
 }
 
-export function attachDeadlockFlameToThumbnail(thumb: HTMLElement, innerCard: HTMLElement) {
+export function attachProjectFlameToThumbnail(thumb: HTMLElement, innerCard: HTMLElement) {
   init()
   if (!flameWrapper) return
-
   if (flameWrapper.parentElement !== thumb) {
     thumb.insertBefore(flameWrapper, innerCard)
   }
-
   targetOpacity = 1.0
 }
 
-export function detachDeadlockFlame() {
+export function detachProjectFlame() {
   targetOpacity = 0.0
 }
 
-export function tickDeadlockFlame(timeSeconds: number) {
+export function tickProjectFlame(timeSeconds: number) {
   if (!inited) return
   material.uniforms.u_time.value = timeSeconds
   const u = material.uniforms.u_globalOpacity
   u.value += (targetOpacity - u.value) * 0.1
-
-  if (u.value > 0.01) {
-    renderer.render(scene, camera)
-  }
+  if (u.value > 0.01) renderer.render(scene, camera)
 }
 

@@ -50,10 +50,10 @@ const projects = [
     category: 'Web Design'
   },
   {
-    id: 'deadlock-hero-select',
-    title: 'Deadlock “Hero Select” Portfolio (1:1 recreation)',
-    description: 'A master-detail roster UI inspired by Deadlock: dense thumbnail grid, neon active state, and angular SVG wipe transitions.',
-    route: '/micro-projects/deadlock-hero-select?fullscreen=true',
+    id: 'project-select',
+    title: 'Project Select Screen',
+    description: 'A master-detail roster UI: dense thumbnail grid, neon active state, and angular wipe transitions.',
+    route: '/micro-projects',
     category: 'Game Design'
   },
   {
@@ -98,12 +98,12 @@ const getThemeColor = (category: string) => {
 
     <!-- Filter Strip -->
     <div class="filter-row mb-12">
-      <div class="deadlock-filter-strip">
+      <div class="ui-filter-strip">
         <button
           v-for="filter in filters"
           :key="filter"
           @click="activeFilter = filter"
-          :class="['deadlock-filter-tab', activeFilter === filter ? 'active' : '']"
+          :class="['ui-filter-tab', activeFilter === filter ? 'active' : '']"
         >
           {{ filter }}
         </button>
@@ -117,21 +117,21 @@ const getThemeColor = (category: string) => {
         :key="project.id"
         :to="project.route"
         @click="trackMicroProjectClick(project)"
-        class="deadlock-roster-card"
+        class="roster-card"
         :style="{ '--theme-color': getThemeColor(project.category), 'animation-delay': `${index * 0.05}s` }"
       >
         <!-- Layer 1: The Void Background -->
         <div class="card-layer void-background"></div>
 
         <!-- Layer 2: The Jagged Frame -->
-        <div class="card-layer deadlock-frame">
-          <div class="deadlock-noise"></div>
+        <div class="card-layer roster-frame">
+          <div class="roster-noise"></div>
         </div>
 
         <!-- Layer 3: The Hero Art (Frame Breaker) -->
         <div class="card-layer hero-art-layer">
           <!-- Stand-in for future transparent PNG characters -->
-          <div class="deadlock-hero-art-placeholder"></div>
+          <div class="roster-hero-art-placeholder"></div>
         </div>
 
         <!-- Layer 4: The Foreground UI -->
@@ -174,7 +174,7 @@ const getThemeColor = (category: string) => {
    LAYERED SPRITE CARD ARCHITECTURE
    ========================================================================== */
 
-.deadlock-roster-card {
+.roster-card {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
@@ -187,11 +187,11 @@ const getThemeColor = (category: string) => {
   transition: transform 150ms var(--ease-mechanical-spring);
 }
 
-.deadlock-roster-card:hover {
+.roster-card:hover {
   transform: translateY(-6px) scale(1.02);
 }
 
-.deadlock-roster-card:active {
+.roster-card:active {
   transform: translateY(2px) scale(0.98) !important;
   transition: transform 50ms !important;
 }
@@ -211,7 +211,7 @@ const getThemeColor = (category: string) => {
 }
 
 /* ── LAYER 2: Z-10 Jagged Frame ── */
-.deadlock-frame {
+.roster-frame {
   z-index: 10;
   background: linear-gradient(135deg, #1A1A1D 0%, #0D0D0F 100%);
   clip-path: polygon(
@@ -226,12 +226,12 @@ const getThemeColor = (category: string) => {
   pointer-events: none;
 }
 
-.deadlock-roster-card:hover .deadlock-frame {
+.roster-card:hover .roster-frame {
   box-shadow: inset 0 0 0 4px var(--theme-color);
   filter: drop-shadow(0 0 15px color-mix(in srgb, var(--theme-color) 40%, transparent));
 }
 
-.deadlock-noise {
+.roster-noise {
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -246,7 +246,7 @@ const getThemeColor = (category: string) => {
   pointer-events: none; /* let clicks pass */
 }
 
-.deadlock-hero-art-placeholder {
+.roster-hero-art-placeholder {
   position: absolute;
   bottom: 0;
   right: -5%;
@@ -260,7 +260,7 @@ const getThemeColor = (category: string) => {
   -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
 }
 
-.deadlock-roster-card:hover .deadlock-hero-art-placeholder {
+.roster-card:hover .roster-hero-art-placeholder {
   opacity: 0.3;
   transform: translateY(-10px) scale(1.05);
 }
@@ -313,7 +313,7 @@ const getThemeColor = (category: string) => {
   transition: color 200ms ease, text-shadow 200ms ease;
 }
 
-.deadlock-roster-card:hover .tile-title {
+.roster-card:hover .tile-title {
   color: #FFF;
   text-shadow: 0 0 25px var(--theme-color);
 }
@@ -331,7 +331,7 @@ const getThemeColor = (category: string) => {
   margin-top: 24px;
 }
 
-.deadlock-btn {
+.roster-btn {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -346,7 +346,7 @@ const getThemeColor = (category: string) => {
   transition: all 200ms ease;
 }
 
-.deadlock-roster-card:hover .deadlock-btn {
+.roster-card:hover .roster-btn {
   background: color-mix(in srgb, var(--theme-color) 20%, transparent);
   color: #FFF;
 }

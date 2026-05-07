@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { CodeXml, Cuboid, Layers, Sparkles } from 'lucide-vue-next'
-import AngularWipe from '../components/deadlock/AngularWipe.vue'
+import AngularWipe from '../components/wipes/AngularWipe.vue'
 import { startCrumple } from '../composables/paperCrumple'
-import { attachDeadlockFlameToThumbnail, detachDeadlockFlame, tickDeadlockFlame } from '../vfx/deadlockFlameSingleton'
+import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
 
 type TechIcon = 'code' | 'cube' | 'layers' | 'spark'
 
@@ -24,12 +24,9 @@ type Project = {
   }
 }
 
-// Using existing repo imagery so this screen renders immediately.
-// (Deadlock-style “splash art” is treated as a semi-transparent bleed layer.)
 import guildHero from '../assets/images/guild/guild-hero.jpg'
 import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png'
 
-// Fallback art (if any import ever fails) is a deterministic procedural gradient.
 const procedural = (seed: number) =>
   `data:image/svg+xml,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
@@ -111,7 +108,6 @@ function rosterMeta(title: string) {
   return { points, color1, color2, label }
 }
 
-// Every project (Work + Micro-projects), excluding the Hero Select page itself.
 const projects = ref<Project[]>([
   {
     id: 'guild',
@@ -232,12 +228,8 @@ const wipeActive = ref(false)
 const wipeTrigger = ref(0)
 const pendingId = ref<string | null>(null)
 
-const activeProject = computed(
-  () => projects.value.find(p => p.id === activeId.value) ?? projects.value[0],
-)
-const displayedProject = computed(
-  () => projects.value.find(p => p.id === displayedId.value) ?? projects.value[0],
-)
+const activeProject = computed(() => projects.value.find(p => p.id === activeId.value) ?? projects.value[0])
+const displayedProject = computed(() => projects.value.find(p => p.id === displayedId.value) ?? projects.value[0])
 
 const pressedId = ref<string | null>(null)
 const hoveredId = ref<string | null>(null)
@@ -252,28 +244,22 @@ function onThumbEnter(e: PointerEvent, id: string) {
 
   const thumb = e.currentTarget as HTMLElement
   const innerCard = thumb.querySelector('.inner-card') as HTMLElement | null
-  if (innerCard) attachDeadlockFlameToThumbnail(thumb, innerCard)
+  if (innerCard) attachProjectFlameToThumbnail(thumb, innerCard)
   startCrumple()
 }
 function onThumbLeave(id: string) {
-  // Hysteresis: avoid thrashing when pointer is on the gap between tiles.
-  // If we immediately detach here, hovering between two cards can rapidly
-  // attach/detach and cause visible glitches.
   if (hoveredId.value === id) hoveredId.value = null
   pressedId.value = null
 
   if (hoverDetachTimeout != null) window.clearTimeout(hoverDetachTimeout)
   hoverDetachTimeout = window.setTimeout(() => {
-    // Only detach if we didn't enter another thumbnail in the meantime.
     if (hoveredId.value == null && pressedId.value == null) {
-      detachDeadlockFlame()
+      detachProjectFlame()
     }
     hoverDetachTimeout = null
   }, 70)
 }
-function onThumbMove() {
-  // kept intentionally empty: demo interaction is purely keyframed (crunch/pop + sway)
-}
+function onThumbMove() {}
 
 function onThumbDown(e: PointerEvent, id: string) {
   pressedId.value = id
@@ -284,21 +270,18 @@ function onThumbDown(e: PointerEvent, id: string) {
   }
   const thumb = e.currentTarget as HTMLElement
   const innerCard = thumb.querySelector('.inner-card') as HTMLElement | null
-  if (innerCard) attachDeadlockFlameToThumbnail(thumb, innerCard)
+  if (innerCard) attachProjectFlameToThumbnail(thumb, innerCard)
   startCrumple()
 
   try {
     thumb.setPointerCapture(e.pointerId)
-  } catch {
-    // ignore: pointer capture not supported
-  }
+  } catch {}
 }
 
 function onThumbUp(id: string) {
   if (pressedId.value !== id) return
   pressedId.value = null
-  // If we're still hovered, keep flame attached (demo-like continuity).
-  if (hoveredId.value == null) detachDeadlockFlame()
+  if (hoveredId.value == null) detachProjectFlame()
   selectProject(id)
 }
 
@@ -309,12 +292,10 @@ onMounted(() => {
   const frameMs = 1000 / 24
   const loop = () => {
     const now = performance.now()
-    // Hard throttle to 24fps (demo/game-like stepped motion)
     if (now - lastFrame >= frameMs) {
-      // avoid drift by snapping forward in frame-sized increments
       lastFrame = now - ((now - lastFrame) % frameMs)
       const t = (lastFrame - clockStart) / 1000
-      tickDeadlockFlame(t)
+      tickProjectFlame(t)
     }
     raf = requestAnimationFrame(loop)
   }
@@ -357,7 +338,6 @@ function onDone() {
     <div class="dl-bg" />
 
     <div class="dl-grid">
-      <!-- LEFT: ROSTER -->
       <aside id="roster-pane" aria-label="Project roster">
         <div class="roster-header">Select Project</div>
 
@@ -406,10 +386,8 @@ function onDone() {
         </div>
       </aside>
 
-      <!-- RIGHT: DETAIL -->
       <section class="dl-detail" aria-label="Project detail">
         <div class="dl-detail__chrome" />
-
         <div class="dl-splash" :style="{ backgroundImage: `url('${displayedProject.splash}')` }" />
 
         <div class="dl-detail__content">
@@ -447,7 +425,6 @@ function onDone() {
 </template>
 
 <style scoped>
-/* App container: strictly fullscreen, no scroll */
 .dl-app {
   position: relative;
   width: 100%;
@@ -457,7 +434,6 @@ function onDone() {
   color: #eae7e2;
 }
 
-/* Subtle node/web pattern background */
 .dl-bg {
   position: absolute;
   inset: -10%;
@@ -487,7 +463,6 @@ function onDone() {
   grid-template-columns: 40% 60%;
 }
 
-/* --- LEFT PANE (copied from your demo) --- */
 #roster-pane {
   position: relative;
   height: 100vh;
@@ -515,16 +490,11 @@ function onDone() {
   padding-bottom: 80px;
 }
 
-/* --- THE MICRO-INTERACTION COMPONENT (demo) --- */
 .thumbnail {
   aspect-ratio: 1 / 1.4;
   cursor: pointer;
   position: relative;
   z-index: 1;
-  --rx: 0deg;
-  --ry: 0deg;
-  --mx: 50%;
-  --my: 50%;
 }
 
 .inner-card {
@@ -533,29 +503,6 @@ function onDone() {
   z-index: 10;
   transform-origin: center center;
   overflow: visible;
-  transform-style: preserve-3d;
-}
-
-/* --- THE WEBGL FLAME WRAPPER (demo) ---
-   NOTE: flame wrapper is DOM-inserted dynamically (no SFC scope attr),
-   so these must be :deep() to actually apply.
-*/
-:deep(#flame-wrapper) {
-  position: absolute;
-  z-index: 5;
-  width: 400%;
-  height: 350%;
-  bottom: -10%;
-  left: -2%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-:deep(#flame-wrapper canvas) {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  filter: drop-shadow(0px 0px 8px rgba(32, 255, 176, 0.4));
 }
 
 .paper-svg {
@@ -594,7 +541,6 @@ function onDone() {
   transition: color 0.15s;
 }
 
-/* --- HOVER STATE LOGIC (demo) --- */
 .thumbnail:hover:not(.selected):not(.pressed) {
   z-index: 50;
   animation: crunchAndPop 0.65s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
@@ -631,7 +577,6 @@ function onDone() {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* --- PRESS / SELECT STATES (requested) --- */
 .thumbnail.pressed {
   z-index: 50;
   animation: none;
@@ -648,44 +593,41 @@ function onDone() {
 }
 
 @keyframes crunchAndPop {
-  0% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(0.85);
-  }
-  100% {
-    transform: scale(1.25);
-  }
+  0% { transform: scale(1); }
+  25% { transform: scale(0.85); }
+  100% { transform: scale(1.25); }
 }
 
 @keyframes settleBack {
-  0% {
-    transform: scale(1.25);
-    z-index: 50;
-  }
-  100% {
-    transform: scale(1);
-    z-index: 1;
-  }
+  0% { transform: scale(1.25); z-index: 50; }
+  100% { transform: scale(1); z-index: 1; }
 }
 
 @keyframes cardSway {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(4deg);
-  }
-  75% {
-    transform: rotate(-4deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(4deg); }
+  75% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
 }
 
-/* RIGHT PANE */
+/* flame wrapper is dynamically inserted (no scope attr) */
+:deep(#flame-wrapper) {
+  position: absolute;
+  z-index: 5;
+  width: 400%;
+  height: 350%;
+  bottom: -10%;
+  left: -2%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+:deep(#flame-wrapper canvas) {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  filter: drop-shadow(0px 0px 8px rgba(32, 255, 176, 0.4));
+}
+
 .dl-detail {
   position: relative;
   overflow: hidden;
@@ -694,13 +636,12 @@ function onDone() {
 }
 .dl-detail__chrome {
   position: absolute;
-  inset: 18px 18px 18px 18px;
+  inset: 18px;
   border: 1px solid rgba(255,255,255,0.08);
   clip-path: polygon(0 0, 96% 0, 100% 10%, 100% 100%, 4% 100%, 0 90%);
   pointer-events: none;
   opacity: 0.65;
 }
-
 .dl-splash {
   position: absolute;
   inset: -8%;
@@ -712,13 +653,11 @@ function onDone() {
   mask-image: radial-gradient(circle at 55% 35%, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
   -webkit-mask-image: radial-gradient(circle at 55% 35%, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
 }
-
 .dl-detail__content {
   position: relative;
   padding: 60px 56px;
   max-width: 920px;
 }
-
 .dl-title {
   font-family: var(--font-display);
   font-weight: 900;
@@ -727,11 +666,8 @@ function onDone() {
   font-size: clamp(40px, 4.6vw, 78px);
   line-height: 0.92;
   margin: 0;
-  text-shadow:
-    0 0 30px rgba(0,0,0,0.75),
-    0 0 60px rgba(57,255,20,0.08);
+  text-shadow: 0 0 30px rgba(0,0,0,0.75);
 }
-
 .dl-subtitle {
   margin-top: 14px;
   font-family: var(--font-sans);
@@ -741,7 +677,6 @@ function onDone() {
   font-size: 12px;
   color: rgba(235,230,224,0.70);
 }
-
 .dl-tags {
   display: flex;
   gap: 10px;
@@ -760,8 +695,6 @@ function onDone() {
   color: rgba(0,0,0,0.92);
   box-shadow: 0 10px 24px rgba(0,0,0,0.35);
 }
-
-/* Ability/tech icons: bottom-right */
 .dl-tech {
   position: absolute;
   right: 28px;
@@ -779,9 +712,7 @@ function onDone() {
   background: rgba(0,0,0,0.55);
   border: 1px solid rgba(255,255,255,0.10);
   color: rgba(235,230,224,0.85);
-  box-shadow:
-    inset 0 0 0 1px rgba(0,0,0,0.7),
-    0 12px 28px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.7), 0 12px 28px rgba(0,0,0,0.5);
 }
 </style>
 
