@@ -25,21 +25,21 @@ const projects = [
     id: 'account-tray',
     title: 'Analogue UI Inspired Usage Dashboard',
     description: 'A brutalist usage dashboard inspired by analogue UIs. Features a serialised X-axis chip cascade, CSS digit-rolling odometers, and a snap-shut mechanical close.',
-    route: '/micro-projects/account-tray',
+    route: '/work/account-tray',
     category: 'Web Design'
   },
   {
     id: 'sales-modal',
     title: 'Component-Driven Sales Modal',
     description: 'A beautifully responsive, isolated pricing modal highlighting dynamic, contextual data-driven banners.',
-    route: '/micro-projects/sales-modal',
+    route: '/work/sales-modal',
     category: 'Web Design'
   },
   {
     id: 'voice-chat',
     title: 'AI Voice Chat Simulation',
     description: 'Bringing your personal assistant to life in a concept that explores visual communication alongside conversations.',
-    route: '/micro-projects/voice-chat',
+    route: '/work/voice-chat',
     category: 'Web Design'
   },
   {
@@ -53,7 +53,7 @@ const projects = [
     id: 'project-select',
     title: 'Project Select Screen',
     description: 'A master-detail roster UI: dense thumbnail grid, neon active state, and angular wipe transitions.',
-    route: '/micro-projects',
+    route: '/work',
     category: 'Game Design'
   },
   {
@@ -93,7 +93,7 @@ const getThemeColor = (category: string) => {
 
     <!-- Page Header -->
     <div class="page-header mb-7">
-      <h1 class="page-title text-sweep-reveal">Micro-projects</h1>
+      <h1 class="page-title text-sweep-reveal">Work</h1>
     </div>
 
     <!-- Filter Strip -->

@@ -10,7 +10,7 @@ const routes = [
     {
         path: '/work',
         name: 'Work',
-        component: () => import('../views/Work.vue')
+        component: () => import('../views/ProjectSelect.vue')
     },
     {
         path: '/about',
@@ -19,13 +19,16 @@ const routes = [
     },
     {
         path: '/micro-projects',
-        name: 'Projects',
-        component: () => import('../views/ProjectSelect.vue')
+        redirect: '/work'
+    },
+    {
+        path: '/work/list',
+        name: 'WorkList',
+        component: () => import('../views/Projects.vue')
     },
     {
         path: '/micro-projects/list',
-        name: 'ProjectsList',
-        component: () => import('../views/Projects.vue')
+        redirect: '/work/list'
     },
     {
         path: '/work/guild-of-guardians',
@@ -65,19 +68,31 @@ const routes = [
         component: () => import('../views/ExperimentJedi.vue')
     },
     {
-        path: '/micro-projects/sales-modal',
+        path: '/work/sales-modal',
         name: 'SalesModal',
         component: () => import('../views/SalesModalView.vue')
     },
     {
-        path: '/micro-projects/account-tray',
+        path: '/work/account-tray',
         name: 'AccountTray',
         component: () => import('../views/AccountTrayView.vue')
     },
     {
-        path: '/micro-projects/voice-chat',
+        path: '/work/voice-chat',
         name: 'VoiceChatSimulation',
         component: () => import('../views/VoiceChatSimulation.vue')
+    },
+    {
+        path: '/micro-projects/sales-modal',
+        redirect: '/work/sales-modal'
+    },
+    {
+        path: '/micro-projects/account-tray',
+        redirect: '/work/account-tray'
+    },
+    {
+        path: '/micro-projects/voice-chat',
+        redirect: '/work/voice-chat'
     },
     // legacy route removed (previously pointed at the project select screen)
 ]

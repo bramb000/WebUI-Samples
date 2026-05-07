@@ -6,7 +6,7 @@ import Footer from './components/Footer.vue';
 import { useCaseTheme } from './composables/useCaseTheme';
 
 const route = useRoute();
-const isHeroSelect = computed(() => route.path === '/micro-projects');
+const isHeroSelect = computed(() => route.path === '/work');
 const isFullScreen = computed(() => route.query.fullscreen === 'true');
 
 // Applies data-theme on <html> for case study Hero theming

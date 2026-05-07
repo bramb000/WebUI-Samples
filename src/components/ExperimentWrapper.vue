@@ -5,8 +5,8 @@
     </div>
   </template>
   <div v-else class="space-y-8">
-    <router-link to="/micro-projects/list" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-4">
-      &larr; Back to Micro-projects
+    <router-link to="/work/list" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-4">
+      &larr; Back to Work
     </router-link>
 
     <!-- Header & Controls -->

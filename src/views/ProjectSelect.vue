@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 import { CodeXml, Cuboid, Layers, Sparkles } from 'lucide-vue-next'
 import AngularWipe from '../components/wipes/AngularWipe.vue'
 import { startCrumple } from '../composables/paperCrumple'
@@ -231,6 +231,14 @@ const pendingId = ref<string | null>(null)
 const activeProject = computed(() => projects.value.find(p => p.id === activeId.value) ?? projects.value[0])
 const displayedProject = computed(() => projects.value.find(p => p.id === displayedId.value) ?? projects.value[0])
 
+const caseStudyComponentById: Partial<Record<Project['id'], ReturnType<typeof defineAsyncComponent>>> = {
+  guild: defineAsyncComponent(() => import('./ProjectGuild.vue')),
+  rocksmith: defineAsyncComponent(() => import('./ProjectRocksmith.vue')),
+}
+
+const isCaseStudyDisplayed = computed(() => displayedId.value === 'guild' || displayedId.value === 'rocksmith')
+const displayedCaseStudyComponent = computed(() => caseStudyComponentById[displayedId.value])
+
 const pressedId = ref<string | null>(null)
 const hoveredId = ref<string | null>(null)
 let hoverDetachTimeout: number | null = null
@@ -388,29 +396,36 @@ function onDone() {
 
       <section class="dl-detail" aria-label="Project detail">
         <div class="dl-detail__chrome" />
-        <div class="dl-splash" :style="{ backgroundImage: `url('${displayedProject.splash}')` }" />
-
-        <div class="dl-detail__content">
-          <h1 class="dl-title">{{ displayedProject.title }}</h1>
-          <div class="dl-subtitle">{{ displayedProject.subtitle }}</div>
-
-          <div class="dl-tags" aria-label="Archetype tags">
-            <span
-              v-for="(t, idx) in displayedProject.tags"
-              :key="t"
-              class="dl-tag"
-              :style="{ background: displayedProject.tagColors[idx] }"
-            >
-              {{ t }}
-            </span>
+        <template v-if="isCaseStudyDisplayed && displayedCaseStudyComponent">
+          <div class="dl-embedded">
+            <component :is="displayedCaseStudyComponent" />
           </div>
-        </div>
+        </template>
+        <template v-else>
+          <div class="dl-splash" :style="{ backgroundImage: `url('${displayedProject.splash}')` }" />
 
-        <div class="dl-tech" aria-label="Core technologies">
-          <div v-for="(t, idx) in displayedProject.tech" :key="`${displayedProject.id}-${idx}`" class="dl-tech__orb">
-            <component :is="iconFor(t)" :size="18" />
+          <div class="dl-detail__content">
+            <h1 class="dl-title">{{ displayedProject.title }}</h1>
+            <div class="dl-subtitle">{{ displayedProject.subtitle }}</div>
+
+            <div class="dl-tags" aria-label="Archetype tags">
+              <span
+                v-for="(t, idx) in displayedProject.tags"
+                :key="t"
+                class="dl-tag"
+                :style="{ background: displayedProject.tagColors[idx] }"
+              >
+                {{ t }}
+              </span>
+            </div>
           </div>
-        </div>
+
+          <div class="dl-tech" aria-label="Core technologies">
+            <div v-for="(t, idx) in displayedProject.tech" :key="`${displayedProject.id}-${idx}`" class="dl-tech__orb">
+              <component :is="iconFor(t)" :size="18" />
+            </div>
+          </div>
+        </template>
 
         <AngularWipe
           :active="wipeActive"
@@ -633,6 +648,27 @@ function onDone() {
   overflow: hidden;
   background: radial-gradient(circle at 60% 20%, rgba(70,240,209,0.08) 0%, transparent 40%),
     linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.68) 100%);
+}
+.dl-embedded {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 0 0;
+  z-index: 2;
+}
+.dl-embedded :deep(.animate-fade-in) {
+  padding-bottom: 120px;
+}
+.dl-embedded :deep(.xl\:grid) {
+  max-width: 100%;
+}
+.dl-embedded :deep(.xl\:grid.xl\:grid-cols-12) {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.dl-embedded :deep(.xl\:grid.xl\:grid-cols-12 .sticky) {
+  top: 24px;
 }
 .dl-detail__chrome {
   position: absolute;

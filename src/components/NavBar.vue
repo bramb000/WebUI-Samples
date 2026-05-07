@@ -42,7 +42,6 @@ onUnmounted(() => {
 
 const navLinks = [
   { name: 'Work', href: '/work' },
-  { name: 'Micro-projects', href: '/micro-projects' },
   { name: 'About', href: '/about' },
 ];
 
