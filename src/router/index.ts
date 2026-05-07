@@ -20,6 +20,11 @@ const routes = [
     {
         path: '/micro-projects',
         name: 'Projects',
+        component: () => import('../views/DeadlockHeroSelect.vue')
+    },
+    {
+        path: '/micro-projects/list',
+        name: 'ProjectsList',
         component: () => import('../views/Projects.vue')
     },
     {
@@ -73,6 +78,11 @@ const routes = [
         path: '/micro-projects/voice-chat',
         name: 'VoiceChatSimulation',
         component: () => import('../views/VoiceChatSimulation.vue')
+    },
+    {
+        path: '/micro-projects/deadlock-hero-select',
+        name: 'DeadlockHeroSelect',
+        component: () => import('../views/DeadlockHeroSelect.vue')
     }
 ]
 

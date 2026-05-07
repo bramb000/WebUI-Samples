@@ -50,6 +50,13 @@ const projects = [
     category: 'Web Design'
   },
   {
+    id: 'deadlock-hero-select',
+    title: 'Deadlock “Hero Select” Portfolio (1:1 recreation)',
+    description: 'A master-detail roster UI inspired by Deadlock: dense thumbnail grid, neon active state, and angular SVG wipe transitions.',
+    route: '/micro-projects/deadlock-hero-select?fullscreen=true',
+    category: 'Game Design'
+  },
+  {
     id: 'patapon',
     title: 'Designing rhythm-combat to feel fun',
     description: 'Breakdown of interaction and combat design of Patapon to recreate the entire core gameplay interaction system in Unity.',

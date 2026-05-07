@@ -94,7 +94,7 @@ const filteredProjects = computed(() => {
 
     <!-- More Link -->
     <div class="more-row flex justify-center pt-10">
-      <PrimaryButton to="/micro-projects" class="more-btn">View micro-projects &rarr;</PrimaryButton>
+      <PrimaryButton to="/micro-projects/list" class="more-btn">View micro-projects &rarr;</PrimaryButton>
     </div>
   </div>
 </template>

@@ -103,18 +103,17 @@ const fragmentShader = `
     // Hovered card rect in screen space (top-left origin from DOM)
     // Convert to shader space where y=0 is bottom
     vec2 cardPos = vec2(u_position.x, u_resolution.y - (u_position.y + u_size.y));
-    vec2 cardBottomRight = cardPos + vec2(u_size.x, 0.0);
-    // Anchor relative to the card size:
-    // user request: move left by width and up by height from bottom-right corner.
-    // This lands at the card's top-left corner in shader space.
-    vec2 anchor = cardBottomRight + vec2(-u_size.x, u_size.y) + u_anchorOffsetPx;
+    // Anchor near the card's bottom-center, slightly below the card
+    // (matches demo "flame rises from beneath paper").
+    // cardPos is bottom-left.
+    vec2 anchor = cardPos + vec2(u_size.x * 0.55, -u_size.y * 0.18) + u_anchorOffsetPx;
 
     // Local coordinates relative to anchor
     vec2 local = px - anchor;
 
-    // Virtual canvas around the card: make the flame "live" mostly to the right side
-    float vW = u_size.x * 1.5;
-    float vH = u_size.y * 2.2;
+    // Virtual canvas around the card (demo: huge wrapper, lots of bleed)
+    float vW = u_size.x * 4.0;
+    float vH = u_size.y * 3.5;
     vec2 uv = (local / vec2(vW, vH)) + vec2(0.5);
 
     // Flame parameters in local UV space
@@ -201,15 +200,15 @@ onMounted(() => {
       u_size: { value: new THREE.Vector2(0, 0) },
       u_hover: { value: 0.0 },
       u_seed: { value: 0.0 },
-      // Fine-tune ignition point around the anchored corner (pixels in shader space)
+      // Fine-tune ignition point around the card lower-mid anchor (pixels in shader space)
       // -x = left, +y = up
-      u_anchorOffsetPx: { value: new THREE.Vector2(-18, 18) },
+      u_anchorOffsetPx: { value: new THREE.Vector2(-12, 6) },
 
       u_color: { value: new THREE.Color('#20ffb0') },
-      u_speed: { value: 0.1 },
+      u_speed: { value: 0.067 },
 
-      u_baseX: { value: 0.12 },
-      u_baseY: { value: -0.05 },
+      u_baseX: { value: 0.0 },
+      u_baseY: { value: 0.0 },
       u_curveBend: { value: 0.33 },
 
       u_bulge: { value: 0.9 },
@@ -281,8 +280,9 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 5; /* above backgrounds, below UI that uses higher z */
+  z-index: 9; /* demo: behind the hovered card */
   mix-blend-mode: screen;
+  filter: drop-shadow(0px 0px 8px rgba(32, 255, 176, 0.4));
 }
 </style>
 
