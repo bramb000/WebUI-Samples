@@ -360,24 +360,18 @@ h3, h4, h5, h6 {
 
 /* ── LCD Data Display ── */
 .lcd-data {
-  background: var(--color-lcd);
+  /* Typography-only: no inner container/pill. */
+  background: transparent;
   color: var(--color-lcd-text);
   font-family: var(--font-mono);
-  border-radius: 2px;
-  border: 1px solid #000;
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 1),
-    0 1px 0 rgba(255, 255, 255, 0.08);
-  position: relative;
-  overflow: hidden;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  position: static;
+  overflow: visible;
 }
 .lcd-data::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.06), transparent);
-  pointer-events: none;
+  content: none;
 }
 
 /* ── Segment Label — engraved tag / badge ── */

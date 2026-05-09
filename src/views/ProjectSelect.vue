@@ -494,7 +494,7 @@ function onDone() {
   min-height: 0;
   display: grid;
   /* Fixed-width roster (3× larger cards) so the detail panel gets the rest */
-  grid-template-columns: minmax(280px, 560px) minmax(0, 1fr);
+  grid-template-columns: minmax(224px, 384px) minmax(0, 1fr);
   align-items: stretch;
 }
 
@@ -509,9 +509,36 @@ function onDone() {
   overflow-x: clip;
   background: rgba(17, 17, 17, 0.85);
   backdrop-filter: blur(10px);
-  padding: 32px 22px 40px;
+  padding: 24px 16px 32px;
   box-sizing: border-box;
   scroll-padding-bottom: 48px;
+  /* Sleek scrollbar (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+/* Sleek scrollbar (Chromium/WebKit). Needs :deep() in scoped styles. */
+:deep(#roster-pane::-webkit-scrollbar) {
+  width: 8px;
+}
+:deep(#roster-pane::-webkit-scrollbar-track) {
+  background: transparent;
+  border-radius: 999px;
+}
+:deep(#roster-pane::-webkit-scrollbar-button) {
+  width: 0;
+  height: 0;
+  display: none;
+}
+:deep(#roster-pane::-webkit-scrollbar-thumb) {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+}
+:deep(#roster-pane::-webkit-scrollbar-thumb:hover) {
+  background: rgba(255, 255, 255, 0.32);
+  background-clip: padding-box;
 }
 
 .roster-header {
@@ -519,7 +546,7 @@ function onDone() {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #7a8b99;
-  margin: 0 0 28px;
+  margin: 0 0 24px;
   padding: 0 4px 8px;
   line-height: 1.1;
   font-weight: 900;
@@ -527,10 +554,10 @@ function onDone() {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
   /* Room for hover/selected scale(1.25), flame VFX, and scroll end */
-  padding: 18px 14px 112px;
+  padding: 16px 16px 96px;
   box-sizing: border-box;
 }
 
