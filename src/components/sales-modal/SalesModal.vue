@@ -103,7 +103,7 @@ const plans: CardProps[] = [
 </script>
 
 <template>
-  <div :class="inline ? 'w-full h-full bg-[#0a0a0f] relative rounded-xl overflow-hidden' : 'fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-[#030305]/80 backdrop-blur-3xl w-full text-left flex flex-col'">
+  <div :class="inline ? 'w-full h-full bg-[#0a0a0f] relative rounded-xl overflow-hidden' : 'fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 lg:p-10 bg-[#030305]/80 backdrop-blur-3xl w-full text-left flex flex-col modal-scrollbar'">
     <div :class="inline ? 'w-full h-full flex flex-col p-2 @sm:p-8 items-center justify-center' : 'w-full min-h-full flex items-center justify-center shrink-0'">
       <!-- Modal Container -->
       <div 
@@ -123,7 +123,7 @@ const plans: CardProps[] = [
       </div>
 
       <!-- Scrollable content area -->
-      <div :class="['flex-1 flex flex-col gap-6 custom-scrollbar w-full', inline ? 'overflow-y-auto overflow-x-hidden pr-2' : '']">
+      <div :class="['flex-1 flex flex-col gap-6 modal-scrollbar w-full', inline ? 'overflow-y-auto overflow-x-hidden pr-2' : '']">
         <!-- Grid layout for cards -->
         <div class="grid grid-cols-1 @[700px]:grid-cols-2 @[1100px]:grid-cols-4 gap-6 items-stretch w-full pb-4 pr-1">
           <SalesPricingCard
@@ -151,21 +151,23 @@ const plans: CardProps[] = [
 </template>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
+/* One muted tone on dark UI; transparent track */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148 163 184 / 0.4) transparent;
 }
-
-.custom-scrollbar::-webkit-scrollbar-track {
+.modal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.modal-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(148 163 184 / 0.38);
+  border-radius: 9999px;
 }
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(203 213 225 / 0.5);
 }
 </style>

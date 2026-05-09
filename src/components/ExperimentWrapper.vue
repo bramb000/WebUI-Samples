@@ -1,6 +1,6 @@
 <template>
   <template v-if="isFullScreen">
-    <div :class="['@container', fullScreenClass || 'min-h-screen w-full flex items-center justify-center p-4 sm:p-8 bg-white overflow-y-auto']">
+    <div :class="['@container', 'sleek-scrollbar', fullScreenClass || 'min-h-screen w-full flex items-center justify-center p-4 sm:p-8 bg-white overflow-y-auto']">
       <slot></slot>
     </div>
   </template>
@@ -97,7 +97,7 @@
         style="resize: horizontal; overflow: hidden; max-width: 100%; min-width: 320px; height: 75vh; width: calc(75vh * 16 / 9);"
       >
         <!-- The @container is crucial here. Overrides containerClass to ensure layout fills this space -->
-        <div class="@container w-full h-full overflow-y-auto overflow-x-hidden" :class="containerClass">
+        <div class="@container w-full h-full overflow-y-auto overflow-x-hidden sleek-scrollbar" :class="containerClass">
           <slot></slot>
         </div>
         
@@ -179,6 +179,26 @@ const storybookUrl = computed(() => {
 </script>
 
 <style scoped>
+/* Thin single-tone thumb; transparent track (WebKit + Firefox) */
+.sleek-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(100 116 139 / 0.45) transparent;
+}
+.sleek-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.sleek-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sleek-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(100 116 139 / 0.42);
+  border-radius: 9999px;
+}
+.sleek-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(71 85 105 / 0.55);
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

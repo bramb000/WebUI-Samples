@@ -590,7 +590,6 @@ function onDone() {
 }
 
 .thumbnail:hover:not(.selected):not(.pressed) {
-  z-index: 50;
   animation: crunchAndPop 0.65s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
 }
 
@@ -626,7 +625,6 @@ function onDone() {
 }
 
 .thumbnail.pressed {
-  z-index: 50;
   animation: none;
   transform: scale(0.85);
 }
@@ -640,6 +638,12 @@ function onDone() {
   transform: scale(1.25);
 }
 
+/* Hover/press = active focus: always above selected-only cards (same z-index used to tie on DOM order). */
+.thumbnail:hover,
+.thumbnail.pressed {
+  z-index: 60;
+}
+
 @keyframes crunchAndPop {
   0% { transform: scale(1); }
   25% { transform: scale(0.85); }
@@ -647,7 +651,7 @@ function onDone() {
 }
 
 @keyframes settleBack {
-  0% { transform: scale(1.25); z-index: 50; }
+  0% { transform: scale(1.25); z-index: 60; }
   100% { transform: scale(1); z-index: 1; }
 }
 

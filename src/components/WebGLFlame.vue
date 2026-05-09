@@ -130,7 +130,7 @@ const fragmentShader = `
     float masterMask = smoothstep(shapeWidth, shapeWidth - u_maskFeather, xDist);
 
     float topFade = clamp(1.2 - localY, 0.0, 1.0);
-    float bottomCutoff = step(0.0, warpedUv.y);
+    float bottomCutoff = smoothstep(-0.05, 0.03, warpedUv.y);
     masterMask *= topFade * bottomCutoff;
 
     vec2 scrolledUv = warpedUv + vec2(0.0, -u_time * u_speed);
@@ -216,7 +216,7 @@ onMounted(() => {
       u_maskFeather: { value: 0.32 },
 
       u_threshold: { value: 0.26 },
-      u_coreFeather: { value: 0.001 },
+      u_coreFeather: { value: 0.02 },
 
       u_wisp_amount: { value: 0.2 },
       u_wispCurve: { value: 3.0 },

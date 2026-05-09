@@ -12,10 +12,15 @@ let flameWrapper: HTMLDivElement | null = null
 let targetOpacity = 0
 /** Wall-clock second when flame was last attached — local time restarts each hover */
 let flameAttachWallSec = 0
+let attachedThumb: HTMLElement | null = null
+/** `${cssW}:${cssH}` — avoid rebuilding geometry every frame */
+let lastFlameSizeKey = ''
 
-const RENDER_WIDTH = 300
-const RENDER_HEIGHT = 450
 const frustumSize = 5.0
+/** Match #flame-wrapper: width 400%, height 350% of thumbnail */
+const WRAPPER_WIDTH_FRAC = 4
+const WRAPPER_HEIGHT_FRAC = 3.5
+const MAX_FLAME_CSS_PX = 2048
 
 const vertexShader = `
 varying vec2 vUv;
@@ -50,7 +55,7 @@ void main() {
   float masterMask = smoothstep(shapeWidth, shapeWidth - u_maskFeather, xDist);
 
   float topFade = clamp(1.2 - localY, 0.0, 1.0);
-  float bottomCutoff = step(0.0, warpedUv.y);
+  float bottomCutoff = smoothstep(-0.05, 0.03, warpedUv.y);
   masterMask *= topFade * bottomCutoff;
 
   vec2 scrolledUv = warpedUv + vec2(0.0, -u_time * u_speed);
@@ -79,12 +84,43 @@ void main() {
 }
 `
 
+function syncFlameCanvasToThumb(thumb: HTMLElement) {
+  if (!inited || !renderer || !camera || !mesh) return
+
+  const r = thumb.getBoundingClientRect()
+  const cssW = Math.min(
+    MAX_FLAME_CSS_PX,
+    Math.max(200, Math.ceil(r.width * WRAPPER_WIDTH_FRAC)),
+  )
+  const cssH = Math.min(
+    MAX_FLAME_CSS_PX,
+    Math.max(200, Math.ceil(r.height * WRAPPER_HEIGHT_FRAC)),
+  )
+  const key = `${cssW}:${cssH}`
+  if (key === lastFlameSizeKey) return
+  lastFlameSizeKey = key
+
+  const dpr = Math.min(window.devicePixelRatio ?? 1, 2)
+  renderer.setPixelRatio(dpr)
+  renderer.setSize(cssW, cssH, false)
+
+  const planeAspect = cssW / cssH
+  camera.left = (frustumSize * planeAspect) / -2
+  camera.right = (frustumSize * planeAspect) / 2
+  camera.top = frustumSize / 2
+  camera.bottom = frustumSize / -2
+  camera.updateProjectionMatrix()
+
+  mesh.geometry.dispose()
+  mesh.geometry = new THREE.PlaneGeometry(frustumSize * planeAspect, frustumSize)
+}
+
 function init() {
   if (inited) return
   inited = true
 
   scene = new THREE.Scene()
-  const aspect = RENDER_WIDTH / RENDER_HEIGHT
+  const aspect = 300 / 450
   camera = new THREE.OrthographicCamera(
     (frustumSize * aspect) / -2,
     (frustumSize * aspect) / 2,
@@ -96,8 +132,8 @@ function init() {
   camera.position.z = 1
 
   renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
-  renderer.setSize(RENDER_WIDTH, RENDER_HEIGHT, false)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio ?? 1, 2))
+  renderer.setSize(300, 450, false)
 
   material = new THREE.ShaderMaterial({
     vertexShader,
@@ -114,7 +150,7 @@ function init() {
       u_taper: { value: 1.22 },
       u_maskFeather: { value: 0.32 },
       u_threshold: { value: 0.26 },
-      u_coreFeather: { value: 0.001 },
+      u_coreFeather: { value: 0.02 },
       u_wisp_amount: { value: 0.2 },
       u_wispCurve: { value: 3.0 },
       u_wispEdge: { value: 0.026 },
@@ -142,6 +178,9 @@ export function attachProjectFlameToThumbnail(thumb: HTMLElement, innerCard: HTM
   if (flameWrapper.parentElement !== thumb) {
     thumb.insertBefore(flameWrapper, innerCard)
   }
+  attachedThumb = thumb
+  lastFlameSizeKey = ''
+  syncFlameCanvasToThumb(thumb)
   flameAttachWallSec = performance.now() / 1000
   material.uniforms.u_seed.value = Math.random() * 1000
   targetOpacity = 1.0
@@ -149,10 +188,13 @@ export function attachProjectFlameToThumbnail(thumb: HTMLElement, innerCard: HTM
 
 export function detachProjectFlame() {
   targetOpacity = 0.0
+  attachedThumb = null
+  lastFlameSizeKey = ''
 }
 
 export function tickProjectFlame(_timeSeconds: number) {
   if (!inited) return
+  if (attachedThumb) syncFlameCanvasToThumb(attachedThumb)
   material.uniforms.u_time.value = performance.now() / 1000 - flameAttachWallSec
   const u = material.uniforms.u_globalOpacity
   u.value += (targetOpacity - u.value) * 0.1
