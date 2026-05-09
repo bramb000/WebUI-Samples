@@ -88,7 +88,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
+    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-8">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-widest" style="color:var(--color-accent)">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
@@ -485,7 +485,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-12">
+    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-12">
       <h2 class="font-mono font-extrabold text-4xl uppercase tracking-wide" style="color:var(--color-accent)">Results</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />

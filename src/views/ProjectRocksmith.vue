@@ -86,7 +86,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
+    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-8">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-widest" style="color:var(--color-accent)">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="5" label="Platforms" />
@@ -410,7 +410,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
+    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-8">
       <h2 class="font-mono font-extrabold text-4xl uppercase tracking-wide" style="color:var(--color-accent)">Result</h2>
       <div class="max-w-3xl mx-auto space-y-6 text-lg leading-relaxed opacity-90">
         <p>

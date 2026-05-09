@@ -23,11 +23,16 @@ const frameAccent = computed(() => {
       return '#00ffcc'
   }
 })
+
+/** Dark paper fill derived from chisel rim color — reads as tinted stock behind the frame */
+const paperFill = computed(
+  () => `color-mix(in srgb, ${frameAccent.value} 26%, rgb(12, 12, 12) 74%)`,
+)
 </script>
 
 <template>
   <ProceduralChiselFrame class="insight-frame" :color="frameAccent">
-    <div class="insight-wrap insight-wrap--chisel panel-recessed noise-overlay">
+    <div class="insight-wrap insight-wrap--chisel panel-recessed panel-recessed--borderless noise-overlay">
 
     <!-- Stat badge (if provided) -->
     <div v-if="stat || statLabel" class="insight-stat-block">
@@ -67,15 +72,22 @@ const frameAccent = computed(() => {
 }
 
 .insight-wrap--chisel {
-  border-color: transparent;
+  border: none !important;
+  background: v-bind(paperFill) !important;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.45),
+    inset 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
 .insight-wrap:hover {
   transform: translateY(-3px);
   box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.12),
-    0 10px 24px rgba(0, 0, 0, 0.18),
-    0 1px 0 rgba(255, 255, 255, 0.9);
+    inset 0 3px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -2px 12px rgba(0, 0, 0, 0.5),
+    inset 0 2px 8px rgba(0, 0, 0, 0.15),
+    0 14px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px color-mix(in srgb, v-bind(frameAccent) 22%, transparent 78%);
 }
 
 .insight-stat-block {
@@ -99,11 +111,13 @@ const frameAccent = computed(() => {
   font-family: var(--font-mono);
   font-size: 22px;
   font-weight: 800;
-  color: var(--color-lcd-text);
+  /* LCD tint + lighten for AA on tinted paper / theme clashes (e.g. teal on teal) */
+  color: color-mix(in srgb, var(--color-lcd-text) 55%, #fafaf9 45%);
   letter-spacing: 0.04em;
   line-height: 1;
   position: relative;
   z-index: 1;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.65), 0 0 28px rgb(255 255 255 / 0.05);
 }
 
 .insight-stat-label {
@@ -113,11 +127,16 @@ const frameAccent = computed(() => {
 }
 .stat-label-text {
   font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--color-text-muted);
+  letter-spacing: 0.14em;
+  line-height: 1.38;
+  text-align: center;
+  max-width: 42rem;
+  text-wrap: balance;
+  color: color-mix(in srgb, #f4f4f5 74%, v-bind(frameAccent) 26%);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
 }
 
 
@@ -125,9 +144,10 @@ const frameAccent = computed(() => {
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.7;
-  color: var(--color-text);
-  opacity: 0.85;
+  color: color-mix(in srgb, #fafaf9 88%, v-bind(frameAccent) 12%);
+  opacity: 1;
   position: relative;
   z-index: 1;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
 }
 </style>

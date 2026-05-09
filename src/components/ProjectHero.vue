@@ -24,7 +24,7 @@ defineProps<Props>();
     </div>
 
     <!-- Metadata Grid -->
-    <div class="hero-meta-grid panel-recessed">
+    <div class="hero-meta-grid panel-recessed panel-recessed--borderless">
       <div class="hero-meta-cell">
         <div class="meta-label">
           <span class="meta-label-text">Role</span>
@@ -52,7 +52,6 @@ defineProps<Props>();
 <style scoped>
 .project-hero {
   padding: 48px 0 40px;
-  border-bottom: 1px solid var(--color-border);
   margin-bottom: 48px;
   display: flex;
   flex-direction: column;
@@ -74,7 +73,7 @@ defineProps<Props>();
   letter-spacing: 0.15em;
   padding: 4px 12px;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: none;
   color: var(--color-text);
   box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
 }
@@ -93,9 +92,7 @@ defineProps<Props>();
   line-height: 1.1;
   color: var(--color-text);
   margin: 0;
-  border-left: 4px solid var(--color-accent);
-  padding-left: 16px;
-  animation: glow-pulse 3s ease-in-out infinite alternate;
+  padding-left: 0;
   text-shadow: 0 0 30px rgba(197, 168, 114, 0.08);
 }
 .hero-desc {
@@ -105,7 +102,7 @@ defineProps<Props>();
   color: var(--color-text);
   opacity: 0.75;
   margin: 0;
-  padding-left: 20px;
+  padding-left: 0;
 }
 
 /* Metadata panel */
@@ -121,15 +118,13 @@ defineProps<Props>();
 
 .hero-meta-cell {
   padding: 16px 20px;
-  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.hero-meta-cell:last-child { border-right: none; }
-.hero-meta-cell--wide { grid-column: 1 / -1; border-right: none; border-top: 1px solid var(--color-border); }
+.hero-meta-cell--wide { grid-column: 1 / -1; }
 @media (min-width: 768px) {
-  .hero-meta-cell--wide { grid-column: auto; border-top: none; border-right: none; }
+  .hero-meta-cell--wide { grid-column: auto; }
 }
 
 .meta-label {
