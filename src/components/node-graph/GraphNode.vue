@@ -246,7 +246,7 @@ const nodeAriaLabel = computed(() => {
   overflow: visible;
   z-index: 1;
   user-select: none;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-sans);
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.12),
     0 4px 12px rgba(0, 0, 0, 0.08);
@@ -397,7 +397,7 @@ const nodeAriaLabel = computed(() => {
   border-radius: 5px;
   color: #FFF;
   font-size: 12px;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-sans);
   padding: 3px 8px;
   height: 22px;
   box-sizing: border-box;

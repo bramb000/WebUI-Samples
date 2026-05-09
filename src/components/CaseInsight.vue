@@ -1,15 +1,33 @@
 <script setup lang="ts">
-withDefaults(defineProps<{
-  stat?: string | number;
-  statLabel?: string;
-  theme?: 'neutral' | 'success' | 'danger';
-}>(), {
-  theme: 'neutral'
-});
+import { computed } from 'vue'
+import ProceduralChiselFrame from './ProceduralChiselFrame.vue'
+
+const props = withDefaults(
+  defineProps<{
+    stat?: string | number
+    statLabel?: string
+    theme?: 'neutral' | 'success' | 'danger'
+  }>(),
+  {
+    theme: 'neutral',
+  },
+)
+
+const frameAccent = computed(() => {
+  switch (props.theme) {
+    case 'success':
+      return '#5eead4'
+    case 'danger':
+      return '#fb923c'
+    default:
+      return '#00ffcc'
+  }
+})
 </script>
 
 <template>
-  <div class="insight-wrap panel-recessed noise-overlay">
+  <ProceduralChiselFrame class="insight-frame" :color="frameAccent">
+    <div class="insight-wrap insight-wrap--chisel panel-recessed noise-overlay">
 
     <!-- Stat badge (if provided) -->
     <div v-if="stat || statLabel" class="insight-stat-block">
@@ -25,10 +43,16 @@ withDefaults(defineProps<{
     <div class="insight-body">
       <slot></slot>
     </div>
-  </div>
+    </div>
+  </ProceduralChiselFrame>
 </template>
 
 <style scoped>
+.insight-frame {
+  width: 100%;
+  min-width: 0;
+}
+
 .insight-wrap {
   padding: 24px;
   display: flex;
@@ -41,6 +65,11 @@ withDefaults(defineProps<{
     box-shadow 200ms var(--ease-mechanical-spring),
     transform  200ms var(--ease-mechanical-spring);
 }
+
+.insight-wrap--chisel {
+  border-color: transparent;
+}
+
 .insight-wrap:hover {
   transform: translateY(-3px);
   box-shadow:
@@ -69,7 +98,7 @@ withDefaults(defineProps<{
 .insight-stat-value {
   font-family: var(--font-mono);
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
   color: var(--color-lcd-text);
   letter-spacing: 0.04em;
   line-height: 1;

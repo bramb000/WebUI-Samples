@@ -395,7 +395,7 @@ onUnmounted(() => {
   height: 100%;
   background: var(--canvas-bg);
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   /* Ensure it has a stacking context */
   isolation: isolate;
 }

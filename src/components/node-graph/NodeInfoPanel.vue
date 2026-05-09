@@ -56,7 +56,7 @@ const emit = defineEmits<{
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   margin: 0 0 6px;
-  font-family: 'Inter', monospace;
+  font-family: var(--font-mono);
 }
 
 .info-description {
@@ -92,7 +92,7 @@ const emit = defineEmits<{
   border: none;
   padding: 0;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   text-decoration: none;
   transition: color 0.15s ease;
 }

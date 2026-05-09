@@ -132,19 +132,19 @@ watch(targetPrice, (newVal) => {
       
       <!-- Headers -->
       <div class="flex flex-col gap-2 items-start justify-start w-full mb-6 shrink-0 z-10 h-[88px]">
-        <h3 class="text-xl @sm:text-2xl font-medium font-['Outfit'] text-white leading-tight">{{ title }}</h3>
-        <p class="text-sm font-normal font-['Outfit'] text-slate-400 leading-snug text-left max-w-xs">{{ subtitle }}</p>
+        <h3 class="text-xl @sm:text-2xl font-medium font-sans text-white leading-tight">{{ title }}</h3>
+        <p class="text-sm font-normal font-sans text-slate-400 leading-snug text-left max-w-xs">{{ subtitle }}</p>
       </div>
 
       <!-- Price -->
       <div class="flex flex-col items-start justify-start w-full text-left mb-8 shrink-0 z-10 h-[140px]">
         <div class="flex items-start justify-start w-full leading-none mb-2 mt-1 relative">
-          <span v-if="!isCustom" class="text-xl font-medium font-['Outfit'] text-white mt-1.5 mr-0.5">$</span>
-          <span v-if="!isCustom" class="text-5xl @sm:text-7xl font-semibold font-['Outfit'] text-white tracking-tighter tabular-nums">{{ formattedPrice }}</span>
-          <span v-else class="text-3xl @sm:text-5xl font-semibold font-['Outfit'] text-white tracking-tight leading-tight">{{ formattedPrice }}</span>
-          <span v-if="!isCustom" class="ml-2 text-sm font-normal font-['Outfit'] text-slate-500 self-center mt-3">/month</span>
+          <span v-if="!isCustom" class="text-xl font-medium font-sans text-white mt-1.5 mr-0.5">$</span>
+          <span v-if="!isCustom" class="text-5xl @sm:text-7xl font-semibold font-sans text-white tracking-tighter tabular-nums">{{ formattedPrice }}</span>
+          <span v-else class="text-3xl @sm:text-5xl font-semibold font-sans text-white tracking-tight leading-tight">{{ formattedPrice }}</span>
+          <span v-if="!isCustom" class="ml-2 text-sm font-normal font-sans text-slate-500 self-center mt-3">/month</span>
         </div>
-        <p class="text-[11px] @sm:text-xs font-normal font-['Outfit'] text-slate-500 leading-tight whitespace-pre-wrap text-left max-w-[200px]">{{ billingSubtext }}</p>
+        <p class="text-[11px] @sm:text-xs font-normal font-sans text-slate-500 leading-tight whitespace-pre-wrap text-left max-w-[200px]">{{ billingSubtext }}</p>
       </div>
 
       <!-- Action Button -->
@@ -170,12 +170,12 @@ watch(targetPrice, (newVal) => {
             <Star v-if="feature.isHighlighted" class="w-5 h-5 shrink-0 mt-0.5 text-amber-400 fill-amber-400" />
             <Check v-else class="w-5 h-5 shrink-0 mt-0.5 text-purple-600" />
             
-            <span v-if="feature.isHighlighted" class="text-xs @sm:text-sm font-medium font-['Outfit'] text-amber-200 bg-amber-500/10 px-2 py-1 rounded-md flex items-center leading-snug shadow-sm border border-amber-500/20">
+            <span v-if="feature.isHighlighted" class="text-xs @sm:text-sm font-medium font-sans text-amber-200 bg-amber-500/10 px-2 py-1 rounded-md flex items-center leading-snug shadow-sm border border-amber-500/20">
               {{ feature.name }}
               <SalesTooltip v-if="feature.tooltip" :text="feature.tooltip" class="ml-1.5" />
             </span>
 
-            <span v-else class="text-xs @sm:text-sm font-normal font-['Outfit'] text-slate-300 flex items-center flex-wrap leading-snug">
+            <span v-else class="text-xs @sm:text-sm font-normal font-sans text-slate-300 flex items-center flex-wrap leading-snug">
               {{ feature.name }}
               <SalesTooltip v-if="feature.tooltip" :text="feature.tooltip" class="ml-1.5" />
             </span>

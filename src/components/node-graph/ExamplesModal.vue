@@ -231,7 +231,7 @@ onUnmounted(() => {
   overflow-y: auto;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
   animation: slideUpModal 0.25s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .modal-close {

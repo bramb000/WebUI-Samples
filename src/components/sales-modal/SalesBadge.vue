@@ -36,7 +36,7 @@ const variantClasses = computed(() => {
       <Lightbulb v-if="icon === 'lightbulb'" class="w-5 h-5 opacity-90 drop-shadow-md" />
       <Info v-if="icon === 'info'" class="w-5 h-5 opacity-90 drop-shadow-md" />
     </div>
-    <div class="flex-1 font-medium font-['Inter'] relative z-10">
+    <div class="flex-1 font-medium font-sans relative z-10">
       <slot />
     </div>
   </div>

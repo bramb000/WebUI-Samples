@@ -44,7 +44,7 @@ const toggleSelect = (value: 'monthly' | 'annual') => {
     <button
       type="button"
       @click="toggleSelect('annual')"
-      class="relative z-10 flex-1 px-5 py-2 text-sm @sm:text-base font-medium font-['Inter'] rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 tracking-wide flex items-center justify-center gap-2"
+      class="relative z-10 flex-1 px-5 py-2 text-sm @sm:text-base font-medium font-sans rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 tracking-wide flex items-center justify-center gap-2"
       :class="selected === 'annual' ? 'text-white' : 'text-slate-400 hover:text-white'"
       :aria-checked="selected === 'annual'"
       role="radio"
@@ -55,7 +55,7 @@ const toggleSelect = (value: 'monthly' | 'annual') => {
     <button
       type="button"
       @click="toggleSelect('monthly')"
-      class="relative z-10 flex-1 px-5 py-2 text-sm @sm:text-base font-medium font-['Inter'] rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 tracking-wide flex items-center justify-center gap-2"
+      class="relative z-10 flex-1 px-5 py-2 text-sm @sm:text-base font-medium font-sans rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 tracking-wide flex items-center justify-center gap-2"
       :class="selected === 'monthly' ? 'text-white' : 'text-slate-400 hover:text-white'"
       :aria-checked="selected === 'monthly'"
       role="radio"

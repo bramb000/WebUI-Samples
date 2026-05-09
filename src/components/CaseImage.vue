@@ -145,7 +145,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
   text-align: center;
   max-width: 600px;
   line-height: 1.5;
-  font-family: var(--font-sans, system-ui, sans-serif);
+  font-family: var(--font-sans);
 }
 
 /* ─── Transition ─── */

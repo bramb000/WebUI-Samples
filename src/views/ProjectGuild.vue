@@ -89,22 +89,22 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
     <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-8">
-      <h2 class="font-mono font-black text-3xl uppercase tracking-widest" style="color:var(--color-accent)">Executive Summary</h2>
+      <h2 class="font-mono font-extrabold text-3xl uppercase tracking-widest" style="color:var(--color-accent)">Executive Summary</h2>
       <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
         <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
         <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="success" />
       </div>
       <div class="space-y-6 text-lg font-sans leading-relaxed opacity-90">
         <div>
-          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">01. The Problem</h4>
+          <h4 class="font-mono font-extrabold text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">01. The Problem</h4>
           <p>The game suffered from a lower than standard D7 retention. Users reported that they needed to play 3-4 times a day to maximise their progression when most users only had time to play 1-2 times a day, creating an ill fit for user lifestyle needs.</p>
         </div>
         <div>
-          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">02. The Data</h4>
+          <h4 class="font-mono font-extrabold text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">02. The Data</h4>
           <p>Using SQL (BigQuery), I identified that the most engaged users were pulling the average session/day metric up and that the average experience felt worse to most users compared to what the dashboards indicated. Most users were playing once a day and therefore lagging behind in a progression system that needed them to play 3 times a day for the best results.</p>
         </div>
         <div>
-          <h4 class="font-mono font-black text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">03. The Solution</h4>
+          <h4 class="font-mono font-extrabold text-xs uppercase tracking-widest mb-2" style="color:var(--color-accent)">03. The Solution</h4>
           <ul class="list-disc pl-5 space-y-2">
             <li><strong>Shifting Player Emotions:</strong> Designed an "AFK Reward Feature" that accumulated rewards while the player was away, transforming the mental model from <em>"I'm missing out"</em> when not playing to <em>"I have a gift waiting for me."</em></li>
             <li><strong>Designing for Delight:</strong> Changing the game loop to reframe features that interrupted player focus to a loop that creates positive anticipation as a hook for long term retention.</li>
@@ -118,7 +118,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── CONTEXT ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Context</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Context</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-xl font-sans leading-relaxed">
@@ -137,8 +137,8 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── ACTION: TLDR ─── -->
     <section class="max-w-4xl mx-auto space-y-6 border-t pt-16" style="border-color:var(--color-border)">
-      <h2 class="font-mono font-black text-3xl uppercase tracking-wide">Action</h2>
-      <h3 class="font-mono font-black text-sm uppercase tracking-widest" style="color:var(--color-accent)">TLDR</h3>
+      <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide">Action</h2>
+      <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest" style="color:var(--color-accent)">TLDR</h3>
       <p class="text-lg font-sans leading-relaxed">Problems analysed through a mixture of quantitative and qualitative data analysis:</p>
       <ol class="list-decimal pl-5 space-y-1 text-lg font-sans">
         <li>Poor structure of sessions → it always ended on a negative note</li>
@@ -157,7 +157,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── BEFORE / AFTER GALLERY ─── -->
     <section class="space-y-6">
-      <h3 class="font-mono font-black text-sm uppercase tracking-widest max-w-4xl mx-auto" style="color:var(--color-accent)">Before &amp; After — Quick Overview</h3>
+      <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest max-w-4xl mx-auto" style="color:var(--color-accent)">Before &amp; After — Quick Overview</h3>
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
       <VideoEmbed src="https://www.youtube.com/embed/nJ4OENCLzkE" title="Old User Flow" />
       <div class="max-w-xl mx-auto py-4">
@@ -180,7 +180,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── DATA DEEP DIVE ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">The Data</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">The Data</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -199,17 +199,17 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
         <!-- Regression details -->
         <div class="panel-recessed p-6 space-y-4">
-          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-text-muted)">Logistic Regression Analysis</h4>
+          <h4 class="font-mono font-extrabold text-xs uppercase tracking-widest" style="color:var(--color-text-muted)">Logistic Regression Analysis</h4>
           <p class="text-base font-sans leading-relaxed">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong class="font-bold">24% of the variance</strong> in a complex model like retention.</p>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
                 <tr style="border-bottom:1px solid var(--color-border)">
-                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">Metric</th>
-                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">Coefficient (β)</th>
-                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">Odds Ratio</th>
-                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">T-Statistic</th>
-                  <th class="text-left p-2 font-mono font-black text-xs uppercase tracking-wider opacity-60">R²</th>
+                  <th class="text-left p-2 font-mono font-extrabold text-xs uppercase tracking-wider opacity-60">Metric</th>
+                  <th class="text-left p-2 font-mono font-extrabold text-xs uppercase tracking-wider opacity-60">Coefficient (β)</th>
+                  <th class="text-left p-2 font-mono font-extrabold text-xs uppercase tracking-wider opacity-60">Odds Ratio</th>
+                  <th class="text-left p-2 font-mono font-extrabold text-xs uppercase tracking-wider opacity-60">T-Statistic</th>
+                  <th class="text-left p-2 font-mono font-extrabold text-xs uppercase tracking-wider opacity-60">R²</th>
                 </tr>
               </thead>
               <tbody>
@@ -245,7 +245,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── SURVEY INSIGHTS ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Survey Research</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Survey Research</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -295,7 +295,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── AFK REWARDS DESIGN ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">AFK Rewards Design</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">AFK Rewards Design</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -350,7 +350,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         <p class="text-sm font-sans text-center opacity-60">The complete AFK Rewards experience</p>
 
         <!-- Post-launch survey -->
-        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">Post-Launch Survey</h3>
+        <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">Post-Launch Survey</h3>
         <p class="text-lg font-sans leading-relaxed"><span class="underline">Question 1 — "What do you think of the new AFK Rewards?"</span></p>
         <ol class="list-decimal pl-5 space-y-1 text-base font-sans italic">
           <li>"I don't have to think about this game during work, which means I can fully focus on it after work"</li>
@@ -368,7 +368,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── EXIT SCREEN ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Exit Screen &amp; Anticipation</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Exit Screen &amp; Anticipation</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -386,7 +386,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Recommendation System</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Recommendation System</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -423,7 +423,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── VISUAL PROGRESSION ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Visual Progression &amp; Goal Setting</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Visual Progression &amp; Goal Setting</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -435,7 +435,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         </div>
 
         <!-- Daily Calendar -->
-        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">7-Day Reward Calendar</h3>
+        <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">7-Day Reward Calendar</h3>
         <p class="text-lg font-sans leading-relaxed">
           I created a <strong>7 day reward letting players pick 1 legendary guardian</strong>, giving players choice and autonomy at the end of a long commitment. The UI was specifically designed as a countdown calendar.
         </p>
@@ -449,7 +449,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
       <div class="md:col-span-4">
-        <h2 class="font-mono font-black text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Moments of Delight &amp; Monetisation</h2>
+        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Moments of Delight &amp; Monetisation</h2>
       </div>
       <div class="md:col-span-8 space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -474,7 +474,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
         </div>
 
         <!-- Iteration stages -->
-        <h3 class="font-mono font-black text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">Iteration Process</h3>
+        <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest pt-8" style="color:var(--color-accent)">Iteration Process</h3>
         <CaseImage :src="offerWireframe" alt="Stage 1 wireframe" caption="Stage 1 — Low fidelity wireframes focusing on user flow and value proposition" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="offerIteration2" alt="Stage 2 iteration" caption="Stage 2 — Polished by UI artist. We did not release this iteration" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="offerIteration3" alt="Stage 3 iteration" caption="Stage 3 — 61% better than old offer, but I wanted more lore and context" imgClass="w-full h-auto rounded-xl" />
@@ -486,7 +486,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── RESULTS ─── -->
     <section class="panel-recessed noise-overlay p-10 md:p-14 space-y-12">
-      <h2 class="font-mono font-black text-4xl uppercase tracking-wide" style="color:var(--color-accent)">Results</h2>
+      <h2 class="font-mono font-extrabold text-4xl uppercase tracking-wide" style="color:var(--color-accent)">Results</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />
         <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="success" />
@@ -505,7 +505,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── LEARNINGS ─── -->
     <section class="max-w-4xl mx-auto space-y-6">
-      <h2 class="font-mono font-black text-3xl uppercase tracking-wide">Learnings</h2>
+      <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide">Learnings</h2>
       <p class="text-lg font-sans leading-relaxed">
         <strong>This was a major block of work that took multiple months and was shipped over multiple releases.</strong> The discovery phase started by understanding what users are lacking is beyond the screen — it's a mismatch of the game's user experience and their habits and lifestyle.
       </p>
@@ -519,16 +519,16 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
 
     <!-- ─── TESTIMONIALS ─── -->
     <section class="border-t pt-16" style="border-color:var(--color-border)">
-      <h2 class="font-mono font-black text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
+      <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
         <div class="panel-recessed p-8 space-y-4">
-          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Josiah Wallace, Senior Game Design Manager</h4>
+          <h4 class="font-mono font-extrabold text-xs uppercase tracking-widest" style="color:var(--color-accent)">Josiah Wallace, Senior Game Design Manager</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Data driven design is now a keystone in modern game development and there are few others like Bramha who combine the UX and Game Design know-how with the Data Analysis process &amp; procedure as well as he does. The decisions, features, and projects he stands behind always produce measurable results, drive revenue growth, and increase player retention."
           </blockquote>
         </div>
         <div class="panel-recessed p-8 space-y-4">
-          <h4 class="font-mono font-black text-xs uppercase tracking-widest" style="color:var(--color-accent)">Daniel Paez, Executive Producer</h4>
+          <h4 class="font-mono font-extrabold text-xs uppercase tracking-widest" style="color:var(--color-accent)">Daniel Paez, Executive Producer</h4>
           <blockquote class="text-base font-sans leading-relaxed opacity-80 italic">
             "Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions."
           </blockquote>

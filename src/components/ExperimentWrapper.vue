@@ -8,7 +8,7 @@
     <!-- Header & Controls -->
     <header class="flex flex-col xl:flex-row xl:items-start justify-between gap-8">
       <div class="space-y-4 max-w-2xl">
-        <h1 class="text-4xl font-serif font-bold">{{ title }}</h1>
+        <h1 class="text-4xl font-bold font-[family-name:var(--font-display)]">{{ title }}</h1>
         <p class="text-lg opacity-80 leading-relaxed">
           <slot name="description">{{ description }}</slot>
         </p>

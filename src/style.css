@@ -45,11 +45,11 @@
   --color-metal-900:      var(--color-text);
   --color-metal-950:      var(--color-lcd);
 
-  /* ── Typography ── */
-  --font-display: 'Cinzel', 'Playfair Display', serif;
-  --font-sans:    'Barlow', 'Inter', sans-serif;
-  --font-mono:    'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-  --font-serif:   var(--font-display); /* alias — prevents broken refs */
+  /* ── Typography (homepage faces only) ── */
+  --font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Keep "mono" styling, but do not introduce a 3rd typeface. */
+  --font-mono:    var(--font-sans);
 }
 
 /* ── Base ── */
