@@ -236,12 +236,15 @@ onMounted(() => {
   updateSize();
   window.addEventListener('resize', updateSize);
 
-  const clock = new THREE.Clock();
   let hoverSmoothed = 0;
 
   const animate = () => {
     animationFrameId = requestAnimationFrame(animate);
-    material.uniforms.u_time.value = clock.getElapsedTime();
+    const wallSec = performance.now() / 1000;
+    material.uniforms.u_time.value =
+      flameState.hoverIntensity > 0 && flameState.hoveredElement
+        ? wallSec - flameState.timeBase
+        : 0;
 
     // Update hovered rect
     if (flameState.hoverIntensity > 0 && flameState.hoveredElement) {

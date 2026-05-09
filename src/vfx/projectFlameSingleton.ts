@@ -10,6 +10,8 @@ let mesh: THREE.Mesh
 
 let flameWrapper: HTMLDivElement | null = null
 let targetOpacity = 0
+/** Wall-clock second when flame was last attached — local time restarts each hover */
+let flameAttachWallSec = 0
 
 const RENDER_WIDTH = 300
 const RENDER_HEIGHT = 450
@@ -26,7 +28,7 @@ void main() {
 const fragmentShader = `
 precision highp float;
 
-uniform float u_time; uniform vec3 u_color; uniform float u_speed;
+uniform float u_time; uniform float u_seed; uniform vec3 u_color; uniform float u_speed;
 uniform float u_baseX; uniform float u_baseY; uniform float u_curveBend;
 uniform float u_bulge; uniform float u_taper; uniform float u_maskFeather;
 uniform float u_threshold; uniform float u_coreFeather;
@@ -52,12 +54,12 @@ void main() {
   masterMask *= topFade * bottomCutoff;
 
   vec2 scrolledUv = warpedUv + vec2(0.0, -u_time * u_speed);
-  float n = fbm(scrolledUv * 5.0);
+  float n = fbm(scrolledUv * 5.0 + vec2(u_seed * 1.73, u_seed * 0.41));
   float coreShape = n * masterMask;
   float coreAlpha = smoothstep(u_threshold, u_threshold + u_coreFeather, coreShape);
 
   vec2 wispUv = warpedUv + vec2(0.0, -u_time * (u_speed * 1.5));
-  float wispNoise = fbm(wispUv * 9.0);
+  float wispNoise = fbm(wispUv * 9.0 + vec2(u_seed * 0.52, u_seed * 1.19));
   float wispLifecycle = pow(sin(localY * 3.14159), u_wispCurve);
   float wispMask = smoothstep(shapeWidth + 0.15, shapeWidth + 0.15 - u_maskFeather, xDist) * bottomCutoff;
   float wispShape = (wispNoise * wispLifecycle) * wispMask;
@@ -102,6 +104,7 @@ function init() {
     fragmentShader,
     uniforms: {
       u_time: { value: 0.0 },
+      u_seed: { value: 0.0 },
       u_color: { value: new THREE.Color('#20ffb0') },
       u_speed: { value: 0.067 },
       u_baseX: { value: 0.0 },
@@ -139,6 +142,8 @@ export function attachProjectFlameToThumbnail(thumb: HTMLElement, innerCard: HTM
   if (flameWrapper.parentElement !== thumb) {
     thumb.insertBefore(flameWrapper, innerCard)
   }
+  flameAttachWallSec = performance.now() / 1000
+  material.uniforms.u_seed.value = Math.random() * 1000
   targetOpacity = 1.0
 }
 
@@ -146,9 +151,9 @@ export function detachProjectFlame() {
   targetOpacity = 0.0
 }
 
-export function tickProjectFlame(timeSeconds: number) {
+export function tickProjectFlame(_timeSeconds: number) {
   if (!inited) return
-  material.uniforms.u_time.value = timeSeconds
+  material.uniforms.u_time.value = performance.now() / 1000 - flameAttachWallSec
   const u = material.uniforms.u_globalOpacity
   u.value += (targetOpacity - u.value) * 0.1
   if (u.value > 0.01) renderer.render(scene, camera)

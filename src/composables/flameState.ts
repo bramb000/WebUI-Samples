@@ -5,6 +5,8 @@ export const flameState = reactive({
   rect: { x: 0, y: 0, width: 0, height: 0 },
   hoverIntensity: 0, // 0 to 1
   seed: 0,
+  /** performance.now()/1000 when current hover began — shader uses (now - timeBase) so each hover restarts motion */
+  timeBase: 0,
 });
 
 export function setFlameHover(el: HTMLElement | null) {
@@ -22,6 +24,7 @@ export function setFlameHover(el: HTMLElement | null) {
     };
     flameState.hoverIntensity = 1;
     flameState.seed = Math.random() * 100;
+    flameState.timeBase = performance.now() / 1000;
   } else {
     flameState.hoveredElement = null;
     flameState.hoverIntensity = 0;

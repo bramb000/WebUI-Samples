@@ -12,11 +12,6 @@ defineProps<Props>();
 
 <template>
   <header class="project-hero">
-    <!-- Back link -->
-    <router-link to="/work" class="hero-back">
-      &larr; Back to Work
-    </router-link>
-
     <!-- Tags row -->
     <div class="hero-tags">
       <span v-for="tag in tags" :key="tag" class="dl-plaque">{{ tag }}</span>
@@ -64,29 +59,6 @@ defineProps<Props>();
   gap: 20px;
 }
 @media (min-width: 768px) { .project-hero { padding: 64px 0 48px; } }
-
-.hero-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--color-text-muted);
-  text-decoration: none;
-  opacity: 0.7;
-  transition: opacity 100ms var(--ease-te-snap), color 100ms var(--ease-te-snap);
-  border-left: 2px solid var(--color-border);
-  padding-left: 10px;
-}
-.hero-back:hover {
-  opacity: 1;
-  color: var(--color-border-hi);
-  border-left-color: var(--color-accent);
-  text-shadow: 0 0 10px rgba(197, 168, 114, 0.3);
-}
 
 .hero-tags {
   display: flex;

@@ -5,10 +5,6 @@
     </div>
   </template>
   <div v-else class="space-y-8">
-    <router-link to="/work/list" class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity mb-4">
-      &larr; Back to Work
-    </router-link>
-
     <!-- Header & Controls -->
     <header class="flex flex-col xl:flex-row xl:items-start justify-between gap-8">
       <div class="space-y-4 max-w-2xl">

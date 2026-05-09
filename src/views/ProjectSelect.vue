@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref } from 'vue'
-import { CodeXml, Cuboid, Layers, Sparkles } from 'lucide-vue-next'
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import AngularWipe from '../components/wipes/AngularWipe.vue'
 import { startCrumple } from '../composables/paperCrumple'
 import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
+import { workPanelEmbeddedCaseStudyId } from '../composables/workPanelCaseTheme'
 
 type TechIcon = 'code' | 'cube' | 'layers' | 'spark'
 
@@ -229,15 +229,34 @@ const wipeTrigger = ref(0)
 const pendingId = ref<string | null>(null)
 
 const activeProject = computed(() => projects.value.find(p => p.id === activeId.value) ?? projects.value[0])
-const displayedProject = computed(() => projects.value.find(p => p.id === displayedId.value) ?? projects.value[0])
 
-const caseStudyComponentById: Partial<Record<Project['id'], ReturnType<typeof defineAsyncComponent>>> = {
+type EmbeddedLoader = ReturnType<typeof defineAsyncComponent>
+
+const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
   guild: defineAsyncComponent(() => import('./ProjectGuild.vue')),
   rocksmith: defineAsyncComponent(() => import('./ProjectRocksmith.vue')),
+  login: defineAsyncComponent(() => import('./LoginInteraction.vue')),
+  helldivers: defineAsyncComponent(() => import('./ExperimentHelldivers.vue')),
+  'account-tray': defineAsyncComponent(() => import('./AccountTrayView.vue')),
+  'sales-modal': defineAsyncComponent(() => import('./SalesModalView.vue')),
+  'voice-chat': defineAsyncComponent(() => import('./VoiceChatSimulation.vue')),
+  'node-graph': defineAsyncComponent(() => import('./NodeGraphView.vue')),
+  patapon: defineAsyncComponent(() => import('./ExperimentPatapon.vue')),
+  jedi: defineAsyncComponent(() => import('./ExperimentJedi.vue')),
 }
 
-const isCaseStudyDisplayed = computed(() => displayedId.value === 'guild' || displayedId.value === 'rocksmith')
-const displayedCaseStudyComponent = computed(() => caseStudyComponentById[displayedId.value])
+const displayedEmbeddedComponent = computed(
+  () => embeddedProjectComponentById[displayedId.value] ?? null,
+)
+const isCaseStudyEmbedded = computed(() => displayedId.value === 'guild' || displayedId.value === 'rocksmith')
+
+watch(
+  displayedId,
+  (id) => {
+    workPanelEmbeddedCaseStudyId.value = id === 'guild' || id === 'rocksmith' ? id : null
+  },
+  { immediate: true },
+)
 
 const pressedId = ref<string | null>(null)
 const hoveredId = ref<string | null>(null)
@@ -309,7 +328,10 @@ onMounted(() => {
   }
   raf = requestAnimationFrame(loop)
 })
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onBeforeUnmount(() => {
+  cancelAnimationFrame(raf)
+  workPanelEmbeddedCaseStudyId.value = null
+})
 
 function selectProject(id: string) {
   if (id === activeId.value) return
@@ -317,19 +339,6 @@ function selectProject(id: string) {
   pendingId.value = id
   wipeActive.value = true
   wipeTrigger.value++
-}
-
-function iconFor(t: TechIcon) {
-  switch (t) {
-    case 'code':
-      return CodeXml
-    case 'cube':
-      return Cuboid
-    case 'layers':
-      return Layers
-    case 'spark':
-      return Sparkles
-  }
 }
 
 function onCovered() {
@@ -345,96 +354,75 @@ function onDone() {
   <div class="dl-app">
     <div class="dl-bg" />
 
-    <div class="dl-grid">
-      <aside id="roster-pane" aria-label="Project roster">
-        <div class="roster-header">Select Project</div>
+    <div class="dl-shell">
+      <div class="dl-grid">
+        <aside id="roster-pane" aria-label="Project roster">
+          <div class="roster-header">Select Project</div>
 
-        <div class="grid-container" role="listbox" :aria-activedescendant="`proj-${activeProject.id}`">
-          <div
-            v-for="(p, idx) in projects"
-            :key="p.id"
-            class="thumbnail"
-            :class="{
-              selected: p.id === activeProject.id,
-              pressed: p.id === pressedId,
-            }"
-            :id="`proj-${p.id}`"
-            role="option"
-            :aria-selected="p.id === activeProject.id"
-            @pointerenter="(e) => onThumbEnter(e, p.id)"
-            @pointerleave="() => onThumbLeave(p.id)"
-            @pointermove="onThumbMove"
-            @pointerdown="(e) => onThumbDown(e, p.id)"
-            @pointerup="() => onThumbUp(p.id)"
-            @pointercancel="() => (pressedId = null)"
-          >
-            <div class="inner-card">
-              <svg class="paper-svg" viewBox="0 0 100 140" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient :id="`grad_${idx}`" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" :stop-color="p.roster.color1" />
-                    <stop offset="100%" :stop-color="p.roster.color2" />
-                  </linearGradient>
-                </defs>
-                <polygon
-                  class="card-poly"
-                  :points="p.roster.points"
-                  :fill="`url(#grad_${idx})`"
-                  stroke-width="2"
-                  vector-effect="non-scaling-stroke"
-                />
-                <polygon class="card-overlay" :points="p.roster.points" fill="url(#dim_grad)" />
-              </svg>
+          <div class="grid-container" role="listbox" :aria-activedescendant="`proj-${activeProject.id}`">
+            <div
+              v-for="(p, idx) in projects"
+              :key="p.id"
+              class="thumbnail"
+              :class="{
+                selected: p.id === activeProject.id,
+                pressed: p.id === pressedId,
+              }"
+              :id="`proj-${p.id}`"
+              role="option"
+              :aria-selected="p.id === activeProject.id"
+              @pointerenter="(e) => onThumbEnter(e, p.id)"
+              @pointerleave="() => onThumbLeave(p.id)"
+              @pointermove="onThumbMove"
+              @pointerdown="(e) => onThumbDown(e, p.id)"
+              @pointerup="() => onThumbUp(p.id)"
+              @pointercancel="() => (pressedId = null)"
+            >
+              <div class="inner-card">
+                <svg class="paper-svg" viewBox="0 0 100 140" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient :id="`grad_${idx}`" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" :stop-color="p.roster.color1" />
+                      <stop offset="100%" :stop-color="p.roster.color2" />
+                    </linearGradient>
+                  </defs>
+                  <polygon
+                    class="card-poly"
+                    :points="p.roster.points"
+                    :fill="`url(#grad_${idx})`"
+                    stroke-width="2"
+                    vector-effect="non-scaling-stroke"
+                  />
+                  <polygon class="card-overlay" :points="p.roster.points" fill="url(#dim_grad)" />
+                </svg>
 
-              <div class="thumbnail-content">
-                <span class="thumbnail-label">{{ p.roster.label }}</span>
+                <div class="thumbnail-content">
+                  <span class="thumbnail-label">{{ p.roster.label }}</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </aside>
+        </aside>
 
-      <section class="dl-detail" aria-label="Project detail">
-        <div class="dl-detail__chrome" />
-        <template v-if="isCaseStudyDisplayed && displayedCaseStudyComponent">
-          <div class="dl-embedded">
-            <component :is="displayedCaseStudyComponent" />
-          </div>
-        </template>
-        <template v-else>
-          <div class="dl-splash" :style="{ backgroundImage: `url('${displayedProject.splash}')` }" />
-
-          <div class="dl-detail__content">
-            <h1 class="dl-title">{{ displayedProject.title }}</h1>
-            <div class="dl-subtitle">{{ displayedProject.subtitle }}</div>
-
-            <div class="dl-tags" aria-label="Archetype tags">
-              <span
-                v-for="(t, idx) in displayedProject.tags"
-                :key="t"
-                class="dl-tag"
-                :style="{ background: displayedProject.tagColors[idx] }"
-              >
-                {{ t }}
-              </span>
-            </div>
+        <section class="dl-detail" aria-label="Project detail">
+          <div class="dl-detail__chrome" />
+          <div
+            v-if="displayedEmbeddedComponent"
+            class="dl-embedded"
+            :class="{ 'dl-embedded--case': isCaseStudyEmbedded }"
+          >
+            <component :is="displayedEmbeddedComponent" :key="displayedId" />
           </div>
 
-          <div class="dl-tech" aria-label="Core technologies">
-            <div v-for="(t, idx) in displayedProject.tech" :key="`${displayedProject.id}-${idx}`" class="dl-tech__orb">
-              <component :is="iconFor(t)" :size="18" />
-            </div>
-          </div>
-        </template>
-
-        <AngularWipe
-          :active="wipeActive"
-          :trigger="wipeTrigger"
-          palette="crimson-teal"
-          @covered="onCovered"
-          @done="onDone"
-        />
-      </section>
+          <AngularWipe
+            :active="wipeActive"
+            :trigger="wipeTrigger"
+            palette="crimson-teal"
+            @covered="onCovered"
+            @done="onDone"
+          />
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -444,9 +432,37 @@ function onDone() {
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 0;
   overflow: hidden;
   background: #111111;
   color: #eae7e2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Centered reading shell: limits horizontal sweep on 21:9, still fills 4:3 / 16:9 */
+.dl-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: min(100%, var(--dl-reading-max, 1520px));
+  margin-inline: auto;
+  padding-inline: clamp(12px, 2.8vw, 40px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-aspect-ratio: 21/9) {
+  .dl-shell {
+    --dl-reading-max: 1420px;
+  }
+}
+
+@media (max-aspect-ratio: 4/3) {
+  .dl-shell {
+    --dl-reading-max: 1280px;
+  }
 }
 
 .dl-bg {
@@ -473,20 +489,29 @@ function onDone() {
 
 .dl-grid {
   position: relative;
-  height: 100%;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
   display: grid;
-  grid-template-columns: 40% 60%;
+  /* Fixed-width roster (3× larger cards) so the detail panel gets the rest */
+  grid-template-columns: minmax(280px, 560px) minmax(0, 1fr);
+  align-items: stretch;
 }
 
 #roster-pane {
   position: relative;
-  height: 100vh;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  min-width: 0;
   border-right: 1px solid #333;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: rgba(17, 17, 17, 0.85);
   backdrop-filter: blur(10px);
-  padding: 40px;
+  padding: 32px 22px 40px;
+  box-sizing: border-box;
+  scroll-padding-bottom: 48px;
 }
 
 .roster-header {
@@ -494,15 +519,19 @@ function onDone() {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #7a8b99;
-  margin-bottom: 24px;
+  margin: 0 0 28px;
+  padding: 0 4px 8px;
+  line-height: 1.1;
   font-weight: 900;
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 4px;
-  padding-bottom: 80px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px 12px;
+  /* Room for hover/selected scale(1.25), flame VFX, and scroll end */
+  padding: 18px 14px 112px;
+  box-sizing: border-box;
 }
 
 .thumbnail {
@@ -510,6 +539,8 @@ function onDone() {
   cursor: pointer;
   position: relative;
   z-index: 1;
+  min-width: 0;
+  isolation: isolate;
 }
 
 .inner-card {
@@ -544,16 +575,18 @@ function onDone() {
   z-index: 20;
   display: flex;
   align-items: flex-end;
-  padding: 8px;
+  padding: 14px 12px 16px;
   pointer-events: none;
 }
 
 .thumbnail-label {
-  font-size: 0.65rem;
+  font-size: 0.8125rem;
   font-weight: bold;
   color: #aaa;
   text-transform: uppercase;
   transition: color 0.15s;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .thumbnail:hover:not(.selected):not(.pressed) {
@@ -645,110 +678,60 @@ function onDone() {
 
 .dl-detail {
   position: relative;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
   overflow: hidden;
   background: radial-gradient(circle at 60% 20%, rgba(70,240,209,0.08) 0%, transparent 40%),
     linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.68) 100%);
 }
 .dl-embedded {
   position: absolute;
-  inset: 0;
+  top: clamp(16px, 2.2vw, 28px);
+  right: clamp(16px, 2.5vw, 36px);
+  bottom: clamp(20px, 2.5vw, 32px);
+  left: clamp(16px, 2.5vw, 36px);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 24px 0 0;
+  padding: 8px 4px 48px;
   z-index: 2;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
-.dl-embedded :deep(.animate-fade-in) {
+.dl-embedded--case :deep(.animate-fade-in) {
   padding-bottom: 120px;
 }
-.dl-embedded :deep(.xl\:grid) {
+.dl-embedded--case :deep(.xl\:grid) {
   max-width: 100%;
 }
-.dl-embedded :deep(.xl\:grid.xl\:grid-cols-12) {
-  padding-left: 24px;
-  padding-right: 24px;
+.dl-embedded--case :deep(.xl\:grid.xl\:grid-cols-12) {
+  padding-left: clamp(16px, 2.5vw, 36px);
+  padding-right: clamp(16px, 2.5vw, 36px);
 }
-.dl-embedded :deep(.xl\:grid.xl\:grid-cols-12 .sticky) {
-  top: 24px;
+.dl-embedded--case :deep(.xl\:grid.xl\:grid-cols-12 .sticky) {
+  top: clamp(20px, 2.5vw, 32px);
+}
+.dl-embedded:not(.dl-embedded--case) :deep(.max-w-4xl) {
+  max-width: 100%;
+}
+.dl-embedded:not(.dl-embedded--case) :deep(.space-y-8) {
+  padding-bottom: 2rem;
+}
+.dl-embedded:not(.dl-embedded--case) :deep(.space-y-8 > header) {
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 .dl-detail__chrome {
   position: absolute;
-  inset: 18px;
+  top: clamp(14px, 2vw, 22px);
+  right: clamp(12px, 2.2vw, 28px);
+  bottom: clamp(16px, 2.2vw, 26px);
+  left: clamp(12px, 2.2vw, 28px);
   border: 1px solid rgba(255,255,255,0.08);
   clip-path: polygon(0 0, 96% 0, 100% 10%, 100% 100%, 4% 100%, 0 90%);
   pointer-events: none;
   opacity: 0.65;
-}
-.dl-splash {
-  position: absolute;
-  inset: -8%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.18;
-  filter: grayscale(0.2) contrast(1.08) saturate(0.85);
-  transform: rotate(-1.2deg) scale(1.06);
-  mask-image: radial-gradient(circle at 55% 35%, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
-  -webkit-mask-image: radial-gradient(circle at 55% 35%, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
-}
-.dl-detail__content {
-  position: relative;
-  padding: 60px 56px;
-  max-width: 920px;
-}
-.dl-title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: clamp(40px, 4.6vw, 78px);
-  line-height: 0.92;
-  margin: 0;
-  text-shadow: 0 0 30px rgba(0,0,0,0.75);
-}
-.dl-subtitle {
-  margin-top: 14px;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 12px;
-  color: rgba(235,230,224,0.70);
-}
-.dl-tags {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-.dl-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-family: var(--font-sans);
-  font-weight: 900;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(0,0,0,0.92);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
-}
-.dl-tech {
-  position: absolute;
-  right: 28px;
-  bottom: 26px;
-  display: flex;
-  gap: 12px;
-  z-index: 10;
-}
-.dl-tech__orb {
-  width: 46px;
-  height: 46px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: rgba(235,230,224,0.85);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.7), 0 12px 28px rgba(0,0,0,0.5);
 }
 </style>
 

@@ -1,5 +1,6 @@
 import { watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { workPanelEmbeddedCaseStudyId } from './workPanelCaseTheme';
 
 /**
  * Maps route names to their case-study theme token.
@@ -9,6 +10,12 @@ const ROUTE_THEME_MAP: Record<string, string> = {
   ProjectGuild:     'tinkerer',   // Furnace Amber  — Live-ops, data-driven systems
   ProjectRocksmith: 'alchemist',  // Spectral Teal  — Multi-platform engineering
   // ProjectPaperRPG: 'illusionist', // Arcane Purple — Creative / narrative work
+};
+
+/** Embedded roster pane on `/work` — same theme tokens as standalone case study routes. */
+const EMBEDDED_CASE_STUDY_THEME_MAP: Record<string, string> = {
+  guild: 'tinkerer',
+  rocksmith: 'alchemist',
 };
 
 /**
@@ -21,9 +28,12 @@ export function useCaseTheme() {
   const route = useRoute();
 
   watch(
-    () => route.name,
-    (routeName) => {
-      const theme = ROUTE_THEME_MAP[routeName as string] ?? null;
+    () => [route.name, workPanelEmbeddedCaseStudyId.value] as const,
+    ([routeName, embedId]) => {
+      const themeFromRoute = ROUTE_THEME_MAP[routeName as string] ?? null;
+      const themeFromEmbed =
+        embedId != null ? (EMBEDDED_CASE_STUDY_THEME_MAP[embedId] ?? null) : null;
+      const theme = themeFromRoute ?? themeFromEmbed;
       if (theme) {
         document.documentElement.setAttribute('data-theme', theme);
       } else {
