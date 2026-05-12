@@ -31,7 +31,7 @@ const paperFill = computed(
 </script>
 
 <template>
-  <ProceduralChiselFrame class="insight-frame" :color="frameAccent">
+  <ProceduralChiselFrame class="insight-frame" :color="frameAccent" :hover-flame="false">
     <div class="insight-wrap insight-wrap--chisel panel-recessed panel-recessed--borderless noise-overlay">
 
     <!-- Stat badge (if provided) -->
@@ -56,6 +56,55 @@ const paperFill = computed(
 .insight-frame {
   width: 100%;
   min-width: 0;
+  --card-hover-tilt: 0.8deg;
+  --card-hover-clip: polygon(4% 0, 100% 0, 100% 94%, 97% 100%, 0 100%, 0 7%);
+  transition: transform 200ms var(--ease-mechanical-spring);
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+.insight-frame::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 2px solid color-mix(in srgb, v-bind(frameAccent) 70%, #f4f4f5 30%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, v-bind(frameAccent) 22%, transparent 78%),
+    0 10px 24px color-mix(in srgb, v-bind(frameAccent) 16%, transparent 84%);
+  transition:
+    opacity 140ms ease,
+    clip-path 200ms var(--ease-mechanical-spring);
+}
+
+.insight-frame:nth-child(4n + 1) {
+  --card-hover-tilt: 0.9deg;
+}
+
+.insight-frame:nth-child(4n + 2) {
+  --card-hover-tilt: -0.55deg;
+  --card-hover-clip: polygon(0 0, 95% 0, 100% 7%, 100% 100%, 4% 100%, 0 92%);
+}
+
+.insight-frame:nth-child(4n + 3) {
+  --card-hover-tilt: 0.65deg;
+  --card-hover-clip: polygon(3% 0, 100% 0, 100% 91%, 93% 100%, 0 100%, 0 4%);
+}
+
+.insight-frame:nth-child(4n + 4) {
+  --card-hover-tilt: -1deg;
+  --card-hover-clip: polygon(0 0, 97% 0, 100% 4%, 100% 100%, 7% 100%, 0 89%);
+}
+
+.insight-frame:hover {
+  transform: translateY(-6px) rotate(var(--card-hover-tilt));
+}
+
+.insight-frame:hover::after {
+  opacity: 1;
+  clip-path: var(--card-hover-clip);
 }
 
 .insight-wrap {
@@ -67,8 +116,10 @@ const paperFill = computed(
   width: 100%;
   min-width: 0;
   transition:
+    clip-path 200ms var(--ease-mechanical-spring),
     box-shadow 200ms var(--ease-mechanical-spring),
     transform  200ms var(--ease-mechanical-spring);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 
 .insight-wrap--chisel {
@@ -80,8 +131,8 @@ const paperFill = computed(
     inset 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
-.insight-wrap:hover {
-  transform: translateY(-3px);
+.insight-frame:hover .insight-wrap {
+  clip-path: var(--card-hover-clip);
   box-shadow:
     inset 0 3px 0 rgba(255, 255, 255, 0.06),
     inset 0 -2px 12px rgba(0, 0, 0, 0.5),

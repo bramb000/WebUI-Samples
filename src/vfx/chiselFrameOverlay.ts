@@ -195,7 +195,7 @@ function ensureGl() {
   const canvas = document.createElement('canvas')
   canvas.setAttribute('aria-hidden', 'true')
   canvas.style.cssText =
-    'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:6;display:block;'
+    'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:46;display:block;transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:strict;'
   document.body.appendChild(canvas)
   canvasEl = canvas
 
@@ -260,19 +260,28 @@ function ensureGl() {
     if (!renderer || !material || !scene || !camera || !clock) return
 
     const pr = renderer.getPixelRatio()
-    const bw = renderer.domElement.width
-    const bh = renderer.domElement.height
+    const winW = window.innerWidth
+    const winH = window.innerHeight
 
     uniforms.u_time.value = clock.getElapsedTime()
 
     renderer.setClearColor(0x000000, 0)
+    renderer.setScissorTest(false)
     renderer.clear(true, true, true)
     renderer.autoClear = false
 
     for (const entry of entries) {
       if (!document.contains(entry.el)) continue
       const r = entry.el.getBoundingClientRect()
-      if (r.width < 2 || r.height < 2) continue
+      const bleedCss = 22
+      if (
+        r.width < 2 ||
+        r.height < 2 ||
+        r.right < -bleedCss ||
+        r.left > winW + bleedCss ||
+        r.bottom < -bleedCss ||
+        r.top > winH + bleedCss
+      ) continue
 
       if (entry.hoverFlame) {
         entry.hoverSmoothed += (entry.hoverTarget - entry.hoverSmoothed) * 0.12
@@ -280,9 +289,6 @@ function ensureGl() {
         entry.hoverSmoothed = 0
       }
 
-      const bleedCss = 22
-      const winW = window.innerWidth
-      const winH = window.innerHeight
       let exL = r.left - bleedCss
       let exT = r.top - bleedCss
       let exR = r.right + bleedCss
@@ -294,12 +300,21 @@ function ensureGl() {
       const wCss = Math.max(4, exR - exL)
       const hCss = Math.max(4, exB - exT)
 
-      const left = exL * pr
-      const bottom = bh - exB * pr
-      const vw = wCss * pr
-      const vh = hCss * pr
+      // Three.js viewport/scissor APIs take CSS pixels and internally multiply
+      // by the renderer pixel ratio. The shader, however, sees device pixels
+      // in gl_FragCoord, so keep a parallel device-pixel copy for uniforms.
+      const leftCss = exL
+      const bottomCss = winH - exB
+      const vwCss = wCss
+      const vhCss = hCss
+      const left = leftCss * pr
+      const bottom = bottomCss * pr
+      const vw = vwCss * pr
+      const vh = vhCss * pr
 
-      renderer.setViewport(left, bottom, vw, vh)
+      renderer.setViewport(leftCss, bottomCss, vwCss, vhCss)
+      renderer.setScissorTest(true)
+      renderer.setScissor(leftCss, bottomCss, vwCss, vhCss)
       material.uniforms.u_vpOrigin.value.set(left, bottom)
       material.uniforms.u_resolution.value.set(vw, vh)
       material.uniforms.u_color.value.copy(entry.color)
@@ -331,7 +346,8 @@ function ensureGl() {
     }
 
     renderer.autoClear = true
-    renderer.setViewport(0, 0, bw, bh)
+    renderer.setScissorTest(false)
+    renderer.setViewport(0, 0, winW, winH)
   }
 
   tick()
