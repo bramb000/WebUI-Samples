@@ -66,7 +66,7 @@ const paperFill = computed(
 .insight-frame::after {
   content: '';
   position: absolute;
-  inset: -10px;
+  inset: -4px;
   border: 2px solid color-mix(in srgb, v-bind(frameAccent) 70%, #f4f4f5 30%);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   opacity: 0;
@@ -115,6 +115,8 @@ const paperFill = computed(
   position: relative;
   width: 100%;
   min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
   transition:
     clip-path 200ms var(--ease-mechanical-spring),
     box-shadow 200ms var(--ease-mechanical-spring),
@@ -200,5 +202,7 @@ const paperFill = computed(
   position: relative;
   z-index: 1;
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  flex: 1 1 auto;
+  min-height: 0;
 }
 </style>

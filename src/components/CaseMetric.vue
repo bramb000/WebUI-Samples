@@ -67,7 +67,7 @@ const paperFill = computed(
 .metric-frame::after {
   content: '';
   position: absolute;
-  inset: -10px;
+  inset: -4px;
   border: 2px solid color-mix(in srgb, v-bind(frameAccent) 70%, #f4f4f5 30%);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   opacity: 0;
@@ -117,6 +117,7 @@ const paperFill = computed(
   gap: 14px;
   padding: 24px 20px;
   min-height: 120px;
+  flex: 1 1 auto;
   transition:
     clip-path 200ms var(--ease-mechanical-spring),
     box-shadow 200ms var(--ease-mechanical-spring),

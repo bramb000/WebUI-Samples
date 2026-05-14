@@ -18,7 +18,7 @@ const props = withDefaults(
   },
 )
 
-const rootRef = ref<HTMLElement | null>(null)
+const trackRef = ref<HTMLElement | null>(null)
 let frameId: number | null = null
 let cancelled = false
 let boundEl: HTMLElement | null = null
@@ -40,7 +40,7 @@ watch(
 onMounted(() => {
   nextTick(() => {
     if (cancelled) return
-    const el = rootRef.value
+    const el = trackRef.value
     if (!el) return
     boundEl = el
     frameId = registerChiselFrame(el, props.color, props.hoverFlame)
@@ -64,8 +64,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="rootRef" class="chisel-frame">
-    <div class="chisel-frame__body">
+  <div class="chisel-frame">
+    <!-- Track inner body for WebGL bounds = same box as the filled card (root can differ if outer has decorative overflow). -->
+    <div ref="trackRef" class="chisel-frame__body">
       <slot />
     </div>
   </div>
@@ -76,11 +77,24 @@ onBeforeUnmount(() => {
   position: relative;
   width: 100%;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
   isolation: isolate;
+  /* Grid row stretch gives this a tall box; flex lets the slot fill it so
+     backgrounds match the WebGL frame bounds. */
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
 }
 
 .chisel-frame__body {
   position: relative;
   z-index: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
 }
 </style>

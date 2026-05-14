@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOC bookmark shader — parameter reference</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      padding: 32px;
+      max-width: 52rem;
+      font-family: system-ui, sans-serif;
+      line-height: 1.55;
+      background: #0a0a0c;
+      color: #e8e4df;
+    }
+    h1 { font-size: 1.35rem; color: #00ffcc; margin-top: 0; }
+    h2 { font-size: 1.05rem; color: #b8c4c0; margin-top: 2rem; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88em; }
+    .note {
+      border-left: 3px solid #00ffcc;
+      padding-left: 14px;
+      margin: 1rem 0;
+      color: #c9c5c0;
+    }
+    table { border-collapse: collapse; width: 100%; font-size: 0.92rem; margin: 0.75rem 0 1.25rem; }
+    th, td { border: 1px solid #2a2a32; padding: 0.45rem 0.6rem; text-align: left; }
+    th { background: #141418; color: #9ae8dc; }
+    ul { padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+  </style>
+</head>
+<body>
+  <h1>TOC procedural bookmark — shader reference</h1>
+  <p>
+    <strong>Rendering parity:</strong> <span class="mono">src/shaders/tocBookmark.frag</span> uses the same
+    <code>hash</code>, <code>noise</code>, <code>fbm</code>, <code>angularCuts</code>, outer-mask / organic /
+    chisel / micro stack, paint pass (<code>fbm(p*4)</code> thickness + <code>u_densityVar</code>),
+    hover flame, and depth pass as <span class="mono">src/vfx/chiselFrameOverlay.ts</span>
+    (<code>CHISEL_FRAGMENT</code>). The only geometric difference is the base SDF: a solid horizontal bookmark
+    (<code>sdBookmarkHorizontal</code>) instead of a rectangular rim built from <code>sdBox</code>.
+  </p>
+  <p>
+    Wiring lives in <span class="mono">src/components/TocProceduralRow.vue</span>.
+    <code>u_borderWidth</code> and <code>u_organicAmp</code> are recomputed on each resize using the same
+    pixel→normalized formulas as the card overlay (<code>borderPx = 3.1</code>, <code>organicPx = 5.5</code>,
+    clamped with the same caps).
+  </p>
+
+  <h2>Base hue (<code>u_color</code>)</h2>
+  <p>
+    Fixed to <strong class="mono">#00ffcc</strong> for the TOC strip. Inactive label colour follows
+    <span class="mono">--color-text</span> via <code>u_textColor</code>.
+  </p>
+
+  <h2>Uniform defaults (match card overlay unless noted)</h2>
+  <table>
+    <thead>
+      <tr><th>Uniform</th><th>Initial / meaning</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>u_chiselDensity</code></td><td><strong>10.26</strong> — TOC slider override (finer chisel frequency).</td></tr>
+      <tr><td><code>u_chiselDepth</code></td><td><strong>0.5</strong> — TOC slider override (strength of angular chips; very strong).</td></tr>
+      <tr><td><code>u_wobble</code></td><td><strong>0.01</strong> — same default as card <code>CHISEL_FRAGMENT</code> uniforms.</td></tr>
+      <tr><td><code>u_chiselChaos</code></td><td><strong>1.0</strong></td></tr>
+      <tr><td><code>u_densityVar</code></td><td><strong>0.896</strong></td></tr>
+      <tr><td><code>u_depthEffect</code></td><td><strong>0.164</strong></td></tr>
+      <tr><td><code>u_hoverFlameState</code></td><td><strong>0</strong> (optional hover wiring later).</td></tr>
+      <tr><td><code>u_borderWidth</code></td><td>Recomputed from row CSS size × DPR (see overlay).</td></tr>
+      <tr><td><code>u_organicAmp</code></td><td>Recomputed from row CSS size × DPR (same as card <code>u_outerOrganicAmp</code>).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Chisel density (<code>u_chiselDensity</code>)</h2>
+  <p>
+    In <code>angularCuts()</code>, coordinates scale as <code>q = p * density</code> before the layered
+    <code>fract</code> waves. Higher density → finer shard bands along the edge; lower → broader chips.
+  </p>
+
+  <h2>Chisel depth (<code>u_chiselDepth</code>)</h2>
+  <p>
+    <code>angularCuts()</code> is multiplied by <code>u_chiselDepth</code> and <code>innerProtect</code>, then
+    added to the displaced SDF (same weighting as the card shader). Higher depth → deeper notches.
+  </p>
+
+  <h2>Chisel chaos (<code>u_chiselChaos</code>)</h2>
+  <p>
+    Phase offsets inside the <code>fract</code> waves (identical to card <code>angularCuts</code> — no extra
+    hidden time term; animation comes from <code>noise(p * 3.0 + u_time * 0.05)</code> in the mask only).
+  </p>
+
+  <p style="margin-top:2.5rem;font-size:0.85rem;color:#7a7874;">
+    Open this file in a browser; it is not bundled into the app build.
+  </p>
+</body>
+</html>

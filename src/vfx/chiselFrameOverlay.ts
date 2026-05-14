@@ -14,6 +14,67 @@ type Entry = {
   hoverSmoothed: number
 }
 
+type CssBox = { left: number; top: number; right: number; bottom: number }
+
+function intersectBoxes(a: CssBox, b: CssBox): CssBox {
+  const left = Math.max(a.left, b.left)
+  const top = Math.max(a.top, b.top)
+  const right = Math.min(a.right, b.right)
+  const bottom = Math.min(a.bottom, b.bottom)
+  return { left, top, right, bottom }
+}
+
+/** Intersection of viewport with self + ancestor overflow / contain:paint clip boxes (CSS client px, top-left origin). */
+function getCumulativeClipRect(el: HTMLElement, winW: number, winH: number): CssBox {
+  let clip: CssBox = { left: 0, top: 0, right: winW, bottom: winH }
+  let p: HTMLElement | null = el
+  const root = document.documentElement
+  while (p) {
+    const st = window.getComputedStyle(p)
+    const ox = st.overflowX
+    const oy = st.overflowY
+    const clipsOverflow =
+      (ox !== 'visible' && ox !== '' && ox !== 'overlay') ||
+      (oy !== 'visible' && oy !== '' && oy !== 'overlay')
+    if (clipsOverflow) {
+      const br = p.getBoundingClientRect()
+      clip = intersectBoxes(clip, {
+        left: br.left,
+        top: br.top,
+        right: br.right,
+        bottom: br.bottom,
+      })
+    }
+    const ct = st.contain || ''
+    if (/\b(paint|strict|content)\b/.test(ct)) {
+      const br = p.getBoundingClientRect()
+      clip = intersectBoxes(clip, {
+        left: br.left,
+        top: br.top,
+        right: br.right,
+        bottom: br.bottom,
+      })
+    }
+    if (p === root) break
+    p = p.parentElement
+  }
+  return clip
+}
+
+/** Fixed header strip is not an ancestor of cards; clip frame pixels below it when visible. */
+function applyFixedNavClip(clip: CssBox, winH: number): CssBox {
+  const ledge = document.querySelector('.dl-nav-ledge-bg')
+  if (!(ledge instanceof HTMLElement)) return clip
+  const br = ledge.getBoundingClientRect()
+  if (br.height < 1 || br.bottom <= 0 || br.top >= winH) return clip
+  return intersectBoxes(clip, {
+    left: -1e6,
+    top: br.bottom,
+    right: 1e6,
+    bottom: 1e6,
+  })
+}
+
 const CHISEL_FRAGMENT = /* glsl */ `
   precision highp float;
 
@@ -33,6 +94,10 @@ const CHISEL_FRAGMENT = /* glsl */ `
   uniform vec2 u_innerHalf;
   /** Card center in expanded-viewport p-space (handles clamped bleed / off-center expansion). */
   uniform vec2 u_pCardCenter;
+  /** eL, eT, wE, hE — expanded draw rect in CSS client px (before clip). */
+  uniform vec4 u_expandCss;
+  /** dL, dT, wD, hD — visible sub-rect in CSS client px (intersection with overflow ancestors). */
+  uniform vec4 u_drawCss;
   /** Amplitude of organic displacement on the outer side of the rim (fbm). */
   uniform float u_outerOrganicAmp;
 
@@ -113,9 +178,17 @@ const CHISEL_FRAGMENT = /* glsl */ `
 
   void main() {
     vec2 local = gl_FragCoord.xy - u_vpOrigin;
-    vec2 uv = local / u_resolution.xy;
-    vec2 p = uv * 2.0 - 1.0;
-    p.x *= u_resolution.x / u_resolution.y;
+    vec2 uvFrag = local / u_resolution.xy;
+    /* Map fragment in cropped viewport back into full expanded-rect UV so the SDF matches DOM clipping. */
+    float xCss = u_drawCss.x + uvFrag.x * u_drawCss.z;
+    /* gl_FragCoord.y grows upward; uvFrag.y=0 is the viewport bottom = larger screen Y (CSS top-left origin). */
+    float yCss = u_drawCss.y + u_drawCss.w - uvFrag.y * u_drawCss.w;
+    float uvE_x = (xCss - u_expandCss.x) / max(u_expandCss.z, 1.0);
+    float uvE_y = (u_expandCss.y + u_expandCss.w - yCss) / max(u_expandCss.w, 1.0);
+    vec2 p = vec2(
+      (uvE_x * 2.0 - 1.0) * (u_resolution.x / max(u_resolution.y, 1.0)),
+      uvE_y * 2.0 - 1.0
+    );
 
     float dFinal = getBorderDistance(p);
     float densityMap = fbm(p * 4.0);
@@ -194,8 +267,9 @@ function ensureGl() {
 
   const canvas = document.createElement('canvas')
   canvas.setAttribute('aria-hidden', 'true')
+  // Below NavBar (40), Footer (50), modals, and WebGLWisp (45); above default in-flow content.
   canvas.style.cssText =
-    'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:46;display:block;transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:strict;'
+    'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:6;display:block;transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:strict;'
   document.body.appendChild(canvas)
   canvasEl = canvas
 
@@ -238,6 +312,8 @@ function ensureGl() {
     u_hoverFlameState: { value: 0.0 },
     u_innerHalf: { value: new THREE.Vector2(1, 1) },
     u_pCardCenter: { value: new THREE.Vector2(0, 0) },
+    u_expandCss: { value: new THREE.Vector4(0, 0, 1, 1) },
+    u_drawCss: { value: new THREE.Vector4(0, 0, 1, 1) },
     u_outerOrganicAmp: { value: 0.065 },
   }
 
@@ -273,7 +349,7 @@ function ensureGl() {
     for (const entry of entries) {
       if (!document.contains(entry.el)) continue
       const r = entry.el.getBoundingClientRect()
-      const bleedCss = 22
+      const bleedCss = 10
       if (
         r.width < 2 ||
         r.height < 2 ||
@@ -297,16 +373,19 @@ function ensureGl() {
       exT = Math.max(0, exT)
       exR = Math.min(winW, exR)
       exB = Math.min(winH, exB)
-      const wCss = Math.max(4, exR - exL)
-      const hCss = Math.max(4, exB - exT)
+      const wE = Math.max(4, exR - exL)
+      const hE = Math.max(4, exB - exT)
 
-      // Three.js viewport/scissor APIs take CSS pixels and internally multiply
-      // by the renderer pixel ratio. The shader, however, sees device pixels
-      // in gl_FragCoord, so keep a parallel device-pixel copy for uniforms.
-      const leftCss = exL
-      const bottomCss = winH - exB
-      const vwCss = wCss
-      const vhCss = hCss
+      const expanded: CssBox = { left: exL, top: exT, right: exR, bottom: exB }
+      let clip = getCumulativeClipRect(entry.el, winW, winH)
+      clip = applyFixedNavClip(clip, winH)
+      const draw = intersectBoxes(expanded, clip)
+      if (draw.right - draw.left < 2 || draw.bottom - draw.top < 2) continue
+
+      const leftCss = draw.left
+      const bottomCss = winH - draw.bottom
+      const vwCss = draw.right - draw.left
+      const vhCss = draw.bottom - draw.top
       const left = leftCss * pr
       const bottom = bottomCss * pr
       const vw = vwCss * pr
@@ -317,20 +396,22 @@ function ensureGl() {
       renderer.setScissor(leftCss, bottomCss, vwCss, vhCss)
       material.uniforms.u_vpOrigin.value.set(left, bottom)
       material.uniforms.u_resolution.value.set(vw, vh)
+      material.uniforms.u_expandCss.value.set(exL, exT, wE, hE)
+      material.uniforms.u_drawCss.value.set(draw.left, draw.top, vwCss, vhCss)
       material.uniforms.u_color.value.copy(entry.color)
       material.uniforms.u_hoverFlameState.value = entry.hoverSmoothed
 
       const aspect = vw / Math.max(vh, 1)
-      const uvx = (r.left + r.width * 0.5 - exL) / wCss
-      const uvy = (exB - (r.top + r.height * 0.5)) / hCss
+      const uvx = (r.left + r.width * 0.5 - exL) / wE
+      const uvy = (exB - (r.top + r.height * 0.5)) / hE
       const pccx = (uvx * 2 - 1) * aspect
       const pccy = uvy * 2 - 1
       material.uniforms.u_pCardCenter.value.set(pccx, pccy)
 
       const inset = 0.996
       material.uniforms.u_innerHalf.value.set(
-        aspect * (r.width / wCss) * inset,
-        (r.height / hCss) * inset,
+        aspect * (r.width / wE) * inset,
+        (r.height / hE) * inset,
       )
 
       const shortPx = Math.min(r.width * pr, r.height * pr)
