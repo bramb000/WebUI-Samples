@@ -202,7 +202,11 @@ const paperFill = computed(
   position: relative;
   z-index: 1;
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   min-height: 0;
+}
+
+.insight-body:not(:empty) {
+  flex: 1 1 auto;
 }
 </style>

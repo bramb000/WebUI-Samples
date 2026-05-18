@@ -21,9 +21,11 @@ onMounted(() => {
     if (!el) return
     frameId = registerChiselFrame(el, {
       colorHex: PAPER_STROKE,
+      fillColorHex: PAPER_STROKE,
       hoverFlame: false,
       panelFill: false,
       staticRim: true,
+      flatRim: true,
       bleedPx: PANEL_BLEED_PX,
       skipAncestorClip: true,
     })
@@ -78,9 +80,6 @@ onBeforeUnmount(() => {
   width: 100%;
   overflow: visible;
   background: var(--paper-surface-fill);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--paper-surface-fill) 70%, white 30%),
-    inset 0 -2px 8px color-mix(in srgb, var(--paper-surface-fill-deep) 85%, black 15%);
 }
 
 /* Global .noise-overlay sets overflow:hidden — that was squaring the outer edge */

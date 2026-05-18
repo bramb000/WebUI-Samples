@@ -78,10 +78,10 @@ onBeforeUnmount(() => {
   width: 100%;
   min-width: 0;
   min-height: 0;
-  height: 100%;
+  height: auto;
   isolation: isolate;
-  /* Grid row stretch gives this a tall box; flex lets the slot fill it so
-     backgrounds match the WebGL frame bounds. */
+  /* Grid items still stretch via align-items; height:auto avoids filling a
+     tall block parent (e.g. case-study column) when not in a grid cell. */
   display: flex;
   flex-direction: column;
   align-self: stretch;

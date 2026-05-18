@@ -18,6 +18,8 @@ export type ChiselFrameOptions = {
   bleedPx?: number
   /** Work panels: clip to viewport only so overflow:hidden ancestors do not trim the outer paper edge. */
   skipAncestorClip?: boolean
+  /** Parchment panels: rim only outside the fill edge — no inner groove / shadow seam. */
+  flatRim?: boolean
 }
 
 type Entry = {
@@ -30,6 +32,7 @@ type Entry = {
   staticRim: boolean
   bleedPx: number
   skipAncestorClip: boolean
+  flatRim: boolean
   hoverTarget: number
   hoverSmoothed: number
 }
@@ -128,6 +131,7 @@ const CHISEL_FRAGMENT = /* glsl */ `
   uniform float u_outerOrganicAmp;
   uniform float u_panelFill;
   uniform vec3 u_fillColor;
+  uniform float u_flatRim;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -191,9 +195,13 @@ const CHISEL_FRAGMENT = /* glsl */ `
 
     float baseDist = rim - organic * outerMask;
 
-    float innerProtect = 1.0 - outerMask * 0.88;
+    float innerProtect = u_flatRim > 0.5 ? 1.0 : 1.0 - outerMask * 0.88;
     float cuts = angularCuts(q, u_chiselDensity, u_chiselChaos) * u_chiselDepth * innerProtect;
-    float micro = fbm(p * 4.0) * u_wobble * (1.0 - outerMask * 0.75);
+    float micro = fbm(p * 4.0) * u_wobble * (1.0 - outerMask * (u_flatRim > 0.5 ? 1.0 : 0.75));
+    if (u_flatRim > 0.5) {
+      cuts *= outerMask;
+      micro *= outerMask;
+    }
     float chiseledDist = baseDist + cuts + micro;
 
     vec2 fireUV = p * 10.0;
@@ -230,7 +238,16 @@ const CHISEL_FRAGMENT = /* glsl */ `
     finalColor = mix(finalColor, flameColor, u_hoverFlameState * paintThickness);
     finalColor *= alphaMult;
 
-    float borderAlpha = 1.0 - smoothstep(0.0, 0.01, dFinal);
+    float borderAlpha = u_flatRim > 0.5
+      ? 1.0 - smoothstep(-0.004, 0.016, dFinal)
+      : 1.0 - smoothstep(0.0, 0.01, dFinal);
+
+    if (u_flatRim > 0.5) {
+      float outwardOnly = smoothstep(-u_borderWidth * 0.25, u_borderWidth * 0.2, dBox);
+      borderAlpha *= outwardOnly;
+      finalColor = mix(u_fillColor, finalColor, borderAlpha);
+    }
+
     float alpha = borderAlpha;
 
     if (u_panelFill > 0.5) {
@@ -357,6 +374,7 @@ function ensureGl() {
     u_outerOrganicAmp: { value: 0.065 },
     u_panelFill: { value: 0.0 },
     u_fillColor: { value: new THREE.Color(0x0c0c0c) },
+    u_flatRim: { value: 0.0 },
   }
 
   material = new THREE.ShaderMaterial({
@@ -450,6 +468,7 @@ function ensureGl() {
       material.uniforms.u_depthEffect.value =
         entry.skipAncestorClip ? 0 : entry.panelFill ? 0.06 : 0.164
       material.uniforms.u_hoverFlameState.value = entry.hoverSmoothed
+      material.uniforms.u_flatRim.value = entry.flatRim ? 1 : 0
 
       const aspect = vw / Math.max(vh, 1)
       const uvx = (r.left + r.width * 0.5 - exL) / wE
@@ -458,7 +477,7 @@ function ensureGl() {
       const pccy = uvy * 2 - 1
       material.uniforms.u_pCardCenter.value.set(pccx, pccy)
 
-      const inset = 0.996
+      const inset = entry.flatRim ? 1.0 : 0.996
       material.uniforms.u_innerHalf.value.set(
         aspect * (r.width / wE) * inset,
         (r.height / hE) * inset,
@@ -524,6 +543,7 @@ export function registerChiselFrame(
     staticRim: cfg.staticRim ?? false,
     bleedPx: cfg.bleedPx ?? 10,
     skipAncestorClip: cfg.skipAncestorClip ?? false,
+    flatRim: cfg.flatRim ?? false,
     hoverTarget: 0,
     hoverSmoothed: 0,
   })
@@ -547,6 +567,7 @@ export function setChiselFrameColor(
   if (e) {
     e.color.set(colorHex)
     if (fillColorHex) e.fillColor.set(fillColorHex)
+    else if (e.flatRim) e.fillColor.set(colorHex)
     else if (!e.panelFill) e.fillColor.copy(accentFillColor(e.color))
   }
 }
