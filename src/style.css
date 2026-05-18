@@ -71,6 +71,48 @@
 
   /* Noise texture SVG */
   --noise-svg: url('data:image/svg+xml,%3Csvg viewBox%3D"0 0 200 200" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%3E%3Cfilter id%3D"n"%3E%3CfeTurbulence type%3D"fractalNoise" baseFrequency%3D"1.5" numOctaves%3D"3" stitchTiles%3D"stitch"%2F%3E%3C%2Ffilter%3E%3Crect width%3D"100%25" height%3D"100%25" filter%3D"url(%23n)"%2F%3E%3C%2Fsvg%3E');
+
+  /* Parchment work-detail panel (fill + rim share one token family) */
+  --paper-surface-fill:       #ebe4d6;
+  --paper-surface-fill-deep:  #e0d8c8;
+  /* Rim matches fill — procedural stroke reads as deckled paper, not brass */
+  --paper-surface-rim:        #ebe4d6;
+  --paper-surface-rim-hi:     #f2ece2;
+  --paper-on-fill-text:       #1a1814;
+  --paper-on-fill-text-muted: #5c564c;
+  --paper-on-fill-border:     #b8a88a;
+}
+
+/* Legible typography on bright parchment — scoped to paper surfaces only */
+[data-surface="paper"] .noise-overlay,
+[data-surface="paper"].noise-overlay {
+  overflow: visible;
+}
+
+[data-surface="paper"] .noise-overlay::before,
+[data-surface="paper"].noise-overlay::before {
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+}
+
+[data-surface="paper"] {
+  --color-text:              var(--paper-on-fill-text);
+  --color-text-muted:        var(--paper-on-fill-text-muted);
+  --color-text-charcoal:     var(--paper-on-fill-text);
+  --color-surface:           var(--paper-surface-fill-deep);
+  --color-elevated:          #f2ece2;
+  --color-bg:                var(--paper-surface-fill);
+  --color-border:            var(--paper-surface-rim);
+  --color-border-hi:         var(--paper-surface-rim-hi);
+  --color-hover-bg:          #ddd5c6;
+  --color-lcd:               #d8d0c2;
+  --color-lcd-text:          #3d3830;
+  --color-accent:            #6b5a32;
+  --color-accent-dark:       #524724;
+  --color-accent-rim:        #8b7347;
+  --color-accent-soft:       var(--paper-on-fill-border);
+  --dl-glow-global:          0 1px 0 color-mix(in srgb, var(--paper-surface-rim-hi) 40%, transparent);
+  color: var(--color-text);
 }
 
 /* ── Case Study Hero Themes

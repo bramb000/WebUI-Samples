@@ -5,13 +5,39 @@
  */
 import * as THREE from 'three'
 
+export type ChiselFrameOptions = {
+  colorHex: string
+  hoverFlame?: boolean
+  /** Solid interior tint behind the procedural rim (work roster panels, etc.). */
+  panelFill?: boolean
+  /** Frozen rim: no time animation, no living-ink density variation, no hover flame. */
+  staticRim?: boolean
+  /** Override interior fill (parchment panels); defaults to dark tint derived from rim. */
+  fillColorHex?: string
+  /** CSS px bleed beyond track bounds so organic rim is visible outside the fill. */
+  bleedPx?: number
+  /** Work panels: clip to viewport only so overflow:hidden ancestors do not trim the outer paper edge. */
+  skipAncestorClip?: boolean
+}
+
 type Entry = {
   id: number
   el: HTMLElement
   color: THREE.Color
+  fillColor: THREE.Color
   hoverFlame: boolean
+  panelFill: boolean
+  staticRim: boolean
+  bleedPx: number
+  skipAncestorClip: boolean
   hoverTarget: number
   hoverSmoothed: number
+}
+
+function accentFillColor(accent: THREE.Color): THREE.Color {
+  const fill = accent.clone()
+  fill.lerp(new THREE.Color(0x0c0c0c), 0.74)
+  return fill
 }
 
 type CssBox = { left: number; top: number; right: number; bottom: number }
@@ -100,6 +126,8 @@ const CHISEL_FRAGMENT = /* glsl */ `
   uniform vec4 u_drawCss;
   /** Amplitude of organic displacement on the outer side of the rim (fbm). */
   uniform float u_outerOrganicAmp;
+  uniform float u_panelFill;
+  uniform vec3 u_fillColor;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -190,6 +218,8 @@ const CHISEL_FRAGMENT = /* glsl */ `
       uvE_y * 2.0 - 1.0
     );
 
+    vec2 q = p - u_pCardCenter;
+    float dBox = sdBox(q, u_innerHalf);
     float dFinal = getBorderDistance(p);
     float densityMap = fbm(p * 4.0);
     float paintThickness = smoothstep(-1.0, 1.0, densityMap);
@@ -200,7 +230,17 @@ const CHISEL_FRAGMENT = /* glsl */ `
     finalColor = mix(finalColor, flameColor, u_hoverFlameState * paintThickness);
     finalColor *= alphaMult;
 
-    float alpha = 1.0 - smoothstep(0.0, 0.01, dFinal);
+    float borderAlpha = 1.0 - smoothstep(0.0, 0.01, dFinal);
+    float alpha = borderAlpha;
+
+    if (u_panelFill > 0.5) {
+      float fillAlpha = 1.0 - smoothstep(-0.004, 0.008, dBox);
+      vec3 interior = u_fillColor;
+      float grain = fbm(p * 9.5) * 0.035;
+      interior *= 1.0 - grain;
+      finalColor = mix(interior, finalColor, borderAlpha);
+      alpha = max(fillAlpha, borderAlpha);
+    }
 
     if (u_depthEffect > 0.0) {
       float edgeScale = 0.35 / max(u_innerHalf.x, u_innerHalf.y);
@@ -315,6 +355,8 @@ function ensureGl() {
     u_expandCss: { value: new THREE.Vector4(0, 0, 1, 1) },
     u_drawCss: { value: new THREE.Vector4(0, 0, 1, 1) },
     u_outerOrganicAmp: { value: 0.065 },
+    u_panelFill: { value: 0.0 },
+    u_fillColor: { value: new THREE.Color(0x0c0c0c) },
   }
 
   material = new THREE.ShaderMaterial({
@@ -338,8 +380,7 @@ function ensureGl() {
     const pr = renderer.getPixelRatio()
     const winW = window.innerWidth
     const winH = window.innerHeight
-
-    uniforms.u_time.value = clock.getElapsedTime()
+    const elapsed = clock.getElapsedTime()
 
     renderer.setClearColor(0x000000, 0)
     renderer.setScissorTest(false)
@@ -349,7 +390,7 @@ function ensureGl() {
     for (const entry of entries) {
       if (!document.contains(entry.el)) continue
       const r = entry.el.getBoundingClientRect()
-      const bleedCss = 10
+      const bleedCss = entry.bleedPx
       if (
         r.width < 2 ||
         r.height < 2 ||
@@ -377,7 +418,10 @@ function ensureGl() {
       const hE = Math.max(4, exB - exT)
 
       const expanded: CssBox = { left: exL, top: exT, right: exR, bottom: exB }
-      let clip = getCumulativeClipRect(entry.el, winW, winH)
+      let clip: CssBox = { left: 0, top: 0, right: winW, bottom: winH }
+      if (!entry.skipAncestorClip) {
+        clip = getCumulativeClipRect(entry.el, winW, winH)
+      }
       clip = applyFixedNavClip(clip, winH)
       const draw = intersectBoxes(expanded, clip)
       if (draw.right - draw.left < 2 || draw.bottom - draw.top < 2) continue
@@ -399,6 +443,12 @@ function ensureGl() {
       material.uniforms.u_expandCss.value.set(exL, exT, wE, hE)
       material.uniforms.u_drawCss.value.set(draw.left, draw.top, vwCss, vhCss)
       material.uniforms.u_color.value.copy(entry.color)
+      material.uniforms.u_panelFill.value = entry.panelFill ? 1 : 0
+      material.uniforms.u_fillColor.value.copy(entry.fillColor)
+      material.uniforms.u_time.value = entry.staticRim ? 0 : elapsed
+      material.uniforms.u_densityVar.value = entry.staticRim ? 0 : 0.896
+      material.uniforms.u_depthEffect.value =
+        entry.skipAncestorClip ? 0 : entry.panelFill ? 0.06 : 0.164
       material.uniforms.u_hoverFlameState.value = entry.hoverSmoothed
 
       const aspect = vw / Math.max(vh, 1)
@@ -415,12 +465,16 @@ function ensureGl() {
       )
 
       const shortPx = Math.min(r.width * pr, r.height * pr)
-      const borderPx = 3.1
+      const isLargePanel = entry.panelFill || entry.bleedPx > 12
+      const borderPx = isLargePanel ? 4.2 : 3.1
       const borderNorm = Math.min(0.07, (borderPx * 2) / Math.max(shortPx, 1))
       material.uniforms.u_borderWidth.value = borderNorm
 
-      const organicPx = 5.5
-      const organicNorm = Math.min(0.11, (organicPx * 2) / Math.max(shortPx, 1))
+      const organicPx = isLargePanel ? (entry.skipAncestorClip ? 10 : 7.5) : 5.5
+      const organicNorm = Math.min(
+        entry.skipAncestorClip ? 0.14 : 0.11,
+        (organicPx * 2) / Math.max(shortPx, 1),
+      )
       material.uniforms.u_outerOrganicAmp.value = organicNorm
 
       renderer.render(scene, camera)
@@ -437,14 +491,39 @@ function ensureGl() {
 export function registerChiselFrame(
   el: HTMLElement,
   colorHex: string,
+  hoverFlame?: boolean,
+): number
+export function registerChiselFrame(el: HTMLElement, options: ChiselFrameOptions): number
+export function registerChiselFrame(
+  el: HTMLElement,
+  colorOrOptions: string | ChiselFrameOptions,
   hoverFlame = true,
 ): number {
+  const cfg: ChiselFrameOptions =
+    typeof colorOrOptions === 'string'
+      ? { colorHex: colorOrOptions, hoverFlame, panelFill: false, staticRim: false }
+      : {
+          colorHex: colorOrOptions.colorHex,
+          hoverFlame: colorOrOptions.hoverFlame ?? false,
+          panelFill: colorOrOptions.panelFill ?? false,
+          staticRim: colorOrOptions.staticRim ?? false,
+        }
+
+  const color = new THREE.Color(cfg.colorHex)
+  const fillColor = cfg.fillColorHex
+    ? new THREE.Color(cfg.fillColorHex)
+    : accentFillColor(color)
   const id = nextId++
   entries.push({
     id,
     el,
-    color: new THREE.Color(colorHex),
-    hoverFlame,
+    color,
+    fillColor,
+    hoverFlame: cfg.hoverFlame ?? false,
+    panelFill: cfg.panelFill ?? false,
+    staticRim: cfg.staticRim ?? false,
+    bleedPx: cfg.bleedPx ?? 10,
+    skipAncestorClip: cfg.skipAncestorClip ?? false,
     hoverTarget: 0,
     hoverSmoothed: 0,
   })
@@ -459,9 +538,17 @@ export function unregisterChiselFrame(id: number) {
   }
 }
 
-export function setChiselFrameColor(id: number, colorHex: string) {
+export function setChiselFrameColor(
+  id: number,
+  colorHex: string,
+  fillColorHex?: string,
+) {
   const e = entries.find((x) => x.id === id)
-  if (e) e.color.set(colorHex)
+  if (e) {
+    e.color.set(colorHex)
+    if (fillColorHex) e.fillColor.set(fillColorHex)
+    else if (!e.panelFill) e.fillColor.copy(accentFillColor(e.color))
+  }
 }
 
 export function setChiselFrameHover(id: number, target: number) {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import AngularWipe from '../components/wipes/AngularWipe.vue'
+import PanelChiselBackground from '../components/PanelChiselBackground.vue'
 import { startCrumple } from '../composables/paperCrumple'
 import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
 import { workPanelEmbeddedCaseStudyId } from '../composables/workPanelCaseTheme'
@@ -405,7 +406,7 @@ function onDone() {
         </aside>
 
         <section class="dl-detail" aria-label="Project detail">
-          <div class="dl-detail__chrome" />
+          <PanelChiselBackground class="dl-detail__surface">
           <div
             v-if="displayedEmbeddedComponent"
             class="dl-embedded"
@@ -413,6 +414,8 @@ function onDone() {
           >
             <component :is="displayedEmbeddedComponent" :key="displayedId" />
           </div>
+
+          </PanelChiselBackground>
 
           <AngularWipe
             :active="wipeActive"
@@ -433,7 +436,8 @@ function onDone() {
   width: 100%;
   height: 100%;
   min-height: 0;
-  overflow: hidden;
+  /* Must not clip — WebGL deckle extends outside the paper rect */
+  overflow: visible;
   background: #111111;
   color: #eae7e2;
   display: flex;
@@ -492,6 +496,7 @@ function onDone() {
   flex: 1 1 auto;
   width: 100%;
   min-height: 0;
+  overflow: visible;
   display: grid;
   /* Fixed-width roster (3× larger cards) so the detail panel gets the rest */
   grid-template-columns: minmax(224px, 384px) minmax(0, 1fr);
@@ -512,12 +517,10 @@ function onDone() {
   padding: 24px 16px 32px;
   box-sizing: border-box;
   scroll-padding-bottom: 48px;
-  /* Sleek scrollbar (Firefox) */
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
 }
 
-/* Sleek scrollbar (Chromium/WebKit). Needs :deep() in scoped styles. */
 :deep(#roster-pane::-webkit-scrollbar) {
   width: 8px;
 }
@@ -713,22 +716,38 @@ function onDone() {
   min-height: 0;
   height: 100%;
   max-height: 100%;
-  overflow: hidden;
-  background: radial-gradient(circle at 60% 20%, rgba(70,240,209,0.08) 0%, transparent 40%),
-    linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.68) 100%);
+  overflow: visible;
+  background: transparent;
 }
+
+.dl-detail__surface {
+  position: relative;
+  z-index: 0;
+  height: 100%;
+  min-height: 0;
+  overflow: visible;
+}
+
 .dl-embedded {
-  position: absolute;
-  top: clamp(16px, 2.2vw, 28px);
-  right: clamp(16px, 2.5vw, 36px);
-  bottom: clamp(20px, 2.5vw, 32px);
-  left: clamp(16px, 2.5vw, 36px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 8px 4px 48px;
-  z-index: 2;
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow: visible;
+  padding: clamp(12px, 1.8vw, 20px) clamp(8px, 1.2vw, 16px) 48px;
+  z-index: 1;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--paper-surface-rim) 55%, transparent) transparent;
+}
+
+.dl-embedded::-webkit-scrollbar {
+  width: 8px;
+}
+.dl-embedded::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--paper-surface-rim) 50%, transparent);
+  border-radius: 999px;
 }
 .dl-embedded--case :deep(.animate-fade-in) {
   padding-bottom: 120px;
@@ -753,16 +772,27 @@ function onDone() {
   flex-wrap: wrap;
   gap: 1rem;
 }
-.dl-detail__chrome {
-  position: absolute;
-  top: clamp(14px, 2vw, 22px);
-  right: clamp(12px, 2.2vw, 28px);
-  bottom: clamp(16px, 2.2vw, 26px);
-  left: clamp(12px, 2.2vw, 28px);
-  border: 1px solid rgba(255,255,255,0.08);
-  clip-path: polygon(0 0, 96% 0, 100% 10%, 100% 100%, 4% 100%, 0 90%);
-  pointer-events: none;
-  opacity: 0.65;
+/* Embedded case studies: keep recessed panels readable on parchment */
+.dl-embedded--case :deep(.panel-recessed) {
+  --color-text: var(--paper-on-fill-text);
+  --color-text-muted: var(--paper-on-fill-text-muted);
+  background: color-mix(in srgb, var(--paper-surface-fill-deep) 88%, #1a1814 12%);
+  box-shadow:
+    inset 0 2px 6px color-mix(in srgb, var(--paper-surface-rim) 22%, black 78%),
+    0 1px 0 color-mix(in srgb, var(--paper-surface-rim-hi) 35%, white 65%);
+}
+
+.dl-embedded--case :deep(.hero-title),
+.dl-embedded--case :deep(.hero-desc),
+.dl-embedded:not(.dl-embedded--case) :deep(h1),
+.dl-embedded:not(.dl-embedded--case) :deep(h2),
+.dl-embedded:not(.dl-embedded--case) :deep(p) {
+  color: var(--color-text);
+}
+
+.dl-embedded:not(.dl-embedded--case) :deep(.opacity-60),
+.dl-embedded:not(.dl-embedded--case) :deep(.opacity-80) {
+  color: var(--color-text-muted);
 }
 </style>
 
