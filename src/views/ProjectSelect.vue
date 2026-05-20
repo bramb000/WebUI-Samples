@@ -436,8 +436,8 @@ function onDone() {
   width: 100%;
   height: 100%;
   min-height: 0;
-  /* Must not clip — WebGL deckle extends outside the paper rect */
-  overflow: visible;
+  /* Clip decorative bleed (.dl-bg); WebGL rim is fixed-canvas, not DOM overflow */
+  overflow: hidden;
   background: #111111;
   color: #eae7e2;
   display: flex;
@@ -471,7 +471,8 @@ function onDone() {
 
 .dl-bg {
   position: absolute;
-  inset: -10%;
+  /* Avoid negative inset — it enlarged scrollable overflow on html/body */
+  inset: 0;
   background:
     radial-gradient(circle at 15% 15%, rgba(70,240,209,0.06) 0%, transparent 45%),
     radial-gradient(circle at 85% 25%, rgba(165,30,44,0.07) 0%, transparent 55%),
@@ -722,7 +723,7 @@ function onDone() {
 
 .dl-detail__surface {
   position: relative;
-  z-index: 0;
+  z-index: 1;
   height: 100%;
   min-height: 0;
   overflow: visible;

@@ -18,8 +18,10 @@ export type ChiselFrameOptions = {
   bleedPx?: number
   /** Work panels: clip to viewport only so overflow:hidden ancestors do not trim the outer paper edge. */
   skipAncestorClip?: boolean
-  /** Parchment panels: rim only outside the fill edge — no inner groove / shadow seam. */
+  /** Rim only outside the fill edge — thinner outward band (often paired with panelFill). */
   flatRim?: boolean
+  /** Monotone parchment-style interior: flat fill, no grain, no depth lighting seam. */
+  monotoneFill?: boolean
 }
 
 type Entry = {
@@ -33,6 +35,7 @@ type Entry = {
   bleedPx: number
   skipAncestorClip: boolean
   flatRim: boolean
+  monotoneFill: boolean
   hoverTarget: number
   hoverSmoothed: number
 }
@@ -132,6 +135,7 @@ const CHISEL_FRAGMENT = /* glsl */ `
   uniform float u_panelFill;
   uniform vec3 u_fillColor;
   uniform float u_flatRim;
+  uniform float u_monotoneFill;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -253,8 +257,10 @@ const CHISEL_FRAGMENT = /* glsl */ `
     if (u_panelFill > 0.5) {
       float fillAlpha = 1.0 - smoothstep(-0.004, 0.008, dBox);
       vec3 interior = u_fillColor;
-      float grain = fbm(p * 9.5) * 0.035;
-      interior *= 1.0 - grain;
+      if (u_monotoneFill < 0.5) {
+        float grain = fbm(p * 9.5) * 0.035;
+        interior *= 1.0 - grain;
+      }
       finalColor = mix(interior, finalColor, borderAlpha);
       alpha = max(fillAlpha, borderAlpha);
     }
@@ -324,9 +330,9 @@ function ensureGl() {
 
   const canvas = document.createElement('canvas')
   canvas.setAttribute('aria-hidden', 'true')
-  // Below NavBar (40), Footer (50), modals, and WebGLWisp (45); above default in-flow content.
+  // Below NavBar/Footer/modals; above in-flow defaults so embedded parchment content can stack above (z-index 1).
   canvas.style.cssText =
-    'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:6;display:block;transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:strict;'
+    'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;display:block;transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:strict;'
   document.body.appendChild(canvas)
   canvasEl = canvas
 
@@ -375,6 +381,7 @@ function ensureGl() {
     u_panelFill: { value: 0.0 },
     u_fillColor: { value: new THREE.Color(0x0c0c0c) },
     u_flatRim: { value: 0.0 },
+    u_monotoneFill: { value: 0.0 },
   }
 
   material = new THREE.ShaderMaterial({
@@ -463,10 +470,13 @@ function ensureGl() {
       material.uniforms.u_color.value.copy(entry.color)
       material.uniforms.u_panelFill.value = entry.panelFill ? 1 : 0
       material.uniforms.u_fillColor.value.copy(entry.fillColor)
+      material.uniforms.u_monotoneFill.value = entry.monotoneFill ? 1 : 0
       material.uniforms.u_time.value = entry.staticRim ? 0 : elapsed
-      material.uniforms.u_densityVar.value = entry.staticRim ? 0 : 0.896
-      material.uniforms.u_depthEffect.value =
-        entry.skipAncestorClip ? 0 : entry.panelFill ? 0.06 : 0.164
+      material.uniforms.u_densityVar.value =
+        entry.staticRim || entry.monotoneFill ? 0 : 0.896
+      let depthFx = entry.skipAncestorClip ? 0 : entry.panelFill ? 0.06 : 0.164
+      if (entry.monotoneFill) depthFx = 0
+      material.uniforms.u_depthEffect.value = depthFx
       material.uniforms.u_hoverFlameState.value = entry.hoverSmoothed
       material.uniforms.u_flatRim.value = entry.flatRim ? 1 : 0
 
@@ -486,14 +496,20 @@ function ensureGl() {
       const shortPx = Math.min(r.width * pr, r.height * pr)
       const isLargePanel = entry.panelFill || entry.bleedPx > 12
       const borderPx = isLargePanel ? 4.2 : 3.1
-      const borderNorm = Math.min(0.07, (borderPx * 2) / Math.max(shortPx, 1))
+      let borderNorm = Math.min(0.07, (borderPx * 2) / Math.max(shortPx, 1))
+      if (entry.monotoneFill && entry.panelFill) {
+        borderNorm = Math.max(borderNorm, 0.038)
+      }
       material.uniforms.u_borderWidth.value = borderNorm
 
       const organicPx = isLargePanel ? (entry.skipAncestorClip ? 10 : 7.5) : 5.5
-      const organicNorm = Math.min(
+      let organicNorm = Math.min(
         entry.skipAncestorClip ? 0.14 : 0.11,
         (organicPx * 2) / Math.max(shortPx, 1),
       )
+      if (entry.monotoneFill && entry.panelFill) {
+        organicNorm = Math.max(organicNorm, 0.058)
+      }
       material.uniforms.u_outerOrganicAmp.value = organicNorm
 
       renderer.render(scene, camera)
@@ -518,14 +534,27 @@ export function registerChiselFrame(
   colorOrOptions: string | ChiselFrameOptions,
   hoverFlame = true,
 ): number {
+  const defaults = {
+    hoverFlame: false,
+    panelFill: false,
+    staticRim: false,
+    flatRim: false,
+    monotoneFill: false,
+    bleedPx: 10,
+    skipAncestorClip: false,
+  } satisfies Partial<ChiselFrameOptions>
+
   const cfg: ChiselFrameOptions =
     typeof colorOrOptions === 'string'
-      ? { colorHex: colorOrOptions, hoverFlame, panelFill: false, staticRim: false }
+      ? {
+          ...defaults,
+          colorHex: colorOrOptions,
+          hoverFlame,
+        }
       : {
+          ...defaults,
+          ...colorOrOptions,
           colorHex: colorOrOptions.colorHex,
-          hoverFlame: colorOrOptions.hoverFlame ?? false,
-          panelFill: colorOrOptions.panelFill ?? false,
-          staticRim: colorOrOptions.staticRim ?? false,
         }
 
   const color = new THREE.Color(cfg.colorHex)
@@ -544,6 +573,7 @@ export function registerChiselFrame(
     bleedPx: cfg.bleedPx ?? 10,
     skipAncestorClip: cfg.skipAncestorClip ?? false,
     flatRim: cfg.flatRim ?? false,
+    monotoneFill: cfg.monotoneFill ?? false,
     hoverTarget: 0,
     hoverSmoothed: 0,
   })

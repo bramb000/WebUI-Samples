@@ -81,6 +81,11 @@
   --paper-on-fill-text:       #1a1814;
   --paper-on-fill-text-muted: #5c564c;
   --paper-on-fill-border:     #b8a88a;
+
+  /* Case study insight cards — semantic accents (rim + tinted interior mix) */
+  --case-insight-observation: #f87171; /* observational / baseline */
+  --case-insight-change:      #4ade80; /* after changes shipped */
+  --case-insight-risk:        #fb923c; /* negative / caution */
 }
 
 /* Legible typography on bright parchment — scoped to paper surfaces only */

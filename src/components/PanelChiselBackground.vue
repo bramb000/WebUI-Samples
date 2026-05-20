@@ -23,9 +23,10 @@ onMounted(() => {
       colorHex: PAPER_STROKE,
       fillColorHex: PAPER_STROKE,
       hoverFlame: false,
-      panelFill: false,
-      staticRim: true,
-      flatRim: true,
+      panelFill: true,
+      monotoneFill: true,
+      /** Match insight cards: full SDF rim band (flatRim reads thin + seam-y on huge rects). */
+      flatRim: false,
       bleedPx: PANEL_BLEED_PX,
       skipAncestorClip: true,
     })
@@ -55,6 +56,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .panel-chisel-bg {
   position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -79,7 +81,8 @@ onBeforeUnmount(() => {
   min-width: 0;
   width: 100%;
   overflow: visible;
-  background: var(--paper-surface-fill);
+  /* Fill + deckle edge come from WebGL panelFill; noise sits on top via ::before */
+  background: transparent;
 }
 
 /* Global .noise-overlay sets overflow:hidden — that was squaring the outer edge */

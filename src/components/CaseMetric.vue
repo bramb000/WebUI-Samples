@@ -13,11 +13,11 @@ const props = withDefaults(defineProps<{
 const frameAccent = computed(() => {
   switch (props.theme) {
     case 'success':
-      return '#5eead4'
+      return 'var(--case-insight-change)'
     case 'danger':
-      return '#fb923c'
+      return 'var(--case-insight-risk)'
     default:
-      return '#00ffcc'
+      return 'var(--case-insight-observation)'
   }
 })
 

@@ -1,72 +1,107 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import {
-  registerChiselFrame,
-  setChiselFrameColor,
-  setChiselFrameHover,
-  unregisterChiselFrame,
-} from '../vfx/chiselFrameOverlay'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { bakeChiselRimImage, CARD_BLEED_PX } from '../vfx/chiselRimBake'
+
+/** Resolves `var(--token)` / `color-mix(...)` etc. for the static WebGL rim bake (needs a concrete hex). */
+function resolveColorPropToHex(el: HTMLElement, cssColor: string): string {
+  const t = cssColor.trim()
+  if (/^#[0-9a-fA-F]{6}$/.test(t) || /^#[0-9a-fA-F]{3}$/.test(t)) return t
+  const probe = document.createElement('span')
+  probe.style.cssText = `position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none;color:${cssColor}`
+  el.appendChild(probe)
+  const rgb = getComputedStyle(probe).color
+  el.removeChild(probe)
+  const m = rgb.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/)
+  if (!m) return '#4ade80'
+  const r = Math.round(Number(m[1]))
+  const g = Math.round(Number(m[2]))
+  const b = Math.round(Number(m[3]))
+  return (
+    '#' +
+    [r, g, b]
+      .map((x) => x.toString(16).padStart(2, '0'))
+      .join('')
+  )
+}
 
 const props = withDefaults(
   defineProps<{
     color?: string
+    /** Cards use a prebaked static rim; live ink is reserved for work panels. */
     hoverFlame?: boolean
   }>(),
   {
-    color: '#00ffcc',
-    hoverFlame: true,
+    color: 'var(--case-insight-change)',
+    hoverFlame: false,
   },
 )
 
-const trackRef = ref<HTMLElement | null>(null)
-let frameId: number | null = null
+const rootRef = ref<HTMLElement | null>(null)
+const rimUrl = ref<string | null>(null)
 let cancelled = false
-let boundEl: HTMLElement | null = null
+let resizeObserver: ResizeObserver | null = null
+let rebakeTimer = 0
 
-const onEnter = () => {
-  if (frameId != null && props.hoverFlame) setChiselFrameHover(frameId, 1)
-}
-const onLeave = () => {
-  if (frameId != null) setChiselFrameHover(frameId, 0)
+const rimStyle = computed(() => {
+  if (!rimUrl.value) return undefined
+  return {
+    '--chisel-rim-image': `url("${rimUrl.value}")`,
+    '--chisel-bleed': `${CARD_BLEED_PX}px`,
+  } as Record<string, string>
+})
+
+function scheduleRebake() {
+  if (rebakeTimer) window.clearTimeout(rebakeTimer)
+  rebakeTimer = window.setTimeout(() => {
+    rebakeTimer = 0
+    void rebakeRim()
+  }, 120)
 }
 
-watch(
-  () => props.color,
-  (c) => {
-    if (frameId != null) setChiselFrameColor(frameId, c)
-  },
-)
+async function rebakeRim() {
+  if (cancelled) return
+  const el = rootRef.value
+  if (!el) return
+  const r = el.getBoundingClientRect()
+  if (r.width < 2 || r.height < 2) return
+  const hex = resolveColorPropToHex(el, props.color)
+  const url = bakeChiselRimImage({
+    widthCss: r.width,
+    heightCss: r.height,
+    colorHex: hex,
+    bleedPx: CARD_BLEED_PX,
+  })
+  if (!cancelled && url) rimUrl.value = url
+}
 
 onMounted(() => {
   nextTick(() => {
     if (cancelled) return
-    const el = trackRef.value
+    const el = rootRef.value
     if (!el) return
-    boundEl = el
-    frameId = registerChiselFrame(el, props.color, props.hoverFlame)
-    el.addEventListener('pointerenter', onEnter)
-    el.addEventListener('pointerleave', onLeave)
+    void rebakeRim()
+    resizeObserver = new ResizeObserver(() => scheduleRebake())
+    resizeObserver.observe(el)
   })
 })
 
+watch(
+  () => props.color,
+  () => scheduleRebake(),
+)
+
 onBeforeUnmount(() => {
   cancelled = true
-  if (boundEl) {
-    boundEl.removeEventListener('pointerenter', onEnter)
-    boundEl.removeEventListener('pointerleave', onLeave)
-    boundEl = null
-  }
-  if (frameId != null) {
-    unregisterChiselFrame(frameId)
-    frameId = null
-  }
+  if (rebakeTimer) window.clearTimeout(rebakeTimer)
+  resizeObserver?.disconnect()
+  resizeObserver = null
+  rimUrl.value = null
 })
 </script>
 
 <template>
-  <div class="chisel-frame">
-    <!-- Track inner body for WebGL bounds = same box as the filled card (root can differ if outer has decorative overflow). -->
-    <div ref="trackRef" class="chisel-frame__body">
+  <div ref="rootRef" class="chisel-frame" :style="rimStyle">
+    <div class="chisel-frame__body">
       <slot />
     </div>
   </div>
@@ -80,20 +115,27 @@ onBeforeUnmount(() => {
   min-height: 0;
   height: auto;
   isolation: isolate;
-  /* Grid items still stretch via align-items; height:auto avoids filling a
-     tall block parent (e.g. case-study column) when not in a grid cell. */
   display: flex;
   flex-direction: column;
   align-self: stretch;
 }
 
+.chisel-frame::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--chisel-bleed, 10px));
+  background-image: var(--chisel-rim-image);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 2;
+}
+
 .chisel-frame__body {
   position: relative;
-  z-index: 0;
-  flex: 1 1 auto;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
   min-width: 0;
   width: 100%;
 }

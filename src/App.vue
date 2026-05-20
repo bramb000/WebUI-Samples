@@ -27,7 +27,7 @@ useCaseTheme();
     <main :class="[
       'flex-grow w-full', 
       // Hero Select needs a full-bleed stage (but still a normal page w/ Nav).
-      isHeroSelect ? 'h-[calc(100vh-72px)] min-h-0 overflow-visible' : '',
+      isHeroSelect ? 'h-[calc(100vh-72px)] min-h-0 overflow-hidden' : '',
       (!isFullScreen && !isHeroSelect && !route.path.startsWith('/work/')) ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : ''
     ]">
       <router-view v-slot="{ Component }">
