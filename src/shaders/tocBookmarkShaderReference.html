@@ -33,6 +33,12 @@
 </head>
 <body>
   <h1>TOC procedural bookmark — shader reference</h1>
+  <p class="note">
+    <strong>Update:</strong> The live TOC row uses a <strong>prebaked bookmark rim</strong>
+    (<span class="mono">tocBookmarkRimBake.ts</span> — bookmark SDF + card-style rim band), with DOM text on a flat
+    fill (no shader grain). This page documents the older live WebGL + <span class="mono">tocBookmark.frag</span>
+    implementation kept as a parameter reference.
+  </p>
   <p>
     <strong>Rendering parity:</strong> <span class="mono">src/shaders/tocBookmark.frag</span> uses the same
     <code>hash</code>, <code>noise</code>, <code>fbm</code>, <code>angularCuts</code>, outer-mask / organic /
@@ -42,7 +48,8 @@
     (<code>sdBookmarkHorizontal</code>) instead of a rectangular rim built from <code>sdBox</code>.
   </p>
   <p>
-    Wiring lives in <span class="mono">src/components/TocProceduralRow.vue</span>.
+    <strong>Historical wiring:</strong> Previously lived in <span class="mono">src/components/TocProceduralRow.vue</span>
+    (WebGL canvas + <span class="mono">tocBookmark.frag</span>).
     <code>u_borderWidth</code> and <code>u_organicAmp</code> are recomputed on each resize using the same
     pixel→normalized formulas as the card overlay (<code>borderPx = 3.1</code>, <code>organicPx = 5.5</code>,
     clamped with the same caps).

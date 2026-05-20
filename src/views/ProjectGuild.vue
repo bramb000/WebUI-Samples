@@ -116,11 +116,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── CONTEXT ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Context</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Context</h2>
+      <div class="space-y-8">
         <p class="text-xl font-sans leading-relaxed">
           <strong>Guild of Guardians is a squad RPG</strong> game where users create teams of 5 heroes to duke it out against monsters, enemies, and other players. In the first 7 to 10 days, the users are expected to play the Adventure mode where they explore the story, learn about the characters, and fight some easy monsters to learn about the game.
         </p>
@@ -178,11 +176,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── DATA DEEP DIVE ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">The Data</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">The Data</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Being a live product, looking at data is always my first step. <strong>D7 retention is an indicator of how much the game has captured the players attention when they are not playing to bring them back and form habits.</strong> I was clear from the start — we are optimising for D7 retention and not D1 retention.
         </p>
@@ -243,11 +239,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── SURVEY INSIGHTS ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Survey Research</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Survey Research</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           To make certain that I was chasing the correct lead, I ran a survey to understand the user stories behind the data.
         </p>
@@ -293,11 +287,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── AFK REWARDS DESIGN ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">AFK Rewards Design</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">AFK Rewards Design</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           <strong>In the original flow, users had to come back to take an action and be rewarded.</strong> This did not generate any anticipation or excitement at the end of your previous session.
         </p>
@@ -366,11 +358,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── EXIT SCREEN ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Exit Screen &amp; Anticipation</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Exit Flow &amp; Anticipation</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           To close off the new game loop, I <strong>added a quit screen</strong> that set goals and anticipation to encourage the user to come back.
         </p>
@@ -384,11 +374,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Recommendation System</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Recommendation System</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           I found through analysing further data that <strong>users would get stuck at specific dungeons and quit the game after trying a few more times</strong>. This was a highly correlated factor to low D7 retention.
         </p>
@@ -421,11 +409,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── VISUAL PROGRESSION ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Visual Progression &amp; Goal Setting</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Goals &amp; Progression</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Players quit after losing because whenever they lost in a dungeon, they had to begin from the start. I collaborated directly with the game designer to add a new <strong>checkpoint dungeon progression system</strong>.
         </p>
@@ -447,11 +433,9 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Moments of Delight &amp; Monetisation</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Delight &amp; Monetisation</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           I added an explicit scripted moment to get the first legendary hero after defeating the first boss — <strong>a moment of delight to feel celebratory and achieved</strong>. This decision was not informed by pre-prepared data, so <strong>we A/B tested this implementation.</strong>
         </p>

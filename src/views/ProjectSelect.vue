@@ -729,12 +729,26 @@ function onDone() {
   overflow: visible;
 }
 
+/**
+ * TOC + in-panel scroll targeting use `closest('.dl-embedded')` as `scrollRootEl`.
+ * `PanelChiselBackground` defaults to scrolling `.panel-chisel-bg__content`, which bypasses that —
+ * observers + `scrollTo` on `.dl-embedded` looked broken. Clamp the inner chrome and scroll here.
+ */
+.dl-detail__surface :deep(.panel-chisel-bg__content) {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  min-height: 0;
+}
+
 .dl-embedded {
   position: relative;
-  flex: 1 1 auto;
+  /* `0%` flex-basis + `min-height: 0` is the reliable flex scrollport pattern */
+  flex: 1 1 0%;
   min-height: 0;
   width: 100%;
-  overflow: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
   padding: clamp(12px, 1.8vw, 20px) clamp(8px, 1.2vw, 16px) 48px;
   z-index: 1;
   box-sizing: border-box;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import TocProceduralRow from './TocProceduralRow.vue'
 
 interface TocItem {
@@ -10,9 +11,46 @@ interface TocItem {
 const items = ref<TocItem[]>([])
 const activeId = ref<string>('')
 const tocRootRef = ref<HTMLElement | null>(null)
+const activeRowRef = ref<HTMLElement | null>(null)
+
+/** Sidebar column is narrow; keep labels scannable and match canvas mask width. */
+const TOC_LABEL_MAX_CHARS = 44
+
+const STOPWORDS = new Set([
+  'a', 'an', 'and', 'as', 'at', 'by', 'for', 'from', 'in', 'into', 'is', 'of', 'on', 'or', 'over',
+  'the', 'to', 'up', 'via', 'with', 'without',
+])
+
+function toTwoWords(raw: string): string {
+  const s = raw.replace(/\s+/g, ' ').trim()
+  if (!s)
+    return ''
+
+  // Split on spaces, strip punctuation edges, keep alphanumerics + dashes.
+  const parts = s
+    .split(' ')
+    .map(w => w.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, ''))
+    .filter(Boolean)
+
+  const keep = parts
+    .filter(w => !STOPWORDS.has(w.toLowerCase()))
+
+  const words = (keep.length >= 2 ? keep : parts).slice(0, 2)
+  return words.join(' ')
+}
 
 let observer: IntersectionObserver | null = null
 let scrollRootEl: HTMLElement | null = null
+
+function formatTocLabel(raw: string): string {
+  const s = raw.replace(/\s+/g, ' ').trim()
+  const short = toTwoWords(s)
+  if (short)
+    return short
+  if (s.length <= TOC_LABEL_MAX_CHARS)
+    return s
+  return `${s.slice(0, TOC_LABEL_MAX_CHARS - 1).trimEnd()}…`
+}
 
 function slugifyHeading(text: string, index: number) {
   const s = text
@@ -51,7 +89,7 @@ function collectHeadings() {
     return
   }
 
-  const headings = Array.from(caseRoot.querySelectorAll('section h2')) as HTMLElement[]
+  const headings = Array.from(caseRoot.querySelectorAll('section h2, section h3')) as HTMLElement[]
   if (headings.length === 0) {
     return
   }
@@ -65,13 +103,17 @@ function collectHeadings() {
 
   const usedSectionIds = new Set<string>()
   headings.forEach((heading, index) => {
-    const text = heading.textContent?.trim()
-    if (!text)
+    const override = heading.dataset.tocLabel?.trim()
+    const textRaw = heading.textContent?.trim().replace(/\s+/g, ' ') || ''
+    const displaySource = (override || textRaw).trim()
+    if (!displaySource)
       return
 
-    const sec = heading.closest('section') as HTMLElement | null
-    const slug = slugifyHeading(text, index)
+    /** Slug IDs follow the on-page heading copy, not the shortened TOC label. */
+    const slug = slugifyHeading(textRaw || override || displaySource, index)
+    const text = formatTocLabel(displaySource)
 
+    const sec = heading.closest('section') as HTMLElement | null
     let scrollId: string
     if (sec) {
       if (!sec.id) {
@@ -134,6 +176,25 @@ function collectHeadings() {
   })
 }
 
+function scrollTocToActive() {
+  const el = activeRowRef.value
+  if (!el)
+    return
+  el.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
+}
+
+function setActiveRowRef(id: string) {
+  return (el: Element | ComponentPublicInstance | null) => {
+    if (activeId.value === id)
+      activeRowRef.value = (el as HTMLElement) ?? null
+  }
+}
+
+watch(activeId, async () => {
+  await nextTick()
+  scrollTocToActive()
+})
+
 onMounted(async () => {
   await nextTick()
   await nextTick()
@@ -182,12 +243,16 @@ function scrollTo(id: string) {
     <div class="toc-list-wrap">
       <ul class="toc-list" role="list">
         <li v-for="item in items" :key="item.id" class="toc-item">
-          <TocProceduralRow
+          <div
+            :ref="setActiveRowRef(item.id)"
+            class="toc-item__row"
+          >
+            <TocProceduralRow
             :label="item.text"
             :active="activeId === item.id"
-            :accent-root="tocRootRef"
             @pick="scrollTo(item.id)"
-          />
+            />
+          </div>
         </li>
       </ul>
     </div>
@@ -238,5 +303,10 @@ function scrollTo(id: string) {
 
 .toc-item {
   margin: 0;
+  overflow: visible;
+}
+
+.toc-item__row {
+  overflow: visible;
 }
 </style>

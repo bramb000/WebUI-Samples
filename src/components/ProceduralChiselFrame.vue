@@ -1,28 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { bakeChiselRimImage, CARD_BLEED_PX } from '../vfx/chiselRimBake'
-
-/** Resolves `var(--token)` / `color-mix(...)` etc. for the static WebGL rim bake (needs a concrete hex). */
-function resolveColorPropToHex(el: HTMLElement, cssColor: string): string {
-  const t = cssColor.trim()
-  if (/^#[0-9a-fA-F]{6}$/.test(t) || /^#[0-9a-fA-F]{3}$/.test(t)) return t
-  const probe = document.createElement('span')
-  probe.style.cssText = `position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;pointer-events:none;color:${cssColor}`
-  el.appendChild(probe)
-  const rgb = getComputedStyle(probe).color
-  el.removeChild(probe)
-  const m = rgb.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/)
-  if (!m) return '#4ade80'
-  const r = Math.round(Number(m[1]))
-  const g = Math.round(Number(m[2]))
-  const b = Math.round(Number(m[3]))
-  return (
-    '#' +
-    [r, g, b]
-      .map((x) => x.toString(16).padStart(2, '0'))
-      .join('')
-  )
-}
+import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
 const props = withDefaults(
   defineProps<{
@@ -64,7 +43,7 @@ async function rebakeRim() {
   if (!el) return
   const r = el.getBoundingClientRect()
   if (r.width < 2 || r.height < 2) return
-  const hex = resolveColorPropToHex(el, props.color)
+  const hex = resolveCssColorToHex(el, props.color, '#4ade80')
   const url = bakeChiselRimImage({
     widthCss: r.width,
     heightCss: r.height,

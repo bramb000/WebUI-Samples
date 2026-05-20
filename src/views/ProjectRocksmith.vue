@@ -114,11 +114,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── CONTEXT ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Context</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Context</h2>
+      <div class="space-y-8">
         <p class="text-xl font-sans leading-relaxed">
           I joined the team in 2020 when Rocksmith+ was in pre-launch production and <strong>Ubisoft wanted a global release on mobile, PC, and next-gen game consoles</strong> (PlayStation 5 and Xbox Series X). Very few people on the UX team had prior experience building mobile user experiences and responsive UIs and interactions for multiple platforms.
         </p>
@@ -132,11 +130,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── RESEARCH ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Research</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Research</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           The first piece of work started with extensive user testing. I requested internal and external volunteers to play a crude, ported version of the PC game on iPad without any scaling and no interactions except simple taps. <strong>My first few initial tests were to discover how people set up a portable device compared to playing on a PC or a TV</strong> to understand the context and environment in which Rocksmith+ would be experienced.
         </p>
@@ -216,11 +212,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Responsive UI</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Responsive UI</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           I first began with working on a core responsive UI that would offer the base experience on all devices. It involved not only designing and validating layouts in Figma, but also working closely with UI engineers to build appropriate tools:
         </p>
@@ -266,11 +260,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── ACCESSIBILITY ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Accessibility &amp; UI Scaling</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Accessibility &amp; UI Scaling</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Accessibility was a core tenet of the experience. <strong>One of the first accessibility features we developed was allowing users to modify the scale of their UI</strong> to fine tune their mobile and tablet experience based on how far they kept their device. The distance between user and device changed heavily based on skill level, instrument type, and physical setup.
         </p>
@@ -290,11 +282,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── UNIFIED INPUT ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Unified Input System</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Unified Input System</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Since one subscription of Rocksmith+ gave access on every platform, we expected users to use the app on multiple platforms — think Netflix. <strong>We needed consistent outcomes from the same input on different platforms.</strong>
         </p>
@@ -339,11 +329,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── COMPONENT ADAPTATIONS ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Platform-Specific Component Adaptations</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Platform UI Adaptations</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           <strong>The original Rocksmith+ experience was built with only PC in mind</strong>, so many components had to undergo changes to be intuitive for mobile and console UI interactions. For example, on PC you scroll through a carousel by clicking arrows. On touch devices, you simply swipe.
         </p>
@@ -362,11 +350,9 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── CONSOLE NAVIGATION ─── -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-12 border-t pt-16" style="border-color:var(--color-border)">
-      <div class="md:col-span-4">
-        <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider sticky top-24" style="border-left:3px solid var(--color-accent);padding-left:10px">Console Navigation Challenge</h2>
-      </div>
-      <div class="md:col-span-8 space-y-8">
+    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+      <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Console Navigation Challenge</h2>
+      <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
           Another major issue <strong>I tackled was menu navigation for consoles.</strong> The original prototypes included expanders with nested scrolls to hide secondary information. While common on desktop and mobile, on consoles this created a major issue.
         </p>
