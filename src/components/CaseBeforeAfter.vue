@@ -26,7 +26,7 @@ defineProps<{
       </div>
 
       <!-- Divider -->
-      <div class="baa-divider" aria-hidden="true"></div>
+      <div class="baa-divider case-divider case-divider--vertical" aria-hidden="true"></div>
 
       <!-- After -->
       <div class="baa-col">
@@ -59,23 +59,21 @@ defineProps<{
   position: relative;
 }
 @media (min-width: 768px) {
-  .baa-grid { grid-template-columns: 1fr 2px 1fr; align-items: start; }
+  .baa-grid { grid-template-columns: 1fr 12px 1fr; align-items: start; }
 }
 
 .baa-col { display: flex; flex-direction: column; gap: 8px; }
 .baa-label { display: flex; }
 .baa-label--after .label-segment { color: var(--color-accent); border-color: var(--color-accent); }
 
-/* Orange vertical divider */
 .baa-divider {
   display: none;
-  background: var(--color-accent);
-  box-shadow: 0 0 6px rgba(255, 87, 34, 0.35);
-  border-radius: 1px;
   align-self: stretch;
-  margin-top: 32px; /* align with image start */
+  margin-top: 32px;
 }
-@media (min-width: 768px) { .baa-divider { display: block; } }
+@media (min-width: 768px) {
+  .baa-divider { display: block; }
+}
 
 .baa-img {
   width: 100%;

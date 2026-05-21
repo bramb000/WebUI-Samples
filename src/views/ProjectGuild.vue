@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
 import VideoEmbed from '../components/VideoEmbed.vue';
@@ -57,10 +59,13 @@ import galBeforeRecs from '../assets/images/guild/tldr/006_screenshot-20250828-0
 import galAfterRecs from '../assets/images/guild/tldr/007_screenshot-20251105-150237-guild-of-guardians-thumbnail.webp';
 import galBeforeAnticipation from '../assets/images/guild/tldr/008_screenshot-20251215-083431-guild-of-guardians-thumbnail.webp';
 import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc8a-1-1-thumbnail.webp';
+
+const caseStudyRoot = ref<HTMLElement | null>(null);
+useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
-  <div class="animate-fade-in pb-24 relative">
+  <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
     <div class="xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
       <div class="xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
@@ -134,7 +139,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── ACTION: TLDR ─── -->
-    <section class="max-w-4xl mx-auto space-y-6 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="max-w-4xl mx-auto space-y-6 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide">Action</h2>
       <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest" style="color:var(--color-accent)">TLDR</h3>
       <p class="text-lg font-sans leading-relaxed">Problems analysed through a mixture of quantitative and qualitative data analysis:</p>
@@ -287,7 +292,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── AFK REWARDS DESIGN ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">AFK Rewards Design</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -358,7 +363,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── EXIT SCREEN ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Exit Flow &amp; Anticipation</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -374,7 +379,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Recommendation System</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -409,7 +414,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── VISUAL PROGRESSION ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Goals &amp; Progression</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -433,7 +438,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Delight &amp; Monetisation</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -502,7 +507,7 @@ import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="border-t pt-16" style="border-color:var(--color-border)">
+    <section class="pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
         <div class="panel-recessed p-8 space-y-4">

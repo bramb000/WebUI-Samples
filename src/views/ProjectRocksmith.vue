@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
 import VideoEmbed from '../components/VideoEmbed.vue';
@@ -55,10 +57,13 @@ import accessibilityColorblind1 from '../assets/images/rocksmith/accessibility/i
 import accessibilityColorblind2 from '../assets/images/rocksmith/accessibility/img-20251109-wa0017-3.webp';
 import accessibilityColorblind3 from '../assets/images/rocksmith/accessibility/img_0459-1.webp';
 import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/img_0460-1.webp';
+
+const caseStudyRoot = ref<HTMLElement | null>(null);
+useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
-  <div class="animate-fade-in pb-24 relative">
+  <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
     <div class="xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
       <div class="xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
@@ -130,7 +135,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── RESEARCH ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Research</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -212,7 +217,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Responsive UI</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -260,7 +265,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── ACCESSIBILITY ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Accessibility &amp; UI Scaling</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -282,7 +287,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── UNIFIED INPUT ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Unified Input System</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -329,7 +334,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── COMPONENT ADAPTATIONS ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Platform UI Adaptations</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -350,7 +355,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── CONSOLE NAVIGATION ─── -->
-    <section class="space-y-8 border-t pt-16" style="border-color:var(--color-border)">
+    <section class="space-y-8 pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Console Navigation Challenge</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -424,7 +429,7 @@ import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/i
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="border-t pt-16" style="border-color:var(--color-border)">
+    <section class="pt-16 case-divider-section">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
         <div class="panel-recessed p-8 space-y-4">

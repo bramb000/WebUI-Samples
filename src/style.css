@@ -375,22 +375,98 @@ h3, h4, h5, h6 {
   filter: none;
 }
 
-/* ── Recessed Panel — sunken obsidian cavity with brass rim ── */
+/* ── Panel — flat surface (case studies add prebaked pencil frame via `useCaseStudySketchPanels`) ── */
 .panel-recessed {
   background: var(--color-surface);
   border: var(--dl-border-width) solid var(--color-border);
   border-radius: var(--dl-border-radius);
-  box-shadow:
-    inset 0 2px 8px rgba(0, 0, 0, 0.6),
-    var(--dl-glow-global);
+  box-shadow: var(--dl-glow-global);
   position: relative;
   overflow: hidden;
 }
 
-/* Same recessed surface treatment without visible frame (case study hero / metrics, etc.) */
+/* Same panel without CSS border — hero meta, insight interiors, etc. */
 .panel-recessed--borderless {
   border: none !important;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+  box-shadow: none;
+}
+
+/**
+ * Prebaked pencil frame (`pencilFrameBake.ts`) — flat fill + hand-drawn stroke in one PNG.
+ */
+.panel-recessed.pencil-baked,
+.panel-recessed.pencil-baked.noise-overlay {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  isolation: isolate;
+  overflow: visible !important;
+}
+
+.panel-recessed.pencil-baked::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--pencil-bleed, 14px));
+  background-image: var(--pencil-frame-image);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.panel-recessed.pencil-baked > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Case study section dividers — same pencil bake as panels (`useCaseStudySketchPanels`) */
+.case-divider-section {
+  border-top: none !important;
+}
+
+.case-divider {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.case-divider--vertical {
+  width: 12px;
+  height: auto;
+  min-height: 80px;
+  align-self: stretch;
+}
+
+.case-divider.pencil-baked {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.case-divider.pencil-baked::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--pencil-bleed, 8px));
+  background-image: var(--pencil-frame-image);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Decorative frame on enlarged images only — excluded from procedural WebGL (see composable). */
+img.panel-recessed {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent 55%);
+  outline-offset: 0;
 }
 
 /* ── Etched Border — decorative frame for cards ── */
@@ -707,13 +783,23 @@ h3, h4, h5, h6 {
 
 /* ── Tactile Click Feedback ── */
 .btn-surface:active,
-.panel-recessed:active,
 .ui-card-container:active,
 .project-tile:active,
 .project-card:active {
   transform: translateY(3px) !important;
   box-shadow: inset 0 4px 10px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.5) !important;
   transition: transform 50ms, box-shadow 50ms !important;
+}
+
+.panel-recessed:active:not(.pencil-baked) {
+  transform: translateY(3px) !important;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.5) !important;
+  transition: transform 50ms, box-shadow 50ms !important;
+}
+
+.panel-recessed.pencil-baked:active {
+  transform: translateY(1px) !important;
+  transition: transform 50ms ease !important;
 }
 
 /* ── Sleek single-tone scrollbars (viewport + scrollable regions can reuse utilities) ── */

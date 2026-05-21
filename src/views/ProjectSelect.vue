@@ -766,6 +766,14 @@ function onDone() {
 }
 .dl-embedded--case :deep(.animate-fade-in) {
   padding-bottom: 120px;
+  /* Parchment tokens (embedded case is not under `[data-surface="paper"]`) — matches `style.css` paper surface */
+  --color-text: var(--paper-on-fill-text);
+  --color-text-muted: var(--paper-on-fill-text-muted);
+  --color-surface: var(--paper-surface-fill-deep);
+  --color-elevated: #f2ece2;
+  --color-border: var(--paper-surface-rim);
+  --color-accent: #6b5a32;
+  --color-accent-rim: #8b7347;
 }
 .dl-embedded--case :deep(.xl\:grid) {
   max-width: 100%;
@@ -787,14 +795,19 @@ function onDone() {
   flex-wrap: wrap;
   gap: 1rem;
 }
-/* Embedded case studies: keep recessed panels readable on parchment */
+/* Embedded case studies: panels pick up parchment via `.animate-fade-in` scope above */
 .dl-embedded--case :deep(.panel-recessed) {
   --color-text: var(--paper-on-fill-text);
   --color-text-muted: var(--paper-on-fill-text-muted);
+}
+
+.dl-embedded--case :deep(.panel-recessed:not(.pencil-baked)) {
   background: color-mix(in srgb, var(--paper-surface-fill-deep) 88%, #1a1814 12%);
-  box-shadow:
-    inset 0 2px 6px color-mix(in srgb, var(--paper-surface-rim) 22%, black 78%),
-    0 1px 0 color-mix(in srgb, var(--paper-surface-rim-hi) 35%, white 65%);
+}
+
+.dl-embedded--case :deep(.case-divider:not(.pencil-baked)) {
+  background: color-mix(in srgb, var(--color-accent) 72%, transparent);
+  opacity: 0.55;
 }
 
 .dl-embedded--case :deep(.hero-title),

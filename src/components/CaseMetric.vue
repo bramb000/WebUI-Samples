@@ -130,19 +130,13 @@ const paperFill = computed(
 .metric-wrap--chisel {
   border: none !important;
   background: v-bind(paperFill) !important;
-  box-shadow:
-    inset 0 3px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -2px 8px rgba(0, 0, 0, 0.45),
-    inset 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: none !important;
 }
 
 .metric-frame:hover .metric-wrap {
   clip-path: var(--card-hover-clip);
   box-shadow:
-    inset 0 3px 0 rgba(255, 255, 255, 0.06),
-    inset 0 -2px 12px rgba(0, 0, 0, 0.5),
-    inset 0 2px 8px rgba(0, 0, 0, 0.15),
-    0 12px 28px rgba(0, 0, 0, 0.45),
+    0 12px 28px rgba(0, 0, 0, 0.28),
     0 0 0 1px color-mix(in srgb, v-bind(frameAccent) 22%, transparent 78%);
 }
 
