@@ -66,9 +66,9 @@ useCaseStudySketchPanels(caseStudyRoot);
 
 <template>
   <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
-    <div class="xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
+    <div class="case-study-layout xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
-      <div class="xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
+      <div class="case-study-main xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
     <!-- ─── HERO ─── -->
     <div class="relative">
       <!-- Decorative Tinkerer Etching -->
@@ -528,8 +528,8 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
       
       <!-- ToC Sidebar Container -->
-      <div class="hidden xl:block xl:col-span-3 xl:col-start-10 relative">
-        <div class="sticky top-32 z-30">
+      <div class="toc-sidebar-column hidden xl:block xl:col-span-3 xl:col-start-10 relative">
+        <div class="toc-sidebar-sticky">
           <TableOfContents />
         </div>
       </div>

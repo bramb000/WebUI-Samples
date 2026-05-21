@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ComponentPublicInstance } from 'vue'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import TocProceduralRow from './TocProceduralRow.vue'
 
@@ -11,7 +10,14 @@ interface TocItem {
 const items = ref<TocItem[]>([])
 const activeId = ref<string>('')
 const tocRootRef = ref<HTMLElement | null>(null)
-const activeRowRef = ref<HTMLElement | null>(null)
+const tocLayoutStyle = ref<Record<string, string>>({})
+
+let layoutScrollRoot: HTMLElement | null = null
+let layoutObserver: ResizeObserver | null = null
+
+/** Matches `.toc-sidebar-sticky` top in `style.css` / embedded case chrome */
+const TOC_STICKY_TOP_PX = 32
+const TOC_VIEWPORT_BOTTOM_INSET_PX = 16
 
 /** Sidebar column is narrow; keep labels scannable and match canvas mask width. */
 const TOC_LABEL_MAX_CHARS = 44
@@ -41,6 +47,8 @@ function toTwoWords(raw: string): string {
 
 let observer: IntersectionObserver | null = null
 let scrollRootEl: HTMLElement | null = null
+let scrollSpyPaused = false
+let scrollSpyResumeTimer = 0
 
 function formatTocLabel(raw: string): string {
   const s = raw.replace(/\s+/g, ' ').trim()
@@ -59,6 +67,123 @@ function slugifyHeading(text: string, index: number) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)+/g, '')
   return s || `section-${index}`
+}
+
+function getTocStickySlot(): HTMLElement | null {
+  return (tocRootRef.value?.closest('.toc-sidebar-sticky') as HTMLElement | null)
+    ?? tocRootRef.value?.parentElement
+    ?? null
+}
+
+function applyStickySlotHeight(panelMaxH: number) {
+  const sticky = getTocStickySlot()
+  if (!sticky)
+    return
+  const h = `${Math.round(panelMaxH)}px`
+  sticky.style.display = 'flex'
+  sticky.style.flexDirection = 'column'
+  sticky.style.justifyContent = 'center'
+  sticky.style.alignItems = 'stretch'
+  sticky.style.boxSizing = 'border-box'
+  sticky.style.height = h
+  sticky.style.minHeight = h
+  sticky.style.maxHeight = h
+}
+
+function clearStickySlot() {
+  const sticky = getTocStickySlot()
+  if (!sticky)
+    return
+  sticky.style.removeProperty('display')
+  sticky.style.removeProperty('flex-direction')
+  sticky.style.removeProperty('justify-content')
+  sticky.style.removeProperty('align-items')
+  sticky.style.removeProperty('height')
+  sticky.style.removeProperty('min-height')
+  sticky.style.removeProperty('max-height')
+  sticky.style.removeProperty('box-sizing')
+}
+
+function applyTocLayoutVars(opts: {
+  panelPad: number
+  headerGap: number
+  gap: number
+  rowMin: number
+  padBlock: number
+  compact: boolean
+}) {
+  tocLayoutStyle.value = {
+    '--toc-panel-pad': `${opts.panelPad}px`,
+    '--toc-header-gap': `${opts.headerGap}px`,
+    '--toc-item-gap': `${Math.max(2, Math.round(opts.gap * 10) / 10)}px`,
+    '--toc-row-min-height': `${Math.round(opts.rowMin)}px`,
+    '--toc-row-pad-block': `${opts.padBlock}px`,
+    '--toc-row-font-size': opts.rowMin < 20 ? '9px' : opts.compact ? '10px' : '11px',
+    '--toc-row-line-height': opts.compact ? '1.18' : '1.3',
+    '--toc-row-pad-inline-start': opts.compact ? '22px' : '28px',
+  }
+}
+
+/** Fit TOC in parchment scrollport; measure DOM and shrink until nothing is clipped. */
+async function layoutTocFit(attempt = 0) {
+  const toc = tocRootRef.value
+  if (!toc || items.value.length === 0)
+    return
+
+  const scrollRoot = toc.closest('.dl-embedded') as HTMLElement | null
+  if (!scrollRoot)
+    return
+
+  if (scrollRoot.clientHeight < 80) {
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+    if (scrollRoot.clientHeight < 80 && attempt < 6)
+      return layoutTocFit(attempt)
+  }
+
+  const panelPad = 18
+  const headerGap = 8
+  const panelMaxH = Math.max(
+    120,
+    scrollRoot.clientHeight - TOC_STICKY_TOP_PX - TOC_VIEWPORT_BOTTOM_INSET_PX,
+  )
+  const maxInnerH = panelMaxH - panelPad * 2
+
+  const shrink = Math.pow(0.94, attempt)
+  const gap = Math.max(2, 6 * shrink)
+  const rowMin = Math.max(16, 28 * shrink)
+  const padBlock = Math.max(2, Math.min(5, Math.floor((rowMin - 10) / 2)))
+  const compact = rowMin < 25
+
+  applyStickySlotHeight(panelMaxH)
+  applyTocLayoutVars({
+    panelPad,
+    headerGap,
+    gap,
+    rowMin,
+    padBlock,
+    compact,
+  })
+
+  await nextTick()
+  await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+
+  const inner = toc.querySelector('.toc-panel__inner') as HTMLElement | null
+  if (!inner)
+    return
+
+  const actualInnerH = inner.getBoundingClientRect().height
+  if (actualInnerH > maxInnerH + 1 && attempt < 24)
+    return layoutTocFit(attempt + 1)
+}
+
+function bindTocLayoutObserver() {
+  layoutObserver?.disconnect()
+  layoutScrollRoot = tocRootRef.value?.closest('.dl-embedded') as HTMLElement | null
+  if (!layoutScrollRoot)
+    return
+  layoutObserver = new ResizeObserver(() => { void layoutTocFit() })
+  layoutObserver.observe(layoutScrollRoot)
+  void layoutTocFit()
 }
 
 function getScrollParent(el: HTMLElement | null): HTMLElement | Window {
@@ -89,7 +214,8 @@ function collectHeadings() {
     return
   }
 
-  const headings = Array.from(caseRoot.querySelectorAll('section h2, section h3')) as HTMLElement[]
+  /** Primary case-study sections only (h2) — exclude h3 subsections e.g. TLDR under Action. */
+  const headings = Array.from(caseRoot.querySelectorAll('section > h2')) as HTMLElement[]
   if (headings.length === 0) {
     return
   }
@@ -159,6 +285,8 @@ function collectHeadings() {
 
   observer = new IntersectionObserver(
     (entries) => {
+      if (scrollSpyPaused)
+        return
       const visibleEntries = entries.filter(entry => entry.isIntersecting)
       if (visibleEntries.length > 0) {
         visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio)
@@ -174,26 +302,64 @@ function collectHeadings() {
     if (el)
       observer!.observe(el)
   })
+
+  const firstId = items.value[0]?.id
+  if (firstId)
+    activeId.value = firstId
+
+  nextTick(() => {
+    void layoutTocFit()
+    bindTocLayoutObserver()
+    window.setTimeout(() => void layoutTocFit(), 350)
+    syncActiveFromScroll()
+  })
 }
 
-function scrollTocToActive() {
-  const el = activeRowRef.value
-  if (!el)
+/** Pick the section most visible in the scrollport (initial highlight + after spy resume). */
+function syncActiveFromScroll() {
+  if (!scrollRootEl || items.value.length === 0)
     return
-  el.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' })
-}
 
-function setActiveRowRef(id: string) {
-  return (el: Element | ComponentPublicInstance | null) => {
-    if (activeId.value === id)
-      activeRowRef.value = (el as HTMLElement) ?? null
+  const rootRect = scrollRootEl.getBoundingClientRect()
+  const bandTop = rootRect.top + rootRect.height * 0.12
+  const bandBottom = rootRect.bottom - rootRect.height * 0.45
+
+  let bestId = items.value[0]!.id
+  let bestScore = -1
+
+  for (const item of items.value) {
+    const el = document.getElementById(item.id)
+    if (!el)
+      continue
+    const r = el.getBoundingClientRect()
+    const visibleTop = Math.max(r.top, bandTop)
+    const visibleBottom = Math.min(r.bottom, bandBottom)
+    const visible = Math.max(0, visibleBottom - visibleTop)
+    if (visible > bestScore) {
+      bestScore = visible
+      bestId = item.id
+    }
   }
+
+  if (bestScore > 0)
+    activeId.value = bestId
 }
 
-watch(activeId, async () => {
-  await nextTick()
-  scrollTocToActive()
-})
+watch(
+  () => items.value.length,
+  () => { void layoutTocFit() },
+)
+
+function pauseScrollSpy(ms = 720) {
+  scrollSpyPaused = true
+  if (scrollSpyResumeTimer)
+    window.clearTimeout(scrollSpyResumeTimer)
+  scrollSpyResumeTimer = window.setTimeout(() => {
+    scrollSpyResumeTimer = 0
+    scrollSpyPaused = false
+    syncActiveFromScroll()
+  }, ms)
+}
 
 onMounted(async () => {
   await nextTick()
@@ -202,10 +368,19 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  if (scrollSpyResumeTimer) {
+    window.clearTimeout(scrollSpyResumeTimer)
+    scrollSpyResumeTimer = 0
+  }
+  scrollSpyPaused = false
   if (observer) {
     observer.disconnect()
     observer = null
   }
+  layoutObserver?.disconnect()
+  layoutObserver = null
+  layoutScrollRoot = null
+  clearStickySlot()
 })
 
 function scrollTo(id: string) {
@@ -214,6 +389,7 @@ function scrollTo(id: string) {
     return
 
   activeId.value = id
+  pauseScrollSpy()
 
   const scroller = scrollRootEl ?? getScrollParent(el)
   const offset = 96
@@ -228,34 +404,44 @@ function scrollTo(id: string) {
     const rootRect = s.getBoundingClientRect()
     const y = elRect.top - rootRect.top + s.scrollTop - offset
     s.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+    const onScrollEnd = () => {
+      s.removeEventListener('scrollend', onScrollEnd)
+      scrollSpyPaused = false
+      if (scrollSpyResumeTimer) {
+        window.clearTimeout(scrollSpyResumeTimer)
+        scrollSpyResumeTimer = 0
+      }
+      syncActiveFromScroll()
+    }
+    if ('onscrollend' in s) {
+      s.addEventListener('scrollend', onScrollEnd, { once: true })
+    }
   }
 }
 </script>
 
 <template>
-  <nav ref="tocRootRef" class="toc-panel">
-    <div class="toc-header">
-      <h4 class="toc-title">
-        Contents
-      </h4>
-      <span class="case-text-divider" aria-hidden="true" />
-    </div>
+  <nav ref="tocRootRef" class="toc-panel" :style="tocLayoutStyle">
+    <div class="toc-panel__inner">
+      <div class="toc-header">
+        <h4 class="toc-title">
+          Contents
+        </h4>
+      </div>
 
-    <div class="toc-list-wrap">
-      <ul class="toc-list" role="list">
-        <li v-for="item in items" :key="item.id" class="toc-item">
-          <div
-            :ref="setActiveRowRef(item.id)"
-            class="toc-item__row"
-          >
-            <TocProceduralRow
-            :label="item.text"
-            :active="activeId === item.id"
-            @pick="scrollTo(item.id)"
-            />
-          </div>
-        </li>
-      </ul>
+      <div class="toc-list-wrap">
+        <ul class="toc-list" role="list">
+          <li v-for="item in items" :key="item.id" class="toc-item">
+            <div class="toc-item__row">
+              <TocProceduralRow
+                :label="item.text"
+                :active="activeId === item.id"
+                @pick="scrollTo(item.id)"
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 </template>
@@ -263,21 +449,36 @@ function scrollTo(id: string) {
 <style scoped>
 .toc-panel {
   width: 100%;
-  padding: 16px;
+  height: auto;
+  padding: var(--toc-panel-pad, 18px) 12px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-sizing: border-box;
   background: transparent;
   border: none;
   box-shadow: none;
+  overflow: visible;
+}
+
+.toc-panel__inner {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 100%;
+  overflow: visible;
 }
 
 .toc-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  gap: 4px;
   width: fit-content;
   max-width: 100%;
-  margin-bottom: 8px;
+  flex-shrink: 0;
+  margin-bottom: var(--toc-header-gap, 10px);
   padding-bottom: 0;
   border-bottom: none;
 }
@@ -294,6 +495,8 @@ function scrollTo(id: string) {
 
 .toc-list-wrap {
   position: relative;
+  flex: 0 0 auto;
+  overflow: visible;
 }
 
 .toc-list {
@@ -302,12 +505,13 @@ function scrollTo(id: string) {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--toc-item-gap, 6px);
 }
 
 .toc-item {
   margin: 0;
   overflow: visible;
+  flex: 0 0 auto;
 }
 
 .toc-item__row {

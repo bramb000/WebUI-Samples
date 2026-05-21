@@ -775,15 +775,16 @@ function onDone() {
   --color-accent: #6b5a32;
   --color-accent-rim: #8b7347;
 }
-.dl-embedded--case :deep(.xl\:grid) {
+.dl-embedded--case :deep(.case-study-layout) {
   max-width: 100%;
 }
-.dl-embedded--case :deep(.xl\:grid.xl\:grid-cols-12) {
-  padding-left: clamp(16px, 2.5vw, 36px);
-  padding-right: clamp(16px, 2.5vw, 36px);
+.dl-embedded--case :deep(.toc-sidebar-column) {
+  overflow: visible;
 }
-.dl-embedded--case :deep(.xl\:grid.xl\:grid-cols-12 .sticky) {
+
+.dl-embedded--case :deep(.toc-sidebar-sticky) {
   top: clamp(20px, 2.5vw, 32px);
+  overflow: visible;
 }
 .dl-embedded:not(.dl-embedded--case) :deep(.max-w-4xl) {
   max-width: 100%;

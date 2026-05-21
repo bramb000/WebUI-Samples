@@ -6,6 +6,9 @@ import * as THREE from 'three'
 
 export type PencilBakeVariant = 'frame' | 'hline' | 'vline'
 
+/** Frame stroke outline — rectangle (panels) or ellipse (TOC highlight). */
+export type PencilFrameShape = 'rect' | 'ellipse'
+
 export type PencilFrameBakeOptions = {
   widthCss: number
   heightCss: number
@@ -16,6 +19,8 @@ export type PencilFrameBakeOptions = {
   variant?: PencilBakeVariant
   /** Frame variant only: omit interior fill (stroke-only ring). */
   strokeOnly?: boolean
+  /** Frame variant only. Default `rect`. */
+  frameShape?: PencilFrameShape
 }
 
 export const PENCIL_FRAME_BLEED_PX = 14
@@ -40,6 +45,7 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
   uniform float u_strokeNorm;
   uniform float u_bakeMode;
   uniform float u_strokeOnly;
+  uniform float u_frameEllipse;
   uniform vec3 u_seed;
 
   const float PI = 3.14159265;
@@ -147,6 +153,58 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
     return vec2(alpha, lum);
   }
 
+  /** Elliptical ring (TOC) — wobbly outline + variable pressure, not a perfect curve. */
+  vec2 ellipseStroke(vec2 p) {
+    vec2 radii = max(u_innerHalf, vec2(1e-4));
+    radii.x *= 1.0 + (hash11(u_seed.x + 2.0) - 0.5) * 0.068;
+    radii.y *= 1.0 + (hash11(u_seed.y + 5.0) - 0.5) * 0.068;
+
+    float theta = atan(p.y, p.x);
+    vec2 tangent = vec2(-sin(theta), cos(theta));
+
+    float tangW = (vnoise(vec2(theta * 1.55 + u_seed.x, 0.6)) - 0.5) * u_strokeNorm * 4.2;
+    vec2 pw = p + tangent * tangW;
+
+    float wobble = 1.0
+      + (vnoise(vec2(theta * 0.82 + u_seed.x, 0.25)) - 0.5) * 0.092
+      + (vnoise(vec2(theta * 3.05 + u_seed.y, 1.15)) - 0.5) * 0.038
+      + (vnoise(vec2(theta * 7.6 + u_seed.z, 2.4)) - 0.5) * 0.015;
+
+    float ell = length(pw / radii) / max(wobble, 0.82);
+    float d = ell - 1.0;
+
+    float pressure = sin(theta * 2.0 + u_seed.x * 0.85) * 0.5 + 0.5;
+    pressure *= sin(theta * 3.0 + u_seed.y * 1.35 + 0.4) * 0.5 + 0.5;
+    pressure = pow(max(pressure, 0.0), 0.46);
+    pressure *= mix(0.75, 1.2, vnoise(vec2(theta * 2.15 / 6.283 + u_seed.z, 3.2)));
+    float halfW = u_strokeNorm * mix(0.22, 1.1, pressure);
+
+    float normDist = abs(d) / max(halfW, 1e-5);
+    float rim = abs(d) - halfW;
+    float aa = max(fwidth(rim), 1e-5);
+    float strokeMask = 1.0 - smoothstep(0.0, aa * 1.1, rim);
+
+    if (strokeMask < 0.002)
+      return vec2(0.0);
+
+    vec2 grainUv = vec2(theta * 0.48 / u_strokeNorm, normDist * 3.1);
+    float graphite = pencilGrain(grainUv);
+    float speck = vnoise(grainUv * vec2(210.0, 88.0) + u_seed.zx);
+    float edgeMask = smoothstep(0.35, 1.0, normDist) * strokeMask;
+
+    float edgeRoughIn = min(0.0, (pencilGrain(vec2(theta * 0.38, normDist * 2.1)) - 0.5) * aa * 1.55);
+    float cov = (1.0 - smoothstep(0.0, aa * 1.1, rim + edgeRoughIn)) * strokeMask;
+
+    float densityInner = mix(0.82, 1.0, graphite);
+    densityInner *= mix(1.0, mix(0.55, 1.0, speck), edgeMask * 0.85);
+    densityInner *= mix(0.9, 1.0, vnoise(vec2(theta * 8.0, normDist * 11.0) + u_seed.xy));
+    float alpha = cov * mix(1.0, densityInner, strokeMask);
+
+    float lumInner = mix(0.86, 1.02, graphite) * mix(1.0, 0.78, speck * edgeMask * 0.5);
+    float lum = mix(1.0, lumInner, strokeMask);
+    return vec2(alpha, lum);
+  }
+
   void main() {
     vec2 local = gl_FragCoord.xy - u_vpOrigin;
     vec2 uvFrag = local / u_resolution.xy;
@@ -178,10 +236,14 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
     float strokeLum = 1.0;
 
     if (u_bakeMode < 0.5) {
-      stroke = taperedSegment(q, c0, c1);
-      stroke = pickStroke(stroke, taperedSegment(q, c1, c2));
-      stroke = pickStroke(stroke, taperedSegment(q, c2, c3));
-      stroke = pickStroke(stroke, taperedSegment(q, c3, c0));
+      if (u_frameEllipse > 0.5) {
+        stroke = ellipseStroke(q);
+      } else {
+        stroke = taperedSegment(q, c0, c1);
+        stroke = pickStroke(stroke, taperedSegment(q, c1, c2));
+        stroke = pickStroke(stroke, taperedSegment(q, c2, c3));
+        stroke = pickStroke(stroke, taperedSegment(q, c3, c0));
+      }
       strokeA = min(stroke.x, 1.0);
       strokeLum = stroke.y;
     } else {
@@ -222,7 +284,7 @@ const vertexShader = /* glsl */ `void main() {
   gl_Position = vec4(position, 1.0);
 }`
 
-const SHADER_REV = 5
+const SHADER_REV = 9
 
 let bakeRenderer: THREE.WebGLRenderer | null = null
 let bakeScene: THREE.Scene | null = null
@@ -275,6 +337,7 @@ function ensurePencilBakeGl(): boolean {
       u_strokeNorm: { value: 0.032 },
       u_bakeMode: { value: 0 },
       u_strokeOnly: { value: 0 },
+      u_frameEllipse: { value: 0 },
       u_seed: { value: new THREE.Vector3(1, 2, 3) },
     },
     vertexShader,
@@ -357,6 +420,8 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
   )
   bakeMaterial.uniforms.u_bakeMode.value = BAKE_MODE[variant]
   bakeMaterial.uniforms.u_strokeOnly.value = opts.strokeOnly && variant === 'frame' ? 1 : 0
+  bakeMaterial.uniforms.u_frameEllipse.value =
+    variant === 'frame' && opts.frameShape === 'ellipse' ? 1 : 0
 
   const aspect = vw / Math.max(vh, 1)
   const uvx = (cardL + cardW * 0.5) / wE

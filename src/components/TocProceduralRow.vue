@@ -17,6 +17,7 @@ const TOC_RING_BLEED_PX = 10
 
 const rowRef = ref<HTMLElement | null>(null)
 const ringImage = ref<string | null>(null)
+const ringDrawKey = ref(0)
 
 let resizeObserver: ResizeObserver | null = null
 let rebakeTimer = 0
@@ -36,10 +37,11 @@ function rebakeRing(attempt = 0) {
   const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#6b5a32')
   const url = bakePencilFrameImage({
     widthCss: r.width + TOC_RING_PAD_PX * 2,
-    heightCss: r.height + TOC_RING_PAD_PX * 2,
+    heightCss: r.height + TOC_RING_PAD_PX * 2 + 6,
     strokeColorHex: stroke,
     fillColorHex: '#000000',
     variant: 'frame',
+    frameShape: 'ellipse',
     strokeOnly: true,
     bleedPx: TOC_RING_BLEED_PX,
   })
@@ -51,6 +53,7 @@ function rebakeRing(attempt = 0) {
   }
 
   ringImage.value = url
+  ringDrawKey.value += 1
 }
 
 function scheduleRebake() {
@@ -119,6 +122,7 @@ function onKeydown(e: KeyboardEvent) {
   >
     <span
       v-if="active && ringImage"
+      :key="ringDrawKey"
       class="toc-pencil-ring toc-pencil-ring--draw"
       aria-hidden="true"
       :style="{
@@ -143,14 +147,14 @@ function onKeydown(e: KeyboardEvent) {
   width: 100%;
   box-sizing: border-box;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--toc-row-font-size, 11px);
   font-weight: 800;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  line-height: 1.42;
-  min-height: 40px;
-  padding-block: 8px;
-  padding-inline: 32px 8px;
+  line-height: var(--toc-row-line-height, 1.32);
+  min-height: var(--toc-row-min-height, 32px);
+  padding-block: var(--toc-row-pad-block, 5px);
+  padding-inline: var(--toc-row-pad-inline-start, 28px) 8px;
   border-radius: 0;
   cursor: pointer;
   background: transparent;
@@ -209,6 +213,22 @@ function onKeydown(e: KeyboardEvent) {
 
 .toc-proc-row--active .toc-proc-row__label {
   color: var(--color-text);
+}
+
+/* Visible while ring bakes / if WebGL bake fails */
+.toc-proc-row--active::after {
+  content: '';
+  position: absolute;
+  inset: 2px 4px;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--color-accent) 72%, transparent);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.toc-proc-row--active:has(.toc-pencil-ring)::after {
+  opacity: 0;
 }
 
 .toc-proc-row:hover .toc-proc-row__label {

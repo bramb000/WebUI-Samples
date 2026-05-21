@@ -192,12 +192,6 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       next.set(divider, { kind: 'text-divider-h', observe: heading })
     }
 
-    const tocHeader = root.querySelector<HTMLElement>('.toc-header')
-    if (tocHeader) {
-      const divider = ensureTextDivider(tocHeader)
-      next.set(divider, { kind: 'text-divider-h', observe: tocHeader })
-    }
-
     for (const divider of root.querySelectorAll<HTMLElement>('.case-divider--vertical')) {
       next.set(divider, { kind: 'divider-v' })
     }

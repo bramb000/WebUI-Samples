@@ -461,6 +461,55 @@ h3, h4, h5, h6 {
   z-index: 0;
 }
 
+/**
+ * Embedded case studies: fit grid inside `.dl-embedded` (overflow-x hidden).
+ * Without this, `max-w-7xl` wider than the scrollport clips to a TOC sliver on the right.
+ */
+.dl-embedded--case .case-study-layout {
+  display: grid !important;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  padding-inline: clamp(8px, 1.4vw, 18px);
+  box-sizing: border-box;
+  /* Beat Tailwind `xl:grid-cols-12` — embedded scrollport is narrower than `max-w-7xl` */
+  grid-template-columns: minmax(0, 1fr) clamp(9.75rem, 27%, 14.5rem) !important;
+  gap: clamp(10px, 1.8vw, 22px);
+  align-items: start;
+}
+
+.dl-embedded--case .case-study-main {
+  grid-column: 1 !important;
+  min-width: 0;
+}
+
+/* Case study TOC — vertically centred inside parchment scrollport when sticky */
+.dl-embedded--case .toc-sidebar-column {
+  /* Override `hidden xl:block` — TOC must stay visible in the narrow embedded scrollport */
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  grid-column: 2 !important;
+  grid-row: 1;
+  min-width: 0;
+  overflow: visible;
+}
+
+.dl-embedded--case .toc-sidebar-sticky {
+  position: sticky;
+  top: clamp(20px, 2.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+  flex-shrink: 0;
+  z-index: 30;
+}
+
 /* Before/after column separator (vertical pencil stroke) */
 .case-divider--vertical {
   position: relative;
