@@ -420,35 +420,64 @@ h3, h4, h5, h6 {
   z-index: 1;
 }
 
-/* Case study section dividers — same pencil bake as panels (`useCaseStudySketchPanels`) */
-.case-divider-section {
-  border-top: none !important;
+/* Case study text dividers — pencil line under headings & TOC labels */
+.case-heading--has-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
 }
 
-.case-divider {
+.case-heading__text {
+  display: block;
+}
+
+.case-text-divider {
   position: relative;
+  display: block;
   width: 100%;
-  height: 12px;
+  height: 10px;
+  min-width: 28px;
   flex-shrink: 0;
-  border: none;
-  background: transparent;
   overflow: visible;
   isolation: isolate;
 }
 
+.case-text-divider.pencil-baked {
+  background: transparent !important;
+}
+
+.case-text-divider.pencil-baked::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--pencil-bleed, 8px));
+  background-image: var(--pencil-frame-image);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Before/after column separator (vertical pencil stroke) */
 .case-divider--vertical {
+  position: relative;
   width: 12px;
   height: auto;
   min-height: 80px;
   align-self: stretch;
+  overflow: visible;
+  isolation: isolate;
 }
 
-.case-divider.pencil-baked {
+.case-divider--vertical.pencil-baked {
   background: transparent !important;
   box-shadow: none !important;
 }
 
-.case-divider.pencil-baked::before {
+.case-divider--vertical.pencil-baked::before {
   content: '';
   position: absolute;
   inset: calc(-1 * var(--pencil-bleed, 8px));

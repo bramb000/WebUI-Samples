@@ -26,7 +26,7 @@ defineProps<{
       </div>
 
       <!-- Divider -->
-      <div class="baa-divider case-divider case-divider--vertical" aria-hidden="true"></div>
+      <div class="baa-divider case-divider--vertical" aria-hidden="true"></div>
 
       <!-- After -->
       <div class="baa-col">

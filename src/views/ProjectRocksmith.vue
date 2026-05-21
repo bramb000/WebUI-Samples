@@ -135,7 +135,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RESEARCH ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Research</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -217,7 +217,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Responsive UI</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -265,7 +265,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── ACCESSIBILITY ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Accessibility &amp; UI Scaling</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -287,7 +287,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── UNIFIED INPUT ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Unified Input System</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -334,7 +334,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── COMPONENT ADAPTATIONS ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Platform UI Adaptations</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -355,7 +355,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── CONSOLE NAVIGATION ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Console Navigation Challenge</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -429,7 +429,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="pt-16 case-divider-section">
+    <section class="pt-16">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
         <div class="panel-recessed p-8 space-y-4">

@@ -8,8 +8,9 @@ import {
 import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
 const PENCIL_BAKED_CLASS = 'pencil-baked'
+const HEADING_DIVIDER_CLASS = 'case-heading--has-divider'
 
-type BoundKind = 'panel' | 'divider-h' | 'divider-v'
+type BoundKind = 'panel' | 'text-divider-h' | 'divider-v'
 
 type BoundEntry = {
   kind: BoundKind
@@ -17,6 +18,8 @@ type BoundEntry = {
   timer: number
   blobUrl: string | null
 }
+
+const CASE_HEADING_SELECTOR = 'section :is(h2, h3, h4).font-mono.font-extrabold'
 
 function shouldBindPanel(el: HTMLElement): boolean {
   if (!el.classList.contains('panel-recessed'))
@@ -28,25 +31,35 @@ function shouldBindPanel(el: HTMLElement): boolean {
   return true
 }
 
-function dividerVariant(el: HTMLElement): PencilBakeVariant | null {
-  if (!el.classList.contains('case-divider'))
-    return null
-  return el.classList.contains('case-divider--vertical') ? 'vline' : 'hline'
+function ensureTextDivider(host: HTMLElement): HTMLElement {
+  let divider = host.querySelector<HTMLElement>(':scope > .case-text-divider')
+  if (divider)
+    return divider
+
+  divider = document.createElement('span')
+  divider.className = 'case-text-divider'
+  divider.setAttribute('aria-hidden', 'true')
+  host.appendChild(divider)
+  return divider
 }
 
-function ensureSectionDivider(section: HTMLElement): HTMLElement {
-  let divider = section.querySelector<HTMLElement>(':scope > .case-divider')
-  if (!divider) {
-    divider = document.createElement('div')
-    divider.className = 'case-divider'
-    divider.setAttribute('aria-hidden', 'true')
-    section.insertBefore(divider, section.firstChild)
+/** Pencil line under heading copy (text width, not full section). */
+function ensureHeadingTextDivider(heading: HTMLElement): HTMLElement {
+  if (!heading.classList.contains(HEADING_DIVIDER_CLASS)) {
+    const textWrap = document.createElement('span')
+    textWrap.className = 'case-heading__text'
+    while (heading.firstChild)
+      textWrap.appendChild(heading.firstChild)
+    heading.appendChild(textWrap)
+    heading.classList.add(HEADING_DIVIDER_CLASS)
   }
-  return divider
+  return ensureTextDivider(heading)
 }
 
 export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
   const bound = new Map<HTMLElement, BoundEntry>()
+  let scanMoTimer = 0
+  let domObserver: MutationObserver | null = null
 
   function revokeBlob(el: HTMLElement) {
     const entry = bound.get(el)
@@ -94,7 +107,7 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
 
     const r = el.getBoundingClientRect()
     const minW = entry.kind === 'divider-v' ? 2 : 8
-    const minH = entry.kind === 'divider-h' ? 2 : 8
+    const minH = entry.kind === 'text-divider-h' ? 2 : 8
     if (r.width < minW || r.height < minH) {
       if (attempt < 48)
         requestAnimationFrame(() => rebake(el, attempt + 1))
@@ -109,7 +122,7 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
     let heightCss = r.height
     let bleedPx = PENCIL_FRAME_BLEED_PX
 
-    if (entry.kind === 'divider-h') {
+    if (entry.kind === 'text-divider-h') {
       variant = 'hline'
       heightCss = Math.max(r.height, 10)
       bleedPx = PENCIL_DIVIDER_BLEED_PX
@@ -150,13 +163,13 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
     }, 120)
   }
 
-  function bind(el: HTMLElement, kind: BoundKind) {
+  function bind(el: HTMLElement, kind: BoundKind, observeEl?: HTMLElement) {
     if (bound.has(el))
       return
     bound.set(el, { kind, ro: null, timer: 0, blobUrl: null })
     rebake(el)
     const ro = new ResizeObserver(() => scheduleRebake(el))
-    ro.observe(el)
+    ro.observe(observeEl ?? el)
     bound.get(el)!.ro = ro
   }
 
@@ -167,22 +180,26 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       return
     }
 
-    const next = new Map<HTMLElement, BoundKind>()
+    const next = new Map<HTMLElement, { kind: BoundKind, observe?: HTMLElement }>()
 
     for (const el of root.querySelectorAll<HTMLElement>('.panel-recessed')) {
       if (shouldBindPanel(el))
-        next.set(el, 'panel')
+        next.set(el, { kind: 'panel' })
     }
 
-    for (const divider of root.querySelectorAll<HTMLElement>('.case-divider')) {
-      const variant = dividerVariant(divider)
-      if (variant)
-        next.set(divider, variant === 'vline' ? 'divider-v' : 'divider-h')
+    for (const heading of root.querySelectorAll<HTMLElement>(CASE_HEADING_SELECTOR)) {
+      const divider = ensureHeadingTextDivider(heading)
+      next.set(divider, { kind: 'text-divider-h', observe: heading })
     }
 
-    for (const section of root.querySelectorAll<HTMLElement>('.case-divider-section')) {
-      const divider = ensureSectionDivider(section)
-      next.set(divider, 'divider-h')
+    const tocHeader = root.querySelector<HTMLElement>('.toc-header')
+    if (tocHeader) {
+      const divider = ensureTextDivider(tocHeader)
+      next.set(divider, { kind: 'text-divider-h', observe: tocHeader })
+    }
+
+    for (const divider of root.querySelectorAll<HTMLElement>('.case-divider--vertical')) {
+      next.set(divider, { kind: 'divider-v' })
     }
 
     for (const el of [...bound.keys()]) {
@@ -190,8 +207,17 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
         clearBound(el)
     }
 
-    for (const [el, kind] of next)
-      bind(el, kind)
+    for (const [el, { kind, observe }] of next)
+      bind(el, kind, observe)
+  }
+
+  function scheduleScanFromDom() {
+    if (scanMoTimer)
+      window.clearTimeout(scanMoTimer)
+    scanMoTimer = window.setTimeout(() => {
+      scanMoTimer = 0
+      scan()
+    }, 80)
   }
 
   onMounted(() => {
@@ -200,14 +226,29 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       requestAnimationFrame(() => {
         scan()
         window.setTimeout(scan, 200)
+        window.setTimeout(scan, 600)
       })
     })
+
+    domObserver = new MutationObserver(() => scheduleScanFromDom())
   })
 
   watch(
     () => rootRef.value,
-    () => nextTick(scan),
+    (root) => {
+      domObserver?.disconnect()
+      if (root)
+        domObserver?.observe(root, { childList: true, subtree: true })
+      nextTick(scan)
+    },
+    { immediate: true },
   )
 
-  onBeforeUnmount(teardown)
+  onBeforeUnmount(() => {
+    domObserver?.disconnect()
+    domObserver = null
+    if (scanMoTimer)
+      window.clearTimeout(scanMoTimer)
+    teardown()
+  })
 }

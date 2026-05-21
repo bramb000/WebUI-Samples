@@ -14,6 +14,8 @@ export type PencilFrameBakeOptions = {
   bleedPx?: number
   seed?: number
   variant?: PencilBakeVariant
+  /** Frame variant only: omit interior fill (stroke-only ring). */
+  strokeOnly?: boolean
 }
 
 export const PENCIL_FRAME_BLEED_PX = 14
@@ -37,6 +39,7 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
   uniform vec4 u_drawCss;
   uniform float u_strokeNorm;
   uniform float u_bakeMode;
+  uniform float u_strokeOnly;
   uniform vec3 u_seed;
 
   const float PI = 3.14159265;
@@ -204,6 +207,9 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
       fillAlpha = 0.0;
     }
 
+    if (u_strokeOnly > 0.5)
+      fillAlpha = 0.0;
+
     float aOut = max(fillAlpha, strokeA);
     vec3 strokeRgb = u_strokeColor * strokeLum;
     vec3 rgb = u_fillColor * fillAlpha;
@@ -216,7 +222,7 @@ const vertexShader = /* glsl */ `void main() {
   gl_Position = vec4(position, 1.0);
 }`
 
-const SHADER_REV = 3
+const SHADER_REV = 5
 
 let bakeRenderer: THREE.WebGLRenderer | null = null
 let bakeScene: THREE.Scene | null = null
@@ -268,6 +274,7 @@ function ensurePencilBakeGl(): boolean {
       u_drawCss: { value: new THREE.Vector4(0, 0, 1, 1) },
       u_strokeNorm: { value: 0.032 },
       u_bakeMode: { value: 0 },
+      u_strokeOnly: { value: 0 },
       u_seed: { value: new THREE.Vector3(1, 2, 3) },
     },
     vertexShader,
@@ -349,6 +356,7 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
     seedBase * 0.773 + 41.2,
   )
   bakeMaterial.uniforms.u_bakeMode.value = BAKE_MODE[variant]
+  bakeMaterial.uniforms.u_strokeOnly.value = opts.strokeOnly && variant === 'frame' ? 1 : 0
 
   const aspect = vw / Math.max(vh, 1)
   const uvx = (cardL + cardW * 0.5) / wE

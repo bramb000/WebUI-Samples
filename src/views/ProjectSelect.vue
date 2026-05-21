@@ -805,7 +805,13 @@ function onDone() {
   background: color-mix(in srgb, var(--paper-surface-fill-deep) 88%, #1a1814 12%);
 }
 
-.dl-embedded--case :deep(.case-divider:not(.pencil-baked)) {
+.dl-embedded--case :deep(.case-text-divider:not(.pencil-baked)) {
+  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  opacity: 0.45;
+  border-radius: 1px;
+}
+
+.dl-embedded--case :deep(.case-divider--vertical:not(.pencil-baked)) {
   background: color-mix(in srgb, var(--color-accent) 72%, transparent);
   opacity: 0.55;
 }

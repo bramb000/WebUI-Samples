@@ -139,7 +139,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── ACTION: TLDR ─── -->
-    <section class="max-w-4xl mx-auto space-y-6 pt-16 case-divider-section">
+    <section class="max-w-4xl mx-auto space-y-6 pt-16">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide">Action</h2>
       <h3 class="font-mono font-extrabold text-sm uppercase tracking-widest" style="color:var(--color-accent)">TLDR</h3>
       <p class="text-lg font-sans leading-relaxed">Problems analysed through a mixture of quantitative and qualitative data analysis:</p>
@@ -292,7 +292,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── AFK REWARDS DESIGN ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">AFK Rewards Design</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -363,7 +363,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── EXIT SCREEN ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Exit Flow &amp; Anticipation</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -379,7 +379,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Recommendation System</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -414,7 +414,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── VISUAL PROGRESSION ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Goals &amp; Progression</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -438,7 +438,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
-    <section class="space-y-8 pt-16 case-divider-section">
+    <section class="space-y-8 pt-16">
       <h2 class="font-mono font-extrabold text-xl uppercase tracking-wider">Delight &amp; Monetisation</h2>
       <div class="space-y-8">
         <p class="text-lg font-sans leading-relaxed">
@@ -507,7 +507,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="pt-16 case-divider-section">
+    <section class="pt-16">
       <h2 class="font-mono font-extrabold text-3xl uppercase tracking-wide text-center mb-12">What My Colleagues Say</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
         <div class="panel-recessed p-8 space-y-4">

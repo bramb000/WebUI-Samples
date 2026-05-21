@@ -238,6 +238,7 @@ function scrollTo(id: string) {
       <h4 class="toc-title">
         Contents
       </h4>
+      <span class="case-text-divider" aria-hidden="true" />
     </div>
 
     <div class="toc-list-wrap">
@@ -271,11 +272,14 @@ function scrollTo(id: string) {
 
 .toc-header {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
   margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 35%, transparent 65%);
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .toc-title {
