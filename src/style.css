@@ -73,6 +73,10 @@
   --case-insight-change:      #4ade80; /* after changes shipped */
   --case-insight-risk:        #fb923c; /* negative / caution */
 
+  /* Project roster cards — discipline colour coding */
+  --roster-discipline-product-design: #524f81;
+  --roster-discipline-ui-design:       #00674f;
+
   /* ── Type scale (size / tracking / leading) ── */
   --text-display-hero:  clamp(3.25rem, 10vw, 6rem);
   --text-page-title:    clamp(3rem, 10vw, 5.25rem);

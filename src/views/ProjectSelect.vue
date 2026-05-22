@@ -5,11 +5,17 @@ import PanelChiselBackground from '../components/PanelChiselBackground.vue'
 import { startCrumple } from '../composables/paperCrumple'
 import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
 import { workPanelEmbeddedCaseStudyId } from '../composables/workPanelCaseTheme'
+import { useRosterCardPaint } from '../composables/useRosterCardPaint'
+import {
+  ROSTER_DISCIPLINE_ACCENT,
+  type RosterDiscipline,
+} from '../constants/rosterDiscipline'
 
 type TechIcon = 'code' | 'cube' | 'layers' | 'spark'
 
 type Project = {
   id: string
+  discipline: RosterDiscipline
   title: string
   subtitle: string
   tags: [string, string, string]
@@ -25,8 +31,7 @@ type Project = {
   }
 }
 
-import guildHero from '../assets/images/guild/guild-hero.jpg'
-import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png'
+import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
 
 const procedural = (seed: number) =>
   `data:image/svg+xml,${encodeURIComponent(
@@ -109,114 +114,128 @@ function rosterMeta(title: string) {
   return { points, color1, color2, label }
 }
 
+function projectArt(id: string, proceduralSeed: number): string {
+  return rosterCardImage(id) ?? procedural(proceduralSeed)
+}
+
 const projects = ref<Project[]>([
   {
     id: 'guild',
+    discipline: 'product-design',
     title: 'Guild of Guardians',
     subtitle: 'Retention & Live-Ops Systems',
     tags: ['MOBILE', 'UX', 'DATA'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: guildHero,
-    splash: guildHero,
+    thumb: projectArt('guild', 17),
+    splash: projectArt('guild', 17),
     tech: ['layers', 'cube', 'code', 'spark'],
     roster: rosterMeta('Guild of Guardians'),
   },
   {
     id: 'rocksmith',
+    discipline: 'product-design',
     title: 'Rocksmith+',
     subtitle: 'Cross-Platform UI System',
     tags: ['SYSTEMS', 'ACCESS', 'SHIPPED'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: rocksmithOutdoors,
-    splash: rocksmithOutdoors,
+    thumb: projectArt('rocksmith', 19),
+    splash: projectArt('rocksmith', 19),
     tech: ['code', 'layers', 'spark', 'cube'],
     roster: rosterMeta('Rocksmith+'),
   },
   {
     id: 'login',
+    discipline: 'ui-design',
     title: 'Login Micro-Interaction',
     subtitle: 'Lottie-driven input tracking avatar',
     tags: ['PROTOTYPE', 'MOTION', 'UI'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(23),
-    splash: procedural(23),
+    thumb: projectArt('login', 23),
+    splash: projectArt('login', 23),
     tech: ['spark', 'code', 'layers', 'cube'],
     roster: rosterMeta('Login Micro-Interaction'),
   },
   {
     id: 'helldivers',
+    discipline: 'ui-design',
     title: 'UI come to life (Helldivers-inspired)',
     subtitle: 'Responsive 2D component with 3D assets',
     tags: ['GAME', 'JUICE', 'UI'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(29),
-    splash: procedural(29),
+    thumb: projectArt('helldivers', 29),
+    splash: projectArt('helldivers', 29),
     tech: ['cube', 'spark', 'layers', 'code'],
     roster: rosterMeta('UI come to life'),
   },
   {
     id: 'account-tray',
+    discipline: 'ui-design',
     title: 'Analogue Usage Dashboard',
     subtitle: 'Brutalist tray with mechanical motion',
     tags: ['HUD', 'MOTION', 'DENSE'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(31),
-    splash: procedural(31),
+    thumb: projectArt('account-tray', 31),
+    splash: projectArt('account-tray', 31),
     tech: ['layers', 'spark', 'code', 'cube'],
     roster: rosterMeta('Analogue Usage Dashboard'),
   },
   {
     id: 'sales-modal',
+    discipline: 'ui-design',
     title: 'Component-Driven Sales Modal',
     subtitle: 'Contextual pricing + banners',
     tags: ['UX', 'MODULAR', 'POLISH'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(37),
-    splash: procedural(37),
+    thumb: projectArt('sales-modal', 37),
+    splash: projectArt('sales-modal', 37),
     tech: ['code', 'layers', 'cube', 'spark'],
     roster: rosterMeta('Component-Driven Sales Modal'),
   },
   {
     id: 'voice-chat',
+    discipline: 'ui-design',
     title: 'AI Voice Chat Simulation',
     subtitle: 'Visual communication + conversation',
     tags: ['AUDIO', 'UX', 'SYSTEMS'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(41),
-    splash: procedural(41),
+    thumb: projectArt('voice-chat', 41),
+    splash: projectArt('voice-chat', 41),
     tech: ['spark', 'code', 'layers', 'cube'],
     roster: rosterMeta('AI Voice Chat Simulation'),
   },
   {
     id: 'node-graph',
+    discipline: 'ui-design',
     title: 'Node Graph Visual Scripting',
     subtitle: 'Dense tool UI + help',
     tags: ['TOOLS', 'DENSE', 'UI'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(43),
-    splash: procedural(43),
+    thumb: projectArt('node-graph', 43),
+    splash: projectArt('node-graph', 43),
     tech: ['cube', 'layers', 'code', 'spark'],
     roster: rosterMeta('Node Graph Visual Scripting'),
   },
   {
     id: 'patapon',
+    discipline: 'ui-design',
     title: 'Rhythm-Combat (Patapon)',
     subtitle: 'Interaction breakdown & recreation',
     tags: ['GAME', 'SYSTEMS', 'FEEL'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(47),
-    splash: procedural(47),
+    thumb: projectArt('patapon', 47),
+    splash: projectArt('patapon', 47),
     tech: ['layers', 'cube', 'code', 'spark'],
     roster: rosterMeta('Rhythm-Combat'),
   },
   {
     id: 'jedi',
+    discipline: 'ui-design',
     title: 'Feel like a Jedi',
     subtitle: 'Combat design + interaction',
     tags: ['GAME', 'JUICE', 'UNITY'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
-    thumb: procedural(53),
-    splash: procedural(53),
+    thumb: projectArt('jedi', 53),
+    splash: projectArt('jedi', 53),
     tech: ['cube', 'spark', 'layers', 'code'],
     roster: rosterMeta('Feel like a Jedi'),
   },
@@ -262,6 +281,15 @@ watch(
 const pressedId = ref<string | null>(null)
 const hoveredId = ref<string | null>(null)
 let hoverDetachTimeout: number | null = null
+
+const gridContainerRef = ref<HTMLElement | null>(null)
+const {
+  plateGrainBakes,
+  setThumbRef,
+  observeGrid,
+  scheduleRebake,
+  rosterPaintMaskUrl,
+} = useRosterCardPaint()
 
 function onThumbEnter(e: PointerEvent, id: string) {
   hoveredId.value = id
@@ -315,6 +343,8 @@ function onThumbUp(id: string) {
 
 let raf = 0
 onMounted(() => {
+  observeGrid(gridContainerRef.value)
+  scheduleRebake()
   const clockStart = performance.now()
   let lastFrame = clockStart
   const frameMs = 1000 / 24
@@ -360,14 +390,28 @@ function onDone() {
         <aside id="roster-pane" aria-label="Project roster">
           <div class="roster-header">Select Project</div>
 
-          <div class="grid-container" role="listbox" :aria-activedescendant="`proj-${activeProject.id}`">
+          <div
+            ref="gridContainerRef"
+            class="grid-container"
+            role="listbox"
+            :aria-activedescendant="`proj-${activeProject.id}`"
+            :style="{ '--roster-paint-mask': `url(${rosterPaintMaskUrl})` }"
+          >
             <div
               v-for="(p, idx) in projects"
               :key="p.id"
+              :ref="(el) => setThumbRef(p.id, el)"
               class="thumbnail"
-              :class="{
-                selected: p.id === activeProject.id,
-                pressed: p.id === pressedId,
+              :class="[
+                `thumbnail--${p.discipline}`,
+                {
+                  selected: p.id === activeProject.id,
+                  pressed: p.id === pressedId,
+                },
+              ]"
+              :data-roster-discipline="p.discipline"
+              :style="{
+                '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[p.discipline],
               }"
               :id="`proj-${p.id}`"
               role="option"
@@ -380,7 +424,28 @@ function onDone() {
               @pointercancel="() => (pressedId = null)"
             >
               <div class="inner-card">
-                <svg class="paper-svg" viewBox="0 0 100 140" preserveAspectRatio="none">
+                <div class="card-art">
+                  <img
+                    class="card-art-img"
+                    :src="p.thumb"
+                    :alt="p.title"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <div class="card-name-plate">
+                  <img
+                    v-if="plateGrainBakes[p.id]"
+                    class="card-plate-grain"
+                    :src="plateGrainBakes[p.id]"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <div v-else class="card-plate-grain card-plate-grain--fallback" aria-hidden="true" />
+                </div>
+
+                <svg class="paper-svg" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <linearGradient :id="`grad_${idx}`" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" :stop-color="p.roster.color1" />
@@ -398,7 +463,7 @@ function onDone() {
                 </svg>
 
                 <div class="thumbnail-content">
-                  <span class="thumbnail-label">{{ p.roster.label }}</span>
+                  <span class="thumbnail-label">{{ p.title }}</span>
                 </div>
               </div>
             </div>
@@ -573,14 +638,105 @@ function onDone() {
   z-index: 1;
   min-width: 0;
   isolation: isolate;
+  container-type: inline-size;
 }
 
 .inner-card {
   position: absolute;
   inset: 0;
   z-index: 10;
+  width: 100%;
+  height: 100%;
   transform-origin: center center;
-  overflow: visible;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 60fr 40fr;
+  grid-template-areas:
+    'art'
+    'plate';
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.72);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 10px 24px rgba(0, 0, 0, 0.58);
+  background: #0e0e11;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.card-art {
+  grid-area: art;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #0a0a0d;
+}
+
+.card-art::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  height: 28%;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(8, 8, 10, 0.9), transparent);
+}
+
+.card-art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.thumbnail--product-design,
+.thumbnail--ui-design {
+  --roster-plate-base: color-mix(in srgb, var(--roster-discipline-accent) 34%, #121016);
+  --roster-grain-fallback: color-mix(in srgb, var(--roster-discipline-accent) 58%, #1a181e);
+}
+
+.card-name-plate {
+  grid-area: plate;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--roster-plate-base);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Hue-shifted mask stretched on plate, multiply over flat base (no image here) */
+.card-plate-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: fill;
+  mix-blend-mode: multiply;
+  opacity: 0.82;
+  pointer-events: none;
+  user-select: none;
+}
+
+.card-plate-grain--fallback {
+  background-color: var(--roster-grain-fallback);
+  -webkit-mask-image: var(--roster-paint-mask);
+  mask-image: var(--roster-paint-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+  mix-blend-mode: multiply;
+  opacity: 0.42;
 }
 
 .paper-svg {
@@ -589,6 +745,8 @@ function onDone() {
   width: 100%;
   height: 100%;
   overflow: visible;
+  opacity: 0;
+  pointer-events: none;
   transition: filter 0.15s;
 }
 
@@ -602,24 +760,27 @@ function onDone() {
 }
 
 .thumbnail-content {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
+  grid-area: plate;
+  position: relative;
+  z-index: 5;
   display: flex;
-  align-items: flex-end;
-  padding: 14px 12px 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 14px;
   pointer-events: none;
+  text-align: center;
 }
 
 .thumbnail-label {
   font-family: var(--font-sans);
-  font-size: var(--text-caption);
+  font-size: clamp(11px, 3.4cqi, 14px);
   font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  transition: color 0.15s;
-  line-height: var(--leading-snug);
+  color: #f5f3ef;
+  letter-spacing: 0.02em;
+  transition: color 0.15s, text-shadow 0.15s;
+  line-height: 1.2;
   overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 .thumbnail:hover:not(.selected):not(.pressed) {
@@ -635,15 +796,20 @@ function onDone() {
   filter: url(#paper-crumple);
 }
 
+.thumbnail:hover .inner-card,
+.thumbnail.selected .inner-card {
+  border-color: color-mix(in srgb, var(--roster-discipline-accent) 65%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 1px color-mix(in srgb, var(--roster-discipline-accent) 45%, transparent),
+    0 0 14px color-mix(in srgb, var(--roster-discipline-accent) 32%, transparent),
+    0 12px 26px rgba(0, 0, 0, 0.65);
+}
+
 .thumbnail:hover .card-poly,
 .thumbnail.selected .card-poly {
   stroke: #20ffb0;
   filter: drop-shadow(0 0 4px rgba(32, 255, 176, 0.6));
-}
-
-.thumbnail:hover .paper-svg,
-.thumbnail.selected .paper-svg {
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.9));
 }
 
 .thumbnail:hover .card-overlay,
@@ -653,8 +819,8 @@ function onDone() {
 
 .thumbnail:hover .thumbnail-label,
 .thumbnail.selected .thumbnail-label {
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
 }
 
 .thumbnail.pressed {
