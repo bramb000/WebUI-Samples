@@ -122,7 +122,7 @@ const projects = ref<Project[]>([
   {
     id: 'guild',
     discipline: 'product-design',
-    title: 'Guild of Guardians',
+    title: 'Increasing stickiness and revenue',
     subtitle: 'Retention & Live-Ops Systems',
     tags: ['MOBILE', 'UX', 'DATA'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
@@ -134,7 +134,7 @@ const projects = ref<Project[]>([
   {
     id: 'rocksmith',
     discipline: 'product-design',
-    title: 'Rocksmith+',
+    title: 'Making guitar accessible to 1M+ users',
     subtitle: 'Cross-Platform UI System',
     tags: ['SYSTEMS', 'ACCESS', 'SHIPPED'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
@@ -158,7 +158,7 @@ const projects = ref<Project[]>([
   {
     id: 'helldivers',
     discipline: 'ui-design',
-    title: 'UI come to life (Helldivers-inspired)',
+    title: 'Bringing UI to life',
     subtitle: 'Responsive 2D component with 3D assets',
     tags: ['GAME', 'JUICE', 'UI'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
@@ -239,6 +239,25 @@ const projects = ref<Project[]>([
     tech: ['cube', 'spark', 'layers', 'code'],
     roster: rosterMeta('Feel like a Jedi'),
   },
+])
+
+const ROSTER_HIDDEN_IDS = new Set<Project['id']>(['sales-modal', 'node-graph'])
+
+const visibleProjects = computed(() =>
+  projects.value.filter((p) => !ROSTER_HIDDEN_IDS.has(p.id)),
+)
+
+const caseStudyProjects = computed(() =>
+  visibleProjects.value.filter((p) => p.discipline === 'product-design'),
+)
+
+const microProjects = computed(() =>
+  visibleProjects.value.filter((p) => p.discipline === 'ui-design'),
+)
+
+const rosterSections = computed(() => [
+  { label: 'Case Studies', projects: caseStudyProjects.value, spaced: false },
+  { label: 'Personal Projects', projects: microProjects.value, spaced: true },
 ])
 
 const activeId = ref(projects.value[0]?.id ?? '')
@@ -397,9 +416,16 @@ function onDone() {
             :aria-activedescendant="`proj-${activeProject.id}`"
             :style="{ '--roster-paint-mask': `url(${rosterPaintMaskUrl})` }"
           >
-            <div
-              v-for="(p, idx) in projects"
-              :key="p.id"
+            <template v-for="section in rosterSections" :key="section.label">
+              <div
+                class="roster-section-header section-header border-b border-[var(--color-border)]"
+                :class="{ 'roster-section-header--spaced': section.spaced }"
+              >
+                <h3 class="type-eyebrow">{{ section.label }}</h3>
+              </div>
+              <div
+                v-for="p in section.projects"
+                :key="p.id"
               :ref="(el) => setThumbRef(p.id, el)"
               class="thumbnail"
               :class="[
@@ -447,7 +473,7 @@ function onDone() {
 
                 <svg class="paper-svg" viewBox="0 0 100 140" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
-                    <linearGradient :id="`grad_${idx}`" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient :id="`grad_${p.id}`" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" :stop-color="p.roster.color1" />
                       <stop offset="100%" :stop-color="p.roster.color2" />
                     </linearGradient>
@@ -455,7 +481,7 @@ function onDone() {
                   <polygon
                     class="card-poly"
                     :points="p.roster.points"
-                    :fill="`url(#grad_${idx})`"
+                    :fill="`url(#grad_${p.id})`"
                     stroke-width="2"
                     vector-effect="non-scaling-stroke"
                   />
@@ -467,6 +493,7 @@ function onDone() {
                 </div>
               </div>
             </div>
+            </template>
           </div>
         </aside>
 
@@ -620,6 +647,21 @@ function onDone() {
   padding: 0 4px 8px;
   line-height: var(--leading-tight);
   font-weight: 900;
+}
+
+.roster-section-header {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0 4px 8px;
+}
+
+.roster-section-header .type-eyebrow {
+  margin: 0;
+}
+
+.roster-section-header--spaced {
+  margin-top: 8px;
+  padding-top: 20px;
 }
 
 .grid-container {

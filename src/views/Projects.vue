@@ -6,6 +6,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
 const activeFilter = ref('All')
 const filters = ['All', 'Web Design', 'Game Design']
 
+const HIDDEN_PROJECT_IDS = new Set(['sales-modal', 'node-graph'])
+
 const projects = [
   {
     id: 'login',
@@ -73,8 +75,9 @@ const projects = [
 ]
 
 const filteredProjects = computed(() => {
-  if (activeFilter.value === 'All') return projects
-  return projects.filter(p => p.category === activeFilter.value)
+  const visible = projects.filter((p) => !HIDDEN_PROJECT_IDS.has(p.id))
+  if (activeFilter.value === 'All') return visible
+  return visible.filter((p) => p.category === activeFilter.value)
 })
 
 const trackMicroProjectClick = (project: { id: string, category: string }) => {

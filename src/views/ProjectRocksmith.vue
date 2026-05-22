@@ -79,8 +79,8 @@ useCaseStudySketchPanels(caseStudyRoot);
       </svg>
       
       <ProjectHero
-      title="Rocksmith+"
-      description="Releasing to 1 million new users on 5 platforms with a single, scalable UI system."
+      title="Making guitar learning accessible to 1 million users"
+      description="Releasing a new learning game on 5 platforms with a single, scalable UI system."
       role="UX Lead for Mobile & Multi-platform Interactions"
       timeline="~2 Years"
       :tags="['PC Game', 'Console Game', 'Accessibility']"
