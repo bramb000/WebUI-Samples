@@ -3,11 +3,13 @@
  * Add imports here when new files land in this folder.
  */
 import guildCard from './Guild of Guardians.png'
+import helldiversCard from './Helldivers UI.png'
 import rocksmithCard from './Rocksmith.png'
 
 export const ROSTER_CARD_IMAGE_BY_ID: Partial<Record<string, string>> = {
   guild: guildCard,
   rocksmith: rocksmithCard,
+  helldivers: helldiversCard,
 }
 
 export function rosterCardImage(id: string): string | undefined {

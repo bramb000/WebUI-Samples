@@ -12,7 +12,7 @@ Drop **top-of-card** images here for the project picker (`ProjectSelect`).
 | `guild` | `Guild of Guardians.png` ✓ | Product Design |
 | `rocksmith` | `Rocksmith.png` ✓ | Product Design |
 | `login` | `login.png` | UI Design |
-| `helldivers` | `helldivers.png` | UI Design |
+| `helldivers` | `Helldivers UI.png` ✓ | UI Design |
 | `account-tray` | `account-tray.png` | UI Design |
 | `sales-modal` | `sales-modal.png` | UI Design |
 | `voice-chat` | `voice-chat.png` | UI Design |
