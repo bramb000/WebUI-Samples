@@ -10,7 +10,7 @@ import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 const PENCIL_BAKED_CLASS = 'pencil-baked'
 const HEADING_DIVIDER_CLASS = 'case-heading--has-divider'
 
-type BoundKind = 'panel' | 'text-divider-h' | 'divider-v'
+type BoundKind = 'panel' | 'text-divider-h' | 'divider-v' | 'chip'
 
 type BoundEntry = {
   kind: BoundKind
@@ -20,6 +20,16 @@ type BoundEntry = {
 }
 
 const CASE_HEADING_SELECTOR = 'section :is(h2, h3, h4)[class*="type-case-"]'
+
+function dataUrlToBlob(dataUrl: string): Blob {
+  const [header = '', b64 = ''] = dataUrl.split(',')
+  const mime = /data:([^;]+)/.exec(header)?.[1] ?? 'image/png'
+  const binary = atob(b64)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++)
+    bytes[i] = binary.charCodeAt(i)
+  return new Blob([bytes], { type: mime })
+}
 
 function shouldBindPanel(el: HTMLElement): boolean {
   if (!el.classList.contains('panel-recessed'))
@@ -63,7 +73,7 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
 
   function revokeBlob(el: HTMLElement) {
     const entry = bound.get(el)
-    if (entry?.blobUrl) {
+    if (entry?.blobUrl?.startsWith('blob:')) {
       URL.revokeObjectURL(entry.blobUrl)
       entry.blobUrl = null
     }
@@ -94,9 +104,10 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
     if (!entry)
       return
 
+    const blobUrl = URL.createObjectURL(dataUrlToBlob(dataUrl))
+    entry.blobUrl = blobUrl
     el.classList.add(PENCIL_BAKED_CLASS)
-    entry.blobUrl = dataUrl
-    el.style.setProperty('--pencil-frame-image', `url("${dataUrl}")`)
+    el.style.setProperty('--pencil-frame-image', `url("${blobUrl}")`)
     el.style.setProperty('--pencil-bleed', `${bleedPx}px`)
   }
 
@@ -132,6 +143,10 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       widthCss = Math.max(r.width, 10)
       bleedPx = PENCIL_DIVIDER_BLEED_PX
     }
+    else if (entry.kind === 'chip') {
+      variant = 'frame'
+      bleedPx = PENCIL_DIVIDER_BLEED_PX
+    }
 
     const url = bakePencilFrameImage({
       widthCss,
@@ -140,6 +155,8 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       fillColorHex: fill,
       bleedPx,
       variant,
+      strokeOnly: entry.kind === 'chip',
+      frameShape: entry.kind === 'chip' ? 'rect' : undefined,
     })
 
     if (!url) {
@@ -164,8 +181,12 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
   }
 
   function bind(el: HTMLElement, kind: BoundKind, observeEl?: HTMLElement) {
-    if (bound.has(el))
+    const existing = bound.get(el)
+    if (existing) {
+      if (!el.classList.contains(PENCIL_BAKED_CLASS))
+        rebake(el)
       return
+    }
     bound.set(el, { kind, ro: null, timer: 0, blobUrl: null })
     rebake(el)
     const ro = new ResizeObserver(() => scheduleRebake(el))
@@ -196,6 +217,10 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       next.set(divider, { kind: 'divider-v' })
     }
 
+    for (const chip of root.querySelectorAll<HTMLElement>('.case-pencil-chip:not([data-pencil-detached])')) {
+      next.set(chip, { kind: 'chip' })
+    }
+
     for (const el of [...bound.keys()]) {
       if (!next.has(el))
         clearBound(el)
@@ -214,6 +239,8 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
     }, 80)
   }
 
+  let visibilityObserver: IntersectionObserver | null = null
+
   onMounted(() => {
     nextTick(() => {
       scan()
@@ -221,18 +248,31 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
         scan()
         window.setTimeout(scan, 200)
         window.setTimeout(scan, 600)
+        window.setTimeout(scan, 1500)
       })
     })
 
     domObserver = new MutationObserver(() => scheduleScanFromDom())
+
+    visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting))
+          scheduleScanFromDom()
+      },
+      { root: null, threshold: 0.01 },
+    )
   })
 
   watch(
     () => rootRef.value,
-    (root) => {
+    (root, prev) => {
+      if (prev)
+        visibilityObserver?.unobserve(prev)
       domObserver?.disconnect()
-      if (root)
+      if (root) {
         domObserver?.observe(root, { childList: true, subtree: true })
+        visibilityObserver?.observe(root)
+      }
       nextTick(scan)
     },
     { immediate: true },
@@ -241,6 +281,8 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
   onBeforeUnmount(() => {
     domObserver?.disconnect()
     domObserver = null
+    visibilityObserver?.disconnect()
+    visibilityObserver = null
     if (scanMoTimer)
       window.clearTimeout(scanMoTimer)
     teardown()

@@ -7,6 +7,7 @@ import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
 import CaseBeforeAfter from '../components/CaseBeforeAfter.vue';
+import CaseTestimonialCard from '../components/CaseTestimonialCard.vue';
 import TableOfContents from '../components/TableOfContents.vue';
 
 // Guild of Guardians Assets
@@ -68,7 +69,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
     <div class="case-study-layout xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
-      <div class="case-study-main xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
+      <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
     <!-- ─── HERO ─── -->
     <div class="relative">
       <!-- Decorative Tinkerer Etching -->
@@ -139,7 +140,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── ACTION: TLDR ─── -->
-    <section class="max-w-4xl mx-auto space-y-6 pt-16">
+    <section class="max-w-4xl mx-auto space-y-6">
       <h2 class="type-case-section-block">Action</h2>
       <h3 class="type-case-subsection">TLDR</h3>
       <p class="type-case-body-lg">Problems analysed through a mixture of quantitative and qualitative data analysis:</p>
@@ -160,7 +161,7 @@ useCaseStudySketchPanels(caseStudyRoot);
 
     <!-- ─── BEFORE / AFTER GALLERY ─── -->
     <section class="space-y-6">
-      <h3 class="type-case-subsection max-w-4xl mx-auto">Before &amp; After — Quick Overview</h3>
+      <h3 class="type-case-subsection max-w-4xl">Before &amp; After — Quick Overview</h3>
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
       <VideoEmbed src="https://www.youtube.com/embed/nJ4OENCLzkE" title="Old User Flow" />
       <div class="max-w-xl mx-auto py-4">
@@ -251,7 +252,7 @@ useCaseStudySketchPanels(caseStudyRoot);
           To make certain that I was chasing the correct lead, I ran a survey to understand the user stories behind the data.
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
           <CaseInsight stat="73%" statLabel="played in-between life activities" theme="neutral">
             <p><strong>Unstructured downtime entertainment:</strong></p>
             <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
@@ -292,7 +293,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── AFK REWARDS DESIGN ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">AFK Rewards Design</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -363,7 +364,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── EXIT SCREEN ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Exit Flow &amp; Anticipation</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -379,14 +380,14 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Recommendation System</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
           I found through analysing further data that <strong>users would get stuck at specific dungeons and quit the game after trying a few more times</strong>. This was a highly correlated factor to low D7 retention.
         </p>
         <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
           <CaseInsight stat="46% of churned users" statLabel="had attempted and lost at the same dungeon 2+ times in their first week" theme="neutral" />
           <CaseInsight stat="22% of churned users" statLabel="had attempted and lost 3+ times" theme="neutral" />
         </div>
@@ -406,7 +407,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <div class="py-4">
           <CaseBeforeAfter :beforeImage="recsBeforeImg" :afterImage="recsAfterImg" caption="Recommendations guiding players using community data without forcing teams." />
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-4">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
           <CaseInsight stat="~70% users" statLabel="Changed their comp after loss #1 (up from 50%)" theme="success" />
           <CaseInsight stat="And 63% of those users" statLabel="Completed the dungeon on Attempt #2" theme="success" />
         </div>
@@ -414,7 +415,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── VISUAL PROGRESSION ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Goals &amp; Progression</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -438,7 +439,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Delight &amp; Monetisation</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -507,21 +508,19 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="pt-16">
-      <h2 class="type-case-section-block text-center mb-12">Testimonials</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-        <div class="panel-recessed p-8 space-y-4">
-          <h4 class="type-case-attribution">Josiah Wallace, Senior Game Design Manager</h4>
-          <blockquote class="type-case-body italic">
-            "Data driven design is now a keystone in modern game development and there are few others like Bramha who combine the UX and Game Design know-how with the Data Analysis process &amp; procedure as well as he does. The decisions, features, and projects he stands behind always produce measurable results, drive revenue growth, and increase player retention."
-          </blockquote>
-        </div>
-        <div class="panel-recessed p-8 space-y-4">
-          <h4 class="type-case-attribution">Daniel Paez, Executive Producer</h4>
-          <blockquote class="type-case-body italic">
-            "Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions."
-          </blockquote>
-        </div>
+    <section>
+      <h2 class="type-case-section-block mb-12">Testimonials</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+        <CaseTestimonialCard
+          name="Josiah Wallace"
+          role="Senior Game Design Manager"
+          quote="Data driven design is now a keystone in modern game development and there are few others like Bramha who combine the UX and Game Design know-how with the Data Analysis process & procedure as well as he does. The decisions, features, and projects he stands behind always produce measurable results, drive revenue growth, and increase player retention."
+        />
+        <CaseTestimonialCard
+          name="Daniel Paez"
+          role="Executive Producer"
+          quote="Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions."
+        />
       </div>
     </section>
 

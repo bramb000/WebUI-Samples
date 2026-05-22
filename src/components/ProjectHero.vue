@@ -67,10 +67,19 @@ defineProps<Props>();
 
 .project-hero .dl-plaque {
   padding: 4px 12px;
-  background: var(--color-surface);
-  border: none;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-border) 30%, transparent);
   color: var(--color-text);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: none;
+  transition: none;
+}
+
+.project-hero .dl-plaque:hover {
+  background: transparent;
+  color: var(--color-text);
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--color-border) 30%, transparent);
+  animation: none;
 }
 
 .hero-title-block {

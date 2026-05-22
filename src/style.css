@@ -72,6 +72,18 @@
   --case-insight-observation: #f87171; /* observational / baseline */
   --case-insight-change:      #4ade80; /* after changes shipped */
   --case-insight-risk:        #fb923c; /* negative / caution */
+  /* Dark insight/metric interiors — never inherit paper or hero theme text */
+  --case-insight-fill-base:      #121110;
+  --case-insight-surface-accent-mix: 22%;
+  --case-insight-on-fill:        #f5f2ec;
+  --case-insight-on-fill-muted:  #cfc8bc;
+  --case-insight-on-fill-subtle: #a8a198;
+  /* Roster-matched paint grain overlay (see `.case-insight-surface__grain`) */
+  --case-insight-grain-overlay-strength: 0.38;
+  --case-insight-grain-opacity:          0.82;
+  --case-insight-grain-fallback-opacity: 0.42;
+  --case-insight-grain-blend:            multiply;
+  --case-insight-grain-fallback-mix:     58%;
 
   /* Project roster cards — discipline colour coding */
   --roster-discipline-product-design: #524f81;
@@ -95,6 +107,8 @@
   --text-caption:       0.8125rem;
   --text-label:         0.625rem;
   --text-label-sm:      0.5625rem;
+  --text-testimonial-name: var(--text-card-title);
+  --text-testimonial-role: var(--text-body-sm);
   --text-filter-tab:    0.6875rem;
   --text-button:        1.1rem;
 
@@ -389,12 +403,23 @@ h5, h6 {
   line-height: var(--leading-snug);
   color: var(--color-text-muted);
 }
-.type-case-attribution {
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
+.type-case-attribution,
+.type-case-testimonial-name {
+  font-family: var(--font-display);
+  font-size: var(--text-testimonial-name);
   font-weight: 700;
-  letter-spacing: var(--tracking-heading-tight);
+  letter-spacing: var(--tracking-display-wide);
+  line-height: var(--leading-snug);
   color: var(--color-accent);
+}
+.type-case-testimonial-role {
+  font-family: var(--font-sans);
+  font-size: var(--text-testimonial-role);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-label);
+  color: var(--color-text-muted);
 }
 .type-case-lead {
   font-family: var(--font-sans);
@@ -737,6 +762,124 @@ h5, h6 {
   align-items: start;
 }
 
+/* Case study vertical rhythm — one gap between sections (avoid space-y-24 + pt-16 stacking) */
+.case-study-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.case-study-main > section {
+  padding-top: 0;
+}
+
+/* Case study headings — consistent left alignment */
+.case-study-main :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .type-hero-title,
+  .type-case-section,
+  .type-case-section-accent,
+  .type-case-section-major,
+  .type-case-section-block,
+  .type-case-subsection,
+  .type-case-kicker,
+  .type-case-kicker-muted,
+  .type-case-attribution,
+  .type-case-testimonial-name,
+  .type-case-testimonial-role
+) {
+  text-align: left;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+/* Case study quote cards */
+.case-testimonial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.case-testimonial-card__attrib {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+}
+
+.case-testimonial-card__name,
+.case-testimonial-card__role {
+  margin: 0;
+}
+
+.case-testimonial-card__quote {
+  margin: 0;
+}
+
+.case-insight-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Insight/metric interior — flat base + roster paint grain (same stack as grid name plate) */
+.case-insight-surface {
+  --insight-accent: var(--case-insight-observation);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+  background-color: color-mix(
+    in srgb,
+    var(--insight-accent) var(--case-insight-surface-accent-mix),
+    var(--case-insight-fill-base) calc(100% - var(--case-insight-surface-accent-mix))
+  );
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.case-insight-surface__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: fill;
+  mix-blend-mode: var(--case-insight-grain-blend);
+  opacity: var(--case-insight-grain-opacity);
+  pointer-events: none;
+  user-select: none;
+}
+
+.case-insight-surface__grain--fallback {
+  background-color: color-mix(
+    in srgb,
+    var(--insight-accent) var(--case-insight-grain-fallback-mix),
+    var(--case-insight-fill-base) calc(100% - var(--case-insight-grain-fallback-mix))
+  );
+  -webkit-mask-image: var(--case-insight-paint-mask);
+  mask-image: var(--case-insight-paint-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+  mix-blend-mode: var(--case-insight-grain-blend);
+  opacity: var(--case-insight-grain-fallback-opacity);
+}
+
+.case-insight-surface__content {
+  position: relative;
+  z-index: 1;
+}
+
 .dl-embedded--case .case-study-main {
   grid-column: 1 !important;
   min-width: 0;
@@ -769,15 +912,64 @@ h5, h6 {
   z-index: 30;
 }
 
-/* Before/after column separator (vertical pencil stroke) */
+/* Before/after labels — regular rect, stroke-only pencil frame */
+.case-pencil-chip {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-self: flex-start;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  isolation: isolate;
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-label);
+  color: var(--color-text);
+}
+
+.case-pencil-chip--on-dark {
+  color: var(--text-on-tint);
+}
+
+.case-pencil-chip.pencil-baked {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.case-pencil-chip.pencil-baked::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--pencil-bleed, 8px));
+  background-image: var(--pencil-frame-image);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Before/after column separator — thin straight pencil stroke */
 .case-divider--vertical {
   position: relative;
-  width: 12px;
+  width: 3px;
+  min-width: 3px;
   height: auto;
   min-height: 80px;
   align-self: stretch;
   overflow: visible;
   isolation: isolate;
+  flex-shrink: 0;
 }
 
 .case-divider--vertical.pencil-baked {

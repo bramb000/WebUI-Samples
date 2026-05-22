@@ -18,7 +18,7 @@ export function startCrumple() {
 
   const targetIntensity = 25 + Math.random() * 20
   currentCrumple = targetIntensity
-  const decaySpeed = 0.05 + Math.random() * 0.05
+  const decaySpeed = (0.05 + Math.random() * 0.05) * 2
 
   const animateCrumple = () => {
     currentCrumple += (0 - currentCrumple) * decaySpeed

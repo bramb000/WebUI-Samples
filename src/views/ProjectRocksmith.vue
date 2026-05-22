@@ -6,6 +6,7 @@ import CaseImage from '../components/CaseImage.vue';
 import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
+import CaseTestimonialCard from '../components/CaseTestimonialCard.vue';
 import TableOfContents from '../components/TableOfContents.vue';
 
 // Rocksmith Assets
@@ -66,7 +67,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
     <div class="case-study-layout xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
       <!-- Main Content Container -->
-      <div class="case-study-main xl:col-span-8 xl:col-start-1 space-y-24 min-w-0">
+      <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
     <!-- ─── HERO ─── -->
     <div class="relative">
       <!-- Decorative Alchemist Etching -->
@@ -135,7 +136,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RESEARCH ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Research</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -168,7 +169,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </div>
 
         <!-- Research statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
           <CaseInsight stat="~90%" statLabel="potential new users" theme="neutral">
             <p>Wanted a hassle-free and wireless experience.</p>
           </CaseInsight>
@@ -180,7 +181,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           We also included questions related to eyesight. I wanted to know how many users suffered from eyesight issues including near/far sightedness and colour vision deficiency. <strong>I personally suffer from near sightedness and colour vision deficiency which impassioned my desire for an accessible UI.</strong>
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
           <CaseInsight stat="~63%" statLabel="of total responders" theme="neutral">
             <p>Suffered from at least 1 eyesight issue.</p>
           </CaseInsight>
@@ -193,7 +194,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           I wanted to know how many contexts the general user stories would have and how many devices a user imagined themselves playing on.
         </p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-3">
           <CaseInsight stat="87%" statLabel="correlation" theme="neutral">
             <p>Between size of device and complexity of setup.</p>
           </CaseInsight>
@@ -217,7 +218,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Responsive UI</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -265,7 +266,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── ACCESSIBILITY ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Accessibility &amp; UI Scaling</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -287,7 +288,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── UNIFIED INPUT ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Unified Input System</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -299,7 +300,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <CaseImage :src="marketingOnHand" alt="One hand interface" imgClass="w-full h-auto rounded-xl max-w-xs mx-auto" />
 
         <!-- Research stats -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
           <CaseInsight stat="86%" statLabel="of participants" theme="neutral">
             <p>Wished the interactions were similar to Netflix or Spotify on mobile.</p>
           </CaseInsight>
@@ -334,7 +335,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── COMPONENT ADAPTATIONS ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Platform UI Adaptations</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -355,7 +356,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── CONSOLE NAVIGATION ─── -->
-    <section class="space-y-8 pt-16">
+    <section class="space-y-8">
       <h2 class="type-case-section">Console Navigation Challenge</h2>
       <div class="space-y-8">
         <p class="type-case-body-lg">
@@ -429,33 +430,29 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── TESTIMONIALS ─── -->
-    <section class="pt-16">
-      <h2 class="type-case-section-block text-center mb-12">Testimonials</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-        <div class="panel-recessed p-8 space-y-4">
-          <h4 class="type-case-attribution">Hiroshi Ogawa, Lead UI Engineer, Ubisoft</h4>
-          <blockquote class="type-case-body italic">
-            "Bramha made the foundation of Multi-platform UI, which was one of the biggest challenges in the project. His knowledge and insight always pushed our discussion forward. A clear design-based dialogue was productive and helpful in the cross-studio project in Japan and India. I respect his courage to accept the change, which is UX/UI design's most challenging part of improving the game while managing our resources."
-          </blockquote>
-        </div>
-        <div class="panel-recessed p-8 space-y-4">
-          <h4 class="type-case-attribution">Kaiwen Young, Director of User Experience, Ubisoft</h4>
-          <blockquote class="type-case-body italic">
-            "Bramha's passion, knowledge and communication style contributed greatly to the quality of our project and team UX culture."
-          </blockquote>
-        </div>
-        <div class="panel-recessed p-8 space-y-4">
-          <h4 class="type-case-attribution">Rohit Suvarna, Senior Game Designer, Ubisoft</h4>
-          <blockquote class="type-case-body italic">
-            "Bramha has a deep understanding of how to design user interfaces that are intuitive, effective and visually appealing. He is also an expert in user experience research and knows how to use data to drive his designs."
-          </blockquote>
-        </div>
-        <div class="panel-recessed p-8 space-y-4">
-          <h4 class="type-case-attribution">Utkarsh Bagade, Senior Engineer, Ubisoft</h4>
-          <blockquote class="type-case-body italic">
-            "Bramha's approach to designing complex game systems always put UX at the highest priority. I'm very impressed by his ability to understand the tech (tools and engine) and designing features that take advantage of the current frameworks and help improve them."
-          </blockquote>
-        </div>
+    <section>
+      <h2 class="type-case-section-block mb-12">Testimonials</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+        <CaseTestimonialCard
+          name="Hiroshi Ogawa"
+          role="Lead UI Engineer, Ubisoft"
+          quote="Bramha made the foundation of Multi-platform UI, which was one of the biggest challenges in the project. His knowledge and insight always pushed our discussion forward. A clear design-based dialogue was productive and helpful in the cross-studio project in Japan and India. I respect his courage to accept the change, which is UX/UI design's most challenging part of improving the game while managing our resources."
+        />
+        <CaseTestimonialCard
+          name="Kaiwen Young"
+          role="Director of User Experience, Ubisoft"
+          quote="Bramha's passion, knowledge and communication style contributed greatly to the quality of our project and team UX culture."
+        />
+        <CaseTestimonialCard
+          name="Rohit Suvarna"
+          role="Senior Game Designer, Ubisoft"
+          quote="Bramha has a deep understanding of how to design user interfaces that are intuitive, effective and visually appealing. He is also an expert in user experience research and knows how to use data to drive his designs."
+        />
+        <CaseTestimonialCard
+          name="Utkarsh Bagade"
+          role="Senior Engineer, Ubisoft"
+          quote="Bramha's approach to designing complex game systems always put UX at the highest priority. I'm very impressed by his ability to understand the tech (tools and engine) and designing features that take advantage of the current frameworks and help improve them."
+        />
       </div>
     </section>
 

@@ -284,7 +284,7 @@ const vertexShader = /* glsl */ `void main() {
   gl_Position = vec4(position, 1.0);
 }`
 
-const SHADER_REV = 9
+const SHADER_REV = 15
 
 let bakeRenderer: THREE.WebGLRenderer | null = null
 let bakeScene: THREE.Scene | null = null
@@ -306,18 +306,43 @@ function disposePencilBakeGl() {
   shaderOk = null
 }
 
-function ensurePencilBakeGl(): boolean {
-  if (bakeRenderer && shaderRevLoaded !== SHADER_REV) {
-    disposePencilBakeGl()
+function validatePencilProgram(): boolean {
+  if (!bakeRenderer || !bakeMaterial || !bakeScene || !bakeCamera)
+    return false
+  try {
+    bakeRenderer.setSize(32, 32, false)
+    bakeRenderer.setClearColor(0x000000, 0)
+    bakeRenderer.clear(true, true, true)
+    bakeMaterial.uniforms.u_bakeMode.value = 1
+    bakeMaterial.uniforms.u_innerHalf.value.set(1, 0.1)
+    bakeMaterial.uniforms.u_strokeNorm.value = 0.032
+    bakeRenderer.compile(bakeScene, bakeCamera)
+    bakeRenderer.render(bakeScene, bakeCamera)
+    const probe = bakeRenderer.domElement.toDataURL('image/png')
+    return probe.length > 120
   }
-  if (bakeRenderer)
-    return shaderOk === true
+  catch (err) {
+    console.error('[pencilFrameBake] Shader link failed', err)
+    return false
+  }
+}
+
+function ensurePencilBakeGl(): boolean {
+  if (bakeRenderer && shaderRevLoaded !== SHADER_REV)
+    disposePencilBakeGl()
+
+  if (bakeRenderer && shaderOk === true)
+    return true
+
+  if (bakeRenderer && shaderOk === false)
+    disposePencilBakeGl()
 
   bakeRenderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
     premultipliedAlpha: false,
     preserveDrawingBuffer: true,
+    failIfMajorPerformanceCaveat: false,
   })
   bakeRenderer.setPixelRatio(1)
 
@@ -350,14 +375,9 @@ function ensurePencilBakeGl(): boolean {
   bakeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bakeMaterial)
   bakeScene.add(bakeMesh)
 
-  try {
-    bakeRenderer.compile(bakeScene, bakeCamera)
-    shaderOk = true
-  }
-  catch (err) {
-    console.error('[pencilFrameBake] Shader compile failed', err)
-    shaderOk = false
-  }
+  shaderOk = validatePencilProgram()
+  if (!shaderOk)
+    console.error('[pencilFrameBake] Pencil bake shader unavailable — panels will use CSS fallback')
 
   shaderRevLoaded = SHADER_REV
   return shaderOk === true

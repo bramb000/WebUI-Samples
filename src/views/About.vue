@@ -80,8 +80,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
         <div class="quote-attribution">
           <div class="attribution-rule"></div>
           <div>
-            <p class="type-case-attribution">Chris Clay</p>
-            <p class="type-eyebrow">VP of Design, Immutable</p>
+            <p class="type-case-testimonial-name">Chris Clay</p>
+            <p class="type-case-testimonial-role">VP of Design, Immutable</p>
           </div>
         </div>
       </div>
@@ -260,11 +260,11 @@ import PrimaryButton from '../components/PrimaryButton.vue';
   flex-shrink: 0;
 }
 .testimonial-block:hover .attribution-rule { width: 64px; }
-.quote-attribution .type-case-attribution {
+.quote-attribution .type-case-testimonial-name {
   color: var(--color-border-hi);
-  margin: 0 0 2px;
+  margin: 0;
 }
-.quote-attribution .type-eyebrow {
+.quote-attribution .type-case-testimonial-role {
   margin: 0;
 }
 

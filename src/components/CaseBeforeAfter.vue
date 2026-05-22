@@ -1,47 +1,41 @@
 <script setup lang="ts">
-import CaseImage from './CaseImage.vue';
+import CaseImage from './CaseImage.vue'
+import CasePencilChip from './CasePencilChip.vue'
 
 defineProps<{
-  beforeImage: string;
-  afterImage: string;
-  beforeAlt?: string;
-  afterAlt?: string;
-  caption?: string;
-}>();
+  beforeImage: string
+  afterImage: string
+  beforeAlt?: string
+  afterAlt?: string
+  caption?: string
+}>()
 </script>
 
 <template>
   <div class="baa-wrap">
     <div class="baa-grid">
-      <!-- Before -->
       <div class="baa-col">
-        <div class="baa-label baa-label--before">
-          <span class="label-segment">Before</span>
-        </div>
+        <CasePencilChip label="Before" />
         <CaseImage
           :src="beforeImage"
-          :alt="beforeAlt || 'Before Image'"
+          :alt="beforeAlt || 'Before'"
+          lightbox-badge="Before"
           img-class="baa-img"
         />
       </div>
 
-      <!-- Divider -->
-      <div class="baa-divider case-divider--vertical" aria-hidden="true"></div>
-
-      <!-- After -->
       <div class="baa-col">
-        <div class="baa-label baa-label--after">
-          <span class="label-segment label-segment--accent">After</span>
-        </div>
+        <CasePencilChip label="After" />
         <CaseImage
           :src="afterImage"
-          :alt="afterAlt || 'After Image'"
+          :alt="afterAlt || 'After'"
+          lightbox-badge="After"
           img-class="baa-img baa-img--after"
         />
       </div>
     </div>
 
-    <p v-if="caption" class="baa-caption">{{ caption }}</p>
+    <p v-if="caption" class="baa-caption type-case-caption">{{ caption }}</p>
   </div>
 </template>
 
@@ -52,27 +46,27 @@ defineProps<{
   gap: 16px;
   width: 100%;
 }
+
 .baa-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
   position: relative;
 }
+
 @media (min-width: 768px) {
-  .baa-grid { grid-template-columns: 1fr 12px 1fr; align-items: start; }
+  .baa-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 24px;
+  }
 }
 
-.baa-col { display: flex; flex-direction: column; gap: 8px; }
-.baa-label { display: flex; }
-.baa-label--after .label-segment { color: var(--color-accent); border-color: var(--color-accent); }
-
-.baa-divider {
-  display: none;
-  align-self: stretch;
-  margin-top: 32px;
-}
-@media (min-width: 768px) {
-  .baa-divider { display: block; }
+.baa-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .baa-img {
@@ -80,23 +74,20 @@ defineProps<{
   height: auto;
   display: block;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--dl-border-radius);
   object-fit: cover;
 }
+
 .baa-img--after {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent), 0 4px 12px rgba(255,87,34,0.15);
+  box-shadow:
+    0 0 0 1px var(--color-accent),
+    var(--dl-glow-global);
 }
 
 .baa-caption {
-  font-family: var(--font-sans);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  text-align: center;
-  color: var(--color-text-muted);
-  opacity: 0.75;
+  text-align: left;
   margin: 0;
+  opacity: 0.85;
 }
 </style>

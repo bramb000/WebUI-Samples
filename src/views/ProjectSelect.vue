@@ -788,7 +788,11 @@ function onDone() {
 }
 
 .thumbnail:not(:hover):not(.selected):not(.pressed) {
-  animation: settleBack 0.25s ease-out forwards;
+  animation: settleBack 0.125s ease-out forwards;
+}
+
+.thumbnail:not(:hover):not(.selected):not(.pressed) .inner-card {
+  transition: transform 0.125s ease-out;
 }
 
 .thumbnail:hover .inner-card {
@@ -983,6 +987,11 @@ function onDone() {
 .dl-embedded--case :deep(.case-divider--vertical:not(.pencil-baked)) {
   background: color-mix(in srgb, var(--color-accent) 72%, transparent);
   opacity: 0.55;
+}
+
+.dl-embedded--case :deep(.case-pencil-chip:not(.pencil-baked)) {
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
 }
 
 .dl-embedded--case :deep(.type-hero-title),

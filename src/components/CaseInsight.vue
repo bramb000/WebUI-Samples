@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { useInsightCardGrain } from '../composables/useInsightCardGrain'
 import ProceduralChiselFrame from './ProceduralChiselFrame.vue'
 
 const props = withDefaults(
@@ -24,30 +25,53 @@ const frameAccent = computed(() => {
   }
 })
 
-/** Dark paper fill derived from chisel rim color — reads as tinted stock behind the frame */
-const paperFill = computed(
-  () => `color-mix(in srgb, ${frameAccent.value} 26%, rgb(12, 12, 12) 74%)`,
-)
+const grainSeed = computed(() => {
+  const label = `${props.stat ?? ''}-${props.statLabel ?? ''}-${props.theme}`
+  let h = 0
+  for (let i = 0; i < label.length; i++)
+    h = (h * 31 + label.charCodeAt(i)) | 0
+  return Math.abs(h) % 1000
+})
+
+const surfaceRef = ref<HTMLElement | null>(null)
+const { grainUrl, paintMaskUrl } = useInsightCardGrain(surfaceRef, grainSeed)
+
+const surfaceStyle = computed(() => ({
+  '--insight-accent': frameAccent.value,
+  '--case-insight-paint-mask': `url(${paintMaskUrl})`,
+}))
 </script>
 
 <template>
   <ProceduralChiselFrame class="insight-frame" :color="frameAccent" :hover-flame="false">
-    <div class="insight-wrap insight-wrap--chisel panel-recessed panel-recessed--borderless noise-overlay">
-
-    <!-- Stat badge (if provided) -->
-    <div v-if="stat || statLabel" class="insight-stat-block">
-      <div class="insight-stat lcd-data">
-        <span class="insight-stat-value">{{ stat }}</span>
+    <div
+      class="insight-wrap insight-wrap--chisel"
+      :style="surfaceStyle"
+    >
+      <div ref="surfaceRef" class="case-insight-surface" aria-hidden="true">
+        <img
+          v-if="grainUrl"
+          class="case-insight-surface__grain"
+          :src="grainUrl"
+          alt=""
+        />
+        <div v-else class="case-insight-surface__grain case-insight-surface__grain--fallback" />
       </div>
-      <div v-if="statLabel" class="insight-stat-label">
-        <span class="stat-label-text">{{ statLabel }}</span>
-      </div>
-    </div>
 
-    <!-- Content Slot -->
-    <div class="insight-body">
-      <slot></slot>
-    </div>
+      <div class="case-insight-surface__content insight-content">
+        <div v-if="stat || statLabel" class="insight-stat-block">
+          <div class="insight-stat lcd-data">
+            <span class="insight-stat-value">{{ stat }}</span>
+          </div>
+          <div v-if="statLabel" class="insight-stat-label">
+            <span class="stat-label-text">{{ statLabel }}</span>
+          </div>
+        </div>
+
+        <div class="insight-body">
+          <slot />
+        </div>
+      </div>
     </div>
   </ProceduralChiselFrame>
 </template>
@@ -56,8 +80,9 @@ const paperFill = computed(
 .insight-frame {
   width: 100%;
   min-width: 0;
+  --insight-accent: v-bind(frameAccent);
+  --card-clip: polygon(4% 0, 100% 0, 100% 94%, 97% 100%, 0 100%, 0 7%);
   --card-hover-tilt: 0.8deg;
-  --card-hover-clip: polygon(4% 0, 100% 0, 100% 94%, 97% 100%, 0 100%, 0 7%);
   transition: transform 200ms var(--ease-mechanical-spring);
   transform-origin: center bottom;
   will-change: transform;
@@ -67,16 +92,14 @@ const paperFill = computed(
   content: '';
   position: absolute;
   inset: -4px;
-  border: 2px solid color-mix(in srgb, v-bind(frameAccent) 70%, #f4f4f5 30%);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  border: 2px solid color-mix(in srgb, var(--insight-accent) 70%, #f4f4f5 30%);
+  clip-path: var(--card-clip);
   opacity: 0;
   pointer-events: none;
   box-shadow:
-    0 0 0 1px color-mix(in srgb, v-bind(frameAccent) 22%, transparent 78%),
-    0 10px 24px color-mix(in srgb, v-bind(frameAccent) 16%, transparent 84%);
-  transition:
-    opacity 140ms ease,
-    clip-path 200ms var(--ease-mechanical-spring);
+    0 0 0 1px color-mix(in srgb, var(--insight-accent) 22%, transparent 78%),
+    0 10px 24px color-mix(in srgb, var(--insight-accent) 16%, transparent 84%);
+  transition: opacity 140ms ease;
 }
 
 .insight-frame:nth-child(4n + 1) {
@@ -85,17 +108,17 @@ const paperFill = computed(
 
 .insight-frame:nth-child(4n + 2) {
   --card-hover-tilt: -0.55deg;
-  --card-hover-clip: polygon(0 0, 95% 0, 100% 7%, 100% 100%, 4% 100%, 0 92%);
+  --card-clip: polygon(0 0, 95% 0, 100% 7%, 100% 100%, 4% 100%, 0 92%);
 }
 
 .insight-frame:nth-child(4n + 3) {
   --card-hover-tilt: 0.65deg;
-  --card-hover-clip: polygon(3% 0, 100% 0, 100% 91%, 93% 100%, 0 100%, 0 4%);
+  --card-clip: polygon(3% 0, 100% 0, 100% 91%, 93% 100%, 0 100%, 0 4%);
 }
 
 .insight-frame:nth-child(4n + 4) {
   --card-hover-tilt: -1deg;
-  --card-hover-clip: polygon(0 0, 97% 0, 100% 4%, 100% 100%, 7% 100%, 0 89%);
+  --card-clip: polygon(0 0, 97% 0, 100% 4%, 100% 100%, 7% 100%, 0 89%);
 }
 
 .insight-frame:hover {
@@ -104,37 +127,34 @@ const paperFill = computed(
 
 .insight-frame:hover::after {
   opacity: 1;
-  clip-path: var(--card-hover-clip);
 }
 
 .insight-wrap {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  clip-path: var(--card-clip);
+}
+
+.insight-wrap--chisel {
+  color: var(--case-insight-on-fill);
+}
+
+.insight-content {
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  position: relative;
-  width: 100%;
-  min-width: 0;
-  flex: 1 1 auto;
   min-height: 0;
-  transition:
-    clip-path 200ms var(--ease-mechanical-spring),
-    box-shadow 200ms var(--ease-mechanical-spring),
-    transform  200ms var(--ease-mechanical-spring);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: box-shadow 200ms var(--ease-mechanical-spring);
 }
 
-.insight-wrap--chisel {
-  border: none !important;
-  background: v-bind(paperFill) !important;
-  box-shadow: none !important;
-}
-
-.insight-frame:hover .insight-wrap {
-  clip-path: var(--card-hover-clip);
+.insight-frame:hover .insight-content {
   box-shadow:
     0 14px 32px rgba(0, 0, 0, 0.28),
-    0 0 0 1px color-mix(in srgb, v-bind(frameAccent) 22%, transparent 78%);
+    0 0 0 1px color-mix(in srgb, var(--insight-accent) 22%, transparent 78%);
 }
 
 .insight-stat-block {
@@ -142,8 +162,6 @@ const paperFill = computed(
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  position: relative;
-  z-index: 1;
 }
 
 .insight-stat {
@@ -152,26 +170,18 @@ const paperFill = computed(
   align-items: center;
   justify-content: center;
   width: 100%;
-  position: relative;
 }
+
 .insight-stat-value {
   font-family: var(--font-sans);
   font-size: var(--text-heading-accent);
   font-weight: 800;
-  /* LCD tint + lighten for AA on tinted paper / theme clashes (e.g. teal on teal) */
-  color: color-mix(in srgb, var(--color-lcd-text) 55%, var(--text-on-tint) 45%);
+  color: color-mix(in srgb, var(--insight-accent) 38%, var(--case-insight-on-fill) 62%);
   letter-spacing: 0.04em;
   line-height: 1;
-  position: relative;
-  z-index: 1;
-  text-shadow: 0 1px 3px rgb(0 0 0 / 0.65), 0 0 28px rgb(255 255 255 / 0.05);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
 }
 
-.insight-stat-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
 .stat-label-text {
   font-family: var(--font-sans);
   font-size: var(--text-filter-tab);
@@ -182,25 +192,32 @@ const paperFill = computed(
   text-align: center;
   max-width: 42rem;
   text-wrap: balance;
-  color: color-mix(in srgb, var(--text-on-tint-muted) 74%, v-bind(frameAccent) 26%);
-  text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
+  color: color-mix(in srgb, var(--case-insight-on-fill-muted) 82%, var(--insight-accent) 18%);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
 }
-
 
 .insight-body {
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: 1.7;
-  color: color-mix(in srgb, var(--text-on-tint) 88%, v-bind(frameAccent) 12%);
-  opacity: 1;
-  position: relative;
-  z-index: 1;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  color: var(--case-insight-on-fill);
   flex: 0 0 auto;
   min-height: 0;
 }
 
 .insight-body:not(:empty) {
   flex: 1 1 auto;
+}
+
+.insight-body :deep(p),
+.insight-body :deep(li),
+.insight-body :deep(.type-case-body),
+.insight-body :deep(.type-case-body-lg),
+.insight-body :deep(.type-case-caption) {
+  color: var(--case-insight-on-fill-muted);
+}
+
+.insight-body :deep(strong) {
+  color: var(--case-insight-on-fill);
 }
 </style>
