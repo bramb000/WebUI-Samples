@@ -19,7 +19,7 @@ type BoundEntry = {
   blobUrl: string | null
 }
 
-const CASE_HEADING_SELECTOR = 'section :is(h2, h3, h4).font-mono.font-extrabold'
+const CASE_HEADING_SELECTOR = 'section :is(h2, h3, h4)[class*="type-case-"]'
 
 function shouldBindPanel(el: HTMLElement): boolean {
   if (!el.classList.contains('panel-recessed'))

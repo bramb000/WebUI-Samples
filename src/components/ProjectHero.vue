@@ -19,29 +19,29 @@ defineProps<Props>();
 
     <!-- Title & Intro -->
     <div class="hero-title-block">
-      <h1 class="hero-title">{{ title }}</h1>
-      <p class="hero-desc">{{ description }}</p>
+      <h1 class="type-hero-title">{{ title }}</h1>
+      <p class="type-body-lg text-muted">{{ description }}</p>
     </div>
 
     <!-- Metadata Grid -->
     <div class="hero-meta-grid panel-recessed panel-recessed--borderless">
       <div class="hero-meta-cell">
         <div class="meta-label">
-          <span class="meta-label-text">Role</span>
+          <span class="type-meta-label">Role</span>
         </div>
-        <p class="meta-value">{{ role }}</p>
+        <p class="type-meta-value">{{ role }}</p>
       </div>
       <div class="hero-meta-cell">
         <div class="meta-label">
-          <span class="meta-label-text">Timeline</span>
+          <span class="type-meta-label">Timeline</span>
         </div>
-        <p class="meta-value">{{ timeline }}</p>
+        <p class="type-meta-value">{{ timeline }}</p>
       </div>
       <div class="hero-meta-cell hero-meta-cell--wide">
         <div class="meta-label">
-          <span class="meta-label-text">Team</span>
+          <span class="type-meta-label">Team</span>
         </div>
-        <div class="meta-value">
+        <div class="type-meta-value">
           <slot name="team"></slot>
         </div>
       </div>
@@ -65,17 +65,12 @@ defineProps<Props>();
   gap: 6px;
 }
 
-.dl-plaque {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+.project-hero .dl-plaque {
   padding: 4px 12px;
   background: var(--color-surface);
   border: none;
   color: var(--color-text);
-  box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .hero-title-block {
@@ -84,25 +79,12 @@ defineProps<Props>();
   gap: 12px;
   max-width: 800px;
 }
-.hero-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(28px, 6vw, 52px);
-  letter-spacing: 0.06em;
-  line-height: 1.1;
-  color: var(--color-text);
+.project-hero .type-hero-title {
   margin: 0;
-  padding-left: 0;
-  text-shadow: 0 0 30px rgba(197, 168, 114, 0.08);
+  text-shadow: 0 0 30px color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
-.hero-desc {
-  font-family: var(--font-sans);
-  font-size: clamp(15px, 2vw, 18px);
-  line-height: 1.7;
-  color: var(--color-text);
-  opacity: 0.75;
+.project-hero .type-body-lg {
   margin: 0;
-  padding-left: 0;
 }
 
 /* Metadata panel */
@@ -132,21 +114,7 @@ defineProps<Props>();
   align-items: center;
   gap: 6px;
 }
-.meta-label-text {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--color-text-muted);
-}
-.meta-value {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--color-text);
+.project-hero .type-meta-value {
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 </style>

@@ -56,7 +56,7 @@ const emit = defineEmits<{
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   margin: 0 0 6px;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
 }
 
 .info-description {

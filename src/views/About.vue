@@ -11,8 +11,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
     <section class="intro-grid grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div class="intro-text">
 
-        <h1 class="intro-title mb-5">More than just design.</h1>
-        <p class="intro-body">
+        <h1 class="type-hero-title mb-5">More than just design.</h1>
+        <p class="type-body-lg text-muted">
           I enjoy cosplay, love Star Wars, and I'm passionate about people. I find joy when products that I build are enjoyed by customers or when I see my team members are growing and having a good time building them.
         </p>
       </div>
@@ -31,7 +31,7 @@ import PrimaryButton from '../components/PrimaryButton.vue';
     <!-- ── Process ── -->
     <section class="process-section">
       <div class="section-header border-b border-[var(--color-border)] pb-3 mb-7">
-        <h2 class="section-title">My Process</h2>
+        <h2 class="type-section-title">My Process</h2>
       </div>
 
       <div class="process-grid grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -40,8 +40,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
           <div class="bg-step-num">1</div>
           <div class="process-card-inner">
             <div class="step-badge btn-extruded step-badge-static">01</div>
-            <h3 class="step-name">Research</h3>
-            <p class="step-desc">Obsessing over understanding the user and the core problem before jumping into pixels.</p>
+            <h3 class="type-case-subsection">Research</h3>
+            <p class="type-body">Obsessing over understanding the user and the core problem before jumping into pixels.</p>
           </div>
         </div>
 
@@ -50,8 +50,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
           <div class="bg-step-num">2</div>
           <div class="process-card-inner">
             <div class="step-badge btn-extruded step-badge-static">02</div>
-            <h3 class="step-name">Validate</h3>
-            <p class="step-desc">Testing solutions rapidly and aligning cross-functional teams with high-fidelity prototypes.</p>
+            <h3 class="type-case-subsection">Validate</h3>
+            <p class="type-body">Testing solutions rapidly and aligning cross-functional teams with high-fidelity prototypes.</p>
           </div>
         </div>
 
@@ -60,8 +60,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
           <div class="bg-step-num">3</div>
           <div class="process-card-inner">
             <div class="step-badge btn-extruded step-badge-static">03</div>
-            <h3 class="step-name">Execute</h3>
-            <p class="step-desc">Deriving execution speed by building empathy—understanding them, talking to them, and becoming a power user myself.</p>
+            <h3 class="type-case-subsection">Execute</h3>
+            <p class="type-body">Deriving execution speed by building empathy—understanding them, talking to them, and becoming a power user myself.</p>
           </div>
         </div>
       </div>
@@ -73,15 +73,15 @@ import PrimaryButton from '../components/PrimaryButton.vue';
       <div class="quote-mark" aria-hidden="true">"</div>
 
       <div class="testimonial-inner">
-        <blockquote class="quote-text">
+        <blockquote class="type-body-lg italic">
           "If there was a challenge that needed solving, Bramha was always willing to step in and try to solve it with curiosity, grit, and determination. If you're looking for someone who will challenge the status quo, ask the right questions, and search for the best answers, Bramha is someone I'd recommend."
         </blockquote>
 
         <div class="quote-attribution">
           <div class="attribution-rule"></div>
           <div>
-            <p class="attribution-name">Chris Clay</p>
-            <p class="attribution-role">VP of Design, Immutable</p>
+            <p class="type-case-attribution">Chris Clay</p>
+            <p class="type-eyebrow">VP of Design, Immutable</p>
           </div>
         </div>
       </div>
@@ -89,7 +89,7 @@ import PrimaryButton from '../components/PrimaryButton.vue';
 
     <!-- ── CTA ── -->
     <section class="cta-section flex flex-col items-start gap-5">
-      <p class="cta-text">If you've reached here, why not read a few case studies?</p>
+      <p class="type-body">If you've reached here, why not read a few case studies?</p>
       <PrimaryButton to="/work" class="cta-btn">View Case Studies</PrimaryButton>
     </section>
 
@@ -97,31 +97,13 @@ import PrimaryButton from '../components/PrimaryButton.vue';
 </template>
 
 <style scoped>
-.eyebrow-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--color-text-muted);
+.page-about .type-hero-title {
+  text-shadow: 0 0 30px color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
-
-/* H1 — Cinzel occult display */
-.intro-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(32px, 6vw, 52px);
-  letter-spacing: 0.06em;
-  line-height: 1.1;
-  color: var(--color-text);
-  text-shadow: 0 0 30px rgba(197, 168, 114, 0.08);
+.page-about .type-body-lg {
+  margin: 0;
 }
-.intro-body {
-  font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.75;
-  color: var(--color-text);
-  opacity: 0.8;
+.page-about .type-section-title {
   margin: 0;
 }
 
@@ -167,16 +149,6 @@ import PrimaryButton from '../components/PrimaryButton.vue';
 }
 .photo-front:hover { transform: rotate(-1deg) scale(1.04); z-index: 3; }
 .photo-img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
-
-/* H2 — Cinzel */
-.section-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 0.1em;
-  color: var(--color-text);
-  margin: 0;
-}
 
 .process-card {
   position: relative;
@@ -237,28 +209,14 @@ import PrimaryButton from '../components/PrimaryButton.vue';
   width: 40px;
   height: 40px;
   border-radius: 2px;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 12px;
   cursor: default;
   pointer-events: none;
 }
 
-.step-name {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-text);
+.process-card-inner .type-body {
   margin: 0;
-}
-.step-desc {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.65;
-  color: var(--color-text-muted);
-  margin: 0;
-  opacity: 0.9;
 }
 
 .quote-mark {
@@ -283,13 +241,7 @@ import PrimaryButton from '../components/PrimaryButton.vue';
   gap: 24px;
 }
 
-.quote-text {
-  font-family: var(--font-sans);
-  font-style: italic;
-  font-size: clamp(13px, 1.8vw, 16px);
-  line-height: 1.75;
-  color: var(--color-text);
-  opacity: 0.85;
+.testimonial-inner .type-body-lg {
   margin: 0;
 }
 
@@ -308,29 +260,16 @@ import PrimaryButton from '../components/PrimaryButton.vue';
   flex-shrink: 0;
 }
 .testimonial-block:hover .attribution-rule { width: 64px; }
-.attribution-name {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+.quote-attribution .type-case-attribution {
   color: var(--color-border-hi);
-  margin: 0 0 2px 0;
+  margin: 0 0 2px;
 }
-.attribution-role {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--color-text-muted);
+.quote-attribution .type-eyebrow {
   margin: 0;
-  opacity: 0.7;
 }
 
-.cta-text {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--color-text-muted);
+.cta-section .type-body {
   margin: 0;
-  opacity: 0.85;
 }
-.cta-btn { padding: 12px 28px; font-size: 12px; }
+.cta-btn { padding: 12px 28px; font-size: var(--text-body-sm); }
 </style>

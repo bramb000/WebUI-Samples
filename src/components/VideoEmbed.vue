@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[var(--color-text-charcoal)]/10 bg-black">
+  <div class="w-full rounded-2xl overflow-hidden shadow-lg border border-[color-mix(in_srgb,var(--color-border)_35%,transparent)] bg-black">
     <div class="relative w-full aspect-video">
       <iframe
         class="absolute top-0 left-0 w-full h-full"

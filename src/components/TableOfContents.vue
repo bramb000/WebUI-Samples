@@ -484,7 +484,7 @@ function scrollTo(id: string) {
 }
 
 .toc-title {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;

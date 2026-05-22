@@ -44,7 +44,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
     />
     <figcaption
       v-if="props.caption"
-      class="text-sm font-sans text-center opacity-60"
+      class="type-case-caption text-center"
     >
       {{ props.caption }}
     </figcaption>

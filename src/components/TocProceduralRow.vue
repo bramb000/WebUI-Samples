@@ -146,10 +146,10 @@ function onKeydown(e: KeyboardEvent) {
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: var(--toc-row-font-size, 11px);
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: var(--tracking-display-wide, 0.06em);
   text-transform: uppercase;
   line-height: var(--toc-row-line-height, 1.32);
   min-height: var(--toc-row-min-height, 32px);

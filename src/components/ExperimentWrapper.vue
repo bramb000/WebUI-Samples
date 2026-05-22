@@ -4,17 +4,17 @@
       <slot></slot>
     </div>
   </template>
-  <div v-else class="space-y-8">
+  <div v-else class="mini-project-doc space-y-8">
     <!-- Header & Controls -->
     <header class="flex flex-col xl:flex-row xl:items-start justify-between gap-8">
       <div class="space-y-4 max-w-2xl">
-        <h1 class="text-4xl font-bold font-[family-name:var(--font-display)]">{{ title }}</h1>
-        <p class="text-lg opacity-80 leading-relaxed">
+        <h1 class="type-hero-title">{{ title }}</h1>
+        <p class="type-body-lg text-muted">
           <slot name="description">{{ description }}</slot>
         </p>
         
         <div class="flex flex-wrap items-center gap-6">
-          <div class="flex items-center gap-4 text-sm font-sans uppercase tracking-wider opacity-60">
+          <div class="flex items-center gap-4 type-body-sm uppercase tracking-wider">
             <template v-for="(tag, index) in tags" :key="tag">
               <span>{{ tag }}</span>
               <span v-if="index < tags.length - 1" class="select-none">•</span>
@@ -22,7 +22,7 @@
           </div>
 
           <!-- Device Simulator Toggle / Badge -->
-          <div v-if="!isFullScreen && supportedDevices.length > 0" class="flex items-center bg-[var(--color-text-charcoal)]/5 p-1 rounded-xl shrink-0 mt-2 sm:mt-0">
+          <div v-if="!isFullScreen && supportedDevices.length > 0" class="flex items-center bg-[var(--color-text)]/5 p-1 rounded-xl shrink-0 mt-2 sm:mt-0">
             
             <!-- Toggle (both supported) -->
             <template v-if="supportedDevices.includes('desktop') && supportedDevices.includes('mobile')">
@@ -30,7 +30,7 @@
                 @click="deviceMode = 'desktop'"
                 :class="[
                   'px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2',
-                  deviceMode === 'desktop' ? 'bg-white dark:bg-[var(--color-surface-dark)] shadow text-indigo-600 dark:text-indigo-400' : 'text-[var(--color-text-charcoal)]/60 hover:text-[var(--color-text-charcoal)] hover:bg-white/10'
+                  deviceMode === 'desktop' ? 'bg-white dark:bg-[var(--color-surface)] shadow text-indigo-600 dark:text-indigo-400' : 'text-[var(--color-text)]/60 hover:text-[var(--color-text)] hover:bg-white/10'
                 ]"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
@@ -40,7 +40,7 @@
                 @click="deviceMode = 'mobile'"
                 :class="[
                   'px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2',
-                  deviceMode === 'mobile' ? 'bg-white dark:bg-[var(--color-surface-dark)] shadow text-indigo-600 dark:text-indigo-400' : 'text-[var(--color-text-charcoal)]/60 hover:text-[var(--color-text-charcoal)] hover:bg-white/10'
+                  deviceMode === 'mobile' ? 'bg-white dark:bg-[var(--color-surface)] shadow text-indigo-600 dark:text-indigo-400' : 'text-[var(--color-text)]/60 hover:text-[var(--color-text)] hover:bg-white/10'
                 ]"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
@@ -50,7 +50,7 @@
 
             <!-- Badge (only one supported) -->
             <template v-else>
-              <div class="px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-wider bg-white dark:bg-[var(--color-surface-dark)] shadow text-[var(--color-text-charcoal)]/80 flex items-center gap-2 select-none">
+              <div class="px-6 py-2 rounded-lg text-sm font-bold uppercase tracking-wider bg-white dark:bg-[var(--color-surface)] shadow text-[var(--color-text)]/80 flex items-center gap-2 select-none">
                 <template v-if="supportedDevices.includes('desktop')">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                   Desktop Only
@@ -68,12 +68,12 @@
 
       <!-- Links/Buttons -->
       <div class="flex flex-col sm:flex-row flex-wrap gap-2 self-start shrink-0 items-end sm:items-start pt-2 xl:pt-0">
-        <a v-if="storybookId" :href="storybookUrl" target="_blank" class="inline-flex items-center justify-end sm:justify-start gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider border border-[var(--color-text-charcoal)]/30 rounded-full hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors w-full sm:w-auto text-right sm:text-left" title="Open isolated component in Storybook">
+        <a v-if="storybookId" :href="storybookUrl" target="_blank" class="inline-flex items-center justify-end sm:justify-start gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider border border-[var(--color-text)]/30 rounded-full hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] transition-colors w-full sm:w-auto text-right sm:text-left" title="Open isolated component in Storybook">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
           Storybook
         </a>
         
-        <a :href="`${route.path}?fullscreen=true`" target="_blank" class="inline-flex items-center justify-end sm:justify-start gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider border border-[var(--color-text-charcoal)]/30 rounded-full hover:bg-[var(--color-text-charcoal)] hover:text-[var(--color-cream-bg)] transition-colors w-full sm:w-auto text-right sm:text-left" title="Open isolated component in a new tab">
+        <a :href="`${route.path}?fullscreen=true`" target="_blank" class="inline-flex items-center justify-end sm:justify-start gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider border border-[var(--color-text)]/30 rounded-full hover:bg-[var(--color-text)] hover:text-[var(--color-bg)] transition-colors w-full sm:w-auto text-right sm:text-left" title="Open isolated component in a new tab">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
           Full Screen
         </a>
@@ -93,7 +93,7 @@
       <!-- DESKTOP SIMULATOR (Resizable) -->
       <div 
         v-else-if="deviceMode === 'desktop'"
-        class="relative border border-[var(--color-text-charcoal)]/10 rounded-xl shadow-2xl group flex flex-col bg-[var(--color-cream-bg)]"
+        class="relative border border-[var(--color-text)]/10 rounded-xl shadow-2xl group flex flex-col bg-[var(--color-bg)]"
         style="resize: horizontal; overflow: hidden; max-width: 100%; min-width: 320px; height: 75vh; width: calc(75vh * 16 / 9);"
       >
         <!-- The @container is crucial here. Overrides containerClass to ensure layout fills this space -->
@@ -113,7 +113,7 @@
       <!-- MOBILE SIMULATOR (iPhone 16 shape - 393x852 inner content) -->
       <div 
         v-else-if="deviceMode === 'mobile'"
-        class="relative border-[14px] border-zinc-900 dark:border-zinc-950 rounded-[3rem] shadow-2xl w-[393px] h-[852px] shrink-0 overflow-hidden ring-1 ring-[var(--color-text-charcoal)]/10 bg-[var(--color-cream-bg)] flex flex-col box-content"
+        class="relative border-[14px] border-zinc-900 dark:border-zinc-950 rounded-[3rem] shadow-2xl w-[393px] h-[852px] shrink-0 overflow-hidden ring-1 ring-[var(--color-text)]/10 bg-[var(--color-bg)] flex flex-col box-content"
       >
         <!-- Dynamic Island / Notch Simulation -->
         <div class="absolute top-2 inset-x-0 h-8 z-50 flex justify-center pointer-events-none">
@@ -131,7 +131,7 @@
     </div>
 
     <!-- Footer note -->
-    <p v-if="footerNote" class="text-sm opacity-60 text-center italic">
+    <p v-if="footerNote" class="type-body-sm text-center italic">
       {{ footerNote }}
     </p>
   </div>

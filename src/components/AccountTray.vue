@@ -75,7 +75,7 @@ const stats = [
                   <div class="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-10"></div>
                   
                   <!-- Rolling mechanism container -->
-                  <div class="digit-roller flex font-mono text-[14px] font-bold tracking-widest text-[#fff] leading-none" :class="{ 'is-rolling': isOpen }">
+                  <div class="digit-roller flex font-sans text-[14px] font-bold tracking-widest text-[#fff] leading-none" :class="{ 'is-rolling': isOpen }">
                     <div class="flex space-x-[2px]">
                       <!-- Each digit container -->
                       <div v-for="(char, i) in item.value" :key="i" class="digit-col relative h-[14px] w-[9px] overflow-hidden bg-[#222]">
@@ -125,7 +125,7 @@ const stats = [
         <div class="flex items-center gap-4 relative z-10">
           <div class="flex flex-col text-left">
             <span class="font-bold text-[#222] tracking-tight leading-tight uppercase text-sm">View Usage</span>
-            <span class="text-[10px] text-[#666] font-mono font-bold tracking-[0.2em] uppercase mt-1">Status: Active</span>
+            <span class="text-[10px] text-[#666] font-sans font-bold tracking-[0.2em] uppercase mt-1">Status: Active</span>
           </div>
         </div>
         

@@ -243,7 +243,7 @@ const trackContactClick = (source: string) => {
 }
 
 .material-label {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.2em;

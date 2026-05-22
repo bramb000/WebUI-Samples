@@ -266,8 +266,10 @@ onUnmounted(() => {
 }
 
 .modal-title {
+  font-family: var(--font-display);
   font-size: 24px;
-  font-weight: 400;
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
   color: var(--modal-text);
   margin: 0;
   line-height: 1.2;
@@ -288,8 +290,10 @@ onUnmounted(() => {
 }
 
 .modal-section-title {
+  font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
   color: var(--modal-text);
   margin: 0 0 10px;
 }

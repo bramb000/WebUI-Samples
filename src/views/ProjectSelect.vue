@@ -546,13 +546,14 @@ function onDone() {
 }
 
 .roster-header {
-  font-size: 2rem;
-  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
+  font-size: var(--text-heading-accent);
+  letter-spacing: var(--tracking-heading-tight);
   text-transform: uppercase;
-  color: #7a8b99;
+  color: var(--color-text-muted);
   margin: 0 0 24px;
   padding: 0 4px 8px;
-  line-height: 1.1;
+  line-height: var(--leading-tight);
   font-weight: 900;
 }
 
@@ -560,7 +561,7 @@ function onDone() {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  /* Room for hover/selected scale(1.25), flame VFX, and scroll end */
+  /* Room for hover scale(1.1), selected scale(1.05), flame VFX, and scroll end */
   padding: 16px 16px 96px;
   box-sizing: border-box;
 }
@@ -611,12 +612,13 @@ function onDone() {
 }
 
 .thumbnail-label {
-  font-size: 0.8125rem;
-  font-weight: bold;
-  color: #aaa;
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   transition: color 0.15s;
-  line-height: 1.25;
+  line-height: var(--leading-snug);
   overflow-wrap: anywhere;
 }
 
@@ -666,7 +668,7 @@ function onDone() {
 .thumbnail.selected {
   z-index: 50;
   animation: none;
-  transform: scale(1.25);
+  transform: scale(1.05);
 }
 
 /* Hover/press = active focus: always above selected-only cards (same z-index used to tie on DOM order). */
@@ -678,11 +680,11 @@ function onDone() {
 @keyframes crunchAndPop {
   0% { transform: scale(1); }
   25% { transform: scale(0.85); }
-  100% { transform: scale(1.25); }
+  100% { transform: scale(1.1); }
 }
 
 @keyframes settleBack {
-  0% { transform: scale(1.25); z-index: 60; }
+  0% { transform: scale(1.1); z-index: 60; }
   100% { transform: scale(1); z-index: 1; }
 }
 
@@ -817,16 +819,28 @@ function onDone() {
   opacity: 0.55;
 }
 
-.dl-embedded--case :deep(.hero-title),
+.dl-embedded--case :deep(.type-hero-title),
 .dl-embedded--case :deep(.hero-desc),
 .dl-embedded:not(.dl-embedded--case) :deep(h1),
 .dl-embedded:not(.dl-embedded--case) :deep(h2),
+.dl-embedded:not(.dl-embedded--case) :deep(h3),
+.dl-embedded:not(.dl-embedded--case) :deep(h4),
 .dl-embedded:not(.dl-embedded--case) :deep(p) {
   color: var(--color-text);
 }
 
-.dl-embedded:not(.dl-embedded--case) :deep(.opacity-60),
-.dl-embedded:not(.dl-embedded--case) :deep(.opacity-80) {
+.dl-embedded:not(.dl-embedded--case) :deep(h1),
+.dl-embedded:not(.dl-embedded--case) :deep(h2),
+.dl-embedded:not(.dl-embedded--case) :deep(h3),
+.dl-embedded:not(.dl-embedded--case) :deep(h4) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
+}
+
+.dl-embedded:not(.dl-embedded--case) :deep(.text-muted),
+.dl-embedded:not(.dl-embedded--case) :deep(.type-case-body),
+.dl-embedded:not(.dl-embedded--case) :deep(.type-case-caption) {
   color: var(--color-text-muted);
 }
 </style>

@@ -38,8 +38,8 @@ const navigateTo = (path: string, projectId: string) => {
   <div class="space-y-24">
     <!-- ── Hero ── -->
     <section class="hero-section pt-12 md:pt-20 max-w-4xl">
-      <h1 class="hero-title mb-6">Hi, I'm<br>Bramha.</h1>
-      <p class="hero-body">
+      <h1 class="type-display-hero mb-6">Hi, I'm<br>Bramha.</h1>
+      <p class="type-body-lg">
         I sit at the intersection of
         <span class="hero-keyword">user experience</span>,
         <span class="hero-keyword">game design</span>, and
@@ -53,7 +53,7 @@ const navigateTo = (path: string, projectId: string) => {
     <!-- ── Selected Work ── -->
     <section id="selected-work" class="mb-24">
       <div class="section-header flex justify-between items-baseline border-b border-[var(--color-border)] pb-3.5 mb-10">
-        <h2 class="section-title">Selected Work</h2>
+        <h2 class="type-section-title">Selected Work</h2>
         <span class="label-segment">Featured</span>
       </div>
 
@@ -78,8 +78,8 @@ const navigateTo = (path: string, projectId: string) => {
             <div class="project-tags flex flex-wrap gap-1.5">
               <span v-for="tag in project.tags" :key="tag" class="label-segment">{{ tag }}</span>
             </div>
-            <h3 class="project-title">{{ project.title }}</h3>
-            <p class="project-desc">{{ project.description }}</p>
+            <h3 class="type-card-title">{{ project.title }}</h3>
+            <p class="type-body">{{ project.description }}</p>
           </div>
         </article>
       </div>
@@ -94,32 +94,10 @@ const navigateTo = (path: string, projectId: string) => {
 </template>
 
 <style scoped>
-/* ── Hero ── */
-.hero-eyebrow-text {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--color-text-muted);
+.type-display-hero {
+  text-shadow: 0 0 40px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
-
-/* H1 — Cinzel occult display heading */
-.hero-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(52px, 10vw, 96px);
-  letter-spacing: 0.04em;
-  line-height: 1.0;
-  color: var(--color-text);
-  text-shadow: 0 0 40px rgba(197, 168, 114, 0.1);
-}
-.hero-body {
-  font-family: var(--font-sans);
-  font-size: clamp(16px, 2vw, 20px);
-  line-height: 1.7;
-  color: var(--color-text);
-  opacity: 0.8;
+.hero-section .type-body-lg {
   max-width: 600px;
   margin: 0;
 }
@@ -133,16 +111,10 @@ const navigateTo = (path: string, projectId: string) => {
 .hero-rule {
   border-top: 1px solid var(--color-border);
   opacity: 0.35;
-  box-shadow: 0 0 8px rgba(197, 168, 114, 0.1);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
-/* ── Section Header ── */
-.section-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(20px, 3.5vw, 28px);
-  letter-spacing: 0.1em;
-  color: var(--color-text);
+.type-section-title {
   margin: 0;
 }
 
@@ -197,32 +169,21 @@ const navigateTo = (path: string, projectId: string) => {
 }
 .project-card:hover .project-overlay { opacity: 1; }
 
-.project-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: 0.06em;
-  color: var(--color-text);
+.type-card-title {
   margin: 0;
-  line-height: 1.3;
-  transition: color 150ms ease;
+  transition: color 150ms ease, text-shadow 150ms ease;
 }
-.project-card:hover .project-title {
+.project-card:hover .type-card-title {
   color: var(--color-border-hi);
-  text-shadow: 0 0 12px rgba(197, 168, 114, 0.3);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
-.project-desc {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--color-text-muted);
+.type-body {
   margin: 0;
-  opacity: 0.85;
 }
 
 /* ── More Work ── */
 .more-work-btn {
   padding: 11px 28px;
-  font-size: 11px;
+  font-size: var(--text-filter-tab);
 }
 </style>

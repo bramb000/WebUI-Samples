@@ -93,7 +93,7 @@ const getThemeColor = (category: string) => {
 
     <!-- Page Header -->
     <div class="page-header mb-7">
-      <h1 class="page-title text-sweep-reveal">Work</h1>
+      <h1 class="type-page-title text-sweep-reveal">Work</h1>
     </div>
 
     <!-- Filter Strip -->
@@ -156,18 +156,12 @@ const getThemeColor = (category: string) => {
 </template>
 
 <style scoped>
-.page-title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(48px, 10vw, 84px);
-  letter-spacing: -0.02em;
-  color: var(--color-text);
+.type-page-title {
   margin: 0;
   border-left: 8px solid var(--color-accent);
   padding-left: 14px;
-  text-shadow: 0 0 40px rgba(197, 168, 114, 0.3);
+  text-shadow: 0 0 40px color-mix(in srgb, var(--color-accent) 30%, transparent);
   clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
-  line-height: 0.9;
 }
 
 /* ==========================================================================
@@ -280,17 +274,17 @@ const getThemeColor = (category: string) => {
 }
 
 .tile-cat-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--text-filter-tab);
   font-weight: 900;
   background: var(--theme-color);
-  color: #000;
+  color: var(--color-bg);
   padding: 4px 10px;
   clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
   transform: rotate(-3deg);
   display: inline-block;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-button);
   box-shadow: 0 4px 10px color-mix(in srgb, var(--theme-color) 50%, transparent);
 }
 
@@ -304,7 +298,7 @@ const getThemeColor = (category: string) => {
 .tile-title {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 28px;
+  font-size: var(--text-heading-accent);
   line-height: 1;
   letter-spacing: 0.02em;
   color: var(--color-text);
@@ -314,15 +308,15 @@ const getThemeColor = (category: string) => {
 }
 
 .roster-card:hover .tile-title {
-  color: #FFF;
+  color: var(--color-text);
   text-shadow: 0 0 25px var(--theme-color);
 }
 
 .tile-desc {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-body);
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-muted);
   margin: 0;
   max-width: 85%;
 }
@@ -333,11 +327,11 @@ const getThemeColor = (category: string) => {
 
 .roster-btn {
   display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--text-filter-tab);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: var(--tracking-label-md);
   background: rgba(0, 0, 0, 0.5);
   color: var(--theme-color);
   padding: 10px 20px;
@@ -348,6 +342,6 @@ const getThemeColor = (category: string) => {
 
 .roster-card:hover .roster-btn {
   background: color-mix(in srgb, var(--theme-color) 20%, transparent);
-  color: #FFF;
+  color: var(--color-text);
 }
 </style>

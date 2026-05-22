@@ -156,10 +156,10 @@ const paperFill = computed(
   position: relative;
 }
 .metric-value {
-  font-family: var(--font-mono);
-  font-size: 26px;
+  font-family: var(--font-sans);
+  font-size: var(--text-heading-accent);
   font-weight: 900;
-  color: color-mix(in srgb, var(--color-lcd-text) 55%, #fafaf9 45%);
+  color: color-mix(in srgb, var(--color-lcd-text) 55%, var(--text-on-tint) 45%);
   letter-spacing: 0.05em;
   line-height: 1;
   position: relative;
@@ -173,12 +173,12 @@ const paperFill = computed(
   gap: 6px;
 }
 .metric-label-text {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-sans);
+  font-size: var(--text-label-sm);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: color-mix(in srgb, #f4f4f5 68%, v-bind(frameAccent) 32%);
+  color: color-mix(in srgb, var(--text-on-tint-muted) 68%, v-bind(frameAccent) 32%);
 }
 
 </style>

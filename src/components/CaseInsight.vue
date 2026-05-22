@@ -155,11 +155,11 @@ const paperFill = computed(
   position: relative;
 }
 .insight-stat-value {
-  font-family: var(--font-mono);
-  font-size: 22px;
+  font-family: var(--font-sans);
+  font-size: var(--text-heading-accent);
   font-weight: 800;
   /* LCD tint + lighten for AA on tinted paper / theme clashes (e.g. teal on teal) */
-  color: color-mix(in srgb, var(--color-lcd-text) 55%, #fafaf9 45%);
+  color: color-mix(in srgb, var(--color-lcd-text) 55%, var(--text-on-tint) 45%);
   letter-spacing: 0.04em;
   line-height: 1;
   position: relative;
@@ -173,8 +173,8 @@ const paperFill = computed(
   gap: 6px;
 }
 .stat-label-text {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--text-filter-tab);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -182,16 +182,16 @@ const paperFill = computed(
   text-align: center;
   max-width: 42rem;
   text-wrap: balance;
-  color: color-mix(in srgb, #f4f4f5 74%, v-bind(frameAccent) 26%);
+  color: color-mix(in srgb, var(--text-on-tint-muted) 74%, v-bind(frameAccent) 26%);
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
 }
 
 
 .insight-body {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-body);
   line-height: 1.7;
-  color: color-mix(in srgb, #fafaf9 88%, v-bind(frameAccent) 12%);
+  color: color-mix(in srgb, var(--text-on-tint) 88%, v-bind(frameAccent) 12%);
   opacity: 1;
   position: relative;
   z-index: 1;

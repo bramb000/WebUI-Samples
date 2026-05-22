@@ -89,7 +89,7 @@ defineProps<{
 }
 
 .baa-caption {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
