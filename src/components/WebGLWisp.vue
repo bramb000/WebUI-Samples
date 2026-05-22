@@ -11,6 +11,7 @@ let renderer: THREE.WebGLRenderer;
 let material: THREE.ShaderMaterial;
 let plane: THREE.Mesh;
 let animationFrameId: number;
+let onVisibilityChange: (() => void) | null = null;
 
 const vertexShader = `
   varying vec2 vUv;
@@ -166,7 +167,7 @@ onMounted(() => {
     premultipliedAlpha: false,
     antialias: false
   });
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio ?? 1, 2));
   
   const updateSize = () => {
     const width = window.innerWidth;
@@ -219,8 +220,10 @@ onMounted(() => {
   let lastTime = 0;
 
   const animate = () => {
+    if (document.hidden)
+      return;
     animationFrameId = requestAnimationFrame(animate);
-    
+
     // 24 FPS discrete time stepping for comic aesthetic
     const now = clock.getElapsedTime();
     if (now - lastTime > 1.0 / 24.0) {
@@ -259,11 +262,24 @@ onMounted(() => {
     renderer.render(scene, camera);
   };
 
+  onVisibilityChange = () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = 0;
+    }
+    else if (!animationFrameId) {
+      animate();
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibilityChange);
+
   animate();
 });
 
 onUnmounted(() => {
   cancelAnimationFrame(animationFrameId);
+  if (onVisibilityChange)
+    document.removeEventListener('visibilitychange', onVisibilityChange);
   window.removeEventListener('resize', () => {});
   renderer.dispose();
   material.dispose();

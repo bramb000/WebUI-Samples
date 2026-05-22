@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import posthog from 'posthog-js'
+import { captureEvent } from '../analytics'
 import { setWispHover, triggerWispClick } from '../composables/wispState'
 import PrimaryButton from './PrimaryButton.vue';
 
 const trackSocialClick = (platform: string) => {
-  posthog.capture('social_clicked', { platform, source: 'footer' })
+  captureEvent('social_clicked', { platform, source: 'footer' })
 }
 
 const trackEmailClick = () => {
-  posthog.capture('email_clicked', { source: 'footer' })
+  captureEvent('email_clicked', { source: 'footer' })
 }
 </script>
 

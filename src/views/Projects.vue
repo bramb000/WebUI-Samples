@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import posthog from 'posthog-js'
+import { captureEvent } from '../analytics'
 import PrimaryButton from '../components/PrimaryButton.vue';
 
 const activeFilter = ref('All')
@@ -77,8 +77,8 @@ const filteredProjects = computed(() => {
   return projects.filter(p => p.category === activeFilter.value)
 })
 
-const trackMicroProjectClick = (project: any) => {
-  posthog.capture('micro_project_clicked', { project_id: project.id, category: project.category })
+const trackMicroProjectClick = (project: { id: string, category: string }) => {
+  captureEvent('micro_project_clicked', { project_id: project.id, category: project.category })
 }
 
 const getThemeColor = (category: string) => {

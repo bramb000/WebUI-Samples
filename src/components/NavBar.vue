@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
-import posthog from 'posthog-js';
+import { computed, defineAsyncComponent, ref, onMounted, onUnmounted, watch } from 'vue';
+import { captureEvent } from '../analytics';
+import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
-import WebGLWisp from './WebGLWisp.vue';
 import PrimaryButton from './PrimaryButton.vue';
+
+const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
+const lowPower = useLowPowerMode();
+const showWisp = computed(() => !lowPower.value);
 
 const isMenuOpen = ref(false);
 
@@ -46,8 +50,12 @@ const navLinks = [
 ];
 
 const trackContactClick = (source: string) => {
-  posthog.capture('contact_clicked', { source });
+  captureEvent('contact_clicked', { source });
 };
+
+function prefetchRoute(importer: () => Promise<unknown>) {
+  void importer();
+}
 </script>
 
 <template>
@@ -64,7 +72,7 @@ const trackContactClick = (source: string) => {
     style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), top 0.3s ease;"
   >
     <!-- WebGL Wisp Effect (Rendered inside Nav so it sits between strip background and buttons) -->
-    <WebGLWisp />
+    <WebGLWisp v-if="showWisp" />
     
     <!-- Mobile Logo -->
     <router-link
@@ -97,7 +105,7 @@ const trackContactClick = (source: string) => {
             v-slot="{ isActive, navigate }"
           >
             <button
-              @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
+              @mouseenter="(e) => { setWispHover(e.currentTarget as HTMLElement); if (link.href === '/work') prefetchRoute(() => import('../views/ProjectSelect.vue')) }"
               @mouseleave="() => setWispHover(null)"
               @mousedown="triggerWispClick"
               @click="navigate"

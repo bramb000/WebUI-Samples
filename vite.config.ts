@@ -14,6 +14,18 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'build',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/three'))
+            return 'three'
+          if (id.includes('node_modules/posthog-js'))
+            return 'posthog'
+          if (id.includes('node_modules/lottie-web'))
+            return 'lottie'
+        },
+      },
+    },
   },
   plugins: [vue()],
   test: {

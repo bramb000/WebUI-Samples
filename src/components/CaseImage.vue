@@ -10,6 +10,8 @@ const props = defineProps<{
   lightboxBadge?: string
   /** Additional classes on the <img> element */
   imgClass?: string
+  /** First visible image on a route — prioritize LCP */
+  priority?: boolean
 }>()
 
 const isOpen = ref(false);
@@ -39,6 +41,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
     <img
       :src="props.src"
       :alt="props.alt"
+      :loading="props.priority ? 'eager' : 'lazy'"
+      :fetchpriority="props.priority ? 'high' : 'auto'"
+      decoding="async"
       :class="[
         'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
         props.imgClass,

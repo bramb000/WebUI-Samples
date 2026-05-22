@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home
+        component: () => import('../views/Home.vue'),
     },
     {
         path: '/work',
@@ -97,13 +96,9 @@ const routes = [
     // legacy route removed (previously pointed at the project select screen)
 ]
 
-import { setupAnalytics } from '../analytics'
-
 const router = createRouter({
     history: createWebHistory(),
     routes
 })
-
-setupAnalytics(router)
 
 export default router

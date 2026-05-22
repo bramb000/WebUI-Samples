@@ -1,10 +1,65 @@
-import posthog from 'posthog-js';
-import type { Router } from 'vue-router';
+import type { PostHog } from 'posthog-js'
+import type { Router } from 'vue-router'
 
-let pageStartTime = 0;
-let maxScrollDepth = 0;
+let pageStartTime = 0
+let maxScrollDepth = 0
+let posthogInstance: PostHog | null = null
+let initPromise: Promise<PostHog | null> | null = null
+
+/** Defer PostHog until after first paint / idle so it does not compete with LCP. */
+export function initAnalyticsDeferred(): Promise<PostHog | null> {
+  if (posthogInstance)
+    return Promise.resolve(posthogInstance)
+  if (initPromise)
+    return initPromise
+
+  initPromise = new Promise((resolve) => {
+    const run = async () => {
+      try {
+        const { default: posthog } = await import('posthog-js')
+        posthog.init(import.meta.env.VITE_POSTHOG_KEY || 'phc_placeholder', {
+          api_host: import.meta.env.VITE_POSTHOG_HOST || 'https://us.i.posthog.com',
+          person_profiles: 'identified_only',
+          capture_pageview: false,
+        })
+        posthogInstance = posthog
+        ;(window as Window & { posthog?: PostHog }).posthog = posthog
+        resolve(posthog)
+      }
+      catch {
+        resolve(null)
+      }
+    }
+
+    if (typeof requestIdleCallback === 'function')
+      requestIdleCallback(() => { void run() }, { timeout: 3500 })
+    else
+      window.setTimeout(() => { void run() }, 1200)
+  })
+
+  return initPromise
+}
+
+/** Funnel events — safe before PostHog has finished loading. */
+export function captureEvent(
+  event: string,
+  properties?: Record<string, string | number | boolean>,
+) {
+  void initAnalyticsDeferred().then((ph) => {
+    ph?.capture(event, properties)
+  })
+}
 
 export function setupAnalytics(router: Router) {
+  void initAnalyticsDeferred().then((ph) => {
+    if (!ph)
+      return
+    posthogInstance = ph
+    bindAnalytics(router, ph)
+  })
+}
+
+function bindAnalytics(router: Router, posthog: PostHog) {
   // Track External Link Clicks
   document.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
@@ -80,8 +135,8 @@ export function setupAnalytics(router: Router) {
   router.afterEach((to, _from, failure) => {
     if (!failure) {
       posthog.capture('$pageview', {
-        $current_url: window.location.origin + to.fullPath
-      });
+        $current_url: window.location.origin + to.fullPath,
+      })
     }
-  });
+  })
 }

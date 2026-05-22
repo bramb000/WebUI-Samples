@@ -95,4 +95,15 @@ useCaseTheme();
   opacity: 0;
   transform: translateY(-3px);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-enter-active,
+  .fade-leave-active {
+    transition-duration: 0.01ms !important;
+  }
+  .fade-enter-from,
+  .fade-leave-to {
+    transform: none !important;
+  }
+}
 </style>

@@ -24,12 +24,12 @@ const caseStudies = [
   }
 ];
 
-import posthog from 'posthog-js';
+import { captureEvent } from '../analytics';
 
 const router = useRouter();
 
 const navigateTo = (path: string, projectId: string) => {
-  posthog.capture('project_clicked', { project_id: projectId, source: 'home_page' });
+  captureEvent('project_clicked', { project_id: projectId, source: 'home_page' });
   router.push(path);
 };
 </script>
@@ -59,14 +59,22 @@ const navigateTo = (path: string, projectId: string) => {
 
       <div class="project-grid grid grid-cols-1 md:grid-cols-2 gap-6">
         <article
-          v-for="project in caseStudies.slice(0, 3)"
+          v-for="(project, index) in caseStudies.slice(0, 3)"
           :key="project.id"
           @click="navigateTo(project.link, project.id)"
           class="project-card panel-recessed"
         >
           <!-- Thumbnail -->
           <div class="project-thumb">
-            <img v-if="project.image" :src="project.image" :alt="project.title" class="project-img" />
+            <img
+              v-if="project.image"
+              :src="project.image"
+              :alt="project.title"
+              class="project-img"
+              :loading="index === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : 'auto'"
+              decoding="async"
+            />
             <!-- Hover overlay -->
             <div class="project-overlay">
               <PrimaryButton class="px-6 py-2.5 text-[11px]" aria-hidden="true" tabindex="-1">View Case Study</PrimaryButton>
