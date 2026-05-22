@@ -218,7 +218,7 @@ const projects = ref<Project[]>([
   {
     id: 'patapon',
     discipline: 'ui-design',
-    title: 'Rhythm-Combat (Patapon)',
+    title: 'Feel the rhythm through interaction',
     subtitle: 'Interaction breakdown & recreation',
     tags: ['GAME', 'SYSTEMS', 'FEEL'],
     tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],

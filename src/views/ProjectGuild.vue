@@ -81,8 +81,8 @@ useCaseStudySketchPanels(caseStudyRoot);
       </svg>
       
       <ProjectHero
-      title="AFK Rewards for Guild of Guardians"
-      description="How data-driven UX design increased D7 retention by 25% and D7 LTV by 12% for a live mobile RPG."
+      title="Repairing stickiness to improve revenue"
+      description="How data-driven feature design increased D7 retention by 25% and D7 LTV by 12% for a live mobile RPG."
       role="Feature Owner & Lead UX Designer"
       timeline="6 months"
       :tags="['Mobile RPG', 'Data Analysis', 'Feature Design', 'Live Product']"

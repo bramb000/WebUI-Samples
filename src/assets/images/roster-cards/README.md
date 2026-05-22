@@ -11,14 +11,14 @@ Drop **top-of-card** images here for the project picker (`ProjectSelect`).
 |--------------|-------------------|------------|
 | `guild` | `Guild of Guardians.png` ✓ | Product Design |
 | `rocksmith` | `Rocksmith.png` ✓ | Product Design |
-| `login` | `login.png` | UI Design |
+| `login` | `Login Interaction.png` ✓ | UI Design |
 | `helldivers` | `Helldivers UI.png` ✓ | UI Design |
 | `account-tray` | `account-tray.png` | UI Design |
 | `sales-modal` | `sales-modal.png` | UI Design |
-| `voice-chat` | `voice-chat.png` | UI Design |
+| `voice-chat` | `AI Voice Chat.png` ✓ | UI Design |
 | `node-graph` | `node-graph.png` | UI Design |
-| `patapon` | `patapon.png` | UI Design |
-| `jedi` | `jedi.png` | UI Design |
+| `patapon` | `Rhythm Game.png` ✓ | UI Design |
+| `jedi` | `laser sword.png` ✓ | UI Design |
 
 Projects without a file in `rosterCardImages.ts` still use a procedural placeholder until you add one.
 
