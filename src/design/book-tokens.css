@@ -1,10 +1,11 @@
 /**
  * Book-only design system (3D process book).
- * Headers use site display tokens; body uses period calligraphy.
+ * Headers: site display (Cinzel). Body: Caudex (OFL, Google Fonts).
+ * @see https://fonts.google.com/specimen/Caudex
  */
 :root {
   --book-font-header: var(--font-display);
-  --book-font-body: 'IM Fell English', Georgia, 'Times New Roman', serif;
+  --book-font-body: 'Caudex', Georgia, 'Times New Roman', serif;
 
   --book-gold-fill: var(--color-accent);
   --book-gold-shadow: var(--color-accent-dark);
@@ -28,4 +29,7 @@
   --book-subtitle-size: 20px;
 
   --book-header-body-gap: 48px;
+
+  /* Uniform overlay on full-bleed left pages (within deckled mask) */
+  --book-left-scrim-fill: rgba(17, 17, 19, 0.32);
 }

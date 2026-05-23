@@ -14,6 +14,9 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'build',
+    // Keep large textures as separate hashed files (default 4KB inline threshold).
+    assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1200,
     rollupOptions: {
       output: {
         manualChunks(id) {

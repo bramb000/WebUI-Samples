@@ -4,7 +4,7 @@
  */
 import * as THREE from 'three'
 
-export const ROSTER_PAINT_MASK_URL = new URL('../shaders/IMG_0558.PNG', import.meta.url).href
+export const ROSTER_PAINT_MASK_URL = new URL('../shaders/IMG_0558.webp', import.meta.url).href
 
 /** Peak alpha in source PNG (8-bit); used to normalize the mask. */
 const PAINT_MASK_ALPHA_MAX = 189 / 255

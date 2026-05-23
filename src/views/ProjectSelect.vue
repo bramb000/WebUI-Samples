@@ -3,13 +3,19 @@ import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch 
 import AngularWipe from '../components/wipes/AngularWipe.vue'
 import PanelChiselBackground from '../components/PanelChiselBackground.vue'
 import { startCrumple } from '../composables/paperCrumple'
-import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
+import {
+  attachProjectFlameToThumbnail,
+  detachProjectFlame,
+  disposeProjectFlameSingleton,
+  tickProjectFlame,
+} from '../vfx/projectFlameSingleton'
 import { workPanelEmbeddedCaseStudyId } from '../composables/workPanelCaseTheme'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
 import {
   ROSTER_DISCIPLINE_ACCENT,
   type RosterDiscipline,
 } from '../constants/rosterDiscipline'
+import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
 
 type TechIcon = 'code' | 'cube' | 'layers' | 'spark'
 
@@ -30,8 +36,6 @@ type Project = {
     label: string
   }
 }
-
-import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
 
 const procedural = (seed: number) =>
   `data:image/svg+xml,${encodeURIComponent(
@@ -368,18 +372,22 @@ onMounted(() => {
   let lastFrame = clockStart
   const frameMs = 1000 / 24
   const loop = () => {
+    raf = requestAnimationFrame(loop)
+    if (document.hidden)
+      return
     const now = performance.now()
     if (now - lastFrame >= frameMs) {
       lastFrame = now - ((now - lastFrame) % frameMs)
       const t = (lastFrame - clockStart) / 1000
       tickProjectFlame(t)
     }
-    raf = requestAnimationFrame(loop)
   }
   raf = requestAnimationFrame(loop)
 })
 onBeforeUnmount(() => {
   cancelAnimationFrame(raf)
+  detachProjectFlame()
+  disposeProjectFlameSingleton()
   workPanelEmbeddedCaseStudyId.value = null
 })
 

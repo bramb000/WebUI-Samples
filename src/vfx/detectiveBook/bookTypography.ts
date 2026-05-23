@@ -11,7 +11,7 @@ export function bookHeaderFont(sizePx: number): string {
 }
 
 export function bookBodyFont(sizePx: number): string {
-  const family = bookVar('--book-font-body', '"IM Fell English", Georgia, serif')
+  const family = bookVar('--book-font-body', 'Caudex, Georgia, serif')
   return `400 ${sizePx}px ${family}`
 }
 

@@ -12,6 +12,7 @@ let material: THREE.ShaderMaterial;
 let plane: THREE.Mesh;
 let animationFrameId: number;
 let onVisibilityChange: (() => void) | null = null;
+let updateSize: (() => void) | null = null;
 
 const vertexShader = `
   varying vec2 vUv;
@@ -169,7 +170,7 @@ onMounted(() => {
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio ?? 1, 2));
   
-  const updateSize = () => {
+  updateSize = () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     renderer.setSize(width, height);
@@ -280,7 +281,9 @@ onUnmounted(() => {
   cancelAnimationFrame(animationFrameId);
   if (onVisibilityChange)
     document.removeEventListener('visibilitychange', onVisibilityChange);
-  window.removeEventListener('resize', () => {});
+  if (updateSize)
+    window.removeEventListener('resize', updateSize);
+  plane?.geometry?.dispose();
   renderer.dispose();
   material.dispose();
 });

@@ -3,7 +3,11 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ALCHEMIST_PHASE_LABELS } from '../../constants/alchemistBookData'
 import { useReducedMotion } from '../../composables/useReducedMotion'
 import { useScrollProgress } from '../../composables/useScrollProgress'
-import { preloadBookPageImages } from '../../assets/images/book/bookPageImages'
+import {
+  BOOK_PRELOAD_PRIORITY,
+  preloadBookPageImages,
+  schedulePreloadRemainingBookPageImages,
+} from '../../assets/images/book/bookPageImages'
 import { createDetectiveBookScene, type DetectiveBookScene } from '../../vfx/detectiveBook/createDetectiveBookScene'
 
 const SCROLL_TRACK_VH = 600
@@ -48,9 +52,10 @@ async function mountBook() {
 
   disposeBook()
   try {
-    await preloadBookPageImages()
+    await preloadBookPageImages({ keys: [...BOOK_PRELOAD_PRIORITY] })
     bookScene = createDetectiveBookScene(canvas)
     bookScene.setProgress(progress.value)
+    schedulePreloadRemainingBookPageImages()
   }
   catch (err) {
     console.error('[AlchemistBook] WebGL init failed:', err)

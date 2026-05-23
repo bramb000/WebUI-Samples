@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
+import CaseLazyImage from '../components/CaseLazyImage.vue';
+import { guildLazyMedia } from '../assets/case-studies/guildLazyMedia';
 import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
@@ -14,41 +16,35 @@ import TableOfContents from '../components/TableOfContents.vue';
 import challengeGraphic from '../assets/images/guild/context/000_challenge-graphic-1.png';
 import outcomeGraphic from '../assets/images/guild/context/001_outcome-2-2.png';
 import kShapeProblem from '../assets/images/guild/tldr/010_k-shape-problem.png';
-import persona from '../assets/images/guild/tldr/011_persona-3.png';
+import persona from '../assets/images/guild/tldr/011_persona-3.webp';
 import gameLoopNegative from '../assets/images/guild/tldr/012_game-loop-negative-2.png';
 import gameLoopPositive from '../assets/images/guild/tldr/013_game-loop-positive.png';
-import wireframeFlow from '../assets/images/guild/tldr/014_frame-68.png';
-import handSketches from '../assets/images/guild/tldr/015_img-0528-1.png';
+import wireframeFlow from '../assets/images/guild/tldr/014_frame-68.webp';
+import handSketches from '../assets/images/guild/tldr/015_img-0528-1.webp';
 import afkTest1 from '../assets/images/guild/tldr/016_afk-rewards-test-1-thumbnail.webp';
 import afkTest2 from '../assets/images/guild/tldr/017_afk-rewards-test-2-thumbnail.webp';
 import wireframe from '../assets/images/guild/tldr/018_wireframe.png';
-import afkMockupFinal from '../assets/images/guild/tldr/019_frame-23.png';
-import afkMockupRough from '../assets/images/guild/tldr/020_frame-20.png';
-import chestLoop from '../assets/images/guild/tldr/021_fullchestloop-ezgif-com-video-to-gif-converter.gif';
-import chestFill from '../assets/images/guild/tldr/022_0112-ezgif-com-optimize.gif';
-import afkTutorial from '../assets/images/guild/tldr/023_afk-tutorial.png';
-import floatingBadge from '../assets/images/guild/tldr/024_floatingactionbutton-ezgif-com-optimize-2.gif';
-import userFlowFigma from '../assets/images/guild/tldr/025_figma-user-flow-2.png';
+import afkMockupRough from '../assets/images/guild/tldr/020_frame-20.webp';
+import userFlowFigma from '../assets/images/guild/tldr/025_figma-user-flow-2.webp';
 import surveyEnjoyment from '../assets/images/guild/tldr/026_screenshot-2026-01-10-075400-2.png';
 import surveyTimers from '../assets/images/guild/tldr/027_timer-survey-question.png';
-import exitScreenBefore from '../assets/images/guild/tldr/028_screenshot-20251215-083431-guild-of-guardians.png';
-import exitScreenAnim from '../assets/images/guild/tldr/029_figma-e1njfafc8a.gif';
-import exitScreenAfter from '../assets/images/guild/tldr/030_figma-e1njfafc8a-1-1.png';
-import playerDropoff from '../assets/images/guild/tldr/031_graph-of-players-attempting-and-quitting.png';
-import guardianUsageData from '../assets/images/guild/tldr/032_guardian-usage-data.png';
+import exitScreenBefore from '../assets/images/guild/tldr/028_screenshot-20251215-083431-guild-of-guardians.webp';
+import exitScreenAfter from '../assets/images/guild/tldr/030_figma-e1njfafc8a-1-1.webp';
+import playerDropoff from '../assets/images/guild/tldr/031_graph-of-players-attempting-and-quitting.webp';
+import guardianUsageData from '../assets/images/guild/tldr/032_guardian-usage-data.webp';
 import recommendedWireframe from '../assets/images/guild/tldr/033_recommended-heroes-2.png';
 import recsBeforeImg from '../assets/images/guild/tldr/034_screenshot-20250828-080318-guild-of-guardians-2-thumbnail.webp';
 import recsAfterImg from '../assets/images/guild/tldr/035_screenshot-20251105-150237-guild-of-guardians-2-thumbnail.webp';
 import progressionWireframe from '../assets/images/guild/tldr/036_visual-progression.png';
 import progBeforeImg from '../assets/images/guild/tldr/037_screenshot-20250915-114738-guild-of-guardians-thumbnail.webp';
 import progAfterImg from '../assets/images/guild/tldr/038_screenshot-20251105-150223-guild-of-guardians-1-thumbnail.webp';
-import dailyCalendar from '../assets/images/guild/tldr/039_screenshot-20251210-075732-guild-of-guardians.png';
-import legendaryHero from '../assets/images/guild/tldr/040_image-3.png';
-import oldOffer from '../assets/images/guild/tldr/041_screenshot-20251117-090321-guild-of-guardians.png';
-import newOffer from '../assets/images/guild/tldr/042_new-offer.png';
-import offerWireframe from '../assets/images/guild/tldr/043_image-5.png';
-import offerIteration2 from '../assets/images/guild/tldr/044_image-6.png';
-import offerIteration3 from '../assets/images/guild/tldr/045_image-4.png';
+import dailyCalendar from '../assets/images/guild/tldr/039_screenshot-20251210-075732-guild-of-guardians.webp';
+import legendaryHero from '../assets/images/guild/tldr/040_image-3.webp';
+import oldOffer from '../assets/images/guild/tldr/041_screenshot-20251117-090321-guild-of-guardians.webp';
+import newOffer from '../assets/images/guild/tldr/042_new-offer.webp';
+import offerWireframe from '../assets/images/guild/tldr/043_image-5.webp';
+import offerIteration2 from '../assets/images/guild/tldr/044_image-6.webp';
+import offerIteration3 from '../assets/images/guild/tldr/045_image-4.webp';
 import smootherBellCurve from '../assets/images/guild/result/046_smoother-bell-curve.png';
 import retentionGrowth from '../assets/images/guild/result/047_retention-growth-2.png';
 // Before/After gallery
@@ -319,7 +315,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <CaseImage :src="wireframe" alt="Final candidate wireframe" caption="One of the final candidate wireframes" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
 
         <!-- High fidelity -->
-        <CaseImage :src="afkMockupFinal" alt="High fidelity AFK rewards mockup" caption="After — An AFK feature that helps users keep getting rewards while they are away. Created in Figma" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="guildLazyMedia.afkMockupFinal" alt="High fidelity AFK rewards mockup" caption="After — An AFK feature that helps users keep getting rewards while they are away. Created in Figma" img-class="w-full h-auto rounded-xl" />
         <CaseImage :src="afkMockupRough" alt="Rough in-engine mockup" caption="A very rough in-engine mockup — originally every interaction was a button" imgClass="w-full h-auto rounded-xl" />
 
         <p class="type-case-body-lg">
@@ -328,16 +324,16 @@ useCaseStudySketchPanels(caseStudyRoot);
 
         <!-- Chest animations -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="chestLoop" alt="Treasure chest loop" caption="A delightfully full treasure chest that makes the user feel the game has been 'productive' in their absence" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="chestFill" alt="Chest fills up animation" caption="The chest fills up giving a sense of delight" imgClass="w-full h-auto rounded-lg" />
+          <CaseLazyImage :loader="guildLazyMedia.chestLoop" alt="Treasure chest loop" caption="A delightfully full treasure chest that makes the user feel the game has been 'productive' in their absence" img-class="w-full h-auto rounded-lg" />
+          <CaseLazyImage :loader="guildLazyMedia.chestFill" alt="Chest fills up animation" caption="The chest fills up giving a sense of delight" img-class="w-full h-auto rounded-lg" />
         </div>
 
         <!-- Usability iteration -->
         <p class="type-case-body-lg">
           <strong>The chest on the screen did not look like a button and did not look clickable</strong> — in early internal testing users were confused on how to actually collect rewards.
         </p>
-        <CaseImage :src="afkTutorial" alt="Tutorial iteration" caption="Iteration 1 — A quick tutorial that coached users about non-button clickable elements (this was a no-go)" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="floatingBadge" alt="Floating badge solution" caption="Final Iteration — Adding a button-shaped badge with gentle motion made it clearer the chest is clickable" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="guildLazyMedia.afkTutorial" alt="Tutorial iteration" caption="Iteration 1 — A quick tutorial that coached users about non-button clickable elements (this was a no-go)" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="guildLazyMedia.floatingBadge" alt="Floating badge solution" caption="Final Iteration — Adding a button-shaped badge with gentle motion made it clearer the chest is clickable" img-class="w-full h-auto rounded-xl" />
         <p class="type-case-body-lg">
           During testing, we found a <strong>100% completion rate</strong> for actions related to collecting rewards from any screen in the game.
         </p>
@@ -371,7 +367,7 @@ useCaseStudySketchPanels(caseStudyRoot);
           To close off the new game loop, I <strong>added a quit screen</strong> that set goals and anticipation to encourage the user to come back.
         </p>
         <CaseImage :src="exitScreenBefore" alt="Before exit screen" caption="Before — A simple exit screen that does not create anticipation" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="exitScreenAnim" alt="Animated exit screen WIP" caption="WIP — An animated exit screen I made in Figma to share the idea with the team" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="guildLazyMedia.exitScreenAnim" alt="Animated exit screen WIP" caption="WIP — An animated exit screen I made in Figma to share the idea with the team" img-class="w-full h-auto rounded-xl" />
         <p class="type-case-body-lg">
           Using UI data, I found <strong>only 12% players closed it using the in-game dialogue</strong>. With so few players seeing this screen, I could not justify the ROI of spending lots of effort to develop animations.
         </p>

@@ -18,12 +18,38 @@ function bookVarPx(name: string, fallback: number): number {
   return Number.parseFloat(raw) || fallback
 }
 
+function bookVarColor(name: string, fallback: string): string {
+  if (typeof document === 'undefined')
+    return fallback
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  return v || fallback
+}
+
+/** Even scrim across the full image area, clipped to the page silhouette */
+function drawFullImageScrim(
+  ctx: CanvasRenderingContext2D,
+  parchmentMask: HTMLCanvasElement,
+  w: number,
+  h: number,
+) {
+  const fill = bookVarColor('--book-left-scrim-fill', 'rgba(17, 17, 19, 0.32)')
+
+  ctx.save()
+  ctx.fillStyle = fill
+  ctx.fillRect(0, 0, w, h)
+  ctx.globalCompositeOperation = 'destination-in'
+  ctx.drawImage(parchmentMask, 0, 0, w, h)
+  ctx.globalCompositeOperation = 'source-over'
+  ctx.restore()
+}
+
 function drawLeftPage(
   ctx: CanvasRenderingContext2D,
   page: BookPageLeft,
   parchment: HTMLCanvasElement,
 ) {
   drawMaskedFullBleedImage(ctx, parchment, page.imageKey, CANVAS_W, CANVAS_H)
+  drawFullImageScrim(ctx, parchment, CANVAS_W, CANVAS_H)
 
   const cx = CANVAS_W / 2
   const cy = CANVAS_H / 2
@@ -34,24 +60,25 @@ function drawLeftPage(
       ? bookVarPx('--book-header-size-end', 28)
       : bookVarPx('--book-header-size-phase', 46)
 
+  let headerLines: string[] = [page.header]
+
   if (page.imageKey === 'end' && page.header.includes('\n')) {
-    const lines = page.header.split('\n')
-    const lineGap = headerSize * 1.35
-    const blockH = (lines.length - 1) * lineGap
-    let y = cy - blockH / 2
-    for (const line of lines) {
-      drawEmbossedHeader(ctx, line.trim(), cx, y, headerSize)
-      y += lineGap
-    }
+    headerLines = page.header.split('\n').map(l => l.trim())
   }
   else if (page.header.length > 28 && page.imageKey === 'end') {
     const words = page.header.split(' ')
     const mid = Math.ceil(words.length / 2)
-    const l1 = words.slice(0, mid).join(' ')
-    const l2 = words.slice(mid).join(' ')
-    const gap = headerSize * 1.35
-    drawEmbossedHeader(ctx, l1, cx, cy - gap / 2, headerSize)
-    drawEmbossedHeader(ctx, l2, cx, cy + gap / 2, headerSize)
+    headerLines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
+  }
+
+  if (headerLines.length > 1) {
+    const lineGap = headerSize * 1.35
+    const blockH = (headerLines.length - 1) * lineGap
+    let y = cy - blockH / 2
+    for (const line of headerLines) {
+      drawEmbossedHeader(ctx, line, cx, y, headerSize)
+      y += lineGap
+    }
   }
   else {
     drawEmbossedHeader(ctx, page.header, cx, cy, headerSize)
@@ -81,7 +108,8 @@ function drawRightPage(
   const numberSize = bookVarPx('--book-number-size', 56)
   const bodySize = bookBodySize()
   const gap = bookVarPx('--book-header-body-gap', 48)
-  const lineHeight = bodySize * bookVarPx('--book-body-leading', 1.55) / bookVarPx('--book-body-size', 24)
+  const leading = bookVarPx('--book-body-leading', 1.55)
+  const lineHeight = bodySize * leading
 
   const cx = CANVAS_W / 2
   const headerY = margin + numberSize * 0.55

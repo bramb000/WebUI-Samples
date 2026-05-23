@@ -26,6 +26,17 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
   const targetRotations: number[] = []
   let animationFrameId = 0
 
+  const onVisibilityChange = () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animationFrameId)
+      animationFrameId = 0
+    }
+    else if (!animationFrameId) {
+      animate()
+    }
+  }
+  document.addEventListener('visibilitychange', onVisibilityChange)
+
   function createPageMaterial(texture: THREE.Texture, side: THREE.Side) {
     return new THREE.ShaderMaterial({
       vertexShader: DETECTIVE_BOOK_VERTEX,
@@ -123,6 +134,8 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
   }
 
   function animate() {
+    if (document.hidden)
+      return
     animationFrameId = requestAnimationFrame(animate)
 
     leaves.forEach((leaf, i) => {
@@ -158,6 +171,7 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
     },
     resize,
     dispose: () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange)
       cancelAnimationFrame(animationFrameId)
       renderer.dispose()
       for (const d of disposables)

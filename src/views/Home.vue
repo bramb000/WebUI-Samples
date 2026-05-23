@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 
-import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png'
-import guildHero from '../assets/images/guild/guild-hero.jpg'
+import rocksmithOutdoors from '../assets/images/rocksmith/research/007_rocksmith-outdoors.webp'
+import guildHero from '../assets/images/guild/guild-hero.webp'
 import PrimaryButton from '../components/PrimaryButton.vue'
 import DetectiveBookStage from '../components/detective/DetectiveBookStage.vue'
 import DetectiveHeroIntro from '../components/detective/DetectiveHeroIntro.vue'

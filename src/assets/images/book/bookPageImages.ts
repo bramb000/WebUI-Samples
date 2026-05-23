@@ -18,8 +18,21 @@ const imageModules = import.meta.glob<{ default: string }>(
   { eager: false },
 )
 
+const ALL_BOOK_IMAGE_KEYS: BookImageKey[] = [
+  'cover',
+  'understand',
+  'analyze',
+  'brew',
+  'deliver',
+  'end',
+]
+
+/** First spread — load before WebGL init; rest deferred via schedulePreloadRemainingBookPageImages */
+export const BOOK_PRELOAD_PRIORITY: BookImageKey[] = ['cover', 'understand']
+
 const cache = new Map<BookImageKey, HTMLImageElement>()
-let preloadPromise: Promise<void> | null = null
+const preloadPromises = new Map<string, Promise<void>>()
+let remainingIdleScheduled = false
 
 const PLACEHOLDER: Record<BookImageKey, { a: string, b: string, label: string }> = {
   cover: { a: '#2a2838', b: '#4a3f5c', label: 'Cover art' },
@@ -27,7 +40,7 @@ const PLACEHOLDER: Record<BookImageKey, { a: string, b: string, label: string }>
   analyze: { a: '#2e2a1a', b: '#5c4f2e', label: 'Analyze' },
   brew: { a: '#3a2218', b: '#6b4028', label: 'Brew' },
   deliver: { a: '#1a2e22', b: '#3d5c48', label: 'Deliver' },
-  end: { a: '#1c1c21', b: '#3a3a44', label: 'End' },
+  end: { a: '#1c1c21', b: '#3a3a44', label: '' },
 }
 
 function basenameFromGlobPath(path: string): string {
@@ -45,41 +58,98 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   })
 }
 
-/** Preload assets in this folder + wait for book fonts. */
-export function preloadBookPageImages(): Promise<void> {
-  if (preloadPromise)
-    return preloadPromise
+const EXT_PRIORITY: Record<string, number> = {
+  '.webp': 0,
+  '.jpg': 1,
+  '.jpeg': 1,
+  '.png': 2,
+}
 
-  preloadPromise = (async () => {
+/** Prefer WebP when both PNG and WebP exist after optimization. */
+function pickBestLoaderPerKey(
+  entries: [string, () => Promise<{ default: string }>][],
+): Map<BookImageKey, () => Promise<{ default: string }>> {
+  const byKey = new Map<BookImageKey, { path: string, loader: () => Promise<{ default: string }> }>()
+
+  for (const [path, loader] of entries) {
+    const base = basenameFromGlobPath(path)
+    const key = BASENAME_TO_KEY[base]
+    if (!key)
+      continue
+    const ext = path.slice(path.lastIndexOf('.')).toLowerCase()
+    const rank = EXT_PRIORITY[ext] ?? 9
+    const prev = byKey.get(key)
+    if (!prev || rank < (EXT_PRIORITY[prev.path.slice(prev.path.lastIndexOf('.')).toLowerCase()] ?? 9))
+      byKey.set(key, { path, loader })
+  }
+
+  return new Map([...byKey.entries()].map(([k, v]) => [k, v.loader]))
+}
+
+async function loadKeys(keys: BookImageKey[]): Promise<void> {
+  const want = new Set(keys)
+  const entries = Object.entries(imageModules) as [string, () => Promise<{ default: string }>][]
+  const loaders = pickBestLoaderPerKey(entries)
+
+  await Promise.all(
+    [...loaders.entries()].map(async ([key, loader]) => {
+      if (!want.has(key) || cache.has(key))
+        return
+
+      try {
+        const mod = await loader()
+        const img = await loadImage(mod.default)
+        cache.set(key, img)
+      }
+      catch (err) {
+        console.warn(`[book] Failed to load image for "${key}":`, err)
+      }
+    }),
+  )
+}
+
+/** Preload book images (+ fonts). Defaults to priority keys only when `keys` omitted. */
+export function preloadBookPageImages(options?: { keys?: BookImageKey[] }): Promise<void> {
+  const keys = options?.keys ?? BOOK_PRELOAD_PRIORITY
+  const cacheKey = keys.slice().sort().join(',')
+  const existing = preloadPromises.get(cacheKey)
+  if (existing)
+    return existing
+
+  const promise = (async () => {
     await document.fonts.ready
-
-    const entries = Object.entries(imageModules) as [string, () => Promise<{ default: string }>][]
-    await Promise.all(
-      entries.map(async ([path, loader]) => {
-        const base = basenameFromGlobPath(path)
-        const key = BASENAME_TO_KEY[base]
-        if (!key)
-          return
-
-        try {
-          const mod = await loader()
-          const img = await loadImage(mod.default)
-          cache.set(key, img)
-        }
-        catch (err) {
-          console.warn(`[book] Failed to load image for "${base}":`, err)
-        }
-      }),
-    )
+    await document.fonts.load('400 24px Caudex')
+    await loadKeys(keys)
   })()
 
-  return preloadPromise
+  preloadPromises.set(cacheKey, promise)
+  return promise
+}
+
+/** Idle-load remaining spreads after first paint. */
+export function schedulePreloadRemainingBookPageImages(): void {
+  if (remainingIdleScheduled)
+    return
+  remainingIdleScheduled = true
+
+  const rest = ALL_BOOK_IMAGE_KEYS.filter(
+    k => !BOOK_PRELOAD_PRIORITY.includes(k),
+  )
+  const run = () => {
+    void preloadBookPageImages({ keys: rest })
+  }
+
+  if (typeof requestIdleCallback === 'function')
+    requestIdleCallback(run, { timeout: 4000 })
+  else
+    setTimeout(run, 1500)
 }
 
 /** Clear cache so remount picks up new files (e.g. after hot reload). */
 export function clearBookPageImageCache() {
   cache.clear()
-  preloadPromise = null
+  preloadPromises.clear()
+  remainingIdleScheduled = false
 }
 
 function drawPlaceholder(
@@ -94,11 +164,13 @@ function drawPlaceholder(
   grad.addColorStop(1, b)
   ctx.fillStyle = grad
   ctx.fillRect(0, 0, w, h)
-  ctx.fillStyle = 'rgba(235, 228, 214, 0.35)'
-  ctx.font = '600 22px Barlow, sans-serif'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(label, w / 2, h / 2)
+  if (label) {
+    ctx.fillStyle = 'rgba(235, 228, 214, 0.35)'
+    ctx.font = '600 22px Barlow, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(label, w / 2, h / 2)
+  }
 }
 
 /** object-fit: cover — full bleed before page mask */

@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
+import CaseLazyImage from '../components/CaseLazyImage.vue';
+import { rocksmithLazyMedia } from '../assets/case-studies/rocksmithLazyMedia';
 import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
@@ -11,15 +13,13 @@ import TableOfContents from '../components/TableOfContents.vue';
 
 // Rocksmith Assets
 import traditionalRocksmith from '../assets/images/rocksmith/executive-summary/000_traditional-rocksmith.webp';
-import rocksmithMobile from '../assets/images/rocksmith/executive-summary/001_rocksmith-mobile.png';
+import rocksmithMobile from '../assets/images/rocksmith/executive-summary/001_rocksmith-mobile.webp';
 import challengeGraphic from '../assets/images/rocksmith/context/002_challenge-2.png';
 import outcomeGraphic from '../assets/images/rocksmith/context/003_outcome-2.png';
 import outcomeAward from '../assets/images/rocksmith/context/004_outcome-1-2.png';
-import kitchenContext from '../assets/images/rocksmith/research/005_rocksmith-kitchen-context.png';
-import userContext from '../assets/images/rocksmith/research/006_rocksmith-user-context.png';
-import outdoorsContext from '../assets/images/rocksmith/research/007_rocksmith-outdoors.png';
-import simpleSetup from '../assets/images/rocksmith/research/008_rocksmith-simple-setup-2.png';
-import complexSetup from '../assets/images/rocksmith/research/009_rocksmith-complex-setup-2.png';
+import kitchenContext from '../assets/images/rocksmith/research/005_rocksmith-kitchen-context.webp';
+import simpleSetup from '../assets/images/rocksmith/research/008_rocksmith-simple-setup-2.webp';
+import complexSetup from '../assets/images/rocksmith/research/009_rocksmith-complex-setup-2.webp';
 // Gallery images
 import gallery1 from '../assets/images/rocksmith/solution/010_img-20251109-wa0002-2-thumbnail.webp';
 import gallery2 from '../assets/images/rocksmith/solution/011_img-20251109-wa0009-2-thumbnail.webp';
@@ -30,28 +30,20 @@ import gallery6 from '../assets/images/rocksmith/solution/015_img-20251109-wa001
 import gallery7 from '../assets/images/rocksmith/solution/016_img-20251109-wa0005-thumbnail.webp';
 import gallery8 from '../assets/images/rocksmith/solution/017_img-20251109-wa0012-2-thumbnail.webp';
 // Solution
-import threeDto2dDiagram from '../assets/images/rocksmith/solution/018_img-0508.png';
-import comparisonOther from '../assets/images/rocksmith/solution/019_frame-7.png';
-import comparisonRocksmith from '../assets/images/rocksmith/solution/020_frame-8.png';
-import responsiveGif from '../assets/images/rocksmith/solution/021_rocksmith-responsive-ui-gif.gif';
-import gpdWin4 from '../assets/images/rocksmith/solution/022_r-on-gpd-win4.png';
+import comparisonRocksmith from '../assets/images/rocksmith/solution/020_frame-8.webp';
+import gpdWin4 from '../assets/images/rocksmith/solution/022_r-on-gpd-win4.webp';
 import accessibilityScale from '../assets/images/rocksmith/solution/023_img-20251109-wa0022.jpg';
 import marketingOnHand from '../assets/images/rocksmith/solution/024_ubdc-newsheader-960x540-us.jpg';
-import cognitiveLoad from '../assets/images/rocksmith/solution/025_img-0492.png';
+import cognitiveLoad from '../assets/images/rocksmith/solution/025_img-0492.webp';
 import interactionMatrix from '../assets/images/rocksmith/solution/026_interaction-matrix-abstraction.png';
-import inputSystem from '../assets/images/rocksmith/solution/027_input-system.png';
-import mobileComponent from '../assets/images/rocksmith/solution/028_mobile-componenet-r-2.jpg';
-import pcInteractions from '../assets/images/rocksmith/solution/029_rpcinteractions-ezgif-com-video-to-gif-converter.gif';
-import mobileInteractions from '../assets/images/rocksmith/solution/030_r-mobile-interactions.gif';
+import inputSystem from '../assets/images/rocksmith/solution/027_input-system.webp';
+import mobileComponent from '../assets/images/rocksmith/solution/028_mobile-componenet-r-2.webp';
 import nestedScroll from '../assets/images/rocksmith/solution/031_nested-scroll-4.png';
-import nestedScrollSolution from '../assets/images/rocksmith/solution/032_nested-scroll-solution-trial-1-4.png';
-import guitarController from '../assets/images/rocksmith/solution/033_guitar-controller-1-2.png';
-import skillsScroll from '../assets/images/rocksmith/solution/034_skills-horizontal-scroll.gif';
-import scrollAmbiguity from '../assets/images/rocksmith/solution/035_r-scroll-ambiguity.png';
-import vertScroll from '../assets/images/rocksmith/solution/036_r-vertical-scroll.gif';
-import vertScrollNonUniform from '../assets/images/rocksmith/solution/037_r-vert-scroll-non-uniform.gif';
-import controlSchemeConsole from '../assets/images/rocksmith/solution/038_rocksmith-screenshot-2025-12-24-07-50-27-43.png';
-import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksmith-screenshot-2025-12-24-09-01-25-06.png';
+import nestedScrollSolution from '../assets/images/rocksmith/solution/032_nested-scroll-solution-trial-1-4.webp';
+import guitarController from '../assets/images/rocksmith/solution/033_guitar-controller-1-2.webp';
+import scrollAmbiguity from '../assets/images/rocksmith/solution/035_r-scroll-ambiguity.webp';
+import controlSchemeConsole from '../assets/images/rocksmith/solution/038_rocksmith-screenshot-2025-12-24-07-50-27-43.webp';
+import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksmith-screenshot-2025-12-24-09-01-25-06.webp';
 
 // Accessibility Colorblind Profiles
 import accessibilityColorblind1 from '../assets/images/rocksmith/accessibility/img-20251109-wa0014-2.webp';
@@ -159,8 +151,8 @@ useCaseStudySketchPanels(caseStudyRoot);
 
         <!-- Context photos -->
         <CaseImage :src="kitchenContext" alt="Kitchen counter setup" caption="A setup showcasing the use of a kitchen counter and an iPad" imgClass="w-full h-auto rounded-xl max-w-md mx-auto" />
-        <CaseImage :src="userContext" alt="User context with notes" caption="A user showing a mixture of physical note taking in their general context" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="outdoorsContext" alt="Outdoor setup" caption="One user wanted to push the limits of where they could learn" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.userContext" alt="User context with notes" caption="A user showing a mixture of physical note taking in their general context" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.outdoorsContext" alt="Outdoor setup" caption="One user wanted to push the limits of where they could learn" img-class="w-full h-auto rounded-xl" />
 
         <p class="type-case-body-lg">Another important highlight was the amount of personalisation needed:</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,12 +230,12 @@ useCaseStudySketchPanels(caseStudyRoot);
           <strong>It would automatically know how much to zoom in or out and how to move left and right</strong> to make sure all the 3D objects appeared at the correct places on the screen no matter the aspect ratio and screen resolution. <strong>The MVP achieved usable display results on all 5 target aspect ratios encompassing 90% of expected devices out of the box.</strong>
         </p>
 
-        <CaseImage :src="threeDto2dDiagram" alt="3D to 2D coordinate system diagram" caption="Converting a 3D object into 2D coordinates, then applying responsive UI component rules, and making the 3D object adjust on different screens" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.threeDto2dDiagram" alt="3D to 2D coordinate system diagram" caption="Converting a 3D object into 2D coordinates, then applying responsive UI component rules, and making the 3D object adjust on different screens" img-class="w-full h-auto rounded-xl" />
 
-        <CaseImage :src="comparisonOther" alt="Other games UI overlap issue" caption="You can see the overlap between 2D and 3D elements when the screen becomes narrower in other games. Fun fact — this is exactly why many games put their characters in the center of the screen" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.comparisonOther" alt="Other games UI overlap issue" caption="You can see the overlap between 2D and 3D elements when the screen becomes narrower in other games. Fun fact — this is exactly why many games put their characters in the center of the screen" img-class="w-full h-auto rounded-xl" />
         <CaseImage :src="comparisonRocksmith" alt="Rocksmith+ no overlap" caption="Because the 3D element is effectively treated as a 2D element, it adjusts without any special rules when playing on phones or tablets" imgClass="w-full h-auto rounded-xl" />
 
-        <CaseImage :src="responsiveGif" alt="Responsive UI in action" caption="The new UI was responsive in runtime without any overlapping of 3D and 2D elements" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.responsiveUi" alt="Responsive UI in action" caption="The new UI was responsive in runtime without any overlapping of 3D and 2D elements" img-class="w-full h-auto rounded-xl" />
 
         <VideoEmbed src="https://www.youtube.com/embed/AvvCJ_hIMjo" title="Responsive UI Live Test" />
         <p class="type-case-caption text-center">Live test demonstrating the 3D-to-2D anchoring system, ensuring all elements remain legible and correctly positioned</p>
@@ -345,8 +337,8 @@ useCaseStudySketchPanels(caseStudyRoot);
           <strong>A large part of my role was making all these small changes to the global design system and its component libraries to improve intuitiveness on mobile, PC, and consoles.</strong>
         </p>
         <CaseImage :src="mobileComponent" alt="Mobile touch UI" caption="Touch focused UI rarely has arrows to scroll — the content extends slightly off-screen to hint at scrollability" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="pcInteractions" alt="PC carousel interactions" caption="On PC, carousel carets are critical for horizontal scrolling with a mouse that usually only supports vertical scroll" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="mobileInteractions" alt="Mobile scroll interactions" caption="Mobile scroll containers support free form horizontal and vertical scroll without buttons" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.pcInteractions" alt="PC carousel interactions" caption="On PC, carousel carets are critical for horizontal scrolling with a mouse that usually only supports vertical scroll" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.mobileInteractions" alt="Mobile scroll interactions" caption="Mobile scroll containers support free form horizontal and vertical scroll without buttons" img-class="w-full h-auto rounded-xl" />
         <div class="mt-8">
           <CaseInsight stat="~90%" statLabel="of participants" theme="success">
             <p>Felt confident about the mobile UI because it looked similar to an app they already used (e.g., Netflix, Spotify).</p>
@@ -381,14 +373,14 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           Going back to the drawing board, a technical designer proposed using a <strong>two-axis design pattern — vertical axis for moving between components, horizontal axis for accessing information.</strong> I created multiple quick iterations in Figma to explore commonalities across platforms.
         </p>
-        <CaseImage :src="skillsScroll" alt="Skills horizontal scroll" caption="Skills moved into a horizontal scroll — the first component to get this treatment" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.skillsScroll" alt="Skills horizontal scroll" caption="Skills moved into a horizontal scroll — the first component to get this treatment" img-class="w-full h-auto rounded-xl" />
 
         <p class="type-case-body-lg">
           <strong>I worked very closely with a Senior Engineer on building consistent focusing in a two-axis interaction</strong> — whenever users would vertically scroll, the item closest to the current item in focus would gain focus.
         </p>
         <CaseImage :src="scrollAmbiguity" alt="Scroll ambiguity" caption="When you scroll up from here, what item do you expect to focus on?" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="vertScroll" alt="Vertical scroll uniform" caption="Uniform grid — simply focus tile number 3 in the next row" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="vertScrollNonUniform" alt="Vertical scroll non-uniform" caption="Non-uniform grid — the focused element is closest in proximity to the previous element" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.vertScroll" alt="Vertical scroll uniform" caption="Uniform grid — simply focus tile number 3 in the next row" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.vertScrollNonUniform" alt="Vertical scroll non-uniform" caption="Non-uniform grid — the focused element is closest in proximity to the previous element" img-class="w-full h-auto rounded-xl" />
 
         <p class="type-case-body-lg">
           When we specifically asked playtesting moderator "comparing to other main menus such as your console's game library, did you have any issues with the Rocksmith+ main menu?" — <strong>100% of results came in as "no"</strong>. This was a big success.

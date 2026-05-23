@@ -193,11 +193,26 @@ export function detachProjectFlame() {
 }
 
 export function tickProjectFlame(_timeSeconds: number) {
-  if (!inited) return
+  if (!inited || document.hidden) return
   if (attachedThumb) syncFlameCanvasToThumb(attachedThumb)
   material.uniforms.u_time.value = performance.now() / 1000 - flameAttachWallSec
   const u = material.uniforms.u_globalOpacity
   u.value += (targetOpacity - u.value) * 0.1
   if (u.value > 0.01) renderer.render(scene, camera)
+}
+
+/** Release WebGL + DOM when leaving /work so the GPU context is not kept alive. */
+export function disposeProjectFlameSingleton() {
+  detachProjectFlame()
+  if (!inited) return
+
+  mesh?.geometry?.dispose()
+  material?.dispose()
+  renderer?.dispose()
+  flameWrapper?.remove()
+  flameWrapper = null
+  attachedThumb = null
+  lastFlameSizeKey = ''
+  inited = false
 }
 
