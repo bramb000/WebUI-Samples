@@ -27,13 +27,20 @@ export type BookPageFace = BookPageLeft | BookPageRight
 
 export type BookSpread = { front: BookPageFace; back: BookPageFace }
 
+/** Baked onto the hardcover boards (not a scroll leaf). */
+export const ALCHEMIST_BOOK_COVER: BookPageLeft = {
+  layout: 'left',
+  imageKey: 'cover',
+  header: 'My Product Textbook',
+  subtitle: 'Brewing for success',
+}
+
 export const ALCHEMIST_BOOK_SPREADS: BookSpread[] = [
   {
     front: {
-      layout: 'left',
-      imageKey: 'cover',
-      header: 'My Process',
-      subtitle: 'Product Alchemist',
+      layout: 'right',
+      number: '',
+      body: 'Turn the page to begin.',
     },
     back: {
       layout: 'left',

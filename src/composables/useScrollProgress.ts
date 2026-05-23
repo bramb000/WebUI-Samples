@@ -1,17 +1,24 @@
 import { onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
 
 export type ScrollProgressOptions = {
-  /** Extra viewport heights of scroll distance (default: track height − 1vh). */
-  trackRef: Ref<HTMLElement | null>
+  /**
+   * Sticky `top` offset in px (e.g. nav height). Progress stays 0 until the track
+   * has pinned and the user scrolls past this inset — avoids animation before lock.
+   */
+  pinTop?: number
 }
 
 /**
  * Normalised scroll progress (0–1) through a tall track with a sticky child.
- * progress = (scrollY − trackTop) / (trackHeight − viewportHeight)
+ * Counts only scroll after the track has pinned at `pinTop`.
  */
-export function useScrollProgress(trackRef: Ref<HTMLElement | null>) {
+export function useScrollProgress(
+  trackRef: Ref<HTMLElement | null>,
+  options: ScrollProgressOptions = {},
+) {
   const progress = ref(0)
   let rafId = 0
+  const pinTop = options.pinTop ?? 0
 
   const update = () => {
     const track = trackRef.value
@@ -20,13 +27,13 @@ export function useScrollProgress(trackRef: Ref<HTMLElement | null>) {
       return
     }
     const rect = track.getBoundingClientRect()
-    const trackTop = window.scrollY + rect.top
     const scrollable = track.offsetHeight - window.innerHeight
     if (scrollable <= 0) {
       progress.value = 0
       return
     }
-    const raw = (window.scrollY - trackTop) / scrollable
+    const scrolledPastPin = Math.max(0, -rect.top - pinTop)
+    const raw = scrolledPastPin / scrollable
     progress.value = Math.max(0, Math.min(1, raw))
   }
 

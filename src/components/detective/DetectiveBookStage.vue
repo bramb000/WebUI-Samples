@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ALCHEMIST_PHASE_LABELS } from '../../constants/alchemistBookData'
+import { bookPageScrollProgress } from '../../constants/alchemistBookScroll'
 import { useReducedMotion } from '../../composables/useReducedMotion'
 import { useScrollProgress } from '../../composables/useScrollProgress'
 import {
@@ -17,13 +18,13 @@ const NAV_OFFSET_PX = 72
 const trackRef = ref<HTMLElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const reducedMotion = useReducedMotion()
-const { progress } = useScrollProgress(trackRef)
+const { progress } = useScrollProgress(trackRef, { pinTop: NAV_OFFSET_PX })
 
 /** Only swap to static UI for accessibility — not low-power heuristics (too many laptops hit cores ≤ 4). */
 const useStaticFallback = computed(() => reducedMotion.value)
 
 const activePhaseIndex = computed(() => {
-  const p = progress.value
+  const p = bookPageScrollProgress(progress.value)
   const i = Math.min(ALCHEMIST_PHASE_LABELS.length - 1, Math.floor(p * ALCHEMIST_PHASE_LABELS.length))
   return i
 })

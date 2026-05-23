@@ -112,10 +112,17 @@ function drawRightPage(
   const lineHeight = bodySize * leading
 
   const cx = CANVAS_W / 2
-  const headerY = margin + numberSize * 0.55
-  drawEmbossedHeader(ctx, page.number, cx, headerY, numberSize)
 
-  const bodyY = headerY + numberSize * 0.45 + gap
+  let bodyY: number
+  if (page.number.trim()) {
+    const headerY = margin + numberSize * 0.55
+    drawEmbossedHeader(ctx, page.number, cx, headerY, numberSize)
+    bodyY = headerY + numberSize * 0.45 + gap
+  }
+  else {
+    bodyY = CANVAS_H / 2 - lineHeight * 0.5
+  }
+
   drawBodyLeft(ctx, page.body, margin, bodyY, contentW, lineHeight)
 }
 

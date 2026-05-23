@@ -32,4 +32,13 @@
 
   /* Uniform overlay on full-bleed left pages (within deckled mask) */
   --book-left-scrim-fill: rgba(17, 17, 19, 0.32);
+
+  /* Hardcover board — leather/cloth baked onto cover meshes */
+  --book-cover-leather: #2a1f18;
+  --book-cover-leather-dark: #140e0a;
+  --book-cover-leather-light: #3d2e24;
+  --book-cover-edge: #1a1410;
+  --book-cover-interior: #241a14;
+  --book-cover-scrim: rgba(10, 8, 6, 0.42);
+  --book-cover-panel-inset: 36px;
 }

@@ -1,12 +1,35 @@
 import * as THREE from 'three'
-import { ALCHEMIST_BOOK_SPREADS } from '../../constants/alchemistBookData'
+import { ALCHEMIST_BOOK_COVER, ALCHEMIST_BOOK_SPREADS } from '../../constants/alchemistBookData'
+import {
+  bookCoverScrollProgress,
+  bookPageScrollProgress,
+} from '../../constants/alchemistBookScroll'
 import { clearBookPageImageCache } from '../../assets/images/book/bookPageImages'
 import { disposeStaticBookParchmentCache } from './bakeStaticBookParchment'
+import {
+  BOOK_RENDER_ORDER,
+  bookStackDepth,
+  COVER_FULLY_OPEN_THRESHOLD,
+  COVER_HEIGHT,
+  COVER_THICKNESS,
+  COVER_WIDTH,
+  LEAF_BEHIND_COVER_Z,
+  LEAF_Z_STEP,
+  LEFT_STACK_Z_BEHIND_BACK,
+  PAGE_HEIGHT,
+  PAGE_WIDTH,
+  SPINE_WIDTH,
+} from './bookDimensions'
+import {
+  createBackCoverMaterials,
+  createBookCoverTextures,
+  createFrontCoverMaterials,
+  createPageBlockMaterials,
+  createSpineMaterials,
+  disposeBookCoverTextures,
+} from './createBookCoverTextures'
 import { createBookPageTexture } from './createBookTextures'
 import { DETECTIVE_BOOK_PAGE_FRAGMENT, DETECTIVE_BOOK_VERTEX } from './detectiveBookShaders'
-
-const PAGE_WIDTH = 320
-const PAGE_HEIGHT = 480
 
 export type DetectiveBookScene = {
   setProgress: (progress: number) => void
@@ -22,8 +45,13 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+  const bookRoot = new THREE.Group()
+  bookRoot.rotation.x = 0.06
+  scene.add(bookRoot)
+
   const leaves: THREE.Group[] = []
-  const targetRotations: number[] = []
+  const leafTargetRotations: number[] = []
+  let coverTargetRotation = 0
   let animationFrameId = 0
 
   const onVisibilityChange = () => {
@@ -54,24 +82,84 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
     })
   }
 
-  /** Stable stack draw order + boost for the leaf currently turning. */
+  function coverTurnProgress(): number {
+    return Math.abs(frontCoverGroup.rotation.y / Math.PI)
+  }
+
+  function setLeafRenderOrder(leaf: THREE.Group, order: number) {
+    const base = Math.max(BOOK_RENDER_ORDER.PAGE_MIN, order)
+    leaf.renderOrder = base
+    const frontMesh = leaf.children[0] as THREE.Mesh
+    const backMesh = leaf.children[1] as THREE.Mesh
+    frontMesh.renderOrder = base + 1
+    backMesh.renderOrder = base
+  }
+
+  /** Pages always render above BACK_COVER; front cover still wins when nearly closed. */
   function updateLeafRenderOrder(leaf: THREE.Group, leafIndex: number) {
     const turnProgress = Math.abs(leaf.rotation.y / Math.PI)
-    const stackOrder = (leaves.length - 1 - leafIndex) * 10
+    const coverOpen = coverTurnProgress()
+    const stackOrder = BOOK_RENDER_ORDER.PAGE_MIN + (leaves.length - 1 - leafIndex)
 
     if (turnProgress > 0.03 && turnProgress < 0.97) {
-      leaf.renderOrder = 200 + leafIndex
+      const turning = BOOK_RENDER_ORDER.PAGE_TURNING + leafIndex
+      setLeafRenderOrder(leaf, coverOpen > 0.92 ? turning : BOOK_RENDER_ORDER.PAGE_MIN + 20 + leafIndex)
     }
     else if (turnProgress >= 0.97) {
-      leaf.renderOrder = leafIndex * 10
+      setLeafRenderOrder(leaf, BOOK_RENDER_ORDER.PAGE_MIN + leafIndex)
     }
     else {
-      leaf.renderOrder = stackOrder
+      setLeafRenderOrder(leaf, stackOrder)
     }
   }
 
   const bookData = ALCHEMIST_BOOK_SPREADS
   const disposables: Array<THREE.Material | THREE.BufferGeometry | THREE.Texture> = []
+
+  const coverTextures = createBookCoverTextures(ALCHEMIST_BOOK_COVER, renderer)
+  const stackDepth = bookStackDepth(bookData.length)
+  const spineDepth = stackDepth + COVER_THICKNESS * 2
+  const stackCenterZ = -COVER_THICKNESS - stackDepth / 2
+  const backCoverZ = -COVER_THICKNESS - stackDepth - COVER_THICKNESS / 2
+
+  const pageRig = new THREE.Group()
+  bookRoot.add(pageRig)
+
+  const pageBlockGeo = new THREE.BoxGeometry(PAGE_WIDTH * 0.96, PAGE_HEIGHT * 0.96, stackDepth + 1.5)
+  const pageBlockMats = createPageBlockMaterials(coverTextures)
+  const pageBlock = new THREE.Mesh(pageBlockGeo, pageBlockMats)
+  pageBlock.position.set(PAGE_WIDTH / 2, 0, stackCenterZ)
+  pageBlock.renderOrder = BOOK_RENDER_ORDER.PAGE_BLOCK
+  pageRig.add(pageBlock)
+  disposables.push(pageBlockGeo, ...pageBlockMats)
+
+  const spineGeo = new THREE.BoxGeometry(SPINE_WIDTH, COVER_HEIGHT, spineDepth)
+  const spineMats = createSpineMaterials(coverTextures)
+  const spine = new THREE.Mesh(spineGeo, spineMats)
+  spine.position.set(-SPINE_WIDTH / 2, 0, stackCenterZ - COVER_THICKNESS / 2)
+  spine.renderOrder = BOOK_RENDER_ORDER.SPINE
+  bookRoot.add(spine)
+  disposables.push(spineGeo, ...spineMats)
+
+  const backCoverGeo = new THREE.BoxGeometry(COVER_WIDTH, COVER_HEIGHT, COVER_THICKNESS)
+  const backCoverMats = createBackCoverMaterials(coverTextures)
+  for (const mat of backCoverMats)
+    mat.depthWrite = false
+  const backCover = new THREE.Mesh(backCoverGeo, backCoverMats)
+  backCover.position.set(COVER_WIDTH / 2, 0, backCoverZ)
+  backCover.renderOrder = BOOK_RENDER_ORDER.BACK_COVER
+  bookRoot.add(backCover)
+  disposables.push(backCoverGeo, ...backCoverMats)
+
+  const frontCoverGroup = new THREE.Group()
+  bookRoot.add(frontCoverGroup)
+
+  const frontCoverGeo = new THREE.BoxGeometry(COVER_WIDTH, COVER_HEIGHT, COVER_THICKNESS)
+  const frontCoverMats = createFrontCoverMaterials(coverTextures)
+  const frontCover = new THREE.Mesh(frontCoverGeo, frontCoverMats)
+  frontCover.position.set(COVER_WIDTH / 2, 0, COVER_THICKNESS / 2)
+  frontCoverGroup.add(frontCover)
+  disposables.push(frontCoverGeo, ...frontCoverMats)
 
   ;[...bookData].reverse().forEach((data, index) => {
     const trueIndex = bookData.length - 1 - index
@@ -89,37 +177,37 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
     const backMesh = new THREE.Mesh(geo, backMat)
     backMesh.position.z = -0.5
 
-    frontMesh.renderOrder = 1
-    backMesh.renderOrder = 0
-
     group.add(frontMesh, backMesh)
-    group.position.z = trueIndex * -2
+    group.position.z = LEAF_BEHIND_COVER_Z + trueIndex * -LEAF_Z_STEP
 
-    scene.add(group)
+    pageRig.add(group)
     leaves.push(group)
-    targetRotations.push(0)
+    leafTargetRotations.push(0)
 
     disposables.push(geo, frontMat, backMat, frontTex, backTex)
   })
 
   leaves.reverse()
-
   leaves.forEach((leaf, i) => updateLeafRenderOrder(leaf, i))
 
   function applyScrollProgress(progress: number) {
+    const coverP = bookCoverScrollProgress(progress)
+    coverTargetRotation = -Math.PI * coverP
+
+    const pageP = bookPageScrollProgress(progress)
     const segmentSize = 1 / bookData.length
     leaves.forEach((_, i) => {
       const pageStart = i * segmentSize
       const pageEnd = pageStart + segmentSize
-      if (progress <= pageStart) {
-        targetRotations[i] = 0
+      if (pageP <= pageStart) {
+        leafTargetRotations[i] = 0
       }
-      else if (progress >= pageEnd) {
-        targetRotations[i] = -Math.PI
+      else if (pageP >= pageEnd) {
+        leafTargetRotations[i] = -Math.PI
       }
       else {
-        const localProgress = (progress - pageStart) / segmentSize
-        targetRotations[i] = -Math.PI * localProgress
+        const localProgress = (pageP - pageStart) / segmentSize
+        leafTargetRotations[i] = -Math.PI * localProgress
       }
     })
   }
@@ -138,16 +226,35 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
       return
     animationFrameId = requestAnimationFrame(animate)
 
+    frontCoverGroup.rotation.y += (coverTargetRotation - frontCoverGroup.rotation.y) * 0.08
+    const coverOpen = coverTurnProgress()
+    const coverFullyOpen = coverOpen >= COVER_FULLY_OPEN_THRESHOLD
+    const coverOrder = coverFullyOpen
+      ? BOOK_RENDER_ORDER.FRONT_COVER_OPEN
+      : BOOK_RENDER_ORDER.FRONT_COVER_CLOSED
+    frontCoverGroup.renderOrder = coverOrder
+    frontCover.renderOrder = coverOrder
+    for (const mat of frontCoverMats)
+      mat.depthWrite = !coverFullyOpen
+
+    const backStackBaseZ = backCoverZ - COVER_THICKNESS / 2 - LEFT_STACK_Z_BEHIND_BACK
+
     leaves.forEach((leaf, i) => {
-      leaf.rotation.y += (targetRotations[i]! - leaf.rotation.y) * 0.08
+      leaf.rotation.y += (leafTargetRotations[i]! - leaf.rotation.y) * 0.08
 
       const turnProgress = Math.abs(leaf.rotation.y / Math.PI)
       const bend = Math.sin(turnProgress * Math.PI)
 
-      const zRight = -i * 2
-      const zLeft = -(leaves.length - 1 - i) * 2
+      const zRight = LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP
+      const zLeft = backStackBaseZ - (leaves.length - 1 - i) * LEAF_Z_STEP
       const zLift = bend * 10
-      leaf.position.z = zRight * (1 - turnProgress) + zLeft * turnProgress + zLift
+      let z = zRight * (1 - turnProgress) + zLeft * turnProgress + zLift
+
+      if (coverOpen < 0.98 && turnProgress < 0.04) {
+        z = Math.min(z, LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP - 2)
+      }
+
+      leaf.position.z = z
 
       const frontMat = (leaf.children[0] as THREE.Mesh).material as THREE.ShaderMaterial
       const backMat = (leaf.children[1] as THREE.Mesh).material as THREE.ShaderMaterial
@@ -156,6 +263,8 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
 
       updateLeafRenderOrder(leaf, i)
     })
+
+    pageBlock.visible = coverOpen < 0.08
 
     renderer.sortObjects = true
     renderer.render(scene, camera)
@@ -176,6 +285,7 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
       renderer.dispose()
       for (const d of disposables)
         d.dispose()
+      disposeBookCoverTextures(coverTextures)
       scene.clear()
       disposeStaticBookParchmentCache()
       clearBookPageImageCache()

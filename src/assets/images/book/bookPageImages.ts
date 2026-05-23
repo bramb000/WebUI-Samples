@@ -203,6 +203,22 @@ function drawCoverFit(
   ctx.drawImage(img, dx, dy, dw, dh)
 }
 
+/** Full-bleed image for hardcover panels (no deckle mask). */
+export function drawBookImageFullBleed(
+  ctx: CanvasRenderingContext2D,
+  key: BookImageKey,
+  w: number,
+  h: number,
+) {
+  const cached = cache.get(key)
+  if (cached?.complete) {
+    drawCoverFit(ctx, cached, w, h)
+  }
+  else {
+    drawPlaceholder(ctx, key, w, h)
+  }
+}
+
 /**
  * Full-bleed image clipped to deckled page shape (parchment alpha mask).
  */
