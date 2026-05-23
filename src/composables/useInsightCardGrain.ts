@@ -36,7 +36,7 @@ export function useInsightCardGrain(
       return
     }
 
-    const baseColorHex = resolveCssColorToHex(el, 'var(--insight-accent)', '#4ade80')
+    const baseColorHex = resolveCssColorToHex(el, 'var(--case-insight-surface-fill)', '#121110')
     const overlayStrength = readTokenNumber(
       el,
       '--case-insight-grain-overlay-strength',

@@ -22,6 +22,17 @@ const frameAccent = computed(() => {
   }
 })
 
+const surfaceFill = computed(() => {
+  switch (props.theme) {
+    case 'success':
+      return 'var(--case-insight-surface-change)'
+    case 'danger':
+      return 'var(--case-insight-surface-risk)'
+    default:
+      return 'var(--case-insight-surface-observation)'
+  }
+})
+
 const grainSeed = computed(() => {
   const label = `${props.value}-${props.label}-${props.theme}`
   let h = 0
@@ -35,12 +46,13 @@ const { grainUrl, paintMaskUrl } = useInsightCardGrain(surfaceRef, grainSeed)
 
 const surfaceStyle = computed(() => ({
   '--insight-accent': frameAccent.value,
+  '--case-insight-surface-fill': surfaceFill.value,
   '--case-insight-paint-mask': `url(${paintMaskUrl})`,
 }))
 </script>
 
 <template>
-  <ProceduralChiselFrame class="metric-frame" :color="frameAccent" :hover-flame="false">
+  <ProceduralChiselFrame class="metric-frame" :color="surfaceFill" :hover-flame="false">
     <div class="metric-wrap metric-wrap--chisel" :style="surfaceStyle">
       <div ref="surfaceRef" class="case-insight-surface" aria-hidden="true">
         <img
@@ -68,8 +80,10 @@ const surfaceStyle = computed(() => ({
 <style scoped>
 .metric-frame {
   width: 100%;
+  height: 100%;
   min-width: 0;
   --insight-accent: v-bind(frameAccent);
+  --case-insight-surface-fill: v-bind(surfaceFill);
   --card-clip: polygon(4% 0, 100% 0, 100% 94%, 97% 100%, 0 100%, 0 7%);
   --card-hover-tilt: 0.8deg;
   transition: transform 200ms var(--ease-mechanical-spring);
@@ -81,13 +95,13 @@ const surfaceStyle = computed(() => ({
   content: '';
   position: absolute;
   inset: -4px;
-  border: 2px solid color-mix(in srgb, var(--insight-accent) 70%, #f4f4f5 30%);
+  border: 2px solid color-mix(in srgb, var(--case-insight-surface-fill) 70%, #f4f4f5 30%);
   clip-path: var(--card-clip);
   opacity: 0;
   pointer-events: none;
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--insight-accent) 22%, transparent 78%),
-    0 10px 24px color-mix(in srgb, var(--insight-accent) 16%, transparent 84%);
+    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%),
+    0 10px 24px color-mix(in srgb, var(--case-insight-surface-fill) 16%, transparent 84%);
   transition: opacity 140ms ease;
 }
 
@@ -120,8 +134,10 @@ const surfaceStyle = computed(() => ({
 
 .metric-wrap {
   position: relative;
+  flex: 1 1 auto;
   min-width: 0;
   width: 100%;
+  height: 100%;
   min-height: 120px;
   overflow: hidden;
   clip-path: var(--card-clip);
@@ -145,7 +161,7 @@ const surfaceStyle = computed(() => ({
 .metric-frame:hover .metric-content {
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.28),
-    0 0 0 1px color-mix(in srgb, var(--insight-accent) 22%, transparent 78%);
+    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%);
 }
 
 .metric-lcd {

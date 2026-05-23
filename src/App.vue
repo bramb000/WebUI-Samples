@@ -7,7 +7,15 @@ import { useCaseTheme } from './composables/useCaseTheme';
 
 const route = useRoute();
 const isHeroSelect = computed(() => route.path === '/work');
+const isHome = computed(() => route.path === '/');
 const isFullScreen = computed(() => route.query.fullscreen === 'true');
+const isConstrainedMain = computed(
+  () =>
+    !isFullScreen.value
+    && !isHeroSelect.value
+    && !isHome.value
+    && !route.path.startsWith('/work/'),
+);
 
 // Applies data-theme on <html> for case study Hero theming
 useCaseTheme();
@@ -28,7 +36,8 @@ useCaseTheme();
       'flex-grow w-full', 
       // Hero Select needs a full-bleed stage (but still a normal page w/ Nav).
       isHeroSelect ? 'h-[calc(100vh-72px)] min-h-0 overflow-hidden' : '',
-      (!isFullScreen && !isHeroSelect && !route.path.startsWith('/work/')) ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : ''
+      isConstrainedMain ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : '',
+      isHome ? 'py-0' : '',
     ]">
       <router-view v-slot="{ Component }">
         <transition v-if="!isFullScreen" name="fade" mode="out-in">

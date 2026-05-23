@@ -1,0 +1,31 @@
+/**
+ * Book-only design system (3D process book).
+ * Headers use site display tokens; body uses period calligraphy.
+ */
+:root {
+  --book-font-header: var(--font-display);
+  --book-font-body: 'IM Fell English', Georgia, 'Times New Roman', serif;
+
+  --book-gold-fill: var(--color-accent);
+  --book-gold-shadow: var(--color-accent-dark);
+  --book-gold-highlight: var(--color-accent-rim);
+  --book-header-recess-fill: var(--paper-on-fill-text);
+
+  --book-body-ink: var(--paper-on-fill-text);
+  --book-body-muted: var(--paper-on-fill-text-muted);
+
+  --book-canvas-w: 512;
+  --book-canvas-h: 768;
+  --book-safe-margin: 48px;
+
+  --book-header-size-cover: 52px;
+  --book-header-size-phase: 46px;
+  --book-header-size-end: 28px;
+  --book-number-size: 56px;
+
+  --book-body-size: 24px;
+  --book-body-leading: 1.55;
+  --book-subtitle-size: 20px;
+
+  --book-header-body-gap: 48px;
+}

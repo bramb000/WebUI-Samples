@@ -10,6 +10,8 @@ export type ChiselRimBakeOptions = {
   colorHex: string
   bleedPx?: number
   flatRim?: boolean
+  /** 0 = flat tone matching interior fill; default card lighting is ~0.164 */
+  depthEffect?: number
 }
 
 export const CARD_BLEED_PX = 10
@@ -255,14 +257,14 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   bakeMaterial.uniforms.u_panelFill.value = 0
   bakeMaterial.uniforms.u_flatRim.value = opts.flatRim ? 1 : 0
   /* Keep rim tint true to props.colorHex — depth lighting reads as lower-saturation on cards. */
-  bakeMaterial.uniforms.u_depthEffect.value = 0.164
+  bakeMaterial.uniforms.u_depthEffect.value = opts.depthEffect ?? 0.164
 
   const aspect = vw / Math.max(vh, 1)
   const uvx = (cardL + cardW * 0.5) / wE
   const uvy = (exB - (cardT + cardH * 0.5)) / hE
   bakeMaterial.uniforms.u_pCardCenter.value.set((uvx * 2 - 1) * aspect, uvy * 2 - 1)
 
-  const inset = opts.flatRim ? 1.0 : 0.996
+  const inset = opts.flatRim ? 1.0 : 1.0
   bakeMaterial.uniforms.u_innerHalf.value.set(
     aspect * (cardW / wE) * inset,
     (cardH / hE) * inset,

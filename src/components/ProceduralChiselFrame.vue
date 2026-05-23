@@ -49,6 +49,7 @@ async function rebakeRim() {
     heightCss: r.height,
     colorHex: hex,
     bleedPx: CARD_BLEED_PX,
+    depthEffect: 0,
   })
   if (!cancelled && url) rimUrl.value = url
 }
@@ -115,7 +116,10 @@ onBeforeUnmount(() => {
   z-index: 1;
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   min-width: 0;
   width: 100%;
+  height: 100%;
+  min-height: 100%;
 }
 </style>
