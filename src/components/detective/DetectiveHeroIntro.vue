@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { FlaskConical } from 'lucide-vue-next'
+import PrimaryButton from '../PrimaryButton.vue'
 </script>
 
 <template>
   <header class="detective-hero-intro">
     <div class="detective-hero-intro__copy">
-      <p class="label-segment detective-hero-intro__eyebrow">Portfolio</p>
       <h1 class="type-display-hero detective-hero-intro__title">
         Hi, I'm<br>
         <span class="text-accent">Bramha</span>
       </h1>
-      <h2 class="detective-hero-intro__role type-hero-title text-accent">
+      <h2 class="type-hero-role text-accent detective-hero-intro__role">
         Product Alchemist
       </h2>
       <p class="type-body-lg text-muted detective-hero-intro__value">
-        I craft products that make users happy and make businesses money.
+        7 years of experience in crafting products that make users happy that they are willing to spend on.
       </p>
-      <a href="#alchemist-book" class="detective-hero-intro__scroll-cta label-segment">
-        Explore my process ↓
-      </a>
+      <PrimaryButton to="/work" class="detective-hero-intro__cta">
+        View Work
+      </PrimaryButton>
     </div>
 
     <div
@@ -42,10 +42,6 @@ import { FlaskConical } from 'lucide-vue-next'
   padding-bottom: clamp(32px, 6vw, 64px);
 }
 
-.detective-hero-intro__eyebrow {
-  margin-bottom: 12px;
-}
-
 .detective-hero-intro__title {
   margin: 0 0 8px;
   text-shadow: 0 0 40px color-mix(in srgb, var(--color-accent) 12%, transparent);
@@ -61,17 +57,8 @@ import { FlaskConical } from 'lucide-vue-next'
   margin: 0 0 28px;
 }
 
-.detective-hero-intro__scroll-cta {
-  display: inline-block;
-  color: var(--color-accent);
-  text-decoration: none;
-  opacity: 0.85;
-  transition: opacity 150ms ease, text-shadow 150ms ease;
-}
-
-.detective-hero-intro__scroll-cta:hover {
-  opacity: 1;
-  text-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 35%, transparent);
+.detective-hero-intro__cta {
+  display: inline-flex;
 }
 
 .detective-hero-intro__portrait {
@@ -109,6 +96,10 @@ import { FlaskConical } from 'lucide-vue-next'
   }
 
   .detective-hero-intro__value {
+    margin-inline: auto;
+  }
+
+  .detective-hero-intro__cta {
     margin-inline: auto;
   }
 }

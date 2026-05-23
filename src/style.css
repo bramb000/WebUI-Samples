@@ -33,6 +33,8 @@
   /* ── Typefaces ── */
   /* Primary headers — homepage hero ("Hi, I'm Bramha") */
   --font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
+  /* Expressive script — hero role line ("Product Alchemist") */
+  --font-script:  'Imperial Script', 'Snell Roundhand', 'Segoe Script', cursive;
   /* Body copy + parchment panel UI labels (case study kickers, badges, meta) */
   --font-sans:    'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
   /* No monospace in the design system — map Tailwind font-mono to Barlow */
@@ -97,6 +99,7 @@
   --text-display-hero:  clamp(3.25rem, 10vw, 6rem);
   --text-page-title:    clamp(3rem, 10vw, 5.25rem);
   --text-hero-title:    clamp(1.75rem, 6vw, 3.25rem);
+  --text-hero-role:     clamp(2.75rem, 9vw, 5rem);
   --text-section-title: clamp(1.25rem, 3.5vw, 1.75rem);
   --text-card-title:    1.0625rem;
   --text-heading-major: 2.25rem;
@@ -118,6 +121,7 @@
 
   --leading-display:    1;
   --leading-tight:      1.1;
+  --leading-script:     1.05;
   --leading-snug:       1.3;
   --leading-body:       1.625;
   --leading-body-sm:    1.6;
@@ -127,6 +131,7 @@
   --tracking-display-wide: 0.06em;
   --tracking-heading:   0.08em;
   --tracking-heading-tight: 0.05em;
+  --tracking-script:        0.01em;
   --tracking-label:     0.2em;
   --tracking-label-md:  0.15em;
   --tracking-button:    0.1em;
@@ -267,6 +272,15 @@ h5, h6 {
   letter-spacing: var(--tracking-display-wide);
   line-height: var(--leading-tight);
   color: var(--color-text);
+}
+.type-hero-role {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: var(--text-hero-role);
+  letter-spacing: var(--tracking-script);
+  line-height: var(--leading-script);
+  color: var(--color-text);
+  text-transform: none;
 }
 
 /* Case study layout — explicit display headings (avoid matching type-case-body*, etc.) */

@@ -82,10 +82,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', onResize)
   disposeBook()
 })
-
-function scrollToCaseStudies() {
-  document.getElementById('selected-work')?.scrollIntoView({ behavior: 'smooth' })
-}
 </script>
 
 <template>
@@ -100,11 +96,11 @@ function scrollToCaseStudies() {
       class="detective-book-stage sticky w-full overflow-hidden"
       :style="{ top: `${NAV_OFFSET_PX}px`, height: `calc(100vh - ${NAV_OFFSET_PX}px)` }"
     >
-      <div class="detective-book-stage__bg noise-overlay" aria-hidden="true" />
+      <div class="detective-book-stage__bg" aria-hidden="true" />
 
       <template v-if="useStaticFallback">
         <div class="detective-book-fallback container mx-auto max-w-3xl px-6 py-16">
-          <h2 class="type-section-title text-center mb-10">My process</h2>
+          <h2 class="type-section-title text-center mb-10">My Product Textbook</h2>
           <ol class="detective-book-fallback__list space-y-6">
             <li
               v-for="(label, i) in ALCHEMIST_PHASE_LABELS"
@@ -141,23 +137,13 @@ function scrollToCaseStudies() {
       </template>
     </div>
   </section>
-
-  <div class="detective-book-cta text-center py-16 px-6">
-    <h2 class="type-section-title mb-6">Read case studies</h2>
-    <button
-      type="button"
-      class="detective-book-cta__btn"
-      @click="scrollToCaseStudies"
-    >
-      View selected work ↓
-    </button>
-  </div>
 </template>
 
 <style scoped>
 .detective-book-track {
   position: relative;
   height: calc(var(--detective-track-vh, 600) * 1vh);
+  background: var(--color-bg);
 }
 
 .detective-book-stage {
@@ -167,11 +153,7 @@ function scrollToCaseStudies() {
 .detective-book-stage__bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 50% 42%,
-    var(--color-elevated) 0%,
-    var(--color-bg) 72%
-  );
+  background: var(--color-bg);
   z-index: 0;
 }
 
@@ -233,33 +215,5 @@ function scrollToCaseStudies() {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.detective-book-cta__btn {
-  font-family: var(--font-sans);
-  font-size: var(--text-filter-tab);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 12px 28px;
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: var(--dl-border-width) solid var(--color-border);
-  border-radius: var(--dl-border-radius);
-  box-shadow: var(--dl-shadow-deep);
-  cursor: pointer;
-  transition:
-    transform 220ms var(--ease-mechanical-spring),
-    box-shadow 220ms var(--ease-mechanical-spring),
-    border-color 220ms ease;
-}
-
-.detective-book-cta__btn:hover {
-  border-color: var(--color-border-hi);
-  box-shadow: var(--dl-shadow-deep), var(--dl-glow-global);
-  transform: translateY(-2px);
-}
-
-.detective-book-cta__btn:active {
-  transform: translateY(3px);
 }
 </style>

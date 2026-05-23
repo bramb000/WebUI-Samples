@@ -1,6 +1,10 @@
 import type { BookPageLeft } from '../../constants/alchemistBookData'
 import { drawBookImageFullBleed } from '../../assets/images/book/bookPageImages'
-import { bookHeaderFont, drawEmbossedHeader } from './bookTypography'
+import {
+  bookSafeMargin,
+  drawCenteredMutedText,
+  drawEmbossedHeaderBlock,
+} from './bookTypography'
 
 const COVER_TEX_W = 512
 const COVER_TEX_H = 768
@@ -140,16 +144,30 @@ export function composeFrontCoverExteriorCanvas(page: BookPageLeft): HTMLCanvasE
   drawBeveledFrame(ctx, COVER_TEX_W, COVER_TEX_H, inset * 0.55)
 
   const headerSize = bookVarPx('--book-header-size-cover', 52)
-  drawEmbossedHeader(ctx, page.header, COVER_TEX_W / 2, COVER_TEX_H / 2, headerSize)
+  const maxTextW = panelW - bookSafeMargin()
+  const centerY = COVER_TEX_H / 2
+  const headerBlockH = drawEmbossedHeaderBlock(
+    ctx,
+    page.header,
+    COVER_TEX_W / 2,
+    centerY,
+    headerSize,
+    maxTextW,
+  )
 
   if (page.subtitle) {
     const subSize = bookVarPx('--book-subtitle-size', 20)
     const inkMuted = bookVarColor('--book-body-muted', '#5c564c')
-    ctx.font = bookHeaderFont(subSize).replace('700', '600')
-    ctx.fillStyle = inkMuted
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(page.subtitle, COVER_TEX_W / 2, COVER_TEX_H / 2 + headerSize * 0.85)
+    const subY = centerY + headerBlockH / 2 + headerSize * 0.45
+    drawCenteredMutedText(
+      ctx,
+      page.subtitle,
+      COVER_TEX_W / 2,
+      subY,
+      subSize,
+      maxTextW,
+      inkMuted,
+    )
   }
 
   return canvas
@@ -168,7 +186,15 @@ export function composeBackCoverExteriorCanvas(): HTMLCanvasElement {
   drawBeveledFrame(ctx, COVER_TEX_W, COVER_TEX_H, 40)
 
   const headerSize = bookVarPx('--book-header-size-end', 28)
-  drawEmbossedHeader(ctx, 'Product Alchemist', COVER_TEX_W / 2, COVER_TEX_H * 0.62, headerSize)
+  const maxTextW = COVER_TEX_W - bookSafeMargin() * 2
+  drawEmbossedHeaderBlock(
+    ctx,
+    'Product Alchemist',
+    COVER_TEX_W / 2,
+    COVER_TEX_H * 0.62,
+    headerSize,
+    maxTextW,
+  )
 
   return canvas
 }
@@ -178,18 +204,16 @@ export function composeSpineCanvas(title: string, subtitle?: string): HTMLCanvas
   drawLeatherBase(ctx, SPINE_TEX_W, SPINE_TEX_H, 'spine')
 
   const headerSize = 22
+  const maxAlongSpine = SPINE_TEX_H - bookSafeMargin() * 2
   ctx.save()
   ctx.translate(SPINE_TEX_W / 2, SPINE_TEX_H * 0.38)
   ctx.rotate(-Math.PI / 2)
-  drawEmbossedHeader(ctx, title, 0, 0, headerSize)
+  const headerBlockH = drawEmbossedHeaderBlock(ctx, title, 0, 0, headerSize, maxAlongSpine)
   if (subtitle) {
     const subSize = 14
     const inkMuted = bookVarColor('--book-body-muted', '#5c564c')
-    ctx.font = bookHeaderFont(subSize).replace('700', '600')
-    ctx.fillStyle = inkMuted
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(subtitle, 0, headerSize * 0.95)
+    const subY = headerBlockH / 2 + headerSize * 0.5
+    drawCenteredMutedText(ctx, subtitle, 0, subY, subSize, maxAlongSpine, inkMuted)
   }
   ctx.restore()
 

@@ -46,7 +46,6 @@ const trackEmailClick = () => {
           @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
           @mouseleave="() => setWispHover(null)"
           @mousedown="triggerWispClick"
-          class="footer-cta-btn"
         >
           Get in touch
         </PrimaryButton>
@@ -159,10 +158,6 @@ const trackEmailClick = () => {
 /* ── CTA Button Row ── */
 .footer-cta-btn-row {
   display: flex;
-}
-.footer-cta-btn {
-  padding: 12px 28px;
-  font-size: 12px;
 }
 
 /* ── Divider — brass hairline ── */

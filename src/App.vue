@@ -8,12 +8,14 @@ import { useCaseTheme } from './composables/useCaseTheme';
 const route = useRoute();
 const isHeroSelect = computed(() => route.path === '/work');
 const isHome = computed(() => route.path === '/');
+const isAbout = computed(() => route.path === '/about');
 const isFullScreen = computed(() => route.query.fullscreen === 'true');
 const isConstrainedMain = computed(
   () =>
     !isFullScreen.value
     && !isHeroSelect.value
     && !isHome.value
+    && !isAbout.value
     && !route.path.startsWith('/work/'),
 );
 
@@ -37,7 +39,7 @@ useCaseTheme();
       // Hero Select needs a full-bleed stage (but still a normal page w/ Nav).
       isHeroSelect ? 'h-[calc(100vh-72px)] min-h-0 overflow-hidden' : '',
       isConstrainedMain ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : '',
-      isHome ? 'py-0' : '',
+      isHome || isAbout ? 'py-0' : '',
     ]">
       <router-view v-slot="{ Component }">
         <transition v-if="!isFullScreen" name="fade" mode="out-in">

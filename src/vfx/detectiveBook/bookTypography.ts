@@ -31,7 +31,7 @@ export function bookSafeMargin(): number {
 }
 
 /**
- * Metallic gold stroke + recessed ink fill (embossed into parchment).
+ * Manuscript header — ink fill on parchment (stroke-scale 0) or legacy gilt rim.
  */
 export function drawEmbossedHeader(
   ctx: CanvasRenderingContext2D,
@@ -39,20 +39,37 @@ export function drawEmbossedHeader(
   centerX: number,
   centerY: number,
   fontSizePx: number,
+  fillVar = '--book-header-fill',
+  shadowVar = '--book-header-shadow-ink',
 ) {
-  const goldShadow = bookVar('--book-gold-shadow', '#8B7347')
-  const goldFill = bookVar('--book-gold-fill', '#C5A872')
-  const goldHi = bookVar('--book-gold-highlight', '#D4BE94')
-  const recess = bookVar('--book-header-recess-fill', '#1a1814')
+  const strokeScale = Number.parseFloat(bookVar('--book-header-stroke-scale', '0')) || 0
 
   ctx.font = bookHeaderFont(fontSizePx)
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   ctx.lineJoin = 'round'
 
-  const depth = Math.max(2, fontSizePx * 0.045)
-  const strokeMain = Math.max(2, fontSizePx * 0.07)
-  const strokeHi = Math.max(1, fontSizePx * 0.035)
+  if (strokeScale <= 0) {
+    const fill = bookVar(fillVar, bookVar('--book-header-fill', '#1a1410'))
+    const shadow = bookVar(shadowVar, bookVar('--book-header-shadow-ink', 'rgba(26, 20, 16, 0.28)'))
+    const shadowOffset = Math.max(1, fontSizePx * 0.022)
+
+    ctx.fillStyle = shadow
+    ctx.fillText(text, centerX + shadowOffset, centerY + shadowOffset)
+
+    ctx.fillStyle = fill
+    ctx.fillText(text, centerX, centerY)
+    return
+  }
+
+  const goldShadow = bookVar('--book-gold-shadow', '#8B7347')
+  const goldFill = bookVar('--book-gold-fill', '#C5A872')
+  const goldHi = bookVar('--book-gold-highlight', '#D4BE94')
+  const recess = bookVar('--book-header-recess-fill', '#1a1814')
+
+  const depth = Math.max(2, fontSizePx * 0.045) * strokeScale
+  const strokeMain = Math.max(2, fontSizePx * 0.07) * strokeScale
+  const strokeHi = Math.max(1, fontSizePx * 0.035) * strokeScale
 
   ctx.strokeStyle = goldShadow
   ctx.lineWidth = strokeMain + 1
@@ -77,6 +94,85 @@ export function measureEmbossedHeader(
 ): TextMetrics {
   ctx.font = bookHeaderFont(fontSizePx)
   return ctx.measureText(text)
+}
+
+/** Word-wrap for embossed headers (cover, spine, phase titles). */
+export function breakHeaderLines(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+  fontSizePx: number,
+): string[] {
+  ctx.font = bookHeaderFont(fontSizePx)
+  const paragraphs = text.split('\n').map(p => p.trim()).filter(Boolean)
+  if (paragraphs.length === 0)
+    return []
+
+  const lines: string[] = []
+  for (const paragraph of paragraphs) {
+    lines.push(...breakBodyLines(ctx, paragraph, maxWidth))
+  }
+  return lines
+}
+
+export function embossedHeaderBlockHeight(
+  lineCount: number,
+  fontSizePx: number,
+  lineGapRatio = 1.35,
+): number {
+  if (lineCount <= 1)
+    return 0
+  return (lineCount - 1) * fontSizePx * lineGapRatio
+}
+
+/** Centred embossed title block; returns vertical span of the block in px. */
+export function drawEmbossedHeaderBlock(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  centerY: number,
+  fontSizePx: number,
+  maxWidth: number,
+  lineGapRatio = 1.35,
+): number {
+  const lines = breakHeaderLines(ctx, text, maxWidth, fontSizePx)
+  if (lines.length === 0)
+    return 0
+
+  const lineGap = fontSizePx * lineGapRatio
+  const blockH = embossedHeaderBlockHeight(lines.length, fontSizePx, lineGapRatio)
+  let y = centerY - blockH / 2
+  for (const line of lines) {
+    drawEmbossedHeader(ctx, line, centerX, y, fontSizePx)
+    y += lineGap
+  }
+  return blockH
+}
+
+export function drawCenteredMutedText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  centerY: number,
+  fontSizePx: number,
+  maxWidth: number,
+  fill: string,
+  lineGapRatio = 1.4,
+) {
+  const font = bookHeaderFont(fontSizePx).replace('700', '600')
+  ctx.font = font
+  ctx.fillStyle = fill
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+
+  const lines = breakHeaderLines(ctx, text, maxWidth, fontSizePx)
+  const lineGap = fontSizePx * lineGapRatio
+  const blockH = embossedHeaderBlockHeight(lines.length, fontSizePx, lineGapRatio)
+  let y = centerY - blockH / 2
+  for (const line of lines) {
+    ctx.fillText(line, centerX, y)
+    y += lineGap
+  }
 }
 
 export function breakBodyLines(

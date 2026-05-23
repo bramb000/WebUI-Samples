@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, onMounted, onUnmounted, watch } from 'vue';
+import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { captureEvent } from '../analytics';
 import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
@@ -19,31 +19,6 @@ watch(isMenuOpen, (isOpen) => {
   }
 });
 
-const showNavbar = ref(true);
-const lastScrollPosition = ref(0);
-
-const handleScroll = () => {
-  const currentScrollPosition = window.scrollY;
-  if (currentScrollPosition < 0) return;
-  
-  if (Math.abs(currentScrollPosition - lastScrollPosition.value) < 60 && currentScrollPosition > 100) return;
-
-  if (currentScrollPosition <= 60) {
-    showNavbar.value = true;
-  } else {
-    showNavbar.value = currentScrollPosition < lastScrollPosition.value;
-  }
-  lastScrollPosition.value = currentScrollPosition;
-};
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true });
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
-
 const navLinks = [
   { name: 'Work', href: '/work' },
   { name: 'About', href: '/about' },
@@ -59,17 +34,10 @@ function prefetchRoute(importer: () => Promise<unknown>) {
 </script>
 
 <template>
-  <div
-    class="dl-nav-ledge-bg fixed w-full z-40"
-    :class="showNavbar ? 'top-0' : 'top-[-72px]'"
-    style="height: 72px; transition: top 0.3s ease;"
-  ></div>
-  <nav 
-    :class="[
-      'w-full flex justify-between md:justify-center items-center sticky z-50 py-4 px-6 md:px-12',
-      showNavbar ? 'top-0' : 'top-[-72px]'
-    ]"
-    style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap), top 0.3s ease;"
+  <div class="dl-nav-ledge-bg fixed top-0 w-full z-40" style="height: 72px;"></div>
+  <nav
+    class="w-full flex justify-between md:justify-center items-center sticky top-0 z-50 py-4 px-6 md:px-12"
+    style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap);"
   >
     <!-- WebGL Wisp Effect (Rendered inside Nav so it sits between strip background and buttons) -->
     <WebGLWisp v-if="showWisp" />

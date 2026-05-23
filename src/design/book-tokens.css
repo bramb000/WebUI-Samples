@@ -1,16 +1,26 @@
 /**
  * Book-only design system (3D process book).
- * Headers: site display (Cinzel). Body: Caudex (OFL, Google Fonts).
+ * Medieval manuscript textbook — Caudex throughout; ink headers (no gilt rim).
  * @see https://fonts.google.com/specimen/Caudex
  */
 :root {
-  --book-font-header: var(--font-display);
+  --book-font-header: var(--book-font-body);
   --book-font-body: 'Caudex', Georgia, 'Times New Roman', serif;
 
-  --book-gold-fill: var(--color-accent);
-  --book-gold-shadow: var(--color-accent-dark);
-  --book-gold-highlight: var(--color-accent-rim);
-  --book-header-recess-fill: var(--paper-on-fill-text);
+  /* Header ink — solid manuscript lettering, no gold border */
+  --book-header-fill: #1a1410;
+  --book-header-shadow-ink: rgba(26, 20, 16, 0.28);
+  --book-header-stroke-scale: 0;
+
+  /* Rubric initials — phase numerals (medieval red/blue drop-cap palette) */
+  --book-number-ink: #6b1c32;
+  --book-number-ink-shadow: rgba(107, 28, 50, 0.22);
+
+  /* Legacy embossed rim tokens — inactive when stroke-scale is 0 */
+  --book-gold-fill: transparent;
+  --book-gold-shadow: transparent;
+  --book-gold-highlight: transparent;
+  --book-header-recess-fill: var(--book-header-fill);
 
   --book-body-ink: var(--paper-on-fill-text);
   --book-body-muted: var(--paper-on-fill-text-muted);

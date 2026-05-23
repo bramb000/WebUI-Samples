@@ -2,10 +2,11 @@ import type { BookPageFace, BookPageLeft } from '../../constants/alchemistBookDa
 import { drawMaskedFullBleedImage } from '../../assets/images/book/bookPageImages'
 import {
   bookBodySize,
-  bookHeaderFont,
   bookSafeMargin,
   drawBodyLeft,
+  drawCenteredMutedText,
   drawEmbossedHeader,
+  drawEmbossedHeaderBlock,
 } from './bookTypography'
 
 const CANVAS_W = 512
@@ -53,6 +54,8 @@ function drawLeftPage(
 
   const cx = CANVAS_W / 2
   const cy = CANVAS_H / 2
+  const margin = bookSafeMargin()
+  const maxTextW = CANVAS_W - margin * 2
 
   const headerSize = page.imageKey === 'cover'
     ? bookVarPx('--book-header-size-cover', 52)
@@ -60,39 +63,21 @@ function drawLeftPage(
       ? bookVarPx('--book-header-size-end', 28)
       : bookVarPx('--book-header-size-phase', 46)
 
-  let headerLines: string[] = [page.header]
-
-  if (page.imageKey === 'end' && page.header.includes('\n')) {
-    headerLines = page.header.split('\n').map(l => l.trim())
-  }
-  else if (page.header.length > 28 && page.imageKey === 'end') {
-    const words = page.header.split(' ')
-    const mid = Math.ceil(words.length / 2)
-    headerLines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
-  }
-
-  if (headerLines.length > 1) {
-    const lineGap = headerSize * 1.35
-    const blockH = (headerLines.length - 1) * lineGap
-    let y = cy - blockH / 2
-    for (const line of headerLines) {
-      drawEmbossedHeader(ctx, line, cx, y, headerSize)
-      y += lineGap
-    }
-  }
-  else {
-    drawEmbossedHeader(ctx, page.header, cx, cy, headerSize)
-  }
+  const headerBlockH = drawEmbossedHeaderBlock(
+    ctx,
+    page.header,
+    cx,
+    cy,
+    headerSize,
+    maxTextW,
+  )
 
   if (page.subtitle) {
     const subSize = bookVarPx('--book-subtitle-size', 20)
     const inkMuted = getComputedStyle(document.documentElement)
       .getPropertyValue('--book-body-muted').trim() || '#5c564c'
-    ctx.font = bookHeaderFont(subSize).replace('700', '600')
-    ctx.fillStyle = inkMuted
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(page.subtitle, cx, cy + headerSize * 0.85)
+    const subY = cy + headerBlockH / 2 + headerSize * 0.45
+    drawCenteredMutedText(ctx, page.subtitle, cx, subY, subSize, maxTextW, inkMuted)
   }
 }
 
@@ -116,7 +101,7 @@ function drawRightPage(
   let bodyY: number
   if (page.number.trim()) {
     const headerY = margin + numberSize * 0.55
-    drawEmbossedHeader(ctx, page.number, cx, headerY, numberSize)
+    drawEmbossedHeader(ctx, page.number, cx, headerY, numberSize, '--book-number-ink', '--book-number-ink-shadow')
     bodyY = headerY + numberSize * 0.45 + gap
   }
   else {
