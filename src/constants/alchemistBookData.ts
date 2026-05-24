@@ -6,12 +6,16 @@ export type BookImageKey =
   | 'deliver'
   | 'end'
 
-/** Full-bleed image + embossed header at true page centre */
+/** Blank parchment leaf (e.g. first front / last back). */
+export type BookPageEmpty = {
+  layout: 'empty'
+}
+
+/** Full-bleed image (optional embossed title on cover board only). */
 export type BookPageLeft = {
   layout: 'left'
   imageKey: BookImageKey
-  header: string
-  /** Optional line under header (e.g. cover kicker) */
+  header?: string
   subtitle?: string
 }
 
@@ -23,19 +27,29 @@ export type BookPageRight = {
   body: string
 }
 
-export type BookPageFace = BookPageLeft | BookPageRight
+export type BookPageFace = BookPageEmpty | BookPageLeft | BookPageRight
 
-export type BookSpread = { front: BookPageFace; back: BookPageFace }
+export type BookLeaf = { front: BookPageFace; back: BookPageFace }
 
 /** Baked onto the hardcover boards (not a scroll leaf). */
 export const ALCHEMIST_BOOK_COVER: BookPageLeft = {
   layout: 'left',
   imageKey: 'cover',
-  header: 'My Product Textbook',
-  subtitle: 'Principles for building what people pay for',
+  header: 'My Product Philosophy',
 }
 
-export const ALCHEMIST_BOOK_SPREADS: BookSpread[] = [
+/**
+ * Leaf stack: image on back of leaf N, paired text on front of leaf N+1.
+ * First front and last back are empty endpapers.
+ */
+export const ALCHEMIST_BOOK_LEAVES: BookLeaf[] = [
+  {
+    front: { layout: 'empty' },
+    back: {
+      layout: 'left',
+      imageKey: 'understand',
+    },
+  },
   {
     front: {
       layout: 'right',
@@ -44,8 +58,7 @@ export const ALCHEMIST_BOOK_SPREADS: BookSpread[] = [
     },
     back: {
       layout: 'left',
-      imageKey: 'understand',
-      header: 'Understand the customer',
+      imageKey: 'analyze',
     },
   },
   {
@@ -56,8 +69,7 @@ export const ALCHEMIST_BOOK_SPREADS: BookSpread[] = [
     },
     back: {
       layout: 'left',
-      imageKey: 'analyze',
-      header: 'Understand the organisation',
+      imageKey: 'brew',
     },
   },
   {
@@ -68,8 +80,7 @@ export const ALCHEMIST_BOOK_SPREADS: BookSpread[] = [
     },
     back: {
       layout: 'left',
-      imageKey: 'brew',
-      header: 'Don\'t be afraid to fail',
+      imageKey: 'deliver',
     },
   },
   {
@@ -78,11 +89,7 @@ export const ALCHEMIST_BOOK_SPREADS: BookSpread[] = [
       number: 'Four',
       body: 'No one can go far without the support of their teammates and their customers. Respecting them will earn you their support.',
     },
-    back: {
-      layout: 'left',
-      imageKey: 'deliver',
-      header: 'Respect humans',
-    },
+    back: { layout: 'empty' },
   },
 ]
 

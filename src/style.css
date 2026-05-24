@@ -58,6 +58,11 @@
   --dl-shadow-deep:   0px 8px 16px rgba(0, 0, 0, 0.8);
   --dl-glow-global:   0 0 10px rgba(197, 168, 114, 0.15);
 
+  /* CTA outline — torn-tape silhouette at rest, fills on hover */
+  --cta-outline-stroke:       4px;
+  --cta-outline-color:        color-mix(in srgb, var(--color-text) 68%, transparent);
+  --cta-outline-color-hover:  var(--color-text);
+
   /* Noise texture SVG */
   --noise-svg: url('data:image/svg+xml,%3Csvg viewBox%3D"0 0 200 200" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%3E%3Cfilter id%3D"n"%3E%3CfeTurbulence type%3D"fractalNoise" baseFrequency%3D"1.5" numOctaves%3D"3" stitchTiles%3D"stitch"%2F%3E%3C%2Ffilter%3E%3Crect width%3D"100%25" height%3D"100%25" filter%3D"url(%23n)"%2F%3E%3C%2Fsvg%3E');
 
@@ -524,7 +529,7 @@ h5, h6 {
   letter-spacing: var(--tracking-button);
   font-size: var(--text-button);
   cursor: pointer;
-  z-index: 50;
+  z-index: 0;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -551,7 +556,45 @@ h5, h6 {
   clip-path: var(--tear-1);
   z-index: -1;
   pointer-events: none;
-  transition: transform 200ms var(--ease-mechanical-spring), background-color 150ms ease;
+  transition:
+    transform 200ms var(--ease-mechanical-spring),
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+/* Resting outline — outer tear (stroke) + inset tear (punch-out); border can't follow clip-path */
+.dl-button-master--outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cta-outline-color);
+  clip-path: var(--tear-1);
+  z-index: -2;
+  pointer-events: none;
+  transition:
+    background-color 150ms ease,
+    transform 200ms var(--ease-mechanical-spring);
+}
+
+.dl-button-master--outline::after {
+  inset: var(--cta-outline-stroke);
+  background: var(--color-bg);
+  border: none;
+  z-index: -1;
+  transition:
+    opacity 150ms ease,
+    transform 200ms var(--ease-mechanical-spring),
+    background-color 150ms ease;
+}
+
+.dl-button-master--outline:hover::after,
+.dl-button-master--outline:focus-visible::after {
+  opacity: 0;
+}
+
+.dl-button-master--outline:hover::before,
+.dl-button-master--outline:focus-visible::before {
+  background: var(--color-text);
 }
 
 

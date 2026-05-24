@@ -4,9 +4,7 @@ import {
   bookBodySize,
   bookSafeMargin,
   drawBodyLeft,
-  drawCenteredMutedText,
   drawEmbossedHeader,
-  drawEmbossedHeaderBlock,
 } from './bookTypography'
 
 const CANVAS_W = 512
@@ -19,29 +17,11 @@ function bookVarPx(name: string, fallback: number): number {
   return Number.parseFloat(raw) || fallback
 }
 
-function bookVarColor(name: string, fallback: string): string {
-  if (typeof document === 'undefined')
-    return fallback
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-  return v || fallback
-}
-
-/** Even scrim across the full image area, clipped to the page silhouette */
-function drawFullImageScrim(
+function drawEmptyPage(
   ctx: CanvasRenderingContext2D,
-  parchmentMask: HTMLCanvasElement,
-  w: number,
-  h: number,
+  parchment: HTMLCanvasElement,
 ) {
-  const fill = bookVarColor('--book-left-scrim-fill', 'rgba(17, 17, 19, 0.32)')
-
-  ctx.save()
-  ctx.fillStyle = fill
-  ctx.fillRect(0, 0, w, h)
-  ctx.globalCompositeOperation = 'destination-in'
-  ctx.drawImage(parchmentMask, 0, 0, w, h)
-  ctx.globalCompositeOperation = 'source-over'
-  ctx.restore()
+  ctx.drawImage(parchment, 0, 0, CANVAS_W, CANVAS_H)
 }
 
 function drawLeftPage(
@@ -50,35 +30,6 @@ function drawLeftPage(
   parchment: HTMLCanvasElement,
 ) {
   drawMaskedFullBleedImage(ctx, parchment, page.imageKey, CANVAS_W, CANVAS_H)
-  drawFullImageScrim(ctx, parchment, CANVAS_W, CANVAS_H)
-
-  const cx = CANVAS_W / 2
-  const cy = CANVAS_H / 2
-  const margin = bookSafeMargin()
-  const maxTextW = CANVAS_W - margin * 2
-
-  const headerSize = page.imageKey === 'cover'
-    ? bookVarPx('--book-header-size-cover', 52)
-    : page.imageKey === 'end'
-      ? bookVarPx('--book-header-size-end', 28)
-      : bookVarPx('--book-header-size-phase', 46)
-
-  const headerBlockH = drawEmbossedHeaderBlock(
-    ctx,
-    page.header,
-    cx,
-    cy,
-    headerSize,
-    maxTextW,
-  )
-
-  if (page.subtitle) {
-    const subSize = bookVarPx('--book-subtitle-size', 20)
-    const inkMuted = getComputedStyle(document.documentElement)
-      .getPropertyValue('--book-body-muted').trim() || '#5c564c'
-    const subY = cy + headerBlockH / 2 + headerSize * 0.45
-    drawCenteredMutedText(ctx, page.subtitle, cx, subY, subSize, maxTextW, inkMuted)
-  }
 }
 
 function drawRightPage(
@@ -122,7 +73,9 @@ export function composeBookPageCanvas(
   if (!ctx)
     throw new Error('Could not compose book page')
 
-  if (page.layout === 'left')
+  if (page.layout === 'empty')
+    drawEmptyPage(ctx, parchment)
+  else if (page.layout === 'left')
     drawLeftPage(ctx, page, parchment)
   else
     drawRightPage(ctx, page, parchment)

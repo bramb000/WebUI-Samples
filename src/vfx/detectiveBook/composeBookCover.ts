@@ -146,29 +146,14 @@ export function composeFrontCoverExteriorCanvas(page: BookPageLeft): HTMLCanvasE
   const headerSize = bookVarPx('--book-header-size-cover', 52)
   const maxTextW = panelW - bookSafeMargin()
   const centerY = COVER_TEX_H / 2
-  const headerBlockH = drawEmbossedHeaderBlock(
+  drawEmbossedHeaderBlock(
     ctx,
-    page.header,
+    page.header ?? '',
     COVER_TEX_W / 2,
     centerY,
     headerSize,
     maxTextW,
   )
-
-  if (page.subtitle) {
-    const subSize = bookVarPx('--book-subtitle-size', 20)
-    const inkMuted = bookVarColor('--book-body-muted', '#5c564c')
-    const subY = centerY + headerBlockH / 2 + headerSize * 0.45
-    drawCenteredMutedText(
-      ctx,
-      page.subtitle,
-      COVER_TEX_W / 2,
-      subY,
-      subSize,
-      maxTextW,
-      inkMuted,
-    )
-  }
 
   return canvas
 }

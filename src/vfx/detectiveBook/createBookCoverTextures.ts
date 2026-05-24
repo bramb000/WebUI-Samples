@@ -48,7 +48,7 @@ export function createBookCoverTextures(
   const backExterior = canvasToTexture(composeBackCoverExteriorCanvas(), renderer)
   const backInterior = canvasToTexture(composeCoverInteriorCanvas(), renderer)
   const spineOuter = canvasToTexture(
-    composeSpineCanvas(coverPage.header, coverPage.subtitle),
+    composeSpineCanvas(coverPage.header ?? ''),
     renderer,
   )
   const spineInner = canvasToTexture(composeCoverInteriorCanvas(), renderer)

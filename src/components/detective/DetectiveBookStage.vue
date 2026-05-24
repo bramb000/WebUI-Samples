@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ALCHEMIST_PHASE_LABELS } from '../../constants/alchemistBookData'
-import { bookPageScrollProgress } from '../../constants/alchemistBookScroll'
+import { canUseWebGL } from '../../composables/canUseWebGL'
 import { useReducedMotion } from '../../composables/useReducedMotion'
 import { useScrollProgress } from '../../composables/useScrollProgress'
 import {
@@ -18,16 +18,12 @@ const NAV_OFFSET_PX = 72
 const trackRef = ref<HTMLElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const reducedMotion = useReducedMotion()
+const webglSupported = ref(true)
+const webglInitFailed = ref(false)
 const { progress } = useScrollProgress(trackRef, { pinTop: NAV_OFFSET_PX })
 
-/** Only swap to static UI for accessibility — not low-power heuristics (too many laptops hit cores ≤ 4). */
-const useStaticFallback = computed(() => reducedMotion.value)
-
-const activePhaseIndex = computed(() => {
-  const p = bookPageScrollProgress(progress.value)
-  const i = Math.min(ALCHEMIST_PHASE_LABELS.length - 1, Math.floor(p * ALCHEMIST_PHASE_LABELS.length))
-  return i
-})
+/** Static list only when WebGL is unavailable — not for reduced-motion or low-power heuristics. */
+const useStaticFallback = computed(() => !webglSupported.value || webglInitFailed.value)
 
 let bookScene: DetectiveBookScene | null = null
 
@@ -48,18 +44,24 @@ async function mountBook() {
   }
   await nextTick()
   const canvas = canvasRef.value
-  if (!canvas || useStaticFallback.value)
+  if (!canvas)
     return
 
   disposeBook()
+  webglInitFailed.value = false
+
   try {
     await preloadBookPageImages({ keys: [...BOOK_PRELOAD_PRIORITY] })
-    bookScene = createDetectiveBookScene(canvas)
+    bookScene = createDetectiveBookScene(canvas, {
+      reducedMotion: reducedMotion.value,
+    })
     bookScene.setProgress(progress.value)
     schedulePreloadRemainingBookPageImages()
   }
   catch (err) {
     console.error('[AlchemistBook] WebGL init failed:', err)
+    webglInitFailed.value = true
+    disposeBook()
   }
 }
 
@@ -68,12 +70,13 @@ function onResize() {
 }
 
 watch(
-  () => [useStaticFallback.value, canvasRef.value] as const,
+  () => [useStaticFallback.value, canvasRef.value, reducedMotion.value] as const,
   () => void mountBook(),
   { flush: 'post' },
 )
 
 onMounted(() => {
+  webglSupported.value = canUseWebGL()
   void mountBook()
   window.addEventListener('resize', onResize, { passive: true })
 })
@@ -100,7 +103,10 @@ onBeforeUnmount(() => {
 
       <template v-if="useStaticFallback">
         <div class="detective-book-fallback container mx-auto max-w-3xl px-6 py-16">
-          <h2 class="type-section-title text-center mb-10">My Product Textbook</h2>
+          <h2 class="type-section-title text-center mb-10">My Product Philosophy</h2>
+          <p class="type-body text-center text-[var(--color-text-muted)] mb-8 max-w-md mx-auto">
+            Interactive 3D book is unavailable in this browser. Principles are listed below.
+          </p>
           <ol class="detective-book-fallback__list space-y-6">
             <li
               v-for="(label, i) in ALCHEMIST_PHASE_LABELS"
@@ -118,21 +124,12 @@ onBeforeUnmount(() => {
         <canvas
           ref="canvasRef"
           class="detective-book-canvas"
-          aria-hidden="true"
+          role="img"
+          aria-label="Interactive product principles book. Scroll to turn pages."
         />
 
         <div class="detective-book-hud pointer-events-none">
           <p class="label-segment detective-book-hud__hint">Scroll to turn the pages</p>
-          <div class="detective-book-hud__phases" role="tablist" aria-label="Process phases">
-            <span
-              v-for="(label, i) in ALCHEMIST_PHASE_LABELS"
-              :key="label"
-              class="detective-book-hud__phase"
-              :class="{ 'detective-book-hud__phase--active': i === activePhaseIndex }"
-            >
-              {{ label }}
-            </span>
-          </div>
         </div>
       </template>
     </div>
@@ -173,42 +170,12 @@ onBeforeUnmount(() => {
   bottom: clamp(24px, 6vh, 56px);
   z-index: 2;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  justify-content: center;
   padding-inline: 24px;
 }
 
 .detective-book-hud__hint {
   opacity: 0.65;
-}
-
-.detective-book-hud__phases {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 16px;
-}
-
-.detective-book-hud__phase {
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  padding: 6px 12px;
-  border: 1px solid color-mix(in srgb, var(--color-border) 35%, transparent);
-  border-radius: var(--dl-border-radius);
-  transition:
-    color 200ms ease,
-    border-color 200ms ease,
-    box-shadow 200ms ease;
-}
-
-.detective-book-hud__phase--active {
-  color: var(--color-accent);
-  border-color: var(--color-border-hi);
-  box-shadow: var(--dl-glow-global);
 }
 
 .detective-book-fallback__list {

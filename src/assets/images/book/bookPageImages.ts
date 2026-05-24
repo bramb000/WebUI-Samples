@@ -34,13 +34,13 @@ const cache = new Map<BookImageKey, HTMLImageElement>()
 const preloadPromises = new Map<string, Promise<void>>()
 let remainingIdleScheduled = false
 
-const PLACEHOLDER: Record<BookImageKey, { a: string, b: string, label: string }> = {
-  cover: { a: '#2a2838', b: '#4a3f5c', label: 'Cover art' },
-  understand: { a: '#1e3a4a', b: '#3d6b7a', label: 'Understand' },
-  analyze: { a: '#2e2a1a', b: '#5c4f2e', label: 'Analyze' },
-  brew: { a: '#3a2218', b: '#6b4028', label: 'Brew' },
-  deliver: { a: '#1a2e22', b: '#3d5c48', label: 'Deliver' },
-  end: { a: '#1c1c21', b: '#3a3a44', label: '' },
+const PLACEHOLDER: Record<BookImageKey, { a: string, b: string }> = {
+  cover: { a: '#2a2838', b: '#4a3f5c' },
+  understand: { a: '#1e3a4a', b: '#3d6b7a' },
+  analyze: { a: '#2e2a1a', b: '#5c4f2e' },
+  brew: { a: '#3a2218', b: '#6b4028' },
+  deliver: { a: '#1a2e22', b: '#3d5c48' },
+  end: { a: '#1c1c21', b: '#3a3a44' },
 }
 
 function basenameFromGlobPath(path: string): string {
@@ -158,19 +158,12 @@ function drawPlaceholder(
   w: number,
   h: number,
 ) {
-  const { a, b, label } = PLACEHOLDER[key]
+  const { a, b } = PLACEHOLDER[key]
   const grad = ctx.createLinearGradient(0, 0, w, h)
   grad.addColorStop(0, a)
   grad.addColorStop(1, b)
   ctx.fillStyle = grad
   ctx.fillRect(0, 0, w, h)
-  if (label) {
-    ctx.fillStyle = 'rgba(235, 228, 214, 0.35)'
-    ctx.font = '600 22px Barlow, sans-serif'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(label, w / 2, h / 2)
-  }
 }
 
 /** object-fit: cover — full bleed before page mask */

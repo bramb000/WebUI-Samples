@@ -3,7 +3,6 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { captureEvent } from '../analytics';
 import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
-import PrimaryButton from './PrimaryButton.vue';
 
 const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
 const lowPower = useLowPowerMode();
@@ -19,9 +18,16 @@ watch(isMenuOpen, (isOpen) => {
   }
 });
 
-const navLinks = [
+type NavLink = {
+  name: string
+  href: string
+  external?: boolean
+}
+
+const navLinks: NavLink[] = [
   { name: 'Work', href: '/work' },
   { name: 'About', href: '/about' },
+  { name: 'Let\'s Talk', href: 'https://www.linkedin.com/in/bramdal/', external: true },
 ];
 
 const trackContactClick = (source: string) => {
@@ -31,17 +37,26 @@ const trackContactClick = (source: string) => {
 function prefetchRoute(importer: () => Promise<unknown>) {
   void importer();
 }
+
+function onNavLinkEnter(link: NavLink, el: HTMLElement) {
+  setWispHover(el);
+  if (link.href === '/work')
+    prefetchRoute(() => import('../views/ProjectSelect.vue'));
+}
+
+function onExternalNavClick(source: string) {
+  trackContactClick(source);
+}
 </script>
 
 <template>
-  <div class="dl-nav-ledge-bg fixed top-0 w-full z-40" style="height: 72px;"></div>
+  <div class="dl-nav-ledge-bg fixed top-0 w-full z-[90]" style="height: 72px;"></div>
   <nav
-    class="w-full flex justify-between md:justify-center items-center sticky top-0 z-50 py-4 px-6 md:px-12"
+    class="w-full flex justify-between md:justify-center items-center sticky top-0 z-[100] py-4 px-6 md:px-12"
     style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap);"
   >
-    <!-- WebGL Wisp Effect (Rendered inside Nav so it sits between strip background and buttons) -->
     <WebGLWisp v-if="showWisp" />
-    
+
     <!-- Mobile Logo -->
     <router-link
       to="/"
@@ -54,8 +69,6 @@ function prefetchRoute(importer: () => Promise<unknown>) {
     <!-- Desktop Layout -->
     <div class="hidden md:flex items-center justify-center w-full">
       <div class="flex items-center gap-6">
-
-        <!-- Logo -->
         <router-link
           to="/"
           class="nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
@@ -63,52 +76,48 @@ function prefetchRoute(importer: () => Promise<unknown>) {
           <span>bramha.</span>
         </router-link>
 
-        <!-- Segmented Nav Strip -->
         <div class="seg-strip">
-          <router-link
-            v-for="link in navLinks"
-            :key="link.name"
-            :to="link.href"
-            custom
-            v-slot="{ isActive, navigate }"
-          >
-            <button
-              @mouseenter="(e) => { setWispHover(e.currentTarget as HTMLElement); if (link.href === '/work') prefetchRoute(() => import('../views/ProjectSelect.vue')) }"
+          <template v-for="link in navLinks" :key="link.name">
+            <router-link
+              v-if="!link.external"
+              :to="link.href"
+              custom
+              v-slot="{ isActive, navigate }"
+            >
+              <button
+                type="button"
+                @mouseenter="(e) => onNavLinkEnter(link, e.currentTarget as HTMLElement)"
+                @mouseleave="() => setWispHover(null)"
+                @mousedown="triggerWispClick"
+                @click="navigate"
+                :class="['seg-btn', isActive ? 'active' : '']"
+                :title="link.name"
+              >
+                <span>{{ link.name }}</span>
+              </button>
+            </router-link>
+
+            <a
+              v-else
+              :href="link.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="seg-btn"
+              :title="link.name"
+              @click="onExternalNavClick('navbar_desktop')"
+              @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
               @mouseleave="() => setWispHover(null)"
               @mousedown="triggerWispClick"
-              @click="navigate"
-              :class="['seg-btn', isActive ? 'active' : '']"
-              :title="link.name"
             >
               <span>{{ link.name }}</span>
-            </button>
-          </router-link>
+            </a>
+          </template>
         </div>
-
-        <!-- Actions -->
-        <div class="flex items-center gap-3">
-
-          <!-- Let's Talk CTA -->
-          <PrimaryButton
-            href="https://www.linkedin.com/in/bramdal/"
-            target="_blank"
-            @click="trackContactClick('navbar_desktop')"
-            @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
-            @mouseleave="() => setWispHover(null)"
-            @mousedown="triggerWispClick"
-            class="px-8 py-3 focus-visible:outline-none"
-          >
-            Let's Talk
-          </PrimaryButton>
-        </div>
-
       </div>
     </div>
 
     <!-- Mobile Controls -->
     <div class="flex md:hidden items-center gap-3 relative z-50">
-
-      <!-- Hamburger -->
       <button
         @click="isMenuOpen = !isMenuOpen"
         class="hamburger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm p-1"
@@ -124,30 +133,30 @@ function prefetchRoute(importer: () => Promise<unknown>) {
     <Teleport to="body">
       <transition name="mobile-menu">
         <div v-if="isMenuOpen" class="mobile-overlay noise-overlay">
-          <!-- Seam detail at top -->
           <div class="mobile-seam"></div>
 
           <nav class="flex flex-col items-center justify-center gap-2 w-full h-full pt-24 pb-12">
-            <router-link
-              v-for="link in navLinks"
-              :key="link.name"
-              :to="link.href"
-              @click="isMenuOpen = false"
-              class="mobile-nav-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-sm px-4 py-2"
-            >
-              <span>{{ link.name }}</span>
-            </router-link>
-
-            <div class="mt-8">
-              <PrimaryButton
-                href="https://www.linkedin.com/in/bramdal/"
-                target="_blank"
-                @click="trackContactClick('navbar_mobile')"
-                class="px-8 py-3 text-sm"
+            <template v-for="link in navLinks" :key="link.name">
+              <router-link
+                v-if="!link.external"
+                :to="link.href"
+                @click="isMenuOpen = false"
+                class="mobile-nav-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-sm px-4 py-2"
               >
-                Let's Talk
-              </PrimaryButton>
-            </div>
+                <span>{{ link.name }}</span>
+              </router-link>
+
+              <a
+                v-else
+                :href="link.href"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mobile-nav-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded-sm px-4 py-2"
+                @click="isMenuOpen = false; onExternalNavClick('navbar_mobile')"
+              >
+                <span>{{ link.name }}</span>
+              </a>
+            </template>
           </nav>
         </div>
       </transition>
@@ -156,7 +165,6 @@ function prefetchRoute(importer: () => Promise<unknown>) {
 </template>
 
 <style scoped>
-/* Scoped Nav Component Styles */
 .nav-logo {
   font-family: var(--font-display);
   font-weight: 700;
@@ -174,61 +182,6 @@ function prefetchRoute(importer: () => Promise<unknown>) {
   text-shadow: 0 0 20px rgba(197, 168, 114, 0.55);
 }
 
-/* ── Occult Gauge Indicator — decorative, toggle() still fires ── */
-.material-switcher {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--dl-border-radius);
-  padding: 4px 10px;
-  cursor: pointer;
-  box-shadow:
-    inset 0 1px 4px rgba(0, 0, 0, 0.6),
-    var(--dl-glow-global);
-  transition: all 100ms var(--ease-te-snap);
-}
-.material-switcher:hover {
-  border-color: var(--color-border-hi);
-  box-shadow:
-    inset 0 1px 4px rgba(0, 0, 0, 0.6),
-    0 0 10px rgba(197, 168, 114, 0.2);
-}
-.material-switcher:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
-}
-
-.material-swatch {
-  display: block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.swatch-alum {
-  background: var(--color-border-hi);
-  box-shadow: 0 0 4px var(--color-accent);
-  animation: glow-pulse 2.5s ease-in-out infinite alternate;
-}
-.swatch-carbon {
-  background: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent);
-  animation: glow-pulse 1.2s ease-in-out infinite alternate;
-}
-
-.material-label {
-  font-family: var(--font-sans);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--color-border-hi);
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-/* ── Hamburger ── */
 .hamburger {
   background: none;
   border: none;
@@ -247,7 +200,6 @@ function prefetchRoute(importer: () => Promise<unknown>) {
   transition: transform 200ms var(--ease-te-slide), opacity 150ms linear;
 }
 
-/* ── Mobile Overlay — full obsidian panel ── */
 .mobile-overlay {
   position: fixed;
   inset: 0;
@@ -255,7 +207,7 @@ function prefetchRoute(importer: () => Promise<unknown>) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 40;
+  z-index: 95;
   box-shadow: inset 0 4px 24px rgba(0,0,0,0.9);
 }
 .mobile-seam {
@@ -297,7 +249,6 @@ function prefetchRoute(importer: () => Promise<unknown>) {
   text-shadow: 0 0 16px var(--color-accent);
 }
 
-/* ── Mobile Menu Transition ── */
 .mobile-menu-enter-active {
   transition: opacity 0.15s var(--ease-te-slide), transform 0.15s var(--ease-te-slide);
 }

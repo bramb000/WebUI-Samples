@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { ALCHEMIST_BOOK_COVER, ALCHEMIST_BOOK_SPREADS } from '../../constants/alchemistBookData'
+import { ALCHEMIST_BOOK_COVER, ALCHEMIST_BOOK_LEAVES } from '../../constants/alchemistBookData'
 import {
   bookCoverScrollProgress,
   bookPageScrollProgress,
@@ -37,12 +37,29 @@ export type DetectiveBookScene = {
   dispose: () => void
 }
 
-export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBookScene {
+export type DetectiveBookSceneOptions = {
+  /** Snap pages and skip curl / lift when prefers-reduced-motion. */
+  reducedMotion?: boolean
+}
+
+export function createDetectiveBookScene(
+  canvas: HTMLCanvasElement,
+  options: DetectiveBookSceneOptions = {},
+): DetectiveBookScene {
+  const reducedMotion = options.reducedMotion ?? false
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(45, 1, 1, 2000)
   camera.position.set(0, 0, 900)
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+    alpha: true,
+    powerPreference: 'default',
+    failIfMajorPerformanceCaveat: false,
+  })
+  if (!renderer.getContext())
+    throw new Error('WebGL context could not be created')
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
   const bookRoot = new THREE.Group()
@@ -113,7 +130,7 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
     }
   }
 
-  const bookData = ALCHEMIST_BOOK_SPREADS
+  const bookData = ALCHEMIST_BOOK_LEAVES
   const disposables: Array<THREE.Material | THREE.BufferGeometry | THREE.Texture> = []
 
   const coverTextures = createBookCoverTextures(ALCHEMIST_BOOK_COVER, renderer)
@@ -226,7 +243,9 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
       return
     animationFrameId = requestAnimationFrame(animate)
 
-    frontCoverGroup.rotation.y += (coverTargetRotation - frontCoverGroup.rotation.y) * 0.08
+    const motionLerp = reducedMotion ? 1 : 0.08
+
+    frontCoverGroup.rotation.y += (coverTargetRotation - frontCoverGroup.rotation.y) * motionLerp
     const coverOpen = coverTurnProgress()
     const coverFullyOpen = coverOpen >= COVER_FULLY_OPEN_THRESHOLD
     const coverOrder = coverFullyOpen
@@ -240,14 +259,14 @@ export function createDetectiveBookScene(canvas: HTMLCanvasElement): DetectiveBo
     const backStackBaseZ = backCoverZ - COVER_THICKNESS / 2 - LEFT_STACK_Z_BEHIND_BACK
 
     leaves.forEach((leaf, i) => {
-      leaf.rotation.y += (leafTargetRotations[i]! - leaf.rotation.y) * 0.08
+      leaf.rotation.y += (leafTargetRotations[i]! - leaf.rotation.y) * motionLerp
 
       const turnProgress = Math.abs(leaf.rotation.y / Math.PI)
-      const bend = Math.sin(turnProgress * Math.PI)
+      const bend = reducedMotion ? 0 : Math.sin(turnProgress * Math.PI)
 
       const zRight = LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP
       const zLeft = backStackBaseZ - (leaves.length - 1 - i) * LEAF_Z_STEP
-      const zLift = bend * 10
+      const zLift = reducedMotion ? 0 : bend * 10
       let z = zRight * (1 - turnProgress) + zLeft * turnProgress + zLift
 
       if (coverOpen < 0.98 && turnProgress < 0.04) {

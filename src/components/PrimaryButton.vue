@@ -7,9 +7,12 @@ type Props = {
   href?: string;
   target?: string;
   rel?: string;
+  variant?: 'filled' | 'outline';
 };
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'outline',
+});
 const attrs = useAttrs();
 
 const isRouterLink = computed(() => props.to !== undefined && props.to !== null);
@@ -30,7 +33,7 @@ const safeRel = computed(() => {
 <template>
   <component
     :is="tag"
-    class="dl-button-master"
+    :class="['dl-button-master', { 'dl-button-master--outline': variant === 'outline' }]"
     :to="isRouterLink ? to : undefined"
     :href="isAnchor ? href : undefined"
     :target="isAnchor ? target : undefined"
@@ -40,4 +43,3 @@ const safeRel = computed(() => {
     <span><slot /></span>
   </component>
 </template>
-

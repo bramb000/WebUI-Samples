@@ -1,7 +1,7 @@
-import { ALCHEMIST_BOOK_SPREADS } from './alchemistBookData'
+import { ALCHEMIST_BOOK_LEAVES } from './alchemistBookData'
 
 /** One scroll segment for the hardcover before leaf turns begin. */
-export const BOOK_COVER_SCROLL_FRACTION = 1 / (ALCHEMIST_BOOK_SPREADS.length + 1)
+export const BOOK_COVER_SCROLL_FRACTION = 1 / (ALCHEMIST_BOOK_LEAVES.length + 1)
 
 export function bookCoverScrollProgress(globalProgress: number): number {
   if (globalProgress <= 0)
