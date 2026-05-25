@@ -6,13 +6,15 @@ import PrimaryButton from '../PrimaryButton.vue'
 <template>
   <header class="detective-hero-intro">
     <div class="detective-hero-intro__copy">
-      <h1 class="type-display-hero detective-hero-intro__title">
-        Hi, I'm<br>
-        <span class="text-accent">Bramha</span>
-      </h1>
-      <h2 class="type-hero-role text-accent detective-hero-intro__role">
-        Product Alchemist
-      </h2>
+      <div class="type-hero-stack">
+        <h1 class="type-display-hero type-display-hero--stacked detective-hero-intro__title">
+          <span class="type-display-hero-greeting">Hi, I'm</span>
+          <span class="type-display-hero-name text-accent">Bramha</span>
+        </h1>
+        <h2 class="type-hero-role text-accent detective-hero-intro__role">
+          Product Alchemist
+        </h2>
+      </div>
       <p class="type-body-lg text-muted detective-hero-intro__value">
         7 years of experience in crafting products that make users happy that they are willing to spend on.
       </p>
@@ -43,18 +45,20 @@ import PrimaryButton from '../PrimaryButton.vue'
 }
 
 .detective-hero-intro__title {
-  margin: 0 0 8px;
+  margin: 0;
   text-shadow: 0 0 40px color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 .detective-hero-intro__role {
-  margin: 0 0 20px;
+  /* Keep block-start free for .type-hero-stack name↔role overlap (design system) */
+  margin-block-end: var(--grid-3);
+  margin-inline: 0;
   text-shadow: 0 0 24px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .detective-hero-intro__value {
   max-width: 32rem;
-  margin: 0 0 28px;
+  margin: 0 0 var(--grid-4);
 }
 
 .detective-hero-intro__cta {

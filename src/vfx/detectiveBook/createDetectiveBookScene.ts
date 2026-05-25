@@ -38,7 +38,7 @@ export type DetectiveBookScene = {
 }
 
 export type DetectiveBookSceneOptions = {
-  /** Snap pages and skip curl / lift when prefers-reduced-motion. */
+  /** Snap page rotation to scroll (no trailing lerp). Curl/lift stay on — OS reduced-motion often disables animations on Windows while Mac does not. */
   reducedMotion?: boolean
 }
 
@@ -261,8 +261,11 @@ export function createDetectiveBookScene(
     leaves.forEach((leaf, i) => {
       leaf.rotation.y += (leafTargetRotations[i]! - leaf.rotation.y) * motionLerp
 
-      const turnProgress = Math.abs(leaf.rotation.y / Math.PI)
-      const bend = reducedMotion ? 0 : Math.sin(turnProgress * Math.PI)
+      const visualTurn = Math.abs(leaf.rotation.y / Math.PI)
+      const targetTurn = Math.abs(leafTargetRotations[i]! / Math.PI)
+      // Curl follows scroll targets so bend isn't delayed behind the rotation lerp (noticeable on Windows scroll).
+      const turnProgress = Math.min(1, Math.max(visualTurn, targetTurn))
+      const bend = Math.sin(turnProgress * Math.PI)
 
       const zRight = LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP
       const zLeft = backStackBaseZ - (leaves.length - 1 - i) * LEAF_Z_STEP

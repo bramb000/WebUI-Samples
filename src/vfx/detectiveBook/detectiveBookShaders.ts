@@ -1,5 +1,7 @@
 /** Page bend — still updated per frame while turning. */
 export const DETECTIVE_BOOK_VERTEX = /* glsl */ `
+  precision highp float;
+
   varying vec2 vUv;
   uniform float uBendIntensity;
   uniform float uPageWidth;

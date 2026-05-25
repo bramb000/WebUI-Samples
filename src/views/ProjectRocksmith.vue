@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
 import CaseLazyImage from '../components/CaseLazyImage.vue';
@@ -52,7 +51,6 @@ import accessibilityColorblind3 from '../assets/images/rocksmith/accessibility/i
 import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/img_0460-1.webp';
 
 const caseStudyRoot = ref<HTMLElement | null>(null);
-useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
@@ -84,13 +82,13 @@ useCaseStudySketchPanels(caseStudyRoot);
     </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-8">
+    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel">
       <h2 class="type-case-section-accent">Executive Summary</h2>
-      <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+      <div class="case-study-panel__metric-grid">
         <CaseMetric value="5" label="Platforms" />
         <CaseMetric value="1" label="UI System" />
       </div>
-      <div class="space-y-6 type-case-body-lg">
+      <div class="case-study-panel__body type-case-body-lg">
         <div>
           <h4 class="type-case-kicker mb-2">01. The Problem</h4>
           <p><strong>Fragmentation:</strong> Rocksmith+ faced a massive scaling challenge: launching a PC-first MVP on Mobile and Console simultaneously. Without a unified framework, the team faced alienating users whose context would switch based on a device and burdening triple the maintenance cost for maintaining all the platforms.</p>
@@ -394,9 +392,9 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-8">
+    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Result</h2>
-      <div class="max-w-3xl mx-auto space-y-6 type-case-body-lg">
+      <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
         <p>
           Rocksmith+ launched in open beta and swiftly followed a global launch in 2022. The mobile version was able to unlock a completely new market of on-the-go learners who did not have the money, time, or privilege of learning to play the guitar on a computer or a game console.
         </p>
@@ -404,7 +402,7 @@ useCaseStudySketchPanels(caseStudyRoot);
           The new and improved accessibility feature set also garnered critical acclaim when Rocksmith+ won the <a href="https://www.gamespress.com/en-US/Winners-of-the-GAconf-Accessibility-Awards-announced" target="_blank" rel="noopener noreferrer" class="underline font-bold text-accent hover:opacity-70 transition-opacity">Game's Accessibility Conference's award for Best physical / mobility accessibility</a>.
         </p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="case-study-panel__metric-grid">
         <VideoEmbed src="https://www.youtube.com/embed/YbmlRnlvNv0?si=m608xmR2kIS-eCED" title="User Testimonials" />
         <VideoEmbed src="https://www.youtube.com/embed/dQxzvH8Pl9E" title="Launch Trailer" />
       </div>

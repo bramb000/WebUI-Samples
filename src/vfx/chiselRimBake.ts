@@ -10,6 +10,8 @@ export type ChiselRimBakeOptions = {
   colorHex: string
   bleedPx?: number
   flatRim?: boolean
+  /** CSS stroke width when `flatRim` (default 4). */
+  borderPx?: number
   /** 0 = flat tone matching interior fill; default card lighting is ~0.164 */
   depthEffect?: number
 }
@@ -271,10 +273,17 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   )
 
   const shortPx = Math.min(cardW * pr * scale, cardH * pr * scale)
-  const borderNorm = Math.min(0.07, (3.1 * 2) / Math.max(shortPx, 1))
+  const flatRim = opts.flatRim ?? false
+  const borderPx = opts.borderPx ?? (flatRim ? 4 : 6.2)
+  const borderNorm = borderPx / Math.max(shortPx, 1)
   bakeMaterial.uniforms.u_borderWidth.value = borderNorm
-  const organicNorm = Math.min(0.11, (5.5 * 2) / Math.max(shortPx, 1))
-  bakeMaterial.uniforms.u_outerOrganicAmp.value = organicNorm
+  bakeMaterial.uniforms.u_outerOrganicAmp.value = flatRim
+    ? 0
+    : Math.min(0.11, (5.5 * 2) / Math.max(shortPx, 1))
+  if (flatRim) {
+    bakeMaterial.uniforms.u_chiselDepth.value = 0
+    bakeMaterial.uniforms.u_wobble.value = 0
+  }
 
   bakeRenderer.render(bakeScene, bakeCamera)
   return bakeRenderer.domElement.toDataURL('image/png')

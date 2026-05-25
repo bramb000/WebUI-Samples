@@ -52,7 +52,7 @@ const surfaceStyle = computed(() => ({
 </script>
 
 <template>
-  <ProceduralChiselFrame class="metric-frame" :color="surfaceFill" :hover-flame="false">
+  <ProceduralChiselFrame class="metric-frame" :hover-flame="false">
     <div class="metric-wrap metric-wrap--chisel" :style="surfaceStyle">
       <div ref="surfaceRef" class="case-insight-surface" aria-hidden="true">
         <img
@@ -84,7 +84,6 @@ const surfaceStyle = computed(() => ({
   min-width: 0;
   --insight-accent: v-bind(frameAccent);
   --case-insight-surface-fill: v-bind(surfaceFill);
-  --card-clip: polygon(4% 0, 100% 0, 100% 94%, 97% 100%, 0 100%, 0 7%);
   --card-hover-tilt: 0.8deg;
   transition: transform 200ms var(--ease-mechanical-spring);
   transform-origin: center bottom;
@@ -94,9 +93,9 @@ const surfaceStyle = computed(() => ({
 .metric-frame::after {
   content: '';
   position: absolute;
-  inset: -4px;
-  border: 2px solid color-mix(in srgb, var(--case-insight-surface-fill) 70%, #f4f4f5 30%);
-  clip-path: var(--card-clip);
+  inset: calc(-1 * var(--dl-card-frame-width));
+  border: var(--dl-card-frame-width) solid var(--dl-card-frame-color);
+  border-radius: var(--dl-card-frame-radius);
   opacity: 0;
   pointer-events: none;
   box-shadow:
@@ -111,17 +110,14 @@ const surfaceStyle = computed(() => ({
 
 .metric-frame:nth-child(4n + 2) {
   --card-hover-tilt: -0.55deg;
-  --card-clip: polygon(0 0, 95% 0, 100% 7%, 100% 100%, 4% 100%, 0 92%);
 }
 
 .metric-frame:nth-child(4n + 3) {
   --card-hover-tilt: 0.65deg;
-  --card-clip: polygon(3% 0, 100% 0, 100% 91%, 93% 100%, 0 100%, 0 4%);
 }
 
 .metric-frame:nth-child(4n + 4) {
   --card-hover-tilt: -1deg;
-  --card-clip: polygon(0 0, 97% 0, 100% 4%, 100% 100%, 7% 100%, 0 89%);
 }
 
 .metric-frame:hover {
@@ -140,7 +136,7 @@ const surfaceStyle = computed(() => ({
   height: 100%;
   min-height: 120px;
   overflow: hidden;
-  clip-path: var(--card-clip);
+  border-radius: 0;
 }
 
 .metric-wrap--chisel {

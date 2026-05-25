@@ -52,11 +52,34 @@
   --ease-te-snap:            cubic-bezier(1, 0, 0, 1);
   --ease-mechanical-spring:  cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
+  /* 8pt spatial grid — 1 unit = 8px @ 16px root (0.5rem) */
+  --grid-unit: 0.5rem;
+  --grid-1: var(--grid-unit);
+  --grid-2: calc(var(--grid-unit) * 2);
+  --grid-3: calc(var(--grid-unit) * 3);
+  --grid-4: calc(var(--grid-unit) * 4);
+  --grid-5: calc(var(--grid-unit) * 5);
+  --grid-6: calc(var(--grid-unit) * 6);
+
   /* UI design tokens */
   --dl-border-width:  2px;
   --dl-border-radius: 4px;
   --dl-shadow-deep:   0px 8px 16px rgba(0, 0, 0, 0.8);
   --dl-glow-global:   0 0 10px rgba(197, 168, 114, 0.15);
+
+  /* Square frame — case study panels, metric/insight cards, testimonial cards, chips */
+  --dl-frame-width:   4px;
+  --dl-frame-radius:  0;
+  --dl-frame-color:   var(--color-border);
+  --dl-card-frame-width:  var(--dl-frame-width);
+  --dl-card-frame-radius: var(--dl-frame-radius);
+  --dl-card-frame-color:  color-mix(in srgb, var(--case-insight-surface-fill, #243b2f) 55%, #f4f4f5 45%);
+
+  /* Case study panel interior — padding + vertical rhythm between blocks */
+  --dl-panel-padding-inline: clamp(1.5rem, 3.2vw, 3.5rem);
+  --dl-panel-padding-block:  clamp(1.75rem, 3.6vw, 3.5rem);
+  --dl-panel-gap:            clamp(1.5rem, 2.8vw, 2rem);
+  --dl-panel-gap-lg:         clamp(2rem, 3.6vw, 3rem);
 
   /* CTA outline — torn-tape silhouette at rest, fills on hover */
   --cta-outline-stroke:       4px;
@@ -101,7 +124,8 @@
   --roster-discipline-ui-design:       #00674f;
 
   /* ── Type scale (size / tracking / leading) ── */
-  --text-display-hero:  clamp(3.25rem, 10vw, 6rem);
+  --text-display-hero:           clamp(3.25rem, 10vw, 6rem);
+  --text-display-hero-greeting:  calc(var(--text-display-hero) * 0.5);
   --text-page-title:    clamp(3rem, 10vw, 5.25rem);
   --text-hero-title:    clamp(1.75rem, 6vw, 3.25rem);
   --text-hero-role:     clamp(2.75rem, 9vw, 5rem);
@@ -127,6 +151,10 @@
   --leading-display:    1;
   --leading-tight:      1.1;
   --leading-script:     1.05;
+  /* Homepage hero — greeting ↔ name use normal display leading; name ↔ role slight tuck */
+  --leading-display-hero-line: var(--leading-display);
+  --leading-hero-name-role:    0.89;
+  --hero-name-role-overlap:    var(--grid-1);
   --leading-snug:       1.3;
   --leading-body:       1.625;
   --leading-body-sm:    1.6;
@@ -286,6 +314,32 @@ h5, h6 {
   line-height: var(--leading-script);
   color: var(--color-text);
   text-transform: none;
+}
+.type-display-hero--stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.type-display-hero-greeting {
+  font-size: var(--text-display-hero-greeting);
+  line-height: var(--leading-display-hero-line);
+}
+.type-display-hero-name {
+  line-height: var(--leading-display-hero-line);
+}
+.type-hero-stack {
+  display: flex;
+  flex-direction: column;
+}
+.type-hero-stack > .type-display-hero {
+  margin-block-end: 0;
+}
+.type-hero-stack .type-display-hero--stacked .type-display-hero-name {
+  margin-block-end: calc(-1 * var(--hero-name-role-overlap));
+}
+.type-hero-stack > .type-hero-role {
+  line-height: var(--leading-hero-name-role);
+  margin-block-start: calc(-1 * var(--hero-name-role-overlap));
 }
 
 /* Case study layout — explicit display headings (avoid matching type-case-body*, etc.) */
@@ -720,7 +774,7 @@ h5, h6 {
   filter: none;
 }
 
-/* ── Panel — flat surface (case studies add prebaked pencil frame via `useCaseStudySketchPanels`) ── */
+/* ── Panel — flat surface; framed variants use `.dl-square-frame` tokens ── */
 .panel-recessed {
   background: var(--color-surface);
   border: var(--dl-border-width) solid var(--color-border);
@@ -730,19 +784,75 @@ h5, h6 {
   overflow: hidden;
 }
 
+/** Uniform square border (panels, cards, chips) — width/radius/color from `:root` tokens */
+.dl-square-frame {
+  box-sizing: border-box;
+  border: var(--dl-frame-width) solid var(--dl-frame-color);
+  border-radius: var(--dl-frame-radius);
+}
+
+.dl-embedded--case .panel-recessed:not(.panel-recessed--borderless) {
+  --dl-frame-color: var(--paper-on-fill-border);
+  border: var(--dl-frame-width) solid var(--dl-frame-color);
+  border-radius: var(--dl-frame-radius);
+  box-shadow: none;
+}
+
+/** Framed case study sections (executive summary, results, etc.) */
+.case-study-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dl-panel-gap);
+  padding-block: var(--dl-panel-padding-block);
+  padding-inline: var(--dl-panel-padding-inline);
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.case-study-panel--loose {
+  gap: var(--dl-panel-gap-lg);
+}
+
+.case-study-panel__metric-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--dl-panel-gap);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .case-study-panel__metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.case-study-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dl-panel-gap);
+}
+
+.case-study-panel__body > * + * {
+  margin-top: 0;
+}
+
+.dl-card-frame {
+  border: var(--dl-card-frame-width) solid var(--dl-card-frame-color);
+  border-radius: var(--dl-card-frame-radius);
+}
+
 /* Same panel without CSS border — hero meta, insight interiors, etc. */
 .panel-recessed--borderless {
   border: none !important;
   box-shadow: none;
 }
 
-/**
- * Prebaked pencil frame (`pencilFrameBake.ts`) — flat fill + hand-drawn stroke in one PNG.
- */
+/** Legacy pencil PNG frames (TOC only); case study panels use `.dl-square-frame` tokens */
 .panel-recessed.pencil-baked,
 .panel-recessed.pencil-baked.noise-overlay {
   background: transparent !important;
   border: none !important;
+  border-radius: 0;
   box-shadow: none !important;
   isolation: isolate;
   overflow: visible !important;
@@ -763,47 +873,6 @@ h5, h6 {
 .panel-recessed.pencil-baked > * {
   position: relative;
   z-index: 1;
-}
-
-/* Case study text dividers — pencil line under headings & TOC labels */
-.case-heading--has-divider {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  width: fit-content;
-  max-width: 100%;
-}
-
-.case-heading__text {
-  display: block;
-}
-
-.case-text-divider {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 10px;
-  min-width: 28px;
-  flex-shrink: 0;
-  overflow: visible;
-  isolation: isolate;
-}
-
-.case-text-divider.pencil-baked {
-  background: transparent !important;
-}
-
-.case-text-divider.pencil-baked::before {
-  content: '';
-  position: absolute;
-  inset: calc(-1 * var(--pencil-bleed, 8px));
-  background-image: var(--pencil-frame-image);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  pointer-events: none;
-  z-index: 0;
 }
 
 /**
@@ -859,7 +928,7 @@ h5, h6 {
   margin-inline-end: 0;
 }
 
-/* Case study quote cards */
+/* Case study quote cards — frame via `.panel-recessed` + `.dl-square-frame` tokens in embedded case */
 .case-testimonial-card {
   display: flex;
   flex-direction: column;
@@ -980,7 +1049,7 @@ h5, h6 {
   z-index: 30;
 }
 
-/* Before/after labels — regular rect, stroke-only pencil frame */
+/* Before/after labels — square frame from tokens */
 .case-pencil-chip {
   position: relative;
   display: inline-flex;
@@ -992,8 +1061,10 @@ h5, h6 {
   justify-content: center;
   padding: 3px 10px;
   background: transparent;
-  border: none;
-  border-radius: 0;
+  --dl-frame-color: var(--color-accent);
+  border: var(--dl-frame-width) solid var(--dl-frame-color);
+  border-radius: var(--dl-frame-radius);
+  box-sizing: border-box;
   overflow: visible;
   isolation: isolate;
   font-family: var(--font-sans);
@@ -1012,6 +1083,7 @@ h5, h6 {
 .case-pencil-chip.pencil-baked {
   background: transparent !important;
   border: none !important;
+  border-radius: 0;
   box-shadow: none !important;
 }
 

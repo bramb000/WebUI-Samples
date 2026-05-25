@@ -27,7 +27,8 @@ export function useScrollProgress(
       return
     }
     const rect = track.getBoundingClientRect()
-    const scrollable = track.offsetHeight - window.innerHeight
+    const viewportH = window.visualViewport?.height ?? window.innerHeight
+    const scrollable = track.offsetHeight - viewportH
     if (scrollable <= 0) {
       progress.value = 0
       return

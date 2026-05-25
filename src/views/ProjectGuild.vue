@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 import ProjectHero from '../components/ProjectHero.vue';
 import CaseImage from '../components/CaseImage.vue';
 import CaseLazyImage from '../components/CaseLazyImage.vue';
@@ -58,7 +57,6 @@ import galBeforeAnticipation from '../assets/images/guild/tldr/008_screenshot-20
 import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc8a-1-1-thumbnail.webp';
 
 const caseStudyRoot = ref<HTMLElement | null>(null);
-useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
@@ -90,13 +88,13 @@ useCaseStudySketchPanels(caseStudyRoot);
     </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-8">
+    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel">
       <h2 class="type-case-section-accent">Executive Summary</h2>
-      <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+      <div class="case-study-panel__metric-grid">
         <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
         <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="success" />
       </div>
-      <div class="space-y-6 type-case-body-lg">
+      <div class="case-study-panel__body type-case-body-lg">
         <div>
           <h4 class="type-case-kicker mb-2">01. The Problem</h4>
           <p>The game suffered from a lower than standard D7 retention. Users reported that they needed to play 3-4 times a day to maximise their progression when most users only had time to play 1-2 times a day, creating an ill fit for user lifestyle needs.</p>
@@ -471,13 +469,13 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed panel-recessed--borderless noise-overlay p-10 md:p-14 space-y-12">
+    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Results</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="case-study-panel__metric-grid">
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />
         <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="success" />
       </div>
-      <div class="max-w-3xl mx-auto space-y-6 type-case-body-lg">
+      <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
         <p>
           The bimodal distribution eventually regressed to a normal distribution, and fewer overall players churned after solving user pain points.
         </p>
