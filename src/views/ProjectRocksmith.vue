@@ -9,6 +9,7 @@ import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
 import CaseTestimonialCard from '../components/CaseTestimonialCard.vue';
 import TableOfContents from '../components/TableOfContents.vue';
+import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 
 // Rocksmith Assets
 import traditionalRocksmith from '../assets/images/rocksmith/executive-summary/000_traditional-rocksmith.webp';
@@ -51,6 +52,7 @@ import accessibilityColorblind3 from '../assets/images/rocksmith/accessibility/i
 import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/img_0460-1.webp';
 
 const caseStudyRoot = ref<HTMLElement | null>(null);
+useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
@@ -82,7 +84,7 @@ const caseStudyRoot = ref<HTMLElement | null>(null);
     </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel">
+    <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
       <h2 class="type-case-section-accent">Executive Summary</h2>
       <div class="case-study-panel__metric-grid">
         <CaseMetric value="5" label="Platforms" />
@@ -392,7 +394,7 @@ const caseStudyRoot = ref<HTMLElement | null>(null);
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel case-study-panel--loose">
+    <section class="panel-recessed panel-recessed--borderless noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Result</h2>
       <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
         <p>

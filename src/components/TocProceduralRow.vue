@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
-import { bakePencilFrameImage } from '../vfx/pencilFrameBake'
+import { getCachedPencilFrameImage, quantizePencilBakeDimensions } from '../vfx/pencilFrameBake'
 import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
 const props = defineProps<{
@@ -21,6 +21,7 @@ const ringDrawKey = ref(0)
 
 let resizeObserver: ResizeObserver | null = null
 let rebakeTimer = 0
+let ringBakeKey: string | null = null
 
 function rebakeRing(attempt = 0) {
   const el = rowRef.value
@@ -35,15 +36,24 @@ function rebakeRing(attempt = 0) {
   }
 
   const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#6b5a32')
-  const url = bakePencilFrameImage({
-    widthCss: r.width + TOC_RING_PAD_PX * 2,
-    heightCss: r.height + TOC_RING_PAD_PX * 2 + 6,
+  const rawW = r.width + TOC_RING_PAD_PX * 2
+  const rawH = r.height + TOC_RING_PAD_PX * 2 + 6
+  const { widthCss, heightCss } = quantizePencilBakeDimensions(rawW, rawH, 'frame')
+  const bakeKey = `toc-ring|${widthCss}|${heightCss}|${stroke}`
+  if (ringBakeKey === bakeKey && ringImage.value)
+    return
+
+  const url = getCachedPencilFrameImage({
+    widthCss,
+    heightCss,
     strokeColorHex: stroke,
     fillColorHex: '#000000',
     variant: 'frame',
     frameShape: 'ellipse',
+    frameStyle: 'sketch',
     strokeOnly: true,
     bleedPx: TOC_RING_BLEED_PX,
+    seed: 71,
   })
 
   if (!url) {
@@ -52,6 +62,7 @@ function rebakeRing(attempt = 0) {
     return
   }
 
+  ringBakeKey = bakeKey
   ringImage.value = url
   ringDrawKey.value += 1
 }
@@ -83,6 +94,7 @@ function stopRing() {
     rebakeTimer = 0
   }
   ringImage.value = null
+  ringBakeKey = null
 }
 
 watch(

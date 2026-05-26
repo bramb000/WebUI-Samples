@@ -10,6 +10,7 @@ import CaseInsight from '../components/CaseInsight.vue';
 import CaseBeforeAfter from '../components/CaseBeforeAfter.vue';
 import CaseTestimonialCard from '../components/CaseTestimonialCard.vue';
 import TableOfContents from '../components/TableOfContents.vue';
+import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 
 // Guild of Guardians Assets
 import challengeGraphic from '../assets/images/guild/context/000_challenge-graphic-1.png';
@@ -57,6 +58,7 @@ import galBeforeAnticipation from '../assets/images/guild/tldr/008_screenshot-20
 import galAfterAnticipation from '../assets/images/guild/tldr/009_figma-e1njfafc8a-1-1-thumbnail.webp';
 
 const caseStudyRoot = ref<HTMLElement | null>(null);
+useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
@@ -88,7 +90,7 @@ const caseStudyRoot = ref<HTMLElement | null>(null);
     </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel">
+    <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
       <h2 class="type-case-section-accent">Executive Summary</h2>
       <div class="case-study-panel__metric-grid">
         <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
@@ -469,7 +471,7 @@ const caseStudyRoot = ref<HTMLElement | null>(null);
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed dl-square-frame noise-overlay case-study-panel case-study-panel--loose">
+    <section class="panel-recessed panel-recessed--borderless noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Results</h2>
       <div class="case-study-panel__metric-grid">
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />

@@ -1,6 +1,6 @@
 /**
- * Static PNG bake: flat panel fill + single hand-drawn frame stroke.
- * Straight edges with corner tapers, graphite grain, and subtle asymmetry per bake.
+ * Static PNG bake: flat panel fill + pencil frame stroke (cached, 4px CSS).
+ * Default style is a near-rectangular 4px ring; sketch/ellipse variants are opt-in.
  */
 import * as THREE from 'three'
 
@@ -24,17 +24,27 @@ export type PencilFrameBakeOptions = {
   strokeOnly?: boolean
   /** Frame variant only. Default `rect`. */
   frameShape?: PencilFrameShape
-  /** Frame variant only. Default `sketch`. */
+  /** Frame variant only. Default `regular`. */
   frameStyle?: PencilFrameStyle
-  /** CSS stroke width for `regular` frames (default 4). */
+  /** CSS stroke width (default {@link PENCIL_STROKE_CSS_PX}). */
   strokePx?: number
 }
+
+/** Uniform pencil rim width in CSS pixels at bake resolution. */
+export const PENCIL_STROKE_CSS_PX = 4
 
 export const PENCIL_FRAME_BLEED_PX = 14
 export const PENCIL_DIVIDER_BLEED_PX = 8
 
-/** Bold marker weight (CSS-pixel-relative). */
+/** Quantize panel/frame bakes to reduce cache entries and rebakes. */
+export const PENCIL_BAKE_QUANTIZE_PX = 16
+export const PENCIL_BAKE_QUANTIZE_SMALL_PX = 8
+
+/** Bold marker weight — sketch style only. */
 const PENCIL_STROKE_BOLD = 1.12
+
+const BAKE_CACHE_MAX = 160
+const bakeCache = new Map<string, string>()
 
 const MAX_BAKE_EDGE_PX = 1024
 
@@ -213,30 +223,20 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
     return vec2(alpha, lum);
   }
 
-  /** Square-corner frame — uniform stroke band around a perfect rectangle. */
+  /** Square-corner frame — uniform 4px band, minimal grain. */
   vec2 regularRectStroke(vec2 p) {
     float d = sdBox(p, u_innerHalf);
     float halfW = u_strokeNorm * 0.5;
     float rim = abs(d) - halfW;
     float aa = max(fwidth(rim), 1e-5);
-    float strokeMask = 1.0 - smoothstep(0.0, aa * 1.1, rim);
+    float strokeMask = 1.0 - smoothstep(0.0, aa * 1.05, rim);
 
     if (strokeMask < 0.002)
       return vec2(0.0);
 
-    float normDist = abs(d) / max(halfW, 1e-5);
-    vec2 grainUv = vec2(p.x * 0.42 + u_seed.x, p.y * 0.42 + u_seed.y);
-    float graphite = pencilGrain(grainUv);
-    float speck = vnoise(grainUv * vec2(210.0, 88.0) + u_seed.zx);
-    float edgeMask = smoothstep(0.4, 1.0, normDist) * strokeMask;
-    float cov = strokeMask;
-
-    float densityInner = mix(0.88, 1.0, graphite);
-    densityInner *= mix(1.0, mix(0.7, 1.0, speck), edgeMask * 0.45);
-    float alpha = cov * densityInner;
-
-    float lumInner = mix(0.92, 1.02, graphite) * mix(1.0, 0.85, speck * edgeMask * 0.35);
-    float lum = mix(1.0, lumInner, strokeMask);
+    float graphite = pencilGrain(p * 0.08 + u_seed.xy * 0.01);
+    float alpha = strokeMask * mix(0.97, 1.0, graphite);
+    float lum = mix(0.99, 1.0, graphite * 0.5);
     return vec2(alpha, lum);
   }
 
@@ -288,6 +288,11 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
       }
       strokeA = min(stroke.x, 1.0);
       strokeLum = stroke.y;
+    } else if (u_frameRegular > 0.5) {
+      stroke = regularRectStroke(q);
+      strokeA = min(stroke.x, 1.0);
+      strokeLum = stroke.y;
+      fillAlpha = 0.0;
     } else {
       float halfLen = u_innerHalf.x;
       float nudge = u_strokeNorm * 3.2;
@@ -326,7 +331,7 @@ const vertexShader = /* glsl */ `void main() {
   gl_Position = vec4(position, 1.0);
 }`
 
-const SHADER_REV = 16
+const SHADER_REV = 17
 
 let bakeRenderer: THREE.WebGLRenderer | null = null
 let bakeScene: THREE.Scene | null = null
@@ -432,6 +437,88 @@ const BAKE_MODE: Record<PencilBakeVariant, number> = {
   vline: 2,
 }
 
+export function quantizePencilBakeDimension(
+  cssPx: number,
+  step = PENCIL_BAKE_QUANTIZE_PX,
+): number {
+  const quantum = Math.max(4, step)
+  return Math.max(quantum, Math.round(cssPx / quantum) * quantum)
+}
+
+export function quantizePencilBakeDimensions(
+  widthCss: number,
+  heightCss: number,
+  variant: PencilBakeVariant = 'frame',
+): { widthCss: number, heightCss: number } {
+  const step = variant === 'frame' ? PENCIL_BAKE_QUANTIZE_PX : PENCIL_BAKE_QUANTIZE_SMALL_PX
+  return {
+    widthCss: quantizePencilBakeDimension(widthCss, step),
+    heightCss: quantizePencilBakeDimension(heightCss, step),
+  }
+}
+
+function normalizeBakeOpts(opts: PencilFrameBakeOptions): PencilFrameBakeOptions {
+  const variant = opts.variant ?? 'frame'
+  const { widthCss, heightCss } = quantizePencilBakeDimensions(
+    opts.widthCss,
+    opts.heightCss,
+    variant,
+  )
+  const frameStyle = opts.frameStyle ?? 'regular'
+  return {
+    ...opts,
+    widthCss,
+    heightCss,
+    variant,
+    frameStyle,
+    strokePx: opts.strokePx ?? PENCIL_STROKE_CSS_PX,
+    seed: opts.seed ?? 1,
+    bleedPx: opts.bleedPx ?? (variant === 'frame' ? PENCIL_FRAME_BLEED_PX : PENCIL_DIVIDER_BLEED_PX),
+  }
+}
+
+function buildBakeCacheKey(opts: PencilFrameBakeOptions): string {
+  const n = normalizeBakeOpts(opts)
+  return [
+    SHADER_REV,
+    n.variant,
+    n.widthCss,
+    n.heightCss,
+    n.strokeColorHex.toLowerCase(),
+    n.fillColorHex.toLowerCase(),
+    n.bleedPx,
+    n.strokeOnly ? 1 : 0,
+    n.frameShape ?? 'rect',
+    n.frameStyle,
+    n.strokePx,
+    n.seed,
+  ].join('|')
+}
+
+export function disposePencilFrameBakeCache() {
+  bakeCache.clear()
+}
+
+/** Cached PNG bake — quantizes size and reuses prior renders. */
+export function getCachedPencilFrameImage(opts: PencilFrameBakeOptions): string | null {
+  const key = buildBakeCacheKey(opts)
+  const hit = bakeCache.get(key)
+  if (hit)
+    return hit
+
+  const url = bakePencilFrameImage(normalizeBakeOpts(opts))
+  if (!url)
+    return null
+
+  if (bakeCache.size >= BAKE_CACHE_MAX) {
+    const oldest = bakeCache.keys().next().value
+    if (oldest)
+      bakeCache.delete(oldest)
+  }
+  bakeCache.set(key, url)
+  return url
+}
+
 export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | null {
   const widthCss = opts.widthCss
   const heightCss = opts.heightCss
@@ -460,7 +547,7 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
   bakeRenderer.setViewport(0, 0, vw, vh)
   bakeRenderer.clear(true, true, true)
 
-  const seedBase = opts.seed ?? Math.random() * 1000
+  const seedBase = opts.seed ?? 1
   const stroke = new THREE.Color(opts.strokeColorHex)
   const fill = new THREE.Color(opts.fillColorHex)
 
@@ -483,12 +570,12 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
   )
   bakeMaterial.uniforms.u_bakeMode.value = BAKE_MODE[variant]
   bakeMaterial.uniforms.u_strokeOnly.value = opts.strokeOnly && variant === 'frame' ? 1 : 0
-  const frameStyle = opts.frameStyle ?? 'sketch'
-  const isRegularFrame = variant === 'frame' && frameStyle === 'regular'
+  const frameStyle = opts.frameStyle ?? 'regular'
+  const useEllipse = variant === 'frame' && opts.frameShape === 'ellipse'
+  const isRegularStroke = frameStyle === 'regular' && !useEllipse
 
-  bakeMaterial.uniforms.u_frameEllipse.value =
-    variant === 'frame' && opts.frameShape === 'ellipse' ? 1 : 0
-  bakeMaterial.uniforms.u_frameRegular.value = isRegularFrame ? 1 : 0
+  bakeMaterial.uniforms.u_frameEllipse.value = useEllipse ? 1 : 0
+  bakeMaterial.uniforms.u_frameRegular.value = isRegularStroke ? 1 : 0
 
   const aspect = vw / Math.max(vh, 1)
   const uvx = (cardL + cardW * 0.5) / wE
@@ -519,10 +606,10 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
     : variant === 'hline'
       ? cardH * pr * scale
       : Math.min(cardW * pr * scale, cardH * pr * scale)
-  const strokePx = opts.strokePx ?? (isRegularFrame ? 4 : variant === 'frame' ? 2.6 * 2 : 2.2 * 2)
-  const strokeBold = isRegularFrame ? 1 : PENCIL_STROKE_BOLD
+  const strokePx = opts.strokePx ?? PENCIL_STROKE_CSS_PX
+  const strokeBold = isRegularStroke ? 1 : PENCIL_STROKE_BOLD
   const strokeBase = (strokePx * strokeBold) / Math.max(shortPx, 1)
-  bakeMaterial.uniforms.u_strokeNorm.value = isRegularFrame
+  bakeMaterial.uniforms.u_strokeNorm.value = isRegularStroke
     ? strokeBase
     : Math.max(
         0.014,

@@ -1016,7 +1016,7 @@ function onDone() {
   --color-text-muted: var(--paper-on-fill-text-muted);
 }
 
-.dl-embedded--case :deep(.panel-recessed:not(.panel-recessed--borderless)) {
+.dl-embedded--case :deep(.panel-recessed:not(.pencil-baked)) {
   background: color-mix(in srgb, var(--paper-surface-fill-deep) 88%, #1a1814 12%);
 }
 

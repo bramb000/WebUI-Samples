@@ -15,9 +15,14 @@ import PrimaryButton from '../PrimaryButton.vue'
           Product Alchemist
         </h2>
       </div>
-      <p class="type-body-lg text-muted detective-hero-intro__value">
-        7 years of experience in crafting products that make users happy that they are willing to spend on.
-      </p>
+      <div class="detective-hero-intro__value">
+        <p class="type-body-lg text-muted">
+          7 years of experience in turning engagement into revenue
+        </p>
+        <p class="type-body-lg text-muted">
+          Designer who engineers
+        </p>
+      </div>
       <PrimaryButton to="/work" class="detective-hero-intro__cta">
         View Work
       </PrimaryButton>
@@ -57,8 +62,15 @@ import PrimaryButton from '../PrimaryButton.vue'
 }
 
 .detective-hero-intro__value {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-1);
   max-width: 32rem;
   margin: 0 0 var(--grid-4);
+}
+
+.detective-hero-intro__value p {
+  margin: 0;
 }
 
 .detective-hero-intro__cta {

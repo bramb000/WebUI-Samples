@@ -55,7 +55,7 @@ const surfaceStyle = computed(() => ({
 </script>
 
 <template>
-  <ProceduralChiselFrame class="insight-frame" :hover-flame="false">
+  <ProceduralChiselFrame class="insight-frame" :color="surfaceFill" :hover-flame="false">
     <div
       class="insight-wrap insight-wrap--chisel"
       :style="surfaceStyle"
