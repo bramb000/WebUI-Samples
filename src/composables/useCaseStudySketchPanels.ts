@@ -3,6 +3,7 @@ import {
   getCachedPencilFrameImage,
   PENCIL_DIVIDER_BLEED_PX,
   PENCIL_FRAME_BLEED_PX,
+  PENCIL_HLINE_HEIGHT_CSS,
   quantizePencilBakeDimensions,
   type PencilBakeVariant,
 } from '../vfx/pencilFrameBake'
@@ -29,7 +30,7 @@ const PENCIL_SEED: Record<BoundKind, number> = {
   chip: 53,
 }
 
-const CASE_HEADING_SELECTOR = 'section :is(h2, h3, h4)[class*="type-case-"]'
+const CASE_HEADING_SELECTOR = ':is(section, .case-study-panel) :is(h2, h3, h4)[class*="type-case-"]'
 
 function dataUrlToBlob(dataUrl: string): Blob {
   const [header = '', b64 = ''] = dataUrl.split(',')
@@ -148,7 +149,7 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
 
     if (entry.kind === 'text-divider-h') {
       variant = 'hline'
-      heightCss = Math.max(r.height, 10)
+      heightCss = PENCIL_HLINE_HEIGHT_CSS
       bleedPx = PENCIL_DIVIDER_BLEED_PX
     }
     else if (entry.kind === 'divider-v') {
@@ -183,8 +184,8 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       bleedPx,
       variant,
       strokeOnly: entry.kind === 'chip',
-      frameShape: entry.kind === 'chip' ? 'rect' : undefined,
-      frameStyle: 'regular',
+      frameShape: 'rect',
+      frameStyle: entry.kind === 'text-divider-h' ? 'sketch' : 'regular',
       seed: PENCIL_SEED[entry.kind],
     })
 
@@ -241,6 +242,12 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
     for (const heading of root.querySelectorAll<HTMLElement>(CASE_HEADING_SELECTOR)) {
       const divider = ensureHeadingTextDivider(heading)
       next.set(divider, { kind: 'text-divider-h', observe: heading })
+    }
+
+    for (const block of root.querySelectorAll<HTMLElement>('.baa-caption-block')) {
+      const divider = block.querySelector<HTMLElement>('.case-text-divider')
+      if (divider)
+        next.set(divider, { kind: 'text-divider-h', observe: block })
     }
 
     for (const divider of root.querySelectorAll<HTMLElement>('.case-divider--vertical')) {

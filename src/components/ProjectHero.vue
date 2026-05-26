@@ -24,7 +24,7 @@ defineProps<Props>();
     </div>
 
     <!-- Metadata Grid -->
-    <div class="hero-meta-grid panel-recessed panel-recessed--borderless">
+    <div class="hero-meta-grid panel-recessed panel-recessed--borderless panel-recessed--pencil-frame">
       <div class="hero-meta-cell">
         <div class="meta-label">
           <span class="type-meta-label">Role</span>

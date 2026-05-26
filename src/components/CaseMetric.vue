@@ -126,10 +126,15 @@ const surfaceStyle = computed(() => ({
 
 .metric-frame:hover::after {
   opacity: 1;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%),
+    0 14px 32px color-mix(in srgb, var(--case-insight-surface-fill) 28%, transparent 72%);
 }
 
 .metric-wrap {
   position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
@@ -148,16 +153,11 @@ const surfaceStyle = computed(() => ({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  padding: 24px 20px;
+  gap: 7px;
+  padding: 12px 10px;
   flex: 1 1 auto;
-  transition: box-shadow 200ms var(--ease-mechanical-spring);
-}
-
-.metric-frame:hover .metric-content {
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.28),
-    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%);
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 .metric-lcd {

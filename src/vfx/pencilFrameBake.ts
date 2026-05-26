@@ -33,6 +33,9 @@ export type PencilFrameBakeOptions = {
 /** Uniform pencil rim width in CSS pixels at bake resolution. */
 export const PENCIL_STROKE_CSS_PX = 4
 
+/** Vertical bake height for horizontal rules (heading + caption underlines). */
+export const PENCIL_HLINE_HEIGHT_CSS = 12
+
 export const PENCIL_FRAME_BLEED_PX = 14
 export const PENCIL_DIVIDER_BLEED_PX = 8
 
@@ -223,20 +226,64 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
     return vec2(alpha, lum);
   }
 
-  /** Square-corner frame — uniform 4px band, minimal grain. */
+  /** Square-corner frame — straight edges with graphite pencil stroke (no corner warp). */
   vec2 regularRectStroke(vec2 p) {
     float d = sdBox(p, u_innerHalf);
     float halfW = u_strokeNorm * 0.5;
     float rim = abs(d) - halfW;
     float aa = max(fwidth(rim), 1e-5);
-    float strokeMask = 1.0 - smoothstep(0.0, aa * 1.05, rim);
+    float normDist = abs(d) / max(halfW, 1e-5);
+
+    vec2 grainUv = vec2(p.x * 0.38 + u_seed.x, p.y * 0.38 + u_seed.y);
+    float graphite = pencilGrain(grainUv);
+    float speck = vnoise(grainUv * vec2(140.0, 58.0) + u_seed.zx);
+
+    float edgeRoughIn = min(0.0, (graphite - 0.5) * aa * 0.9);
+    float strokeMask = 1.0 - smoothstep(0.0, aa * 1.08, rim + edgeRoughIn);
 
     if (strokeMask < 0.002)
       return vec2(0.0);
 
-    float graphite = pencilGrain(p * 0.08 + u_seed.xy * 0.01);
-    float alpha = strokeMask * mix(0.97, 1.0, graphite);
-    float lum = mix(0.99, 1.0, graphite * 0.5);
+    float edgeMask = smoothstep(0.35, 1.0, normDist) * strokeMask;
+    float densityInner = mix(0.86, 1.0, graphite);
+    densityInner *= mix(1.0, mix(0.65, 1.0, speck), edgeMask * 0.55);
+    float alpha = strokeMask * densityInner;
+
+    float lumInner = mix(0.88, 1.03, graphite) * mix(1.0, 0.8, speck * edgeMask * 0.35);
+    float lum = mix(1.0, lumInner, strokeMask);
+    return vec2(alpha, lum);
+  }
+
+  /** Section heading rule — 4px at left, fades/tapers toward the right. */
+  vec2 taperedHlineStroke(vec2 p) {
+    float halfLen = u_innerHalf.x;
+    float span = max(2.0 * halfLen, 1e-5);
+    float t = clamp((p.x + halfLen) / span, 0.0, 1.0);
+
+    float halfW = u_strokeNorm * 0.5 * mix(1.0, 0.1, smoothstep(0.0, 1.0, pow(t, 0.8)));
+
+    float dist = abs(p.y);
+    float rim = dist - halfW;
+    float aa = max(fwidth(rim), 1e-5);
+    float normDist = dist / max(halfW, 1e-5);
+
+    vec2 grainUv = vec2(t * 12.0 + u_seed.x, normDist * 2.2 + u_seed.y);
+    float graphite = pencilGrain(grainUv);
+    float speck = vnoise(grainUv * vec2(150.0, 60.0) + u_seed.zx);
+
+    float edgeRoughIn = min(0.0, (graphite - 0.5) * aa * 0.85);
+    float strokeMask = 1.0 - smoothstep(0.0, aa * 1.08, rim + edgeRoughIn);
+
+    if (strokeMask < 0.002)
+      return vec2(0.0);
+
+    float edgeMask = smoothstep(0.3, 1.0, normDist) * strokeMask;
+    float densityInner = mix(0.86, 1.0, graphite);
+    densityInner *= mix(1.0, mix(0.65, 1.0, speck), edgeMask * 0.5);
+    float alpha = strokeMask * densityInner;
+
+    float lumInner = mix(0.88, 1.03, graphite) * mix(1.0, 0.8, speck * edgeMask * 0.35);
+    float lum = mix(1.0, lumInner, strokeMask);
     return vec2(alpha, lum);
   }
 
@@ -288,21 +335,13 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
       }
       strokeA = min(stroke.x, 1.0);
       strokeLum = stroke.y;
-    } else if (u_frameRegular > 0.5) {
-      stroke = regularRectStroke(q);
-      strokeA = min(stroke.x, 1.0);
-      strokeLum = stroke.y;
-      fillAlpha = 0.0;
     } else {
       float halfLen = u_innerHalf.x;
       float nudge = u_strokeNorm * 3.2;
       if (u_bakeMode < 1.5) {
-        float stretch = 1.0 + (hash11(u_seed.z + 2.0) - 0.5) * 0.045;
-        float y0 = (hash11(u_seed.x) - 0.5) * u_strokeNorm * 1.8;
-        float y1 = y0 + (hash11(u_seed.y) - 0.5) * u_strokeNorm * 1.1;
-        vec2 a = vec2(-halfLen * stretch, y0) + hash22(vec2(0.0, u_seed.x)) * nudge;
-        vec2 b = vec2( halfLen * stretch, y1) + hash22(vec2(1.0, u_seed.y)) * nudge;
-        stroke = taperedSegment(q, a, b);
+        stroke = taperedHlineStroke(q);
+      } else if (u_frameRegular > 0.5) {
+        stroke = regularRectStroke(q);
       } else {
         float stretch = 1.0 + (hash11(u_seed.z + 5.0) - 0.5) * 0.045;
         float x0 = (hash11(u_seed.x) - 0.5) * u_strokeNorm * 1.8;
@@ -331,7 +370,7 @@ const vertexShader = /* glsl */ `void main() {
   gl_Position = vec4(position, 1.0);
 }`
 
-const SHADER_REV = 17
+const SHADER_REV = 20
 
 let bakeRenderer: THREE.WebGLRenderer | null = null
 let bakeScene: THREE.Scene | null = null
@@ -459,16 +498,16 @@ export function quantizePencilBakeDimensions(
 
 function normalizeBakeOpts(opts: PencilFrameBakeOptions): PencilFrameBakeOptions {
   const variant = opts.variant ?? 'frame'
-  const { widthCss, heightCss } = quantizePencilBakeDimensions(
-    opts.widthCss,
-    opts.heightCss,
-    variant,
-  )
+  let widthCss = opts.widthCss
+  let heightCss = opts.heightCss
+  if (variant === 'hline')
+    heightCss = Math.max(heightCss, PENCIL_HLINE_HEIGHT_CSS)
+  const quantized = quantizePencilBakeDimensions(widthCss, heightCss, variant)
   const frameStyle = opts.frameStyle ?? 'regular'
   return {
     ...opts,
-    widthCss,
-    heightCss,
+    widthCss: quantized.widthCss,
+    heightCss: quantized.heightCss,
     variant,
     frameStyle,
     strokePx: opts.strokePx ?? PENCIL_STROKE_CSS_PX,
@@ -572,7 +611,7 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
   bakeMaterial.uniforms.u_strokeOnly.value = opts.strokeOnly && variant === 'frame' ? 1 : 0
   const frameStyle = opts.frameStyle ?? 'regular'
   const useEllipse = variant === 'frame' && opts.frameShape === 'ellipse'
-  const isRegularStroke = frameStyle === 'regular' && !useEllipse
+  const isRegularStroke = frameStyle === 'regular' && variant === 'frame' && !useEllipse
 
   bakeMaterial.uniforms.u_frameEllipse.value = useEllipse ? 1 : 0
   bakeMaterial.uniforms.u_frameRegular.value = isRegularStroke ? 1 : 0
@@ -609,12 +648,13 @@ export function bakePencilFrameImage(opts: PencilFrameBakeOptions): string | nul
   const strokePx = opts.strokePx ?? PENCIL_STROKE_CSS_PX
   const strokeBold = isRegularStroke ? 1 : PENCIL_STROKE_BOLD
   const strokeBase = (strokePx * strokeBold) / Math.max(shortPx, 1)
-  bakeMaterial.uniforms.u_strokeNorm.value = isRegularStroke
-    ? strokeBase
-    : Math.max(
-        0.014,
-        Math.min(variant === 'frame' ? 0.052 : 0.048, strokeBase),
-      )
+  bakeMaterial.uniforms.u_strokeNorm.value =
+    variant === 'hline' || variant === 'vline' || isRegularStroke
+      ? strokeBase
+      : Math.max(
+          0.014,
+          Math.min(variant === 'frame' ? 0.052 : 0.048, strokeBase),
+        )
 
   bakeRenderer.render(bakeScene, bakeCamera)
   return bakeRenderer.domElement.toDataURL('image/png')

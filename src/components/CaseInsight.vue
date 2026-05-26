@@ -137,10 +137,15 @@ const surfaceStyle = computed(() => ({
 
 .insight-frame:hover::after {
   opacity: 1;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%),
+    0 14px 32px color-mix(in srgb, var(--case-insight-surface-fill) 28%, transparent 72%);
 }
 
 .insight-wrap {
   position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
@@ -155,19 +160,13 @@ const surfaceStyle = computed(() => ({
 }
 
 .insight-content {
-  padding: 24px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  gap: 16px;
-  min-height: 0;
-  transition: box-shadow 200ms var(--ease-mechanical-spring);
-}
-
-.insight-frame:hover .insight-content {
-  box-shadow:
-    0 14px 32px rgba(0, 0, 0, 0.28),
-    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%);
+  gap: 8px;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 .insight-stat-block {

@@ -35,7 +35,10 @@ defineProps<{
       </div>
     </div>
 
-    <p v-if="caption" class="baa-caption type-case-caption">{{ caption }}</p>
+    <div v-if="caption" class="baa-caption-block">
+      <p class="baa-caption type-case-caption">{{ caption }}</p>
+      <span class="case-text-divider" aria-hidden="true" />
+    </div>
   </div>
 </template>
 
@@ -83,6 +86,15 @@ defineProps<{
   box-shadow:
     0 0 0 1px var(--color-accent),
     var(--dl-glow-global);
+}
+
+.baa-caption-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--grid-1) / 2);
+  width: fit-content;
+  max-width: 100%;
 }
 
 .baa-caption {

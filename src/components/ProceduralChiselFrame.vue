@@ -98,6 +98,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  overflow: visible;
 }
 
 .chisel-frame::before {
@@ -107,6 +108,7 @@ onBeforeUnmount(() => {
   background-image: var(--chisel-rim-image);
   background-size: 100% 100%;
   background-repeat: no-repeat;
+  background-position: center;
   pointer-events: none;
   z-index: 2;
 }

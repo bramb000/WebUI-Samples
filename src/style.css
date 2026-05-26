@@ -77,11 +77,11 @@
   --dl-card-frame-radius: var(--dl-frame-radius);
   --dl-card-frame-color:  color-mix(in srgb, var(--case-insight-surface-fill, #243b2f) 55%, #f4f4f5 45%);
 
-  /* Case study panel interior — strict 8pt grid (see `.case-study-panel`) */
-  --dl-panel-padding-inline: var(--grid-5);
-  --dl-panel-padding-block:  var(--grid-5);
-  --dl-panel-gap:            var(--grid-4);
-  --dl-panel-gap-lg:         var(--grid-6);
+  /* Case study panel interior (see `.case-study-panel`) */
+  --dl-panel-padding-inline: calc(var(--grid-5) / 2);
+  --dl-panel-padding-block:  calc(var(--grid-5) / 2);
+  --dl-panel-gap:            calc(var(--grid-4) / 2);
+  --dl-panel-gap-lg:         calc(var(--grid-6) / 2);
 
   /* CTA outline — torn-tape silhouette at rest, fills on hover */
   --cta-outline-stroke:       4px;
@@ -813,8 +813,8 @@ h5, h6 {
 
 @media (min-width: 768px) {
   .case-study-panel {
-    --dl-panel-padding-inline: var(--grid-7);
-    --dl-panel-padding-block: var(--grid-7);
+    --dl-panel-padding-inline: calc(var(--grid-7) / 2);
+    --dl-panel-padding-block: calc(var(--grid-7) / 2);
   }
 }
 
@@ -864,11 +864,17 @@ h5, h6 {
   background: transparent;
 }
 
+/** Opt-in: hero meta and similar panels that must use the pencil frame bake */
+.panel-recessed--pencil-frame.panel-recessed--borderless {
+  border: none !important;
+  box-shadow: none;
+}
+
 .case-heading--has-divider {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--grid-1);
+  gap: calc(var(--grid-1) / 2);
   width: fit-content;
   max-width: 100%;
 }
@@ -877,11 +883,12 @@ h5, h6 {
   display: block;
 }
 
+/* Baked pencil rule under section headings + captions (see `useCaseStudySketchPanels`) */
 .case-text-divider {
   position: relative;
   display: block;
   width: 100%;
-  height: 10px;
+  height: 12px;
   min-width: 28px;
   flex-shrink: 0;
   overflow: visible;
@@ -1112,11 +1119,12 @@ h5, h6 {
   display: inline-flex;
   width: fit-content;
   max-width: 100%;
+  min-height: calc(var(--grid-1) + var(--leading-label));
   align-self: flex-start;
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  padding: 3px 10px;
+  padding: calc(var(--grid-1) / 2) calc(var(--grid-2) / 2);
   background: transparent;
   --dl-frame-color: var(--color-accent);
   border: var(--dl-frame-width) solid var(--dl-frame-color);
