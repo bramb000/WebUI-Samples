@@ -164,7 +164,8 @@ const surfaceStyle = computed(() => ({
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  gap: 8px;
+  align-items: stretch;
+  gap: 0;
   min-height: 100%;
   box-sizing: border-box;
 }
@@ -173,11 +174,12 @@ const surfaceStyle = computed(() => ({
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: calc(var(--grid-1) / 2);
+  flex: 0 0 auto;
 }
 
 .insight-stat {
-  padding: 8px 16px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,8 +219,8 @@ const surfaceStyle = computed(() => ({
   min-height: 0;
 }
 
-.insight-body:not(:empty) {
-  flex: 1 1 auto;
+.insight-stat-block + .insight-body {
+  margin-top: var(--grid-2);
 }
 
 .insight-body :deep(p),

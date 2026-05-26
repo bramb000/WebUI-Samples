@@ -2,6 +2,9 @@
 export const PAGE_WIDTH = 320
 export const PAGE_HEIGHT = 480
 export const LEAF_Z_STEP = 2
+
+/** Page stays flat for this fraction of a turn (~12°) so lift clears the stack before curl. */
+export const PAGE_BEND_START_TURN = 12 / 180
 export const COVER_THICKNESS = 14
 export const COVER_FORE_EDGE_OVERHANG = 18
 export const COVER_VERTICAL_OVERHANG = 14

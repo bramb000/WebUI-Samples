@@ -16,6 +16,7 @@ import {
   LEAF_BEHIND_COVER_Z,
   LEAF_Z_STEP,
   LEFT_STACK_Z_BEHIND_BACK,
+  PAGE_BEND_START_TURN,
   PAGE_HEIGHT,
   PAGE_WIDTH,
   SPINE_WIDTH,
@@ -263,13 +264,14 @@ export function createDetectiveBookScene(
 
       const visualTurn = Math.abs(leaf.rotation.y / Math.PI)
       const targetTurn = Math.abs(leafTargetRotations[i]! / Math.PI)
-      // Curl follows scroll targets so bend isn't delayed behind the rotation lerp (noticeable on Windows scroll).
       const turnProgress = Math.min(1, Math.max(visualTurn, targetTurn))
-      const bend = Math.sin(turnProgress * Math.PI)
+      const lift = Math.sin(visualTurn * Math.PI)
+      const bendAfterStart = Math.max(0, visualTurn - PAGE_BEND_START_TURN) / (1 - PAGE_BEND_START_TURN)
+      const bend = visualTurn > PAGE_BEND_START_TURN ? Math.sin(bendAfterStart * Math.PI) : 0
 
       const zRight = LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP
       const zLeft = backStackBaseZ - (leaves.length - 1 - i) * LEAF_Z_STEP
-      const zLift = reducedMotion ? 0 : bend * 10
+      const zLift = reducedMotion ? 0 : lift * 10
       let z = zRight * (1 - turnProgress) + zLeft * turnProgress + zLift
 
       if (coverOpen < 0.98 && turnProgress < 0.04) {
