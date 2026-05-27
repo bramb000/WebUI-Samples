@@ -394,7 +394,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── RESULTS ─── -->
-    <section class="panel-recessed panel-recessed--borderless noise-overlay case-study-panel case-study-panel--loose">
+    <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Result</h2>
       <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
         <p>

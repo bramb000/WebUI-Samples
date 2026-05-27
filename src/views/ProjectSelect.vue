@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import AngularWipe from '../components/wipes/AngularWipe.vue'
+import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import SoftDrillWipe from '../components/wipes/SoftDrillWipe.vue'
 import PanelChiselBackground from '../components/PanelChiselBackground.vue'
 import { startCrumple } from '../composables/paperCrumple'
 import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
@@ -263,25 +263,43 @@ const rosterSections = computed(() => [
 const activeId = ref(projects.value[0]?.id ?? '')
 const displayedId = ref(activeId.value)
 
-const wipeActive = ref(false)
 const wipeTrigger = ref(0)
+const wipePhase = ref<'idle' | 'exit' | 'loading' | 'enter'>('idle')
 const pendingId = ref<string | null>(null)
+
+let transitionToken = 0
+let pendingLoad: Promise<unknown> | null = null
 
 const activeProject = computed(() => projects.value.find(p => p.id === activeId.value) ?? projects.value[0])
 
 type EmbeddedLoader = ReturnType<typeof defineAsyncComponent>
 
+type EmbeddedImporter = () => Promise<{ default: any }>
+
+const embeddedProjectImportById: Record<Project['id'], EmbeddedImporter> = {
+  guild: () => import('./ProjectGuild.vue'),
+  rocksmith: () => import('./ProjectRocksmith.vue'),
+  login: () => import('./LoginInteraction.vue'),
+  helldivers: () => import('./ExperimentHelldivers.vue'),
+  'account-tray': () => import('./AccountTrayView.vue'),
+  'sales-modal': () => import('./SalesModalView.vue'),
+  'voice-chat': () => import('./VoiceChatSimulation.vue'),
+  'node-graph': () => import('./NodeGraphView.vue'),
+  patapon: () => import('./ExperimentPatapon.vue'),
+  jedi: () => import('./ExperimentJedi.vue'),
+}
+
 const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
-  guild: defineAsyncComponent(() => import('./ProjectGuild.vue')),
-  rocksmith: defineAsyncComponent(() => import('./ProjectRocksmith.vue')),
-  login: defineAsyncComponent(() => import('./LoginInteraction.vue')),
-  helldivers: defineAsyncComponent(() => import('./ExperimentHelldivers.vue')),
-  'account-tray': defineAsyncComponent(() => import('./AccountTrayView.vue')),
-  'sales-modal': defineAsyncComponent(() => import('./SalesModalView.vue')),
-  'voice-chat': defineAsyncComponent(() => import('./VoiceChatSimulation.vue')),
-  'node-graph': defineAsyncComponent(() => import('./NodeGraphView.vue')),
-  patapon: defineAsyncComponent(() => import('./ExperimentPatapon.vue')),
-  jedi: defineAsyncComponent(() => import('./ExperimentJedi.vue')),
+  guild: defineAsyncComponent(embeddedProjectImportById.guild),
+  rocksmith: defineAsyncComponent(embeddedProjectImportById.rocksmith),
+  login: defineAsyncComponent(embeddedProjectImportById.login),
+  helldivers: defineAsyncComponent(embeddedProjectImportById.helldivers),
+  'account-tray': defineAsyncComponent(embeddedProjectImportById['account-tray']),
+  'sales-modal': defineAsyncComponent(embeddedProjectImportById['sales-modal']),
+  'voice-chat': defineAsyncComponent(embeddedProjectImportById['voice-chat']),
+  'node-graph': defineAsyncComponent(embeddedProjectImportById['node-graph']),
+  patapon: defineAsyncComponent(embeddedProjectImportById.patapon),
+  jedi: defineAsyncComponent(embeddedProjectImportById.jedi),
 }
 
 const displayedEmbeddedComponent = computed(
@@ -321,6 +339,9 @@ function onThumbEnter(e: PointerEvent, id: string) {
   const innerCard = thumb.querySelector('.inner-card') as HTMLElement | null
   if (innerCard) attachProjectFlameToThumbnail(thumb, innerCard)
   startCrumple()
+
+  // Prefetch next detail chunk for a shorter blank hold.
+  embeddedProjectImportById[id]?.().catch(() => {})
 }
 function onThumbLeave(id: string) {
   if (hoveredId.value === id) hoveredId.value = null
@@ -385,18 +406,48 @@ onBeforeUnmount(() => {
 
 function selectProject(id: string) {
   if (id === activeId.value) return
+  transitionToken++
+  const token = transitionToken
   activeId.value = id
   pendingId.value = id
-  wipeActive.value = true
+  pendingLoad = embeddedProjectImportById[id]?.() ?? Promise.resolve()
+  wipePhase.value = 'exit'
   wipeTrigger.value++
+
+  // If a previous transition was mid-flight, this keeps the overlay authoritative.
+  void token
 }
 
-function onCovered() {
-  if (pendingId.value) displayedId.value = pendingId.value
+async function onCleared(trigger: number) {
+  if (trigger !== wipeTrigger.value) return
+  const token = transitionToken
+  const id = pendingId.value
+  if (!id) return
+
+  wipePhase.value = 'loading'
+
+  try {
+    await (pendingLoad ?? Promise.resolve())
+  } catch {}
+
+  if (token !== transitionToken) return
+
+  displayedId.value = id
+  await nextTick()
+  if (token !== transitionToken) return
+
+  // One more frame so the new subtree has a chance to mount before reveal begins.
+  await new Promise<void>((r) => requestAnimationFrame(() => r()))
+  if (token !== transitionToken) return
+
+  wipePhase.value = 'enter'
 }
-function onDone() {
+
+function onDone(trigger: number) {
+  if (trigger !== wipeTrigger.value) return
   pendingId.value = null
-  wipeActive.value = false
+  pendingLoad = null
+  wipePhase.value = 'idle'
 }
 </script>
 
@@ -509,11 +560,10 @@ function onDone() {
 
           </PanelChiselBackground>
 
-          <AngularWipe
-            :active="wipeActive"
+          <SoftDrillWipe
+            :phase="wipePhase"
             :trigger="wipeTrigger"
-            palette="crimson-teal"
-            @covered="onCovered"
+            @cleared="onCleared"
             @done="onDone"
           />
         </section>
