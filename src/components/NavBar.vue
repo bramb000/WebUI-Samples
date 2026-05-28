@@ -3,6 +3,7 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { captureEvent } from '../analytics';
 import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
+import bramhaLogo from '../assets/images/logo/bramha-logo.gif';
 
 const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
 const lowPower = useLowPowerMode();
@@ -57,26 +58,24 @@ function onExternalNavClick(source: string) {
   >
     <WebGLWisp v-if="showWisp" />
 
-    <!-- Mobile Logo -->
-    <router-link
-      to="/"
-      class="md:hidden nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
-      @click="isMenuOpen = false"
-    >
-      <span>bramha.</span>
-    </router-link>
-
-    <!-- Desktop Layout -->
-    <div class="hidden md:flex items-center justify-center w-full">
+    <div class="flex items-center justify-between md:justify-center w-full">
       <div class="flex items-center gap-6">
         <router-link
           to="/"
           class="nav-logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm"
+          @click="isMenuOpen = false"
         >
-          <span>bramha.</span>
+          <img
+            :src="bramhaLogo"
+            alt="Bramha"
+            class="nav-logo-img"
+            width="121"
+            height="28"
+            decoding="async"
+          />
         </router-link>
 
-        <div class="seg-strip">
+        <div class="hidden md:block seg-strip">
           <template v-for="link in navLinks" :key="link.name">
             <router-link
               v-if="!link.external"
@@ -114,11 +113,10 @@ function onExternalNavClick(source: string) {
           </template>
         </div>
       </div>
-    </div>
 
-    <!-- Mobile Controls -->
-    <div class="flex md:hidden items-center gap-3 relative z-50">
-      <button
+      <!-- Mobile Controls -->
+      <div class="flex md:hidden items-center gap-3 relative z-50">
+        <button
         @click="isMenuOpen = !isMenuOpen"
         class="hamburger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-accent)] rounded-sm p-1"
         :aria-label="isMenuOpen ? 'Close menu' : 'Open menu'"
@@ -126,7 +124,8 @@ function onExternalNavClick(source: string) {
         <span :class="{'rotate-45 translate-y-[7px]': isMenuOpen}" class="ham-bar"></span>
         <span :class="{'opacity-0': isMenuOpen}" class="ham-bar"></span>
         <span :class="{'-rotate-45 -translate-y-[7px]': isMenuOpen}" class="ham-bar"></span>
-      </button>
+        </button>
+      </div>
     </div>
 
     <!-- Mobile Menu Overlay -->
@@ -166,20 +165,16 @@ function onExternalNavClick(source: string) {
 
 <style scoped>
 .nav-logo {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-border-hi);
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  transition: color 150ms var(--ease-te-snap), text-shadow 150ms var(--ease-te-snap);
-  line-height: 1;
-  text-shadow: 0 0 12px rgba(197, 168, 114, 0.3);
+  line-height: 0;
 }
-.nav-logo:hover {
-  color: var(--color-text);
-  text-shadow: 0 0 20px rgba(197, 168, 114, 0.55);
+.nav-logo-img {
+  display: block;
+  width: auto;
+  height: 28px;
+  object-fit: contain;
 }
 
 .hamburger {

@@ -39,7 +39,7 @@ useCaseTheme();
     <main :class="[
       'flex-grow w-full', 
       // Hero Select needs a full-bleed stage (but still a normal page w/ Nav).
-      isHeroSelect ? 'h-[calc(100vh-72px)] min-h-0 overflow-hidden' : '',
+      isHeroSelect ? 'md:h-[calc(100vh-72px)] md:min-h-0 md:overflow-hidden' : '',
       isConstrainedMain ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : '',
       isHome || isAbout ? 'py-0' : '',
     ]">

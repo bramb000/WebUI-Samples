@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import SoftDrillWipe from '../components/wipes/SoftDrillWipe.vue'
 import PanelChiselBackground from '../components/PanelChiselBackground.vue'
 import RosterCard from '../components/RosterCard.vue'
 import { startCrumple } from '../composables/paperCrumple'
 import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
 import { workPanelEmbeddedCaseStudyId } from '../composables/workPanelCaseTheme'
+import { useIsMobile } from '../composables/useIsMobile'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
+import { PROJECT_ROUTE_BY_ID } from '../constants/projectRoutes'
 import {
   ROSTER_DISCIPLINE_ACCENT,
   type RosterDiscipline,
@@ -264,6 +267,9 @@ const rosterSections = computed(() => [
   { label: 'Personal Projects', projects: microProjects.value, spaced: true },
 ])
 
+const router = useRouter()
+const isMobile = useIsMobile()
+
 const activeId = ref(projects.value[0]?.id ?? '')
 const displayedId = ref(activeId.value)
 
@@ -312,8 +318,12 @@ const displayedEmbeddedComponent = computed(
 const isCaseStudyEmbedded = computed(() => displayedId.value === 'guild' || displayedId.value === 'rocksmith')
 
 watch(
-  displayedId,
-  (id) => {
+  [displayedId, isMobile],
+  ([id, mobile]) => {
+    if (mobile) {
+      workPanelEmbeddedCaseStudyId.value = null
+      return
+    }
     workPanelEmbeddedCaseStudyId.value = id === 'guild' || id === 'rocksmith' ? id : null
   },
   { immediate: true },
@@ -333,6 +343,7 @@ const {
 } = useRosterCardPaint()
 
 function onThumbEnter(e: PointerEvent, id: string) {
+  if (isMobile.value) return
   hoveredId.value = id
   if (hoverDetachTimeout != null) {
     window.clearTimeout(hoverDetachTimeout)
@@ -362,6 +373,10 @@ function onThumbLeave(id: string) {
 function onThumbMove() {}
 
 function onThumbDown(e: PointerEvent, id: string) {
+  if (isMobile.value) {
+    pressedId.value = id
+    return
+  }
   pressedId.value = id
   hoveredId.value = id
   if (hoverDetachTimeout != null) {
@@ -381,6 +396,11 @@ function onThumbDown(e: PointerEvent, id: string) {
 function onThumbUp(id: string) {
   if (pressedId.value !== id) return
   pressedId.value = null
+  if (isMobile.value) {
+    const path = PROJECT_ROUTE_BY_ID[id]
+    if (path) void router.push(path)
+    return
+  }
   if (hoveredId.value == null) detachProjectFlame()
   selectProject(id)
 }
@@ -389,6 +409,7 @@ let raf = 0
 onMounted(() => {
   observeGrid(gridContainerRef.value)
   scheduleRebake()
+  if (isMobile.value) return
   const clockStart = performance.now()
   let lastFrame = clockStart
   const frameMs = 1000 / 24
@@ -490,7 +511,7 @@ function onDone(trigger: number) {
                 :plate-grain="plateGrainBakes[p.id]"
                 :variant="p.clientName ? 'case-study' : 'default'"
                 :client-name="p.clientName"
-                :selected="p.id === activeProject.id"
+                :selected="!isMobile && p.id === activeProject.id"
                 :pressed="p.id === pressedId"
                 :style="{
                   '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[p.discipline],
@@ -506,7 +527,7 @@ function onDone(trigger: number) {
           </div>
         </aside>
 
-        <section class="dl-detail" aria-label="Project detail">
+        <section v-if="!isMobile" class="dl-detail" aria-label="Project detail">
           <PanelChiselBackground class="dl-detail__surface">
           <div
             v-if="displayedEmbeddedComponent"
@@ -799,6 +820,37 @@ function onDone(trigger: number) {
 .dl-embedded:not(.dl-embedded--case) :deep(.type-case-body),
 .dl-embedded:not(.dl-embedded--case) :deep(.type-case-caption) {
   color: var(--color-text-muted);
+}
+
+@media (max-width: 767px) {
+  .dl-app {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .dl-shell {
+    padding-inline: 12px;
+  }
+
+  .dl-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #roster-pane {
+    border-right: none;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+    padding-inline: 8px;
+  }
+
+  .grid-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-inline: 8px;
+    padding-bottom: 48px;
+  }
 }
 </style>
 
