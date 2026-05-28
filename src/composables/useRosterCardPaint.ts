@@ -32,11 +32,17 @@ export function useRosterCardPaint() {
     if (prev && gridObserver)
       gridObserver.unobserve(prev)
 
-    if (el instanceof HTMLElement) {
-      thumbEls.set(id, el)
-      gridObserver?.observe(el)
-    }
-    else {
+    const resolved =
+      el instanceof HTMLElement
+        ? el
+        : el != null && typeof el === 'object' && '$el' in el && (el as { $el: unknown }).$el instanceof HTMLElement
+          ? ((el as { $el: HTMLElement }).$el)
+          : null
+
+    if (resolved) {
+      thumbEls.set(id, resolved)
+      gridObserver?.observe(resolved)
+    } else {
       thumbEls.delete(id)
     }
     scheduleRebake()

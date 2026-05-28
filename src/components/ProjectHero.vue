@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import type { ClientName } from '../assets/images/clients/clientLogos';
+import { CLIENT_LOGOS } from '../assets/images/clients/clientLogos';
+
 interface Props {
   title: string;
   description: string;
   role: string;
   timeline: string;
   tags: string[];
+  client?: ClientName;
 }
 
 defineProps<Props>();
@@ -14,6 +18,14 @@ defineProps<Props>();
   <header class="project-hero">
     <!-- Tags row -->
     <div class="hero-tags">
+      <span v-if="client" class="dl-plaque hero-client-tag">
+        <img
+          class="hero-client-logo"
+          :src="CLIENT_LOGOS[client]"
+          :alt="`${client} logo`"
+        />
+        <span>{{ client }}</span>
+      </span>
       <span v-for="tag in tags" :key="tag" class="dl-plaque">{{ tag }}</span>
     </div>
 
@@ -80,6 +92,19 @@ defineProps<Props>();
   box-shadow: none;
   border-color: color-mix(in srgb, var(--color-border) 30%, transparent);
   animation: none;
+}
+
+.hero-client-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-client-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .hero-title-block {

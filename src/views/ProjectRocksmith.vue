@@ -75,6 +75,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       description="Releasing a new learning game on 5 platforms with a single, scalable UI system."
       role="UX Lead for Mobile & Multi-platform Interactions"
       timeline="~2 Years"
+      client="Ubisoft"
       :tags="['PC Game', 'Console Game', 'Accessibility']"
     >
       <template #team>
