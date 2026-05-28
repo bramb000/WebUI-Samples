@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 import Footer from './components/Footer.vue';
+import GlobalBackgroundTexture from './components/GlobalBackgroundTexture.vue';
 import { useCaseTheme } from './composables/useCaseTheme';
 
 const route = useRoute();
@@ -32,6 +33,7 @@ useCaseTheme();
         : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-border-hi)] selection:text-[#111113]',
     ]"
   >
+    <GlobalBackgroundTexture />
     <NavBar v-if="!isFullScreen" />
     
     <main :class="[

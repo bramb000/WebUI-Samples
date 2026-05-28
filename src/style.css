@@ -91,6 +91,11 @@
   /* Noise texture SVG */
   --noise-svg: url('data:image/svg+xml,%3Csvg viewBox%3D"0 0 200 200" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%3E%3Cfilter id%3D"n"%3E%3CfeTurbulence type%3D"fractalNoise" baseFrequency%3D"1.5" numOctaves%3D"3" stitchTiles%3D"stitch"%2F%3E%3C%2Ffilter%3E%3Crect width%3D"100%25" height%3D"100%25" filter%3D"url(%23n)"%2F%3E%3C%2Fsvg%3E');
 
+  /* Global page background texture (baked, extremely subtle) */
+  --global-bg-grain-overlay-strength: 0.14;
+  --global-bg-grain-opacity: 0.12;
+  --global-bg-halftone-opacity: 0.045;
+
   /* Parchment work-detail panel (fill + rim share one token family) */
   --paper-surface-fill:       #ebe4d6;
   --paper-surface-fill-deep:  #e0d8c8;
@@ -255,11 +260,15 @@ html, body, nav {
     border-color     0.35s var(--ease-te-snap);
 }
 
+html {
+  background-color: var(--color-bg);
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--color-bg);
+  background-color: transparent;
 }
 
 /* ── Typography — semantic roles (prefer these over ad-hoc utilities) ── */

@@ -902,6 +902,53 @@ function onDone(trigger: number) {
     0 12px 26px rgba(0, 0, 0, 0.65);
 }
 
+.thumbnail.selected .inner-card {
+  --selected-gold: #f5c453;
+  --selected-gold-soft: rgba(245, 196, 83, 0.28);
+  --selected-gold-ring: rgba(245, 196, 83, 0.55);
+  border-color: color-mix(in srgb, var(--selected-gold) 92%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 0 0 1px var(--selected-gold-ring),
+    0 0 18px var(--selected-gold-soft),
+    0 12px 26px rgba(0, 0, 0, 0.65);
+}
+
+.thumbnail.selected .inner-card::after {
+  content: '';
+  position: absolute;
+  /* Oversize so the diagonal bands are always edge-to-edge while clipped by the card */
+  inset: -70%;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 12;
+  /*
+   * Rotate the sweep layer; use a horizontal gradient so thickness is stable in px.
+   * Bands: 8px primary + (2px gap) + 2px secondary.
+   */
+  background-image: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(50% - 6px),
+    rgba(255, 255, 255, 0.18) calc(50% - 6px),
+    rgba(255, 255, 255, 0.98) calc(50% - 4px),
+    rgba(255, 255, 255, 0.98) calc(50% + 4px),
+    rgba(255, 255, 255, 0.18) calc(50% + 6px),
+    transparent calc(50% + 6px),
+    transparent calc(50% + 8px),
+    rgba(255, 255, 255, 0.92) calc(50% + 8px),
+    rgba(255, 255, 255, 0.92) calc(50% + 10px),
+    transparent calc(50% + 10px),
+    transparent 100%
+  );
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  animation: selectedGoldSweep 7s cubic-bezier(0.2, 0.9, 0.2, 1) infinite;
+  transform: translate3d(-55%, 0, 0) rotate(45deg);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
 .thumbnail:hover .card-poly,
 .thumbnail.selected .card-poly {
   stroke: #20ffb0;
@@ -955,6 +1002,20 @@ function onDone(trigger: number) {
   25% { transform: rotate(4deg); }
   75% { transform: rotate(-4deg); }
   100% { transform: rotate(0deg); }
+}
+
+@keyframes selectedGoldSweep {
+  0% { transform: translate3d(-55%, 0, 0) rotate(45deg); opacity: 0; }
+  6% { opacity: 0.92; }
+  14% { transform: translate3d(55%, 0, 0) rotate(45deg); opacity: 0; }
+  100% { transform: translate3d(55%, 0, 0) rotate(45deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumbnail.selected .inner-card::after {
+    animation: none;
+    opacity: 0;
+  }
 }
 
 /* flame wrapper is dynamically inserted (no scope attr) */
