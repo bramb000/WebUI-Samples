@@ -1,4 +1,4 @@
-import type { BookLeaf, BookPageLeft } from './alchemistBookData'
+import type { BookCoverPage, BookLeaf } from './alchemistBookData'
 
 export type TestimonialEntry = {
   name: string
@@ -34,9 +34,7 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
   },
 ]
 
-export const TESTIMONIAL_BOOK_COVER: BookPageLeft = {
-  layout: 'left',
-  imageKey: 'cover',
+export const TESTIMONIAL_BOOK_COVER: BookCoverPage = {
   header: 'Testimonials',
 }
 

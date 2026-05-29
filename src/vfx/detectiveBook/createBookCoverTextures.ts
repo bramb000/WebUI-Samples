@@ -1,4 +1,4 @@
-import type { BookPageLeft } from '../../constants/alchemistBookData'
+import type { BookCoverPage } from '../../constants/alchemistBookData'
 import * as THREE from 'three'
 import {
   composeBackCoverExteriorCanvas,
@@ -40,7 +40,7 @@ export type BookCoverTextures = {
 }
 
 export function createBookCoverTextures(
-  coverPage: BookPageLeft,
+  coverPage: BookCoverPage,
   renderer: THREE.WebGLRenderer,
 ): BookCoverTextures {
   const frontExterior = canvasToTexture(composeFrontCoverExteriorCanvas(coverPage), renderer)

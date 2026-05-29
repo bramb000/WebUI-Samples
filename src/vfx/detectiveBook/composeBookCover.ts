@@ -1,9 +1,9 @@
-import type { BookPageLeft } from '../../constants/alchemistBookData'
+import type { BookCoverPage } from '../../constants/alchemistBookData'
 import { drawBookImageFullBleed } from '../../assets/images/book/bookPageImages'
 import {
   bookSafeMargin,
   drawCenteredMutedText,
-  drawEmbossedHeaderBlock,
+  drawCoverEmbossedHeaderBlock,
 } from './bookTypography'
 
 const COVER_TEX_W = 512
@@ -121,8 +121,8 @@ function createCanvas(w: number, h: number): { canvas: HTMLCanvasElement, ctx: C
   return { canvas, ctx }
 }
 
-/** Front board exterior — art panel + embossed title on leather. */
-export function composeFrontCoverExteriorCanvas(page: BookPageLeft): HTMLCanvasElement {
+/** Front board exterior — optional art panel + embossed title on leather. */
+export function composeFrontCoverExteriorCanvas(page: BookCoverPage): HTMLCanvasElement {
   const { canvas, ctx } = createCanvas(COVER_TEX_W, COVER_TEX_H)
   drawLeatherBase(ctx, COVER_TEX_W, COVER_TEX_H, 'exterior')
 
@@ -130,23 +130,25 @@ export function composeFrontCoverExteriorCanvas(page: BookPageLeft): HTMLCanvasE
   const panelW = COVER_TEX_W - inset * 2
   const panelH = COVER_TEX_H - inset * 2
 
-  ctx.save()
-  ctx.beginPath()
-  ctx.rect(inset, inset, panelW, panelH)
-  ctx.clip()
-  drawBookImageFullBleed(ctx, page.imageKey, COVER_TEX_W, COVER_TEX_H)
+  if (page.imageKey) {
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(inset, inset, panelW, panelH)
+    ctx.clip()
+    drawBookImageFullBleed(ctx, page.imageKey, COVER_TEX_W, COVER_TEX_H)
 
-  const scrim = bookVarColor('--book-cover-scrim', 'rgba(10, 8, 6, 0.42)')
-  ctx.fillStyle = scrim
-  ctx.fillRect(inset, inset, panelW, panelH)
-  ctx.restore()
+    const scrim = bookVarColor('--book-cover-scrim', 'rgba(10, 8, 6, 0.42)')
+    ctx.fillStyle = scrim
+    ctx.fillRect(inset, inset, panelW, panelH)
+    ctx.restore()
+  }
 
-  drawBeveledFrame(ctx, COVER_TEX_W, COVER_TEX_H, inset * 0.55)
+  drawBeveledFrame(ctx, COVER_TEX_W, COVER_TEX_H, page.imageKey ? inset * 0.55 : 40)
 
   const headerSize = bookVarPx('--book-header-size-cover', 52)
   const maxTextW = panelW - bookSafeMargin()
   const centerY = COVER_TEX_H / 2
-  drawEmbossedHeaderBlock(
+  drawCoverEmbossedHeaderBlock(
     ctx,
     page.header ?? '',
     COVER_TEX_W / 2,
@@ -172,7 +174,7 @@ export function composeBackCoverExteriorCanvas(): HTMLCanvasElement {
 
   const headerSize = bookVarPx('--book-header-size-end', 28)
   const maxTextW = COVER_TEX_W - bookSafeMargin() * 2
-  drawEmbossedHeaderBlock(
+  drawCoverEmbossedHeaderBlock(
     ctx,
     'Product Specialist',
     COVER_TEX_W / 2,
@@ -193,7 +195,7 @@ export function composeSpineCanvas(title: string, subtitle?: string): HTMLCanvas
   ctx.save()
   ctx.translate(SPINE_TEX_W / 2, SPINE_TEX_H * 0.38)
   ctx.rotate(-Math.PI / 2)
-  const headerBlockH = drawEmbossedHeaderBlock(ctx, title, 0, 0, headerSize, maxAlongSpine)
+  const headerBlockH = drawCoverEmbossedHeaderBlock(ctx, title, 0, 0, headerSize, maxAlongSpine)
   if (subtitle) {
     const subSize = 14
     const inkMuted = bookVarColor('--book-body-muted', '#5c564c')

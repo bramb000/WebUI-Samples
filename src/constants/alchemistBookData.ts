@@ -19,6 +19,13 @@ export type BookPageLeft = {
   subtitle?: string
 }
 
+/** Hardcover board — optional art panel + embossed title. */
+export type BookCoverPage = {
+  imageKey?: BookImageKey
+  header?: string
+  subtitle?: string
+}
+
 /** Spelled-out number header (centred) + calligraphy body (left-aligned) */
 export type BookPageRight = {
   layout: 'right'

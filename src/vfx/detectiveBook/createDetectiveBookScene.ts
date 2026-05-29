@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import type { BookLeaf, BookPageLeft } from '../../constants/alchemistBookData'
+import type { BookCoverPage, BookLeaf } from '../../constants/alchemistBookData'
 import {
   bookCoverScrollProgress,
   bookPageScrollProgress,
@@ -39,7 +39,7 @@ export type DetectiveBookScene = {
 }
 
 export type DetectiveBookContent = {
-  cover: BookPageLeft
+  cover: BookCoverPage
   leaves: BookLeaf[]
 }
 

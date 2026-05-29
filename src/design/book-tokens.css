@@ -54,4 +54,9 @@
   --book-cover-interior: #241a14;
   --book-cover-scrim: rgba(10, 8, 6, 0.42);
   --book-cover-panel-inset: 36px;
+
+  /* Cover board lettering — light on dark leather (not parchment ink tokens) */
+  --book-cover-header-fill: #ede4d4;
+  --book-cover-header-shadow-ink: rgba(6, 4, 2, 0.72);
+  --book-cover-header-halo: rgba(6, 4, 2, 0.55);
 }

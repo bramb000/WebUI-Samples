@@ -87,6 +87,36 @@ export function drawEmbossedHeader(
   ctx.fillText(text, centerX, centerY + 1)
 }
 
+/** Light lettering on dark leather — halo + drop shadow for grainy boards. */
+export function drawCoverEmbossedHeader(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  centerY: number,
+  fontSizePx: number,
+) {
+  const fill = bookVar('--book-cover-header-fill', '#ede4d4')
+  const shadow = bookVar('--book-cover-header-shadow-ink', 'rgba(6, 4, 2, 0.72)')
+  const halo = bookVar('--book-cover-header-halo', 'rgba(6, 4, 2, 0.55)')
+  const shadowOffset = Math.max(1.5, fontSizePx * 0.028)
+  const haloWidth = Math.max(1.5, fontSizePx * 0.05)
+
+  ctx.font = bookHeaderFont(fontSizePx)
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.lineJoin = 'round'
+
+  ctx.strokeStyle = halo
+  ctx.lineWidth = haloWidth
+  ctx.strokeText(text, centerX, centerY)
+
+  ctx.fillStyle = shadow
+  ctx.fillText(text, centerX + shadowOffset, centerY + shadowOffset)
+
+  ctx.fillStyle = fill
+  ctx.fillText(text, centerX, centerY)
+}
+
 export function measureEmbossedHeader(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -123,6 +153,30 @@ export function embossedHeaderBlockHeight(
   if (lineCount <= 1)
     return 0
   return (lineCount - 1) * fontSizePx * lineGapRatio
+}
+
+/** Centred cover title block on leather boards. */
+export function drawCoverEmbossedHeaderBlock(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  centerY: number,
+  fontSizePx: number,
+  maxWidth: number,
+  lineGapRatio = 1.35,
+): number {
+  const lines = breakHeaderLines(ctx, text, maxWidth, fontSizePx)
+  if (lines.length === 0)
+    return 0
+
+  const lineGap = fontSizePx * lineGapRatio
+  const blockH = embossedHeaderBlockHeight(lines.length, fontSizePx, lineGapRatio)
+  let y = centerY - blockH / 2
+  for (const line of lines) {
+    drawCoverEmbossedHeader(ctx, line, centerX, y, fontSizePx)
+    y += lineGap
+  }
+  return blockH
 }
 
 /** Centred embossed title block; returns vertical span of the block in px. */
