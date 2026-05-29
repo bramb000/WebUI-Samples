@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { RosterDiscipline } from '../constants/rosterDiscipline'
 
 export type RosterCardVariant = 'default' | 'case-study'
@@ -16,6 +17,8 @@ interface Props {
   discipline: RosterDiscipline
   title: string
   thumb: string
+  /** WebP/PNG poster while a `.webm` thumb decodes */
+  thumbPoster?: string
   roster: RosterCardRoster
   plateGrain?: string
   variant?: RosterCardVariant
@@ -27,13 +30,15 @@ interface Props {
   hoverMotion?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   plateTypography: 'default',
   selected: false,
   pressed: false,
   hoverMotion: true,
 })
+
+const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 </script>
 
 <template>
@@ -56,7 +61,21 @@ withDefaults(defineProps<Props>(), {
   >
     <div class="inner-card" :class="{ 'inner-card--case-study': variant === 'case-study' }">
       <div class="card-art">
+        <video
+          v-if="isThumbVideo"
+          class="card-art-img"
+          :src="thumb"
+          :poster="thumbPoster"
+          autoplay
+          loop
+          muted
+          playsinline
+          disablepictureinpicture
+          preload="metadata"
+          :aria-label="title"
+        />
         <img
+          v-else
           class="card-art-img"
           :src="thumb"
           :alt="title"

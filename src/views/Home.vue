@@ -5,7 +5,7 @@ import DetectiveBookStage from '../components/detective/DetectiveBookStage.vue'
 import HeroBackgroundTexture from '../components/HeroBackgroundTexture.vue'
 import PrimaryButton from '../components/PrimaryButton.vue'
 import RosterCard from '../components/RosterCard.vue'
-import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
+import { homeAchievementCardArt } from '../assets/images/home-achievement-cards/homeAchievementCardImages'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
 import {
   ROSTER_DISCIPLINE_ACCENT,
@@ -20,31 +20,8 @@ type AchievementCard = {
   id: string
   title: string
   thumb: string
+  thumbPoster?: string
   roster: RosterCardRoster
-}
-
-function proceduralThumb(seed: number): string {
-  return `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
-      <defs>
-        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#0b0b0d"/>
-          <stop offset="0.45" stop-color="#111114"/>
-          <stop offset="1" stop-color="#0b0b0d"/>
-        </linearGradient>
-        <radialGradient id="r" cx="70%" cy="25%" r="80%">
-          <stop offset="0" stop-color="rgba(197,168,114,0.14)"/>
-          <stop offset="1" stop-color="rgba(0,0,0,0)"/>
-        </radialGradient>
-        <filter id="n">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="${seed}"/>
-        </filter>
-      </defs>
-      <rect width="1200" height="800" fill="url(#g)"/>
-      <rect width="1200" height="800" fill="url(#r)"/>
-      <rect width="1200" height="800" filter="url(#n)" opacity="0.4"/>
-    </svg>`,
-  )}`
 }
 
 function achievementRoster(label: string, hue = 42): RosterCardRoster {
@@ -66,7 +43,7 @@ const ACHIEVEMENT_JUMP_STAGGER_MS = 90
  */
 const ACHIEVEMENT_FLOAT_PHASE_STEP = 0.2
 
-function achievementCardMotionStyle(index: number, total: number) {
+function achievementCardMotionStyle(index: number) {
   const jumpStaggerMs = index * ACHIEVEMENT_JUMP_STAGGER_MS
   // Negative delay = start mid-cycle so cards sit at different points on the same sine path
   const floatPhaseS = -(index * ACHIEVEMENT_FLOAT_DURATION_S * ACHIEVEMENT_FLOAT_PHASE_STEP)
@@ -82,26 +59,26 @@ const achievementCards: AchievementCard[] = [
   {
     id: 'home-achievement-guild',
     title: 'Executed roadmap to increase revenue by 20%+ for product with $5M+ annual revenue',
-    thumb: rosterCardImage('guild') ?? proceduralThumb(17),
+    ...homeAchievementCardArt('guild'),
     roster: achievementRoster('Guild'),
   },
   {
     id: 'home-achievement-ai',
     title: 'Saving $100,000+ by automating agentic AI insights & processes for faster discovery',
-    thumb: proceduralThumb(31),
+    ...homeAchievementCardArt('ai'),
     roster: achievementRoster('AI'),
   },
   {
     id: 'home-achievement-edtech',
     title: 'Shipped award-winning edtech products to millions of learners',
-    thumb: rosterCardImage('rocksmith') ?? proceduralThumb(19),
+    ...homeAchievementCardArt('edtech'),
     roster: achievementRoster('EdTech'),
   },
   {
-    id: 'home-achievement-placeholder',
+    id: 'home-achievement-global',
     title: 'Multicultural leader having managed teams in 5+ countries, timezones, and languages',
-    thumb: proceduralThumb(53),
-    roster: achievementRoster('Soon'),
+    ...homeAchievementCardArt('global'),
+    roster: achievementRoster('Global'),
   },
 ]
 
@@ -154,7 +131,7 @@ onMounted(async () => {
             v-for="(card, index) in achievementCards"
             :key="card.id"
             class="home-achievement-card"
-            :style="achievementCardMotionStyle(index, achievementCards.length)"
+            :style="achievementCardMotionStyle(index)"
           >
             <RosterCard
               :ref="(el) => setThumbRef(card.id, el)"
@@ -162,6 +139,7 @@ onMounted(async () => {
               :discipline="ACHIEVEMENT_DISCIPLINE"
               :title="card.title"
               :thumb="card.thumb"
+              :thumb-poster="card.thumbPoster"
               :roster="card.roster"
               :plate-grain="plateGrainBakes[card.id]"
               variant="case-study"

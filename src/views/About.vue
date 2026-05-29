@@ -30,26 +30,6 @@ import PrimaryButton from '../components/PrimaryButton.vue';
     </div>
 
     <div class="page-about__container flex flex-col gap-16 pb-24 pt-16">
-      <!-- ── Testimonial ── -->
-      <section class="testimonial-block p-10 md:p-14 overflow-hidden border-l-[3px] border-[var(--color-accent)] panel-recessed noise-overlay relative">
-        <div class="quote-mark" aria-hidden="true">"</div>
-
-        <div class="testimonial-inner">
-          <blockquote class="type-body-lg italic">
-            "If there was a challenge that needed solving, Bramha was always willing to step in and try to solve it with curiosity, grit, and determination. If you're looking for someone who will challenge the status quo, ask the right questions, and search for the best answers, Bramha is someone I'd recommend."
-          </blockquote>
-
-          <div class="quote-attribution">
-            <div class="attribution-rule"></div>
-            <div>
-              <p class="type-case-testimonial-name">Chris Clay</p>
-              <p class="type-case-testimonial-role">VP of Design, Immutable</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── CTA ── -->
       <section id="about-cta" class="cta-section flex flex-col items-start gap-5">
         <p class="type-body">If you've reached here, why not read a few case studies?</p>
         <PrimaryButton to="/work">View Case Studies</PrimaryButton>
@@ -115,55 +95,6 @@ import PrimaryButton from '../components/PrimaryButton.vue';
 }
 .photo-front:hover { transform: rotate(-1deg) scale(1.04); z-index: 3; }
 .photo-img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
-
-.quote-mark {
-  position: absolute;
-  top: -32px;
-  left: -8px;
-  font-family: var(--font-display);
-  font-size: 140px;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--color-accent);
-  opacity: 0.06;
-  user-select: none;
-  pointer-events: none;
-}
-
-.testimonial-inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.testimonial-inner .type-body-lg {
-  margin: 0;
-}
-
-.quote-attribution {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.attribution-rule {
-  width: 32px;
-  height: 2px;
-  background: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent);
-  border-radius: 1px;
-  transition: width 400ms var(--ease-mechanical-spring);
-  flex-shrink: 0;
-}
-.testimonial-block:hover .attribution-rule { width: 64px; }
-.quote-attribution .type-case-testimonial-name {
-  color: var(--color-border-hi);
-  margin: 0;
-}
-.quote-attribution .type-case-testimonial-role {
-  margin: 0;
-}
 
 .cta-section .type-body {
   margin: 0;
