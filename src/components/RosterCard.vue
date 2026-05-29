@@ -2,6 +2,7 @@
 import type { RosterDiscipline } from '../constants/rosterDiscipline'
 
 export type RosterCardVariant = 'default' | 'case-study'
+export type RosterCardPlateTypography = 'default' | 'achievement'
 
 export type RosterCardRoster = {
   points: string
@@ -18,15 +19,20 @@ interface Props {
   roster: RosterCardRoster
   plateGrain?: string
   variant?: RosterCardVariant
+  plateTypography?: RosterCardPlateTypography
   clientName?: string
   selected?: boolean
   pressed?: boolean
+  /** When false, skips scale/sway hover keyframes (e.g. home achievement strip). */
+  hoverMotion?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   variant: 'default',
+  plateTypography: 'default',
   selected: false,
   pressed: false,
+  hoverMotion: true,
 })
 </script>
 
@@ -37,6 +43,8 @@ withDefaults(defineProps<Props>(), {
       `thumbnail--${discipline}`,
       {
         'thumbnail--case-study': variant === 'case-study',
+        'thumbnail--achievement-plate': plateTypography === 'achievement',
+        'thumbnail--calm-hover': !hoverMotion,
         selected,
         pressed,
       },
@@ -86,8 +94,15 @@ withDefaults(defineProps<Props>(), {
       </svg>
 
       <div class="thumbnail-content">
-        <span class="thumbnail-label">{{ title }}</span>
-        <span v-if="variant === 'case-study' && clientName" class="thumbnail-client">
+        <span
+          class="thumbnail-label"
+          :class="plateTypography === 'achievement' ? 'type-roster-achievement-title' : 'type-roster-card-title'"
+        >{{ title }}</span>
+        <span
+          v-if="variant === 'case-study' && clientName && plateTypography !== 'achievement'"
+          class="thumbnail-client"
+          :class="'type-roster-card-client'"
+        >
           for {{ clientName }}
         </span>
       </div>
@@ -252,13 +267,8 @@ withDefaults(defineProps<Props>(), {
 }
 
 .thumbnail-label {
-  font-family: var(--font-sans);
-  font-size: clamp(11px, 3.4cqi, 14px);
-  font-weight: 700;
   color: #f5f3ef;
-  letter-spacing: 0.02em;
   transition: color 0.15s, text-shadow 0.15s;
-  line-height: 1.2;
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
@@ -268,14 +278,43 @@ withDefaults(defineProps<Props>(), {
 }
 
 .thumbnail-client {
-  font-family: var(--font-sans);
-  font-size: clamp(9px, 2.8cqi, 11px);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
   color: color-mix(in srgb, #f5f3ef 72%, var(--roster-discipline-accent));
-  line-height: 1.1;
   margin-top: auto;
+}
+
+.thumbnail--achievement-plate .thumbnail-content {
+  justify-content: center;
+  padding: var(--roster-achievement-plate-padding);
+  gap: 8px;
+}
+
+.thumbnail--achievement-plate .inner-card--case-study .thumbnail-content {
+  justify-content: center;
+}
+
+.thumbnail--achievement-plate .inner-card--case-study .thumbnail-label {
+  margin-block: 0;
+}
+
+/* Display strip — stable hit target; glow only, no scale/sway loop */
+.thumbnail--calm-hover:hover:not(.selected):not(.pressed),
+.thumbnail--calm-hover:not(:hover):not(.selected):not(.pressed) {
+  animation: none;
+  transform: none;
+}
+
+.thumbnail--calm-hover:hover .inner-card {
+  animation: none;
+  filter: none;
+}
+
+.thumbnail--calm-hover:hover,
+.thumbnail--calm-hover.pressed {
+  z-index: auto;
+}
+
+.thumbnail--calm-hover.pressed {
+  transform: none;
 }
 
 .thumbnail:hover:not(.selected):not(.pressed) {

@@ -2,7 +2,6 @@
 import cosplayImage from '../assets/images/about/about-1.webp';
 import speakingImage from '../assets/images/about/about-2.webp';
 import PrimaryButton from '../components/PrimaryButton.vue';
-import DetectiveBookStage from '../components/detective/DetectiveBookStage.vue';
 </script>
 
 <template>
@@ -29,8 +28,6 @@ import DetectiveBookStage from '../components/detective/DetectiveBookStage.vue';
         </div>
       </section>
     </div>
-
-    <DetectiveBookStage />
 
     <div class="page-about__container flex flex-col gap-16 pb-24 pt-16">
       <!-- ── Testimonial ── -->

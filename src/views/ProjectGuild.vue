@@ -515,7 +515,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         />
         <CaseTestimonialCard
           name="Daniel Paez"
-          role="Executive Producer"
+          role="VP of Revenue, Immutable"
           quote="Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions."
         />
       </div>

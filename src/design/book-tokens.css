@@ -39,6 +39,9 @@
   --book-subtitle-size: 20px;
 
   --book-header-body-gap: 48px;
+  --book-attribution-gap: 36px;
+  --book-attribution-size: 20px;
+  --book-attribution-leading: 1.45;
 
   /* Uniform overlay on full-bleed left pages (within deckled mask) */
   --book-left-scrim-fill: rgba(17, 17, 19, 0.32);

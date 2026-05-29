@@ -33,7 +33,7 @@
   /* ── Typefaces ── */
   /* Primary headers — homepage hero ("Hi, I'm Bramha") */
   --font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
-  /* Expressive script — hero role line ("Product Alchemist") */
+  /* Expressive script — hero role line ("Product Specialist") */
   --font-script:  'Imperial Script', 'Snell Roundhand', 'Segoe Script', cursive;
   /* Body copy + parchment panel UI labels (case study kickers, badges, meta) */
   --font-sans:    'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -129,6 +129,41 @@
   /* Project roster cards — discipline colour coding */
   --roster-discipline-product-design: #524f81;
   --roster-discipline-ui-design:       #00674f;
+
+  /* Roster card name-plate typography (work grid default) */
+  --text-roster-card-title:   clamp(11px, 3.4cqi, 14px);
+  --text-roster-card-client:  clamp(9px, 2.8cqi, 11px);
+  --leading-roster-card-title:  1.2;
+  --leading-roster-card-client: 1.1;
+  --tracking-roster-card-title: 0.02em;
+  --tracking-roster-card-client: 0.06em;
+
+  /* Work roster grid — card footprint (ProjectSelect #roster-pane, 2 columns) */
+  --roster-work-grid-pane-width: clamp(224px, 28vw, 384px);
+  --roster-work-grid-columns: 2;
+  --roster-work-grid-gap: 16px;
+  --roster-work-grid-pane-padding-inline: 32px;
+  --roster-work-grid-container-padding-inline: 32px;
+  --roster-card-width-work-grid: calc(
+    (
+      var(--roster-work-grid-pane-width)
+      - var(--roster-work-grid-pane-padding-inline)
+      - var(--roster-work-grid-container-padding-inline)
+      - var(--roster-work-grid-gap)
+    ) / var(--roster-work-grid-columns)
+  );
+
+  /* Home achievement strip — 25% larger than work grid cards */
+  --roster-card-width-home-achievement: calc(var(--roster-card-width-work-grid) * 1.25);
+
+  /* Home achievement strip — same plate type as work grid; no “for” prefix via RosterCard */
+  --text-roster-achievement-title: var(--text-roster-card-title);
+  --text-roster-achievement-client: var(--text-roster-card-client);
+  --leading-roster-achievement-title: var(--leading-roster-card-title);
+  --leading-roster-achievement-client: var(--leading-roster-card-client);
+  --tracking-roster-achievement-title: var(--tracking-roster-card-title);
+  --tracking-roster-achievement-client: var(--tracking-roster-card-client);
+  --roster-achievement-plate-padding: 12px 14px;
 
   /* ── Type scale (size / tracking / leading) ── */
   --text-display-hero:           clamp(3.25rem, 10vw, 6rem);
@@ -550,6 +585,40 @@ h5, h6 {
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   color: var(--color-text-muted);
+}
+
+/* Roster card name-plate — work grid */
+.type-roster-card-title {
+  font-family: var(--font-sans);
+  font-size: var(--text-roster-card-title);
+  font-weight: 700;
+  letter-spacing: var(--tracking-roster-card-title);
+  line-height: var(--leading-roster-card-title);
+}
+.type-roster-card-client {
+  font-family: var(--font-sans);
+  font-size: var(--text-roster-card-client);
+  font-weight: 600;
+  letter-spacing: var(--tracking-roster-card-client);
+  line-height: var(--leading-roster-card-client);
+  text-transform: uppercase;
+}
+
+/* Roster card name-plate — home achievement strip */
+.type-roster-achievement-title {
+  font-family: var(--font-sans);
+  font-size: var(--text-roster-achievement-title);
+  font-weight: 700;
+  letter-spacing: var(--tracking-roster-achievement-title);
+  line-height: var(--leading-roster-achievement-title);
+}
+.type-roster-achievement-client {
+  font-family: var(--font-sans);
+  font-size: var(--text-roster-achievement-client);
+  font-weight: 600;
+  letter-spacing: var(--tracking-roster-achievement-client);
+  line-height: var(--leading-roster-achievement-client);
+  text-transform: uppercase;
 }
 
 /* Mini-project / experiment write-ups (embedded in work panel) */

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { ALCHEMIST_PHASE_LABELS } from '../../constants/alchemistBookData'
+import {
+  TESTIMONIAL_BOOK_COVER,
+  TESTIMONIAL_BOOK_ENTRIES,
+  TESTIMONIAL_BOOK_LEAVES,
+} from '../../constants/testimonialBookData'
 import { canUseWebGL } from '../../composables/canUseWebGL'
 import { useReducedMotion } from '../../composables/useReducedMotion'
 import { useScrollProgress } from '../../composables/useScrollProgress'
@@ -11,7 +15,7 @@ import {
 } from '../../assets/images/book/bookPageImages'
 import { createDetectiveBookScene, type DetectiveBookScene } from '../../vfx/detectiveBook/createDetectiveBookScene'
 
-const SCROLL_TRACK_VH = 600
+const SCROLL_TRACK_VH = 480
 /** Matches NavBar fixed height in App layout */
 const NAV_OFFSET_PX = 72
 
@@ -54,6 +58,10 @@ async function mountBook() {
     await preloadBookPageImages({ keys: [...BOOK_PRELOAD_PRIORITY] })
     bookScene = createDetectiveBookScene(canvas, {
       reducedMotion: reducedMotion.value,
+      book: {
+        cover: TESTIMONIAL_BOOK_COVER,
+        leaves: TESTIMONIAL_BOOK_LEAVES,
+      },
     })
     bookScene.setProgress(progress.value)
     schedulePreloadRemainingBookPageImages()
@@ -93,7 +101,7 @@ onBeforeUnmount(() => {
     ref="trackRef"
     class="detective-book-track"
     :style="{ '--detective-track-vh': String(SCROLL_TRACK_VH) }"
-    aria-label="Product Alchemist process"
+    aria-label="Testimonials"
   >
     <div
       class="detective-book-stage sticky w-full overflow-hidden"
@@ -103,18 +111,20 @@ onBeforeUnmount(() => {
 
       <template v-if="useStaticFallback">
         <div class="detective-book-fallback container mx-auto max-w-3xl px-6 py-16">
-          <h2 class="type-section-title text-center mb-10">My Product Philosophy</h2>
           <p class="type-body text-center text-[var(--color-text-muted)] mb-8 max-w-md mx-auto">
-            Interactive 3D book is unavailable in this browser. Principles are listed below.
+            Interactive 3D book is unavailable in this browser. Quotes are listed below.
           </p>
           <ol class="detective-book-fallback__list space-y-6">
             <li
-              v-for="(label, i) in ALCHEMIST_PHASE_LABELS"
-              :key="label"
+              v-for="entry in TESTIMONIAL_BOOK_ENTRIES"
+              :key="entry.name"
               class="panel-recessed p-6"
             >
-              <span class="label-segment">Phase {{ i + 1 }}</span>
-              <h3 class="type-card-title mt-2">{{ label }}</h3>
+              <blockquote class="type-body-lg italic m-0">
+                {{ entry.quote }}
+              </blockquote>
+              <p class="type-case-testimonial-name mt-4 mb-1">{{ entry.name }}</p>
+              <p class="type-case-testimonial-role m-0">{{ entry.role }}</p>
             </li>
           </ol>
         </div>
@@ -125,7 +135,7 @@ onBeforeUnmount(() => {
           ref="canvasRef"
           class="detective-book-canvas"
           role="img"
-          aria-label="Interactive product principles book. Scroll to turn pages."
+          aria-label="Interactive testimonials book. Scroll to turn pages."
         />
 
         <div class="detective-book-hud pointer-events-none">

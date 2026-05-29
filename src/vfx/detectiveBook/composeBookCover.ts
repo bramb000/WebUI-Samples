@@ -174,7 +174,7 @@ export function composeBackCoverExteriorCanvas(): HTMLCanvasElement {
   const maxTextW = COVER_TEX_W - bookSafeMargin() * 2
   drawEmbossedHeaderBlock(
     ctx,
-    'Product Alchemist',
+    'Product Specialist',
     COVER_TEX_W / 2,
     COVER_TEX_H * 0.62,
     headerSize,

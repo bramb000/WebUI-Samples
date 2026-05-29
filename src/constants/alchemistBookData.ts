@@ -22,9 +22,11 @@ export type BookPageLeft = {
 /** Spelled-out number header (centred) + calligraphy body (left-aligned) */
 export type BookPageRight = {
   layout: 'right'
-  /** Spelled out: One, Two, Three, Four */
-  number: string
+  /** Spelled out: One, Two, Three, Four — omit for testimonial pages */
+  number?: string
   body: string
+  /** Name + role below body (testimonial pages) */
+  attribution?: string
 }
 
 export type BookPageFace = BookPageEmpty | BookPageLeft | BookPageRight

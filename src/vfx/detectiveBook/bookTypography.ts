@@ -198,6 +198,18 @@ export function breakBodyLines(
   return lines
 }
 
+export function measureBodyBlockHeight(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+  lineHeightPx: number,
+  fontSizePx = bookBodySize(),
+): number {
+  ctx.font = bookBodyFont(fontSizePx)
+  const lineCount = breakBodyLines(ctx, text, maxWidth).length
+  return lineCount * lineHeightPx
+}
+
 export function drawBodyLeft(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -205,15 +217,45 @@ export function drawBodyLeft(
   y: number,
   maxWidth: number,
   lineHeightPx: number,
+  fontSizePx = bookBodySize(),
 ) {
   const ink = bookVar('--book-body-ink', '#1a1814')
   ctx.fillStyle = ink
   ctx.textAlign = 'left'
   ctx.textBaseline = 'top'
-  ctx.font = bookBodyFont(bookBodySize())
+  ctx.font = bookBodyFont(fontSizePx)
 
   for (const row of breakBodyLines(ctx, text, maxWidth)) {
     ctx.fillText(row, x, y)
     y += lineHeightPx
+  }
+}
+
+/** Testimonial attribution — name then role below the quote body */
+export function drawAttributionLeft(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+) {
+  const ink = bookVar('--book-body-ink', '#1a1814')
+  const muted = bookVar('--book-body-muted', '#5c564c')
+  const size = Number.parseFloat(bookVar('--book-attribution-size', '20px')) || 20
+  const leading = Number.parseFloat(bookVar('--book-attribution-leading', '1.45')) || 1.45
+  const lineHeight = size * leading
+  const lines = text.split('\n').map(part => part.trim()).filter(Boolean)
+
+  ctx.textAlign = 'left'
+  ctx.textBaseline = 'top'
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!
+    ctx.font = i === 0 ? bookHeaderFont(size * 0.95) : bookBodyFont(size)
+    ctx.fillStyle = i === 0 ? ink : muted
+    for (const row of breakBodyLines(ctx, line, maxWidth)) {
+      ctx.fillText(row, x, y)
+      y += lineHeight
+    }
   }
 }

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { ALCHEMIST_BOOK_COVER, ALCHEMIST_BOOK_LEAVES } from '../../constants/alchemistBookData'
+import type { BookLeaf, BookPageLeft } from '../../constants/alchemistBookData'
 import {
   bookCoverScrollProgress,
   bookPageScrollProgress,
@@ -38,14 +38,20 @@ export type DetectiveBookScene = {
   dispose: () => void
 }
 
+export type DetectiveBookContent = {
+  cover: BookPageLeft
+  leaves: BookLeaf[]
+}
+
 export type DetectiveBookSceneOptions = {
   /** Snap page rotation to scroll (no trailing lerp). Curl/lift stay on — OS reduced-motion often disables animations on Windows while Mac does not. */
   reducedMotion?: boolean
+  book: DetectiveBookContent
 }
 
 export function createDetectiveBookScene(
   canvas: HTMLCanvasElement,
-  options: DetectiveBookSceneOptions = {},
+  options: DetectiveBookSceneOptions,
 ): DetectiveBookScene {
   const reducedMotion = options.reducedMotion ?? false
   const scene = new THREE.Scene()
@@ -131,10 +137,12 @@ export function createDetectiveBookScene(
     }
   }
 
-  const bookData = ALCHEMIST_BOOK_LEAVES
+  const { book } = options
+  const bookData = book.leaves
+  const leafCount = bookData.length
   const disposables: Array<THREE.Material | THREE.BufferGeometry | THREE.Texture> = []
 
-  const coverTextures = createBookCoverTextures(ALCHEMIST_BOOK_COVER, renderer)
+  const coverTextures = createBookCoverTextures(book.cover, renderer)
   const stackDepth = bookStackDepth(bookData.length)
   const spineDepth = stackDepth + COVER_THICKNESS * 2
   const stackCenterZ = -COVER_THICKNESS - stackDepth / 2
@@ -209,10 +217,10 @@ export function createDetectiveBookScene(
   leaves.forEach((leaf, i) => updateLeafRenderOrder(leaf, i))
 
   function applyScrollProgress(progress: number) {
-    const coverP = bookCoverScrollProgress(progress)
+    const coverP = bookCoverScrollProgress(progress, leafCount)
     coverTargetRotation = -Math.PI * coverP
 
-    const pageP = bookPageScrollProgress(progress)
+    const pageP = bookPageScrollProgress(progress, leafCount)
     const segmentSize = 1 / bookData.length
     leaves.forEach((_, i) => {
       const pageStart = i * segmentSize

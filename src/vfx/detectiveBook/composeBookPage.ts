@@ -3,8 +3,10 @@ import { drawMaskedFullBleedImage } from '../../assets/images/book/bookPageImage
 import {
   bookBodySize,
   bookSafeMargin,
+  drawAttributionLeft,
   drawBodyLeft,
   drawEmbossedHeader,
+  measureBodyBlockHeight,
 } from './bookTypography'
 
 const CANVAS_W = 512
@@ -48,18 +50,25 @@ function drawRightPage(
   const lineHeight = bodySize * leading
 
   const cx = CANVAS_W / 2
+  const phaseNumber = page.number?.trim() ?? ''
 
   let bodyY: number
-  if (page.number.trim()) {
+  if (phaseNumber) {
     const headerY = margin + numberSize * 0.55
-    drawEmbossedHeader(ctx, page.number, cx, headerY, numberSize, '--book-number-ink', '--book-number-ink-shadow')
+    drawEmbossedHeader(ctx, phaseNumber, cx, headerY, numberSize, '--book-number-ink', '--book-number-ink-shadow')
     bodyY = headerY + numberSize * 0.45 + gap
   }
   else {
-    bodyY = CANVAS_H / 2 - lineHeight * 0.5
+    bodyY = margin
   }
 
   drawBodyLeft(ctx, page.body, margin, bodyY, contentW, lineHeight)
+  const bodyHeight = measureBodyBlockHeight(ctx, page.body, contentW, lineHeight)
+
+  if (page.attribution?.trim()) {
+    const attrGap = bookVarPx('--book-attribution-gap', 36)
+    drawAttributionLeft(ctx, page.attribution.trim(), margin, bodyY + bodyHeight + attrGap, contentW)
+  }
 }
 
 export function composeBookPageCanvas(
