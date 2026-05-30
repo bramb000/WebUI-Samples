@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * Looping case-study clip — prefer WebM/MP4 over GIF after `npm run assets:optimize`.
- * Poster WebP optional for LCP before video decodes.
+ * Looping case-study clip — prefer WebM over GIF. Defers decode until near viewport unless priority.
  */
+import { onMounted, onUnmounted, ref } from 'vue'
 import CaseLightboxOverlay from './CaseLightboxOverlay.vue'
 import { useCaseLightbox } from '../composables/useCaseLightbox'
 
@@ -16,16 +16,38 @@ const props = defineProps<{
 }>()
 
 const { isOpen, open, close } = useCaseLightbox()
+const root = ref<HTMLElement | null>(null)
+const shouldPlay = ref(!!props.priority)
+let observer: IntersectionObserver | null = null
 
 const mediaClass = [
   'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
   props.imgClass,
 ]
+
+onMounted(() => {
+  if (props.priority) return
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        shouldPlay.value = true
+        observer?.disconnect()
+      }
+    },
+    { rootMargin: '320px' },
+  )
+  if (root.value) observer.observe(root.value)
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
+})
 </script>
 
 <template>
-  <figure class="case-loop space-y-2">
+  <figure ref="root" class="case-loop space-y-2">
     <video
+      v-if="shouldPlay"
       :src="props.src"
       :poster="props.poster"
       :class="mediaClass"
@@ -34,9 +56,16 @@ const mediaClass = [
       muted
       playsinline
       disablepictureinpicture
-      :preload="props.priority ? 'auto' : 'metadata'"
+      :preload="props.priority ? 'auto' : 'none'"
       :aria-label="props.alt"
       @click="open"
+    />
+    <div
+      v-else
+      class="case-loop__placeholder w-full min-h-[12rem] rounded-xl bg-[var(--color-elevated)]"
+      :style="props.poster ? { backgroundImage: `url(${props.poster})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined"
+      :aria-label="`Loading video: ${props.alt}`"
+      role="img"
     />
     <figcaption
       v-if="props.caption"
@@ -51,6 +80,7 @@ const mediaClass = [
       @close="close"
     >
       <video
+        v-if="shouldPlay"
         :src="props.src"
         :poster="props.poster"
         class="lightbox-video"

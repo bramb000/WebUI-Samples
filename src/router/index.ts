@@ -1,104 +1,124 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { INDEXABLE_PATHS } from '../seo/indexablePaths'
+import { ROUTE_SEO } from '../seo/routeMeta'
+import type { RouteMetaSeo } from '../seo/types'
+
+export { INDEXABLE_PATHS }
+
+function seo(name: keyof typeof ROUTE_SEO): { seo: RouteMetaSeo } {
+  return { seo: ROUTE_SEO[name] }
+}
 
 const routes = [
     {
         path: '/',
         name: 'Home',
         component: () => import('../views/Home.vue'),
+        meta: { ...seo('Home'), sitemap: true, prerender: true },
     },
     {
         path: '/work',
         name: 'Work',
-        component: () => import('../views/ProjectSelect.vue')
+        component: () => import('../views/ProjectSelect.vue'),
+        meta: { ...seo('Work'), sitemap: true, prerender: true },
     },
     {
         path: '/about',
         name: 'About',
-        component: () => import('../views/About.vue')
+        component: () => import('../views/About.vue'),
+        meta: { ...seo('About'), sitemap: true, prerender: true },
     },
     {
         path: '/micro-projects',
-        redirect: '/work'
+        redirect: '/work',
     },
     {
         path: '/work/list',
         name: 'WorkList',
-        component: () => import('../views/Projects.vue')
+        component: () => import('../views/Projects.vue'),
+        meta: { ...seo('WorkList'), sitemap: true, prerender: true },
     },
     {
         path: '/micro-projects/list',
-        redirect: '/work/list'
+        redirect: '/work/list',
     },
     {
         path: '/work/guild-of-guardians',
         name: 'ProjectGuild',
-        component: () => import('../views/ProjectGuild.vue')
+        component: () => import('../views/ProjectGuild.vue'),
+        meta: { ...seo('ProjectGuild'), sitemap: true, prerender: true },
     },
     {
         path: '/work/rocksmith',
         name: 'ProjectRocksmith',
-        component: () => import('../views/ProjectRocksmith.vue')
+        component: () => import('../views/ProjectRocksmith.vue'),
+        meta: { ...seo('ProjectRocksmith'), sitemap: true, prerender: true },
     },
     {
         path: '/login-interaction-1',
         name: 'LoginInteraction1',
         component: () => import('../views/LoginInteraction.vue'),
-
+        meta: seo('LoginInteraction1'),
     },
     {
         path: '/node-graph',
         name: 'NodeGraph',
         component: () => import('../views/NodeGraphView.vue'),
-
+        meta: seo('NodeGraph'),
     },
     {
         path: '/experiment/patapon',
         name: 'ExperimentPatapon',
-        component: () => import('../views/ExperimentPatapon.vue')
+        component: () => import('../views/ExperimentPatapon.vue'),
+        meta: seo('ExperimentPatapon'),
     },
     {
         path: '/experiment/helldivers',
         name: 'ExperimentHelldivers',
-        component: () => import('../views/ExperimentHelldivers.vue')
+        component: () => import('../views/ExperimentHelldivers.vue'),
+        meta: seo('ExperimentHelldivers'),
     },
     {
         path: '/experiment/jedi',
         name: 'ExperimentJedi',
-        component: () => import('../views/ExperimentJedi.vue')
+        component: () => import('../views/ExperimentJedi.vue'),
+        meta: seo('ExperimentJedi'),
     },
     {
         path: '/work/sales-modal',
         name: 'SalesModal',
-        component: () => import('../views/SalesModalView.vue')
+        component: () => import('../views/SalesModalView.vue'),
+        meta: seo('SalesModal'),
     },
     {
         path: '/work/account-tray',
         name: 'AccountTray',
-        component: () => import('../views/AccountTrayView.vue')
+        component: () => import('../views/AccountTrayView.vue'),
+        meta: seo('AccountTray'),
     },
     {
         path: '/work/voice-chat',
         name: 'VoiceChatSimulation',
-        component: () => import('../views/VoiceChatSimulation.vue')
+        component: () => import('../views/VoiceChatSimulation.vue'),
+        meta: seo('VoiceChatSimulation'),
     },
     {
         path: '/micro-projects/sales-modal',
-        redirect: '/work/sales-modal'
+        redirect: '/work/sales-modal',
     },
     {
         path: '/micro-projects/account-tray',
-        redirect: '/work/account-tray'
+        redirect: '/work/account-tray',
     },
     {
         path: '/micro-projects/voice-chat',
-        redirect: '/work/voice-chat'
+        redirect: '/work/voice-chat',
     },
-    // legacy route removed (previously pointed at the project select screen)
 ]
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes,
 })
 
 export default router

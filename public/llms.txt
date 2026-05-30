@@ -1,0 +1,42 @@
+# Bramha Dalvi
+
+> UX designer for games with 7+ years turning player engagement into revenue. Portfolio and case studies for roles as **game designer**, **product manager for games**, **UX designer for games**, and **data analyst for games**.
+
+## Identity
+
+- Name: Bramha Dalvi
+- Site: https://bramha.work/
+- LinkedIn: https://www.linkedin.com/in/bramdal/
+- Focus: Live mobile games, multi-platform game UX, data-driven retention and monetization
+
+## Primary pages
+
+- [Home](https://bramha.work/): Product specialist portfolio — game UX, product thinking, analytics
+- [About](https://bramha.work/about): Background, speaking, cosplay, people-first product leadership
+- [Work (interactive roster)](https://bramha.work/work): Case study selector
+- [Work (list)](https://bramha.work/work/list): All projects
+
+## Case studies (indexed, high signal)
+
+- [Guild of Guardians](https://bramha.work/work/guild-of-guardians): Live mobile RPG — Feature Owner & Lead UX Designer. Data analysis and feature design; **+25% D7 retention**, **+12% D7 LTV**. Tags: mobile RPG, data analysis, feature design, live product. Client: Immutable.
+- [Rocksmith+](https://bramha.work/work/rocksmith): Music learning game — UX Lead for mobile & multi-platform. Single scalable UI across **5 platforms**. Client: Ubisoft. Tags: PC/console/mobile, accessibility, unified input systems.
+
+## Skills (search-relevant)
+
+Game UX, game product management, game design, player retention, LTV, live ops, A/B thinking, user research, Figma, multi-platform UI, accessibility, data-informed design
+
+## Campaign links (home hero role label)
+
+- `?role=game-designer` → Game designer
+- `?role=product-designer` → Product designer
+- `?role=ui-ux-designer` → UI/UX designer
+- `?role=product-manager` → Product manager
+- Default (no param): Product Specialist
+
+## Extended reference
+
+- Full context: [/llms-full.txt](https://bramha.work/llms-full.txt)
+
+## Optional
+
+- Component docs (Storybook): https://bramha.work/storybook/

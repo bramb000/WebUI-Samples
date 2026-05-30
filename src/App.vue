@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useRouteSeo } from './seo/applyRouteSeo';
 import NavBar from './components/NavBar.vue';
 import Footer from './components/Footer.vue';
 import GlobalBackgroundTexture from './components/GlobalBackgroundTexture.vue';
+import SeoStructuredData from './components/SeoStructuredData.vue';
 import { useCaseTheme } from './composables/useCaseTheme';
 
 const route = useRoute();
+useRouteSeo(route);
 const isHeroSelect = computed(() => route.path === '/work');
 const isHome = computed(() => route.path === '/');
 const isAbout = computed(() => route.path === '/about');
@@ -33,6 +36,7 @@ useCaseTheme();
         : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-border-hi)] selection:text-[#111113]',
     ]"
   >
+    <SeoStructuredData />
     <GlobalBackgroundTexture />
     <NavBar v-if="!isFullScreen" />
     

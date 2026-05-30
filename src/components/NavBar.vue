@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { captureEvent } from '../analytics';
 import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
@@ -8,6 +9,7 @@ const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
 const lowPower = useLowPowerMode();
 const showWisp = computed(() => !lowPower.value);
 
+const route = useRoute();
 const isMenuOpen = ref(false);
 
 watch(isMenuOpen, (isOpen) => {
@@ -72,20 +74,13 @@ function onExternalNavClick(source: string) {
             <router-link
               v-if="!link.external"
               :to="link.href"
-              custom
-              v-slot="{ isActive, navigate }"
+              :class="['seg-btn', route.path === link.href || (link.href !== '/' && route.path.startsWith(link.href)) ? 'active' : '']"
+              :title="link.name"
+              @mouseenter="(e) => onNavLinkEnter(link, e.currentTarget as HTMLElement)"
+              @mouseleave="() => setWispHover(null)"
+              @mousedown="triggerWispClick"
             >
-              <button
-                type="button"
-                @mouseenter="(e) => onNavLinkEnter(link, e.currentTarget as HTMLElement)"
-                @mouseleave="() => setWispHover(null)"
-                @mousedown="triggerWispClick"
-                @click="navigate"
-                :class="['seg-btn', isActive ? 'active' : '']"
-                :title="link.name"
-              >
-                <span>{{ link.name }}</span>
-              </button>
+              <span>{{ link.name }}</span>
             </router-link>
 
             <a

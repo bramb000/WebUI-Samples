@@ -1,7 +1,27 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { captureEvent } from '../analytics'
-import PrimaryButton from '../components/PrimaryButton.vue';
+import PrimaryButton from '../components/PrimaryButton.vue'
+import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
+
+const featuredCaseStudies = [
+  {
+    id: 'guild',
+    title: 'Guild of Guardians — Retention & revenue',
+    description: 'Data-driven UX on a live mobile RPG: +25% D7 retention, +12% D7 LTV.',
+    route: '/work/guild-of-guardians',
+    image: rosterCardImage('guild'),
+    theme: '#B873D3',
+  },
+  {
+    id: 'rocksmith',
+    title: 'Rocksmith+ — Multi-platform UX',
+    description: 'One scalable UI system across five platforms for a music learning game.',
+    route: '/work/rocksmith',
+    image: rosterCardImage('rocksmith'),
+    theme: '#45F0D1',
+  },
+] as const
 
 const activeFilter = ref('All')
 const filters = ['All', 'Web Design', 'Game Design']
@@ -84,6 +104,10 @@ const trackMicroProjectClick = (project: { id: string, category: string }) => {
   captureEvent('micro_project_clicked', { project_id: project.id, category: project.category })
 }
 
+const trackFeaturedCaseStudyClick = (id: string) => {
+  captureEvent('case_study_clicked', { project_id: id, source: 'work_list_featured' })
+}
+
 const getThemeColor = (category: string) => {
   if (category === 'Game Design') return '#B873D3'; // Arcane Purple
   if (category === 'Web Design') return '#45F0D1'; // Spectral Green
@@ -98,6 +122,36 @@ const getThemeColor = (category: string) => {
     <div class="page-header mb-7">
       <h1 class="type-page-title text-sweep-reveal">Work</h1>
     </div>
+
+    <section class="featured-case-studies mb-12" aria-labelledby="featured-case-studies-heading">
+      <h2 id="featured-case-studies-heading" class="type-meta-label uppercase tracking-wider mb-5 text-muted">
+        Featured case studies
+      </h2>
+      <div class="featured-case-studies__grid grid grid-cols-1 md:grid-cols-2 gap-6">
+        <router-link
+          v-for="study in featuredCaseStudies"
+          :key="study.id"
+          :to="study.route"
+          class="featured-case-study"
+          :style="{ '--featured-theme': study.theme }"
+          @click="trackFeaturedCaseStudyClick(study.id)"
+        >
+          <img
+            v-if="study.image"
+            :src="study.image"
+            :alt="`${study.title} thumbnail`"
+            class="featured-case-study__thumb"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="featured-case-study__body">
+            <h3 class="featured-case-study__title">{{ study.title }}</h3>
+            <p class="featured-case-study__desc">{{ study.description }}</p>
+            <span class="featured-case-study__cta">View case study →</span>
+          </div>
+        </router-link>
+      </div>
+    </section>
 
     <!-- Filter Strip -->
     <div class="filter-row mb-12">
@@ -159,6 +213,61 @@ const getThemeColor = (category: string) => {
 </template>
 
 <style scoped>
+.featured-case-study {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  text-decoration: none;
+  color: inherit;
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.featured-case-study:hover {
+  border-color: var(--featured-theme, var(--color-accent));
+  box-shadow: 0 0 20px color-mix(in srgb, var(--featured-theme, var(--color-accent)) 25%, transparent);
+}
+
+.featured-case-study__thumb {
+  width: 7rem;
+  height: 7rem;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.featured-case-study__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.featured-case-study__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.featured-case-study__desc {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--color-text-muted);
+  line-height: var(--leading-snug);
+}
+
+.featured-case-study__cta {
+  margin-top: auto;
+  font-size: var(--text-body-sm);
+  color: var(--color-accent);
+}
+
 .type-page-title {
   margin: 0;
   border-left: 8px solid var(--color-accent);

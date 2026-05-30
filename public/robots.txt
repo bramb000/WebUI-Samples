@@ -1,0 +1,21 @@
+# https://bramha.work
+User-agent: *
+Allow: /
+
+# AI / LLM crawlers — welcome to indexable pages; see /llms.txt for a summary
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://bramha.work/sitemap.xml

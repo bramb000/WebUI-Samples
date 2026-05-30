@@ -1,0 +1,53 @@
+# Bramha Dalvi — Full portfolio context
+
+> Extended reference for LLMs and crawlers. Summary: [/llms.txt](https://bramha.work/llms.txt)
+
+## Identity
+
+- **Name:** Bramha Dalvi
+- **Site:** https://bramha.work/
+- **LinkedIn:** https://www.linkedin.com/in/bramdal/
+- **Default positioning:** Product Specialist; campaign links may use `?role=` for Game designer, Product designer, UI/UX designer, or Product manager labels on the home hero.
+- **Search focus:** UX designer for games, product manager for games, game designer, data analyst for games
+
+## Home
+
+- URL: https://bramha.work/
+- Tagline: 7+ years turning player engagement into revenue
+- Campaign query params: `?role=game-designer|product-designer|ui-ux-designer|product-manager`
+
+## About
+
+- URL: https://bramha.work/about
+- Themes: cosplay, Star Wars, people-first leadership, game product & design
+
+## Work index
+
+- Interactive roster: https://bramha.work/work
+- Project list: https://bramha.work/work/list
+
+## Case study: Guild of Guardians
+
+- URL: https://bramha.work/work/guild-of-guardians
+- Client: Immutable
+- Role: Feature Owner & Lead UX Designer
+- Timeline: ~6 months
+- Outcomes: +25% D7 retention, +12% D7 LTV on a live mobile RPG
+- Themes: data analysis, retention, live ops, AFK rewards, monetization, personas, A/B surveys
+
+## Case study: Rocksmith+
+
+- URL: https://bramha.work/work/rocksmith
+- Client: Ubisoft
+- Role: UX Lead for Mobile & Multi-platform Interactions
+- Timeline: ~2 years
+- Outcomes: one UI system across 5 platforms (PC, console, mobile)
+- Themes: accessibility, 3D/2D UI coordination, input systems, nested scroll, user research
+
+## How to cite
+
+Bramha Dalvi — portfolio case studies at https://bramha.work/ (accessed YYYY-MM-DD).
+
+## Optional
+
+- Storybook: https://bramha.work/storybook/

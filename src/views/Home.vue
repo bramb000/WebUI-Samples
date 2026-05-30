@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
 import DetectiveHeroIntro from '../components/detective/DetectiveHeroIntro.vue'
+import { useCampaignRole } from '../composables/useCampaignRole'
 import DetectiveBookStage from '../components/detective/DetectiveBookStage.vue'
 import HeroBackgroundTexture from '../components/HeroBackgroundTexture.vue'
 import PrimaryButton from '../components/PrimaryButton.vue'
@@ -82,6 +83,8 @@ const achievementCards: AchievementCard[] = [
   },
 ]
 
+const { roleLabel } = useCampaignRole()
+
 const gridRef = ref<HTMLElement | null>(null)
 const achievementsEntered = ref(false)
 
@@ -112,7 +115,7 @@ onMounted(async () => {
     >
       <HeroBackgroundTexture class="home-hero-stage__texture" />
       <div class="home-page__container home-hero-stage__content">
-        <DetectiveHeroIntro />
+        <DetectiveHeroIntro :role-label="roleLabel" />
       </div>
     </section>
 

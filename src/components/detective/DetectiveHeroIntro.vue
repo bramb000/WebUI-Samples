@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { DEFAULT_ROLE_LABEL } from '../../constants/campaignRoles'
+
+withDefaults(
+  defineProps<{
+    roleLabel?: string
+  }>(),
+  { roleLabel: DEFAULT_ROLE_LABEL },
+)
+</script>
+
 <template>
   <header class="detective-hero-intro">
     <div class="detective-hero-intro__copy">
@@ -6,7 +17,7 @@
           <span class="type-display-hero-name text-accent">Bramha</span>
         </h1>
         <h2 class="type-hero-role text-accent detective-hero-intro__role">
-          Product Specialist
+          {{ roleLabel }}
         </h2>
       </div>
       <p class="detective-hero-intro__tagline">
