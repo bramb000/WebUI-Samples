@@ -59,7 +59,13 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
     role="option"
     :aria-selected="selected"
   >
-    <div class="inner-card" :class="{ 'inner-card--case-study': variant === 'case-study' }">
+    <div
+      class="inner-card"
+      :class="{
+        'inner-card--case-study': variant === 'case-study',
+        'inner-card--case-study-solo': variant === 'case-study' && !clientName,
+      }"
+    >
       <div class="card-art">
         <video
           v-if="isThumbVideo"
@@ -176,20 +182,11 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 .card-art {
   grid-area: art;
   position: relative;
+  z-index: 1;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
   background: #0a0a0d;
-}
-
-.card-art::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 0;
-  z-index: 1;
-  height: 28%;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(8, 8, 10, 0.9), transparent);
 }
 
 .card-art-img {
@@ -209,6 +206,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 .card-name-plate {
   grid-area: plate;
   position: relative;
+  z-index: 2;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
@@ -292,8 +290,17 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   text-wrap: balance;
 }
 
-.inner-card--case-study .thumbnail-label {
+.inner-card--case-study:not(.inner-card--case-study-solo) .thumbnail-label {
   margin-block: auto 0;
+}
+
+/* Case-study without client row — vertically centered title in the plate */
+.inner-card--case-study-solo .thumbnail-content {
+  justify-content: center;
+}
+
+.inner-card--case-study-solo .thumbnail-label {
+  margin-block: 0;
 }
 
 .thumbnail-client {

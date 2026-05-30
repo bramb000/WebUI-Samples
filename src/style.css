@@ -138,7 +138,8 @@
   --roster-work-grid-gap: 16px;
   --roster-work-grid-pane-padding-inline: 32px;
   --roster-work-grid-container-padding-inline: 32px;
-  --roster-card-width-work-grid: calc(
+  /* One cell in the work roster 2-up grid (matches ProjectSelect .grid-container 1fr) */
+  --roster-card-cell-width: calc(
     (
       var(--roster-work-grid-pane-width)
       - var(--roster-work-grid-pane-padding-inline)
@@ -146,6 +147,7 @@
       - var(--roster-work-grid-gap)
     ) / var(--roster-work-grid-columns)
   );
+  --roster-card-width-work-grid: var(--roster-card-cell-width);
 
   /* Home achievement strip — same footprint as work grid cards */
   --roster-card-width-home-achievement: var(--roster-card-width-work-grid);
@@ -625,6 +627,23 @@ h5, h6 {
 /* ─────────────────────────────────────────────
    SHARED UTILITY CLASSES
    ───────────────────────────────────────────── */
+
+/* Project roster grid — ProjectSelect .grid-container + home achievements (2-up) */
+.roster-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--roster-work-grid-gap);
+  padding: 16px 16px 96px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .roster-card-grid {
+    gap: 12px;
+    padding-inline: 8px;
+    padding-bottom: 48px;
+  }
+}
 
 /* ── Noise Texture Overlay ── */
 .noise-overlay {

@@ -487,7 +487,7 @@ function onDone(trigger: number) {
 
           <div
             ref="gridContainerRef"
-            class="grid-container"
+            class="grid-container roster-card-grid"
             role="listbox"
             :aria-activedescendant="`proj-${activeProject.id}`"
             :style="{ '--roster-paint-mask': `url(${rosterPaintMaskUrl})` }"
@@ -693,15 +693,6 @@ function onDone(trigger: number) {
   padding-top: 20px;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  /* Room for hover scale(1.1), selected scale(1.05), flame VFX, and scroll end */
-  padding: 16px 16px 96px;
-  box-sizing: border-box;
-}
-
 .dl-detail {
   position: relative;
   min-width: 0;
@@ -842,13 +833,6 @@ function onDone(trigger: number) {
     max-height: none;
     overflow-y: visible;
     padding-inline: 8px;
-  }
-
-  .grid-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding-inline: 8px;
-    padding-bottom: 48px;
   }
 }
 </style>

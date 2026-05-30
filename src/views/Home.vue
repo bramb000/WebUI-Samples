@@ -121,34 +121,32 @@ onMounted(async () => {
       aria-label="Achievements"
       :class="{ 'home-achievements--entered': achievementsEntered }"
     >
-      <div class="home-page__container">
+      <div
+        ref="gridRef"
+        class="home-achievements__grid roster-card-grid"
+        :style="{ '--roster-paint-mask': `url(${rosterPaintMaskUrl})` }"
+      >
         <div
-          ref="gridRef"
-          class="home-achievements__grid"
-          :style="{ '--roster-paint-mask': `url(${rosterPaintMaskUrl})` }"
+          v-for="(card, index) in achievementCards"
+          :key="card.id"
+          class="home-achievement-card"
+          :style="achievementCardMotionStyle(index)"
         >
-          <div
-            v-for="(card, index) in achievementCards"
-            :key="card.id"
-            class="home-achievement-card"
-            :style="achievementCardMotionStyle(index)"
-          >
-            <RosterCard
-              :ref="(el) => setThumbRef(card.id, el)"
-              :id="card.id"
-              :discipline="ACHIEVEMENT_DISCIPLINE"
-              :title="card.title"
-              :thumb="card.thumb"
-              :thumb-poster="card.thumbPoster"
-              :roster="card.roster"
-              :plate-grain="plateGrainBakes[card.id]"
-              variant="case-study"
-              :hover-motion="false"
-              :style="{
-                '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[ACHIEVEMENT_DISCIPLINE],
-              }"
-            />
-          </div>
+          <RosterCard
+            :ref="(el) => setThumbRef(card.id, el)"
+            :id="card.id"
+            :discipline="ACHIEVEMENT_DISCIPLINE"
+            :title="card.title"
+            :thumb="card.thumb"
+            :thumb-poster="card.thumbPoster"
+            :roster="card.roster"
+            :plate-grain="plateGrainBakes[card.id]"
+            variant="case-study"
+            :hover-motion="false"
+            :style="{
+              '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[ACHIEVEMENT_DISCIPLINE],
+            }"
+          />
         </div>
       </div>
     </section>
@@ -227,31 +225,39 @@ onMounted(async () => {
   pointer-events: none;
 }
 
+/* Same shell inset as ProjectSelect .dl-shell + #roster-pane on mobile */
+
 .home-achievements__grid {
-  display: grid;
-  grid-template-columns: repeat(4, var(--roster-card-width-work-grid));
-  gap: var(--roster-work-grid-gap);
-  justify-content: center;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
   margin-inline: auto;
-  padding-block: clamp(8px, 1.5vw, 16px);
   pointer-events: auto;
-  align-items: end;
+  /* Work grid reserves scroll room; home strip does not */
+  padding-bottom: clamp(8px, 1.5vw, 16px);
 }
 
-/* Animate wrapper — avoids fighting RosterCard's own thumbnail keyframes */
+@media (min-width: 1025px) {
+  .home-achievements__grid {
+    /* 4-up strip — width of two roster panes so each cell ≈ one work-grid 1fr column */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: min(
+      100%,
+      calc(
+        2 * (var(--roster-work-grid-pane-width) - var(--roster-work-grid-pane-padding-inline))
+        + var(--roster-work-grid-gap)
+        + var(--roster-work-grid-container-padding-inline)
+      )
+    );
+    max-width: 100%;
+    padding: clamp(8px, 1.5vw, 16px);
+  }
+}
+
+/* Motion wrapper — separate from RosterCard so calm-hover settleBack cannot override enter */
 .home-achievement-card {
   position: relative;
   z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  width: var(--roster-card-width-work-grid);
   min-width: 0;
-  min-height: 100%;
-  padding: 20px 6px 0;
-  box-sizing: border-box;
+  width: 100%;
   opacity: 0;
   transform: translateY(36px) scale(0.98);
   transform-origin: center bottom;
@@ -260,11 +266,6 @@ onMounted(async () => {
 
 .home-achievement-card:hover {
   z-index: 80;
-}
-
-.home-achievement-card :deep(.thumbnail) {
-  width: var(--roster-card-width-work-grid);
-  max-width: 100%;
 }
 
 .home-achievements--entered .home-achievement-card {
@@ -340,26 +341,6 @@ onMounted(async () => {
   justify-content: center;
 }
 
-@media (max-width: 1024px) {
-  .home-achievements__grid {
-    width: 100%;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding-inline: 8px;
-    align-items: stretch;
-  }
-
-  .home-achievement-card {
-    width: 100%;
-    padding: 0;
-    align-items: stretch;
-  }
-
-  .home-achievement-card :deep(.thumbnail) {
-    width: 100%;
-  }
-}
-
 @media (max-width: 767px) {
   .home-hero-stage {
     min-height: auto;
@@ -373,15 +354,8 @@ onMounted(async () => {
   .home-achievements {
     margin-top: calc(-1 * clamp(32px, 8vw, 64px));
     padding-bottom: clamp(16px, 4vw, 28px);
-  }
-
-  .home-achievements .home-page__container {
-    /* 20px + grid 8px = 28px inset — matches ProjectSelect mobile roster pane */
+    /* dl-shell 12px + roster-pane 8px — grid adds another 8px via .roster-card-grid */
     padding-inline: 20px;
-  }
-
-  .home-achievements__grid {
-    padding-block: 16px 24px;
   }
 
   .home-achievement-card {
