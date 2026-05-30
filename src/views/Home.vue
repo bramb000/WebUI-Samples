@@ -342,11 +342,25 @@ onMounted(async () => {
 
 @media (max-width: 1024px) {
   .home-achievements__grid {
-    grid-template-columns: repeat(2, var(--roster-card-width-work-grid));
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-inline: 8px;
+    align-items: stretch;
+  }
+
+  .home-achievement-card {
+    width: 100%;
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .home-achievement-card :deep(.thumbnail) {
+    width: 100%;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .home-hero-stage {
     min-height: auto;
   }
@@ -357,17 +371,24 @@ onMounted(async () => {
   }
 
   .home-achievements {
-    margin-top: calc(-1 * clamp(48px, 10vw, 88px));
+    margin-top: calc(-1 * clamp(32px, 8vw, 64px));
+    padding-bottom: clamp(16px, 4vw, 28px);
+  }
+
+  .home-achievements .home-page__container {
+    /* 20px + grid 8px = 28px inset — matches ProjectSelect mobile roster pane */
+    padding-inline: 20px;
   }
 
   .home-achievements__grid {
-    grid-template-columns: repeat(2, var(--roster-card-width-work-grid));
-    gap: var(--roster-work-grid-gap);
-    padding-inline: 0;
+    padding-block: 16px 24px;
   }
 
   .home-achievement-card {
-    padding: 8px 4px 0;
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+    will-change: auto;
   }
 }
 </style>
