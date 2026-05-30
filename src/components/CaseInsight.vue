@@ -1,76 +1,43 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useInsightCardGrain } from '../composables/useInsightCardGrain'
+import { computed } from 'vue'
+import { CASE_INSIGHT_THEME } from '../constants/caseInsightTheme'
 import ProceduralChiselFrame from './ProceduralChiselFrame.vue'
 
 const props = withDefaults(
   defineProps<{
     stat?: string | number
     statLabel?: string
-    theme?: 'neutral' | 'success' | 'danger'
+    theme?: 'before' | 'after'
   }>(),
   {
-    theme: 'neutral',
+    theme: 'before',
   },
 )
 
-const frameAccent = computed(() => {
-  switch (props.theme) {
-    case 'success':
-      return 'var(--case-insight-change)'
-    case 'danger':
-      return 'var(--case-insight-risk)'
-    default:
-      return 'var(--case-insight-observation)'
-  }
-})
+const frameAccent = computed(() =>
+  props.theme === 'after'
+    ? 'var(--case-insight-after)'
+    : 'var(--case-insight-before)',
+)
 
-const surfaceFill = computed(() => {
-  switch (props.theme) {
-    case 'success':
-      return 'var(--case-insight-surface-change)'
-    case 'danger':
-      return 'var(--case-insight-surface-risk)'
-    default:
-      return 'var(--case-insight-surface-observation)'
-  }
-})
+const surfaceFill = computed(() =>
+  props.theme === 'after'
+    ? 'var(--case-insight-surface-after)'
+    : 'var(--case-insight-surface-before)',
+)
 
-const grainSeed = computed(() => {
-  const label = `${props.stat ?? ''}-${props.statLabel ?? ''}-${props.theme}`
-  let h = 0
-  for (let i = 0; i < label.length; i++)
-    h = (h * 31 + label.charCodeAt(i)) | 0
-  return Math.abs(h) % 1000
-})
+const surfaceHex = computed(() => CASE_INSIGHT_THEME[props.theme].surface)
 
-const surfaceRef = ref<HTMLElement | null>(null)
-const { grainUrl, paintMaskUrl } = useInsightCardGrain(surfaceRef, grainSeed)
-
-const surfaceStyle = computed(() => ({
+const wrapStyle = computed(() => ({
   '--insight-accent': frameAccent.value,
   '--case-insight-surface-fill': surfaceFill.value,
-  '--case-insight-paint-mask': `url(${paintMaskUrl})`,
 }))
 </script>
 
 <template>
-  <ProceduralChiselFrame class="insight-frame" :color="surfaceFill" :hover-flame="false">
-    <div
-      class="insight-wrap insight-wrap--chisel"
-      :style="surfaceStyle"
-    >
-      <div ref="surfaceRef" class="case-insight-surface" aria-hidden="true">
-        <img
-          v-if="grainUrl"
-          class="case-insight-surface__grain"
-          :src="grainUrl"
-          alt=""
-        />
-        <div v-else class="case-insight-surface__grain case-insight-surface__grain--fallback" />
-      </div>
-
-      <div class="case-insight-surface__content insight-content">
+  <ProceduralChiselFrame class="insight-frame" :color="surfaceHex" :hover-flame="false">
+    <div class="insight-wrap" :style="wrapStyle">
+      <div class="insight-content">
         <div v-if="stat || statLabel" class="insight-stat-block">
           <div class="insight-stat lcd-data">
             <span class="insight-stat-value">{{ stat }}</span>
@@ -91,7 +58,7 @@ const surfaceStyle = computed(() => ({
 <style scoped>
 .insight-frame {
   width: 100%;
-  height: 100%;
+  height: auto;
   min-width: 0;
   --insight-accent: v-bind(frameAccent);
   --case-insight-surface-fill: v-bind(surfaceFill);
@@ -99,20 +66,6 @@ const surfaceStyle = computed(() => ({
   transition: transform 200ms var(--ease-mechanical-spring);
   transform-origin: center bottom;
   will-change: transform;
-}
-
-.insight-frame::after {
-  content: '';
-  position: absolute;
-  inset: calc(-1 * var(--dl-card-frame-width));
-  border: var(--dl-card-frame-width) solid var(--dl-card-frame-color);
-  border-radius: var(--dl-card-frame-radius);
-  opacity: 0;
-  pointer-events: none;
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%),
-    0 10px 24px color-mix(in srgb, var(--case-insight-surface-fill) 16%, transparent 84%);
-  transition: opacity 140ms ease;
 }
 
 .insight-frame:nth-child(4n + 1) {
@@ -135,38 +88,36 @@ const surfaceStyle = computed(() => ({
   transform: translateY(-6px) rotate(var(--card-hover-tilt));
 }
 
-.insight-frame:hover::after {
-  opacity: 1;
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--case-insight-surface-fill) 22%, transparent 78%),
-    0 14px 32px color-mix(in srgb, var(--case-insight-surface-fill) 28%, transparent 72%);
+@media (prefers-reduced-motion: reduce) {
+  .insight-frame {
+    transition: none;
+    will-change: auto;
+  }
+  .insight-frame:hover {
+    transform: none;
+  }
 }
 
 .insight-wrap {
   position: relative;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
   width: 100%;
-  height: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  border-radius: 0;
-}
-
-.insight-wrap--chisel {
+  overflow: visible;
   color: var(--case-insight-on-fill);
 }
 
 .insight-content {
+  position: relative;
+  z-index: 1;
   padding: 12px;
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   align-items: stretch;
-  gap: 0;
-  min-height: 100%;
+  gap: 8px;
   box-sizing: border-box;
 }
 
@@ -174,12 +125,12 @@ const surfaceStyle = computed(() => ({
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--grid-1) / 2);
+  gap: 8px;
   flex: 0 0 auto;
 }
 
 .insight-stat {
-  padding: 0 12px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,10 +168,6 @@ const surfaceStyle = computed(() => ({
   color: var(--case-insight-on-fill);
   flex: 0 0 auto;
   min-height: 0;
-}
-
-.insight-stat-block + .insight-body {
-  margin-top: var(--grid-2);
 }
 
 .insight-body :deep(p),

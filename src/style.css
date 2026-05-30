@@ -75,7 +75,7 @@
   --dl-frame-color:   var(--color-border);
   --dl-card-frame-width:  var(--dl-frame-width);
   --dl-card-frame-radius: var(--dl-frame-radius);
-  --dl-card-frame-color:  color-mix(in srgb, var(--case-insight-surface-fill, #243b2f) 55%, #f4f4f5 45%);
+  --dl-card-frame-color:  var(--case-insight-surface-fill, #3a2c2e);
 
   /* Case study panel interior (see `.case-study-panel`) */
   --dl-panel-padding-inline: calc(var(--grid-5) / 2);
@@ -106,26 +106,16 @@
   --paper-on-fill-text-muted: #5c564c;
   --paper-on-fill-border:     #b8a88a;
 
-  /* Case study insight cards — bright accents for stat text */
-  --case-insight-observation: #f87171; /* observational / baseline */
-  --case-insight-change:      #4ade80; /* after changes shipped */
-  --case-insight-risk:        #fb923c; /* negative / caution */
-  /* Dark rim + fill (paired with accents above; frame and interior share one token) */
-  --case-insight-surface-observation: #4a2c2c; /* subtle dark red — problems / baseline */
-  --case-insight-surface-change:      #243b2f; /* subtle dark green — solutions */
-  --case-insight-surface-risk:        #453018; /* subtle dark amber — caution */
+  /* Case study insight cards — before (issue) / after (fixed); hex synced in caseInsightTheme.ts */
+  --case-insight-before:     #ffc9c9;
+  --case-insight-after:      #b8ffd0;
+  --case-insight-surface-before:     #b84e55;
+  --case-insight-surface-after:      #3dba6a;
   /* Dark insight/metric interiors — never inherit paper or hero theme text */
   --case-insight-fill-base:      #121110;
   --case-insight-on-fill:        #f5f2ec;
   --case-insight-on-fill-muted:  #cfc8bc;
   --case-insight-on-fill-subtle: #a8a198;
-  /* Roster-matched paint grain overlay (see `.case-insight-surface__grain`) */
-  --case-insight-grain-overlay-strength: 0.38;
-  --case-insight-grain-opacity:          0.82;
-  --case-insight-grain-fallback-opacity: 0.42;
-  --case-insight-grain-blend:            multiply;
-  --case-insight-grain-fallback-mix:     58%;
-
   /* Project roster cards — discipline colour coding */
   --roster-discipline-product-design: #524f81;
   --roster-discipline-ui-design:       #00674f;
@@ -153,8 +143,8 @@
     ) / var(--roster-work-grid-columns)
   );
 
-  /* Home achievement strip — 25% larger than work grid cards */
-  --roster-card-width-home-achievement: calc(var(--roster-card-width-work-grid) * 1.25);
+  /* Home achievement strip — same footprint as work grid cards */
+  --roster-card-width-home-achievement: var(--roster-card-width-work-grid);
 
   /* Home achievement strip — same plate type as work grid; no “for” prefix via RosterCard */
   --text-roster-achievement-title: var(--text-roster-card-title);
@@ -1096,67 +1086,23 @@ h5, h6 {
 .case-insight-grid {
   display: grid;
   gap: 1.5rem;
-  align-items: stretch;
+  align-items: start;
+  /* Room for baked deckled rim (::before bleed) between cards */
+  padding: 4px;
 }
 
 .case-insight-grid > * {
-  height: 100%;
-  min-height: 100%;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
 }
 
-/* Rim, flat fill, and grain share --case-insight-surface-fill (set per theme in components) */
+/* Theme tokens for insight/metric cards (fill baked on ProceduralChiselFrame ::before) */
 .insight-frame,
 .metric-frame,
 .insight-wrap,
 .metric-wrap {
-  --case-insight-surface-fill: var(--case-insight-surface-observation);
-}
-
-/* Insight/metric interior — flat base + roster paint grain (same stack as grid name plate) */
-.case-insight-surface {
-  --insight-accent: var(--case-insight-observation);
-  position: absolute;
-  /* Bleed under baked rim band so textured fill meets the chisel edge */
-  inset: -3px;
-  z-index: 0;
-  overflow: hidden;
-  isolation: isolate;
-  pointer-events: none;
-  background-color: var(--case-insight-surface-fill);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
-}
-
-.case-insight-surface__grain {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: fill;
-  mix-blend-mode: var(--case-insight-grain-blend);
-  opacity: var(--case-insight-grain-opacity);
-  pointer-events: none;
-  user-select: none;
-}
-
-.case-insight-surface__grain--fallback {
-  background-color: var(--case-insight-surface-fill);
-  -webkit-mask-image: var(--case-insight-paint-mask);
-  mask-image: var(--case-insight-paint-mask);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-mode: alpha;
-  mask-mode: alpha;
-  mix-blend-mode: var(--case-insight-grain-blend);
-  opacity: var(--case-insight-grain-fallback-opacity);
-}
-
-.case-insight-surface__content {
-  position: relative;
-  z-index: 1;
+  --case-insight-surface-fill: var(--case-insight-surface-before);
 }
 
 .dl-embedded--case .case-study-main {
@@ -1338,7 +1284,6 @@ img.panel-recessed {
 .seg-strip {
   position: relative;
   z-index: 60; /* Above wisp/flame canvas layer */
-  display: inline-flex;
   align-items: center;
   gap: 8px;
   background: rgba(0,0,0,0.6);

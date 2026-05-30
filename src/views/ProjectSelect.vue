@@ -739,11 +739,10 @@ function onDone(trigger: number) {
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
   padding: clamp(12px, 1.8vw, 20px) clamp(8px, 1.2vw, 16px) 48px;
   z-index: 1;
   box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--paper-surface-rim) 55%, transparent) transparent;
 }

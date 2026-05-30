@@ -143,7 +143,6 @@ onMounted(async () => {
               :roster="card.roster"
               :plate-grain="plateGrainBakes[card.id]"
               variant="case-study"
-              plate-typography="achievement"
               :hover-motion="false"
               :style="{
                 '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[ACHIEVEMENT_DISCIPLINE],
@@ -230,9 +229,12 @@ onMounted(async () => {
 
 .home-achievements__grid {
   display: grid;
-  grid-template-columns: repeat(4, var(--roster-card-width-home-achievement));
+  grid-template-columns: repeat(4, var(--roster-card-width-work-grid));
   gap: var(--roster-work-grid-gap);
   justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
   padding-block: clamp(8px, 1.5vw, 16px);
   pointer-events: auto;
   align-items: end;
@@ -245,7 +247,7 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  width: 100%;
+  width: var(--roster-card-width-work-grid);
   min-width: 0;
   min-height: 100%;
   padding: 20px 6px 0;
@@ -261,7 +263,8 @@ onMounted(async () => {
 }
 
 .home-achievement-card :deep(.thumbnail) {
-  width: 100%;
+  width: var(--roster-card-width-work-grid);
+  max-width: 100%;
 }
 
 .home-achievements--entered .home-achievement-card {
@@ -339,7 +342,7 @@ onMounted(async () => {
 
 @media (max-width: 1024px) {
   .home-achievements__grid {
-    grid-template-columns: repeat(2, var(--roster-card-width-home-achievement));
+    grid-template-columns: repeat(2, var(--roster-card-width-work-grid));
   }
 }
 
@@ -358,7 +361,13 @@ onMounted(async () => {
   }
 
   .home-achievements__grid {
-    grid-template-columns: var(--roster-card-width-home-achievement);
+    grid-template-columns: repeat(2, var(--roster-card-width-work-grid));
+    gap: var(--roster-work-grid-gap);
+    padding-inline: 0;
+  }
+
+  .home-achievement-card {
+    padding: 8px 4px 0;
   }
 }
 </style>

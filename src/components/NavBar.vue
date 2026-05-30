@@ -67,7 +67,7 @@ function onExternalNavClick(source: string) {
           <span>bramha.</span>
         </router-link>
 
-        <div class="hidden md:block seg-strip">
+        <div class="hidden md:inline-flex seg-strip">
           <template v-for="link in navLinks" :key="link.name">
             <router-link
               v-if="!link.external"

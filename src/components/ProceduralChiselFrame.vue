@@ -10,7 +10,7 @@ const props = withDefaults(
     hoverFlame?: boolean
   }>(),
   {
-    color: 'var(--case-insight-change)',
+    color: 'var(--case-insight-surface-before)',
     hoverFlame: false,
   },
 )
@@ -43,13 +43,21 @@ async function rebakeRim() {
   if (!el) return
   const r = el.getBoundingClientRect()
   if (r.width < 2 || r.height < 2) return
-  const hex = resolveCssColorToHex(el, props.color, '#4ade80')
+  const trimmed = props.color.trim()
+  const hex = /^#[0-9a-fA-F]{6}$/.test(trimmed) || /^#[0-9a-fA-F]{3}$/.test(trimmed)
+    ? trimmed
+    : resolveCssColorToHex(el, props.color, '#b84e55')
   const url = bakeChiselRimImage({
     widthCss: r.width,
     heightCss: r.height,
     colorHex: hex,
     bleedPx: CARD_BLEED_PX,
     depthEffect: 0,
+    cleanRim: false,
+    flatRim: false,
+    panelFill: true,
+    monotoneFill: true,
+    borderPx: 8,
   })
   if (!cancelled && url) rimUrl.value = url
 }
@@ -59,9 +67,16 @@ onMounted(() => {
     if (cancelled) return
     const el = rootRef.value
     if (!el) return
-    void rebakeRim()
-    resizeObserver = new ResizeObserver(() => scheduleRebake())
-    resizeObserver.observe(el)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (cancelled) return
+        void rebakeRim().then(() => {
+          if (!cancelled && !rimUrl.value) scheduleRebake()
+        })
+        resizeObserver = new ResizeObserver(() => scheduleRebake())
+        resizeObserver.observe(el)
+      })
+    })
   })
 })
 
@@ -101,16 +116,17 @@ onBeforeUnmount(() => {
   overflow: visible;
 }
 
+/* Baked plate (fill + deckle) — must live in DOM; page bg sits above fixed WebGL canvas */
 .chisel-frame::before {
   content: '';
   position: absolute;
-  inset: calc(-1 * var(--chisel-bleed, 10px));
-  background-image: var(--chisel-rim-image);
+  inset: calc(-1 * var(--chisel-bleed, 16px));
+  z-index: 0;
+  background-image: var(--chisel-rim-image, none);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
   pointer-events: none;
-  z-index: 2;
 }
 
 .chisel-frame__body {
@@ -121,7 +137,6 @@ onBeforeUnmount(() => {
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
-  height: 100%;
-  min-height: 100%;
+  min-height: 0;
 }
 </style>

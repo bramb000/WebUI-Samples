@@ -25,7 +25,6 @@ onMounted(() => {
       hoverFlame: false,
       panelFill: true,
       monotoneFill: true,
-      /** Match insight cards: full SDF rim band (flatRim reads thin + seam-y on huge rects). */
       flatRim: false,
       bleedPx: PANEL_BLEED_PX,
       skipAncestorClip: true,
@@ -101,6 +100,5 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
 }
 </style>

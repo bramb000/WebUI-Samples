@@ -67,16 +67,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       <!-- Main Content Container -->
       <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
     <!-- ─── HERO ─── -->
-    <div class="relative">
-      <!-- Decorative Tinkerer Etching -->
-      <svg class="absolute right-0 top-0 opacity-10 pointer-events-none w-64 h-64 text-[var(--color-accent)] mix-blend-screen transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
-        <circle cx="50" cy="50" r="40" stroke-dasharray="2 4" />
-        <circle cx="50" cy="50" r="30" />
-        <path d="M 50 10 L 50 90 M 10 50 L 90 50 M 21 21 L 79 79 M 21 79 L 79 21" stroke-dasharray="1 6" />
-        <rect x="35" y="35" width="30" height="30" transform="rotate(45 50 50)" />
-      </svg>
-      
-      <ProjectHero
+    <ProjectHero
       title="Repairing stickiness to improve revenue"
       description="How data-driven feature design increased D7 retention by 25% and D7 LTV by 12% for a live mobile RPG."
       role="Feature Owner & Lead UX Designer"
@@ -88,14 +79,13 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-team">1 UI Artist &middot; 1 UI Engineer &middot; 1 Full Stack Engineer</p>
       </template>
     </ProjectHero>
-    </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
     <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
       <h2 class="type-case-section-accent">Executive Summary</h2>
       <div class="case-study-panel__metric-grid">
-        <CaseMetric value="+25%" label="Retention (D7)" theme="success" />
-        <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="success" />
+        <CaseMetric value="+25%" label="Retention (D7)" theme="after" />
+        <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="after" />
       </div>
       <div class="case-study-panel__body type-case-body-lg">
         <div>
@@ -162,12 +152,12 @@ useCaseStudySketchPanels(caseStudyRoot);
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
       <VideoEmbed src="https://www.youtube.com/embed/nJ4OENCLzkE" title="Old User Flow" />
       <div class="max-w-xl mx-auto py-4">
-        <CaseInsight stat="7-10 clicks and open app 3 times a day" statLabel="to get rewards that you have already earned" theme="neutral" />
+        <CaseInsight stat="7-10 clicks and open app 3 times a day" statLabel="to get rewards that you have already earned" theme="before" />
       </div>
       <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">New user flow — rewards as soon you open the game:</p>
       <VideoEmbed src="https://www.youtube.com/embed/reWvwvFF8CQ" title="New User Flow" />
       <div class="max-w-xl mx-auto py-4">
-        <CaseInsight stat="2 clicks and open app 2 times a day" statLabel="to get rewards that you have already earned" theme="success" />
+        <CaseInsight stat="2 clicks and open app 2 times a day" statLabel="to get rewards that you have already earned" theme="after" />
       </div>
       <!-- Before/After Comparions -->
       <div class="space-y-8">
@@ -232,7 +222,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </div>
 
         <div class="py-4">
-          <CaseInsight stat="Even just 1 additional day" statLabel="was 16% higher likelihood of retaining to 7 days" theme="neutral" />
+          <CaseInsight stat="Even just 1 additional day" statLabel="was 16% higher likelihood of retaining to 7 days" theme="before" />
         </div>
 
         <p class="type-case-body-lg">
@@ -250,7 +240,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
 
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
-          <CaseInsight stat="73%" statLabel="played in-between life activities" theme="neutral">
+          <CaseInsight stat="73%" statLabel="played in-between life activities" theme="before">
             <p><strong>Unstructured downtime entertainment:</strong></p>
             <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
               <li>"When picking up my child"</li>
@@ -258,7 +248,7 @@ useCaseStudySketchPanels(caseStudyRoot);
               <li>"When commuting"</li>
             </ul>
           </CaseInsight>
-          <CaseInsight stat="54%" statLabel="Timers negatively impacted lifestyle" theme="neutral">
+          <CaseInsight stat="54%" statLabel="Timers negatively impacted lifestyle" theme="before">
             <p><strong>Game timers felt punishing and interrupted flow:</strong></p>
             <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
               <li>"Punishes me for having a job"</li>
@@ -266,10 +256,10 @@ useCaseStudySketchPanels(caseStudyRoot);
               <li>"Use lunch break for boring quests"</li>
             </ul>
           </CaseInsight>
-          <CaseInsight stat="21%" statLabel="did not think of game between sessions" theme="danger">
+          <CaseInsight stat="21%" statLabel="did not think of game between sessions" theme="before">
             <p><strong>Driven by loss avoidance:</strong> Passive waiting rather than active consideration.</p>
           </CaseInsight>
-          <CaseInsight stat="36%" statLabel="passively waited for timer notifications" theme="danger">
+          <CaseInsight stat="36%" statLabel="passively waited for timer notifications" theme="before">
             <p><strong>Negative anticipation:</strong></p>
             <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
               <li>"Forget until notification reminds me"</li>
@@ -354,9 +344,9 @@ useCaseStudySketchPanels(caseStudyRoot);
           <li>"Thank god y'all removed the arbitrary timer"</li>
         </ol>
         <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="w-full h-auto rounded-xl panel-recessed p-4 mb-6" />
-        <CaseInsight stat="72%" statLabel="Completely agreed that this flow improved the overall game" theme="success" />
+        <CaseInsight stat="72%" statLabel="Completely agreed that this flow improved the overall game" theme="after" />
         <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="w-full h-auto rounded-xl panel-recessed p-4 mt-8 mb-6" />
-        <CaseInsight stat="81%" statLabel="Agreed that the new timers fit their lifestyle better" theme="success" />
+        <CaseInsight stat="81%" statLabel="Agreed that the new timers fit their lifestyle better" theme="after" />
       </div>
     </section>
 
@@ -385,8 +375,8 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
-          <CaseInsight stat="46% of churned users" statLabel="had attempted and lost at the same dungeon 2+ times in their first week" theme="neutral" />
-          <CaseInsight stat="22% of churned users" statLabel="had attempted and lost 3+ times" theme="neutral" />
+          <CaseInsight stat="46% of churned users" statLabel="had attempted and lost at the same dungeon 2+ times in their first week" theme="before" />
+          <CaseInsight stat="22% of churned users" statLabel="had attempted and lost 3+ times" theme="before" />
         </div>
 
         <p class="type-case-body-lg">
@@ -394,7 +384,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="guardianUsageData" alt="Guardian usage data" caption="Clear difference in heroes used by successful vs unsuccessful players" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="py-4">
-          <CaseInsight stat="about 50% users who quit" statLabel="Made no changes to their comp between attempt #1 and #2" theme="neutral" />
+          <CaseInsight stat="about 50% users who quit" statLabel="Made no changes to their comp between attempt #1 and #2" theme="before" />
         </div>
 
         <p class="type-case-body-lg">
@@ -405,8 +395,8 @@ useCaseStudySketchPanels(caseStudyRoot);
           <CaseBeforeAfter :beforeImage="recsBeforeImg" :afterImage="recsAfterImg" caption="Recommendations guiding players using community data without forcing teams." />
         </div>
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
-          <CaseInsight stat="~70% users" statLabel="Changed their comp after loss #1 (up from 50%)" theme="success" />
-          <CaseInsight stat="And 63% of those users" statLabel="Completed the dungeon on Attempt #2" theme="success" />
+          <CaseInsight stat="~70% users" statLabel="Changed their comp after loss #1 (up from 50%)" theme="after" />
+          <CaseInsight stat="And 63% of those users" statLabel="Completed the dungeon on Attempt #2" theme="after" />
         </div>
       </div>
     </section>
@@ -430,7 +420,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="dailyCalendar" alt="Daily reward calendar" caption="Daily instant gratification rewards + a big delayed gratification reward at the end of the week" imgClass="w-full h-auto rounded-xl" />
         <div class="py-4">
-          <CaseInsight stat="+3% increase" statLabel="in day 6 to day 7 retention" theme="success" />
+          <CaseInsight stat="+3% increase" statLabel="in day 6 to day 7 retention" theme="after" />
         </div>
       </div>
     </section>
@@ -444,7 +434,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="legendaryHero" alt="Legendary hero design" caption="I created this design in Figma with existing design system components" imgClass="w-full h-auto rounded-xl" />
         <div class="py-4">
-          <CaseInsight stat="+38% higher likelihood" statLabel="A user who received the hero would retain compared to one who did not" theme="success" />
+          <CaseInsight stat="+38% higher likelihood" statLabel="A user who received the hero would retain compared to one who did not" theme="after" />
         </div>
 
         <!-- Offer iterations -->
@@ -453,11 +443,11 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="oldOffer" alt="Old offer" caption="Before — The old offer had no context. 99% of players closed the popup in under 1 second" imgClass="w-full h-auto rounded-xl" />
         <div class="py-4">
-          <CaseInsight stat="99.9% users" statLabel="Closed this popup instantly" theme="danger" />
+          <CaseInsight stat="99.9% users" statLabel="Closed this popup instantly" theme="before" />
         </div>
         <CaseImage :src="newOffer" alt="New offer" caption="After — The new offer with context and clear value proposition" imgClass="w-full h-auto rounded-xl" />
         <div class="py-4">
-          <CaseInsight stat="More than double purchases" statLabel="compared to the old offer" theme="success" />
+          <CaseInsight stat="More than double purchases" statLabel="compared to the old offer" theme="after" />
         </div>
 
         <!-- Iteration stages -->
@@ -475,8 +465,8 @@ useCaseStudySketchPanels(caseStudyRoot);
     <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Results</h2>
       <div class="case-study-panel__metric-grid">
-        <CaseMetric value="+25%" label="D7 Retention Uplift" theme="success" />
-        <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="success" />
+        <CaseMetric value="+25%" label="D7 Retention Uplift" theme="after" />
+        <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="after" />
       </div>
       <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
         <p>

@@ -61,16 +61,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       <!-- Main Content Container -->
       <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
     <!-- ─── HERO ─── -->
-    <div class="relative">
-      <!-- Decorative Alchemist Etching -->
-      <svg class="absolute right-0 top-0 opacity-10 pointer-events-none w-64 h-64 text-[var(--color-accent)] mix-blend-screen transform translate-x-1/4 -translate-y-1/4" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5">
-        <polygon points="50,10 90,90 10,90" stroke-dasharray="2 4" />
-        <circle cx="50" cy="65" r="25" />
-        <path d="M 20 40 Q 50 10 80 40 T 50 90 Z" />
-        <circle cx="50" cy="50" r="45" stroke-dasharray="1 6" />
-      </svg>
-      
-      <ProjectHero
+    <ProjectHero
       title="Making guitar learning accessible to 1 million users"
       description="Releasing a new learning game on 5 platforms with a single, scalable UI system."
       role="UX Lead for Mobile & Multi-platform Interactions"
@@ -82,7 +73,6 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-team">UX Director &middot; 2 UX Designers &middot; 2 UI Artists &middot; 2 UI Engineers</p>
       </template>
     </ProjectHero>
-    </div>
 
     <!-- ─── EXECUTIVE SUMMARY ─── -->
     <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
@@ -163,10 +153,10 @@ useCaseStudySketchPanels(caseStudyRoot);
 
         <!-- Research statistics -->
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
-          <CaseInsight stat="~90%" statLabel="potential new users" theme="neutral">
+          <CaseInsight stat="~90%" statLabel="potential new users" theme="before">
             <p>Wanted a hassle-free and wireless experience.</p>
           </CaseInsight>
-          <CaseInsight stat="~5%" statLabel="of total responders" theme="neutral">
+          <CaseInsight stat="~5%" statLabel="of total responders" theme="before">
             <p>Wanted a hardcore experience with all their gear. <em>77% of these were legacy Rocksmith users.</em></p>
           </CaseInsight>
         </div>
@@ -175,10 +165,10 @@ useCaseStudySketchPanels(caseStudyRoot);
           We also included questions related to eyesight. I wanted to know how many users suffered from eyesight issues including near/far sightedness and colour vision deficiency. <strong>I personally suffer from near sightedness and colour vision deficiency which impassioned my desire for an accessible UI.</strong>
         </p>
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
-          <CaseInsight stat="~63%" statLabel="of total responders" theme="neutral">
+          <CaseInsight stat="~63%" statLabel="of total responders" theme="before">
             <p>Suffered from at least 1 eyesight issue.</p>
           </CaseInsight>
-          <CaseInsight stat="~31%" statLabel="of total responders" theme="neutral">
+          <CaseInsight stat="~31%" statLabel="of total responders" theme="before">
             <p>Suffered from either near or far sightedness.</p>
           </CaseInsight>
         </div>
@@ -188,13 +178,13 @@ useCaseStudySketchPanels(caseStudyRoot);
           I wanted to know how many contexts the general user stories would have and how many devices a user imagined themselves playing on.
         </p>
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-3">
-          <CaseInsight stat="87%" statLabel="correlation" theme="neutral">
+          <CaseInsight stat="87%" statLabel="correlation" theme="before">
             <p>Between size of device and complexity of setup.</p>
           </CaseInsight>
-          <CaseInsight stat="~63%" statLabel="of responders" theme="neutral">
+          <CaseInsight stat="~63%" statLabel="of responders" theme="before">
             <p>Could see themselves using more than 2 devices, but not more than 2 setups.</p>
           </CaseInsight>
-          <CaseInsight stat="~92%" statLabel="of new learners" theme="neutral">
+          <CaseInsight stat="~92%" statLabel="of new learners" theme="before">
             <p>Said they would start with acoustic guitars and mobile phones.</p>
           </CaseInsight>
         </div>
@@ -294,16 +284,16 @@ useCaseStudySketchPanels(caseStudyRoot);
 
         <!-- Research stats -->
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
-          <CaseInsight stat="86%" statLabel="of participants" theme="neutral">
+          <CaseInsight stat="86%" statLabel="of participants" theme="before">
             <p>Wished the interactions were similar to Netflix or Spotify on mobile.</p>
           </CaseInsight>
-          <CaseInsight stat="16%" statLabel="of participants" theme="neutral">
+          <CaseInsight stat="16%" statLabel="of participants" theme="before">
             <p>Used Netflix or Spotify on their console — we could learn from these apps but not rely on them for consoles.</p>
           </CaseInsight>
-          <CaseInsight stat="72%" statLabel="of participants" theme="danger">
+          <CaseInsight stat="72%" statLabel="of participants" theme="before">
             <p>Found it difficult to move from mobile to console or PC due to lack of contextual input guides.</p>
           </CaseInsight>
-          <CaseInsight stat="47%" statLabel="of participants" theme="danger">
+          <CaseInsight stat="47%" statLabel="of participants" theme="before">
             <p>Failed to recreate contextual outcomes (e.g., hovering for tooltips) when switching platforms.</p>
           </CaseInsight>
         </div>
@@ -320,7 +310,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <CaseImage :src="interactionMatrix" alt="Interaction matrix abstraction" caption="A sample abstraction of the complex interaction matrix" imgClass="w-full h-auto rounded-xl" />
         <CaseImage :src="inputSystem" alt="Unified input system" caption="How 3 different actions consistently lead to the same outcome on any platform" imgClass="w-full h-auto rounded-xl" />
         <div class="mt-8">
-          <CaseInsight stat="80%" statLabel="average completion rate per user" theme="success">
+          <CaseInsight stat="80%" statLabel="average completion rate per user" theme="after">
             <p>Users could consistently achieve the same activities across platforms despite changing devices.</p>
           </CaseInsight>
         </div>
@@ -341,7 +331,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <CaseLazyImage :loader="rocksmithLazyMedia.pcInteractions" alt="PC carousel interactions" caption="On PC, carousel carets are critical for horizontal scrolling with a mouse that usually only supports vertical scroll" img-class="w-full h-auto rounded-xl" />
         <CaseLazyImage :loader="rocksmithLazyMedia.mobileInteractions" alt="Mobile scroll interactions" caption="Mobile scroll containers support free form horizontal and vertical scroll without buttons" img-class="w-full h-auto rounded-xl" />
         <div class="mt-8">
-          <CaseInsight stat="~90%" statLabel="of participants" theme="success">
+          <CaseInsight stat="~90%" statLabel="of participants" theme="after">
             <p>Felt confident about the mobile UI because it looked similar to an app they already used (e.g., Netflix, Spotify).</p>
           </CaseInsight>
         </div>

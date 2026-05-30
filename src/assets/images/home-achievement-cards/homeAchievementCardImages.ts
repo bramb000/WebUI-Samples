@@ -13,14 +13,14 @@ import globalPoster from './home-achievement-global.webp'
 
 export type HomeAchievementCardArt = {
   thumb: string
-  poster: string
+  thumbPoster: string
 }
 
 export const HOME_ACHIEVEMENT_CARD_ART = {
-  guild: { thumb: guildWebm, poster: guildPoster },
-  ai: { thumb: aiWebm, poster: aiPoster },
-  edtech: { thumb: edtechWebm, poster: edtechPoster },
-  global: { thumb: globalWebm, poster: globalPoster },
+  guild: { thumb: guildWebm, thumbPoster: guildPoster },
+  ai: { thumb: aiWebm, thumbPoster: aiPoster },
+  edtech: { thumb: edtechWebm, thumbPoster: edtechPoster },
+  global: { thumb: globalWebm, thumbPoster: globalPoster },
 } as const satisfies Record<string, HomeAchievementCardArt>
 
 export type HomeAchievementCardArtKey = keyof typeof HOME_ACHIEVEMENT_CARD_ART

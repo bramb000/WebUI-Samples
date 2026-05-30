@@ -14,9 +14,17 @@ export type ChiselRimBakeOptions = {
   borderPx?: number
   /** 0 = flat tone matching interior fill; default card lighting is ~0.164 */
   depthEffect?: number
+  /** Insight cards: no angular cuts / wobble (clean rim in surface color). */
+  cleanRim?: boolean
+  /** Paint rim outside the card rect only (visible deckle on parchment). */
+  outwardRim?: boolean
+  /** Bake interior fill + deckled edge (parchment-style card plate). */
+  panelFill?: boolean
+  /** Flat fill + rim in one tone (parchment / insight cards). */
+  monotoneFill?: boolean
 }
 
-export const CARD_BLEED_PX = 10
+export const CARD_BLEED_PX = 16
 const MAX_BAKE_EDGE_PX = 1024
 
 const CHISEL_BAKE_FRAGMENT = /* glsl */ `
@@ -42,6 +50,8 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
   uniform float u_panelFill;
   uniform vec3 u_fillColor;
   uniform float u_flatRim;
+  uniform float u_outwardRim;
+  uniform float u_monotoneFill;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -127,6 +137,8 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
       uvE_y * 2.0 - 1.0
     );
 
+    vec2 q = p - u_pCardCenter;
+    float dBox = sdBox(q, u_innerHalf);
     float dFinal = getBorderDistance(p);
     float densityMap = fbm(p * 4.0);
     float paintThickness = smoothstep(-1.0, 1.0, densityMap);
@@ -139,7 +151,24 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
       ? 1.0 - smoothstep(-0.004, 0.016, dFinal)
       : 1.0 - smoothstep(0.0, 0.01, dFinal);
 
+    if (u_outwardRim > 0.5 && u_panelFill < 0.5) {
+      float outwardOnly = smoothstep(-u_borderWidth * 0.25, u_borderWidth * 0.2, dBox);
+      borderAlpha *= outwardOnly;
+    }
+
     float alpha = borderAlpha;
+
+    if (u_panelFill > 0.5) {
+      float fillAlpha = 1.0 - smoothstep(-0.004, 0.008, dBox);
+      if (u_monotoneFill > 0.5) {
+        finalColor = u_fillColor;
+        alpha = max(fillAlpha, borderAlpha);
+      } else {
+        vec3 interior = u_fillColor;
+        finalColor = mix(interior, finalColor, borderAlpha);
+        alpha = max(fillAlpha, borderAlpha);
+      }
+    }
 
     if (u_depthEffect > 0.0) {
       float edgeScale = 0.35 / max(u_innerHalf.x, u_innerHalf.y);
@@ -200,6 +229,8 @@ function ensureBakeGl() {
     u_panelFill: { value: 0 },
     u_fillColor: { value: new THREE.Color(0x0c0c0c) },
     u_flatRim: { value: 0 },
+    u_outwardRim: { value: 0 },
+    u_monotoneFill: { value: 0 },
   }
 
   bakeMaterial = new THREE.ShaderMaterial({
@@ -252,14 +283,29 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   bakeMaterial.uniforms.u_expandCss.value.set(0, 0, wE, hE)
   bakeMaterial.uniforms.u_drawCss.value.set(0, 0, wE, hE)
   bakeMaterial.uniforms.u_color.value.copy(color)
-  bakeMaterial.uniforms.u_fillColor.value.set(0x0c0c0c)
+  bakeMaterial.uniforms.u_fillColor.value.copy(color)
   bakeMaterial.uniforms.u_time.value = 0
   bakeMaterial.uniforms.u_densityVar.value = 0
   bakeMaterial.uniforms.u_hoverFlameState.value = 0
-  bakeMaterial.uniforms.u_panelFill.value = 0
+  bakeMaterial.uniforms.u_panelFill.value = opts.panelFill ? 1 : 0
+  bakeMaterial.uniforms.u_monotoneFill.value = opts.monotoneFill ? 1 : 0
   bakeMaterial.uniforms.u_flatRim.value = opts.flatRim ? 1 : 0
-  /* Keep rim tint true to props.colorHex — depth lighting reads as lower-saturation on cards. */
-  bakeMaterial.uniforms.u_depthEffect.value = opts.depthEffect ?? 0.164
+  bakeMaterial.uniforms.u_outwardRim.value = opts.outwardRim ? 1 : 0
+  const depthEffect = opts.depthEffect ?? 0.164
+  bakeMaterial.uniforms.u_depthEffect.value = depthEffect
+  const cleanRim = opts.cleanRim ?? false
+  if (cleanRim) {
+    bakeMaterial.uniforms.u_chiselDepth.value = 0
+    bakeMaterial.uniforms.u_chiselChaos.value = 0
+    bakeMaterial.uniforms.u_chiselDensity.value = 0
+    bakeMaterial.uniforms.u_wobble.value = 0
+    bakeMaterial.uniforms.u_outerOrganicAmp.value = 0
+  } else {
+    bakeMaterial.uniforms.u_chiselDepth.value = 0.0206
+    bakeMaterial.uniforms.u_chiselChaos.value = 1.0
+    bakeMaterial.uniforms.u_chiselDensity.value = 8.0
+    bakeMaterial.uniforms.u_wobble.value = 0.01
+  }
 
   const aspect = vw / Math.max(vh, 1)
   const uvx = (cardL + cardW * 0.5) / wE
@@ -277,10 +323,18 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   const borderPx = opts.borderPx ?? (flatRim ? 4 : 6.2)
   const borderNorm = borderPx / Math.max(shortPx, 1)
   bakeMaterial.uniforms.u_borderWidth.value = borderNorm
-  bakeMaterial.uniforms.u_outerOrganicAmp.value = flatRim
-    ? 0
-    : Math.min(0.11, (5.5 * 2) / Math.max(shortPx, 1))
-  if (flatRim) {
+  if (!cleanRim) {
+    const organicPx = opts.panelFill ? 14 : 7
+    bakeMaterial.uniforms.u_outerOrganicAmp.value = flatRim
+      ? 0
+      : Math.min(0.18, (organicPx * 2) / Math.max(shortPx, 1))
+  }
+  if (opts.panelFill) {
+    bakeMaterial.uniforms.u_borderWidth.value = Math.max(borderNorm, 0.048)
+    bakeMaterial.uniforms.u_chiselDepth.value = 0.028
+    bakeMaterial.uniforms.u_chiselDensity.value = 9.5
+  }
+  if (flatRim && !cleanRim) {
     bakeMaterial.uniforms.u_chiselDepth.value = 0
     bakeMaterial.uniforms.u_wobble.value = 0
   }
