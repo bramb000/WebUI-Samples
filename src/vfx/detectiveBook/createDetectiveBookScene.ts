@@ -172,6 +172,7 @@ export function createDetectiveBookScene(
   for (const mat of backCoverMats)
     mat.depthWrite = false
   const backCover = new THREE.Mesh(backCoverGeo, backCoverMats)
+  // backCoverMats[5] = exterior back face (role label texture)
   backCover.position.set(COVER_WIDTH / 2, 0, backCoverZ)
   backCover.renderOrder = BOOK_RENDER_ORDER.BACK_COVER
   bookRoot.add(backCover)

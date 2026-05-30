@@ -171,18 +171,6 @@ export function composeBackCoverExteriorCanvas(): HTMLCanvasElement {
   const { canvas, ctx } = createCanvas(COVER_TEX_W, COVER_TEX_H)
   drawLeatherBase(ctx, COVER_TEX_W, COVER_TEX_H, 'exterior')
   drawBeveledFrame(ctx, COVER_TEX_W, COVER_TEX_H, 40)
-
-  const headerSize = bookVarPx('--book-header-size-end', 28)
-  const maxTextW = COVER_TEX_W - bookSafeMargin() * 2
-  drawCoverEmbossedHeaderBlock(
-    ctx,
-    'Product Specialist',
-    COVER_TEX_W / 2,
-    COVER_TEX_H * 0.62,
-    headerSize,
-    maxTextW,
-  )
-
   return canvas
 }
 
