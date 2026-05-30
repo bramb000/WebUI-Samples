@@ -13,14 +13,31 @@ function readTokenNumber(el: HTMLElement, name: string, fallback: number): numbe
 }
 
 /**
- * Hue-shifted paint grain for insight/metric plates.
- * Bakes to the full card + chisel bleed; composited with CSS mask from the baked plate.
+ * Hue-shifted paint grain for parchment panel (not insight/metric cards).
+ * Bakes to the full sheet + chisel bleed; composited with CSS mask from the baked plate.
  */
+export type ChiselPlateGrainOptions = {
+  bleedPx?: number
+  /** CSS color token for hue-shifted multiply tint (e.g. parchment or insight fill). */
+  fillCssVar?: string
+  fillFallbackHex?: string
+  grainOverlayStrengthVar?: string
+}
+
 export function useInsightCardGrain(
   frameRef: Ref<HTMLElement | null>,
   seed: Ref<number>,
-  bleedPx = CARD_BLEED_PX,
+  bleedPxOrOptions: number | ChiselPlateGrainOptions = CARD_BLEED_PX,
 ) {
+  const opts =
+    typeof bleedPxOrOptions === 'number'
+      ? { bleedPx: bleedPxOrOptions }
+      : bleedPxOrOptions
+  const bleedPx = opts.bleedPx ?? CARD_BLEED_PX
+  const fillCssVar = opts.fillCssVar ?? '--case-insight-surface-fill'
+  const fillFallbackHex = opts.fillFallbackHex ?? '#c4565e'
+  const grainOverlayStrengthVar =
+    opts.grainOverlayStrengthVar ?? '--case-insight-grain-overlay-strength'
   const grainUrl = ref<string | null>(null)
   let resizeObserver: ResizeObserver | null = null
   let rebakeTimer = 0
@@ -39,16 +56,8 @@ export function useInsightCardGrain(
       return
     }
 
-    const baseColorHex = resolveCssColorToHex(
-      el,
-      'var(--case-insight-surface-fill)',
-      '#b84e55',
-    )
-    const overlayStrength = readTokenNumber(
-      el,
-      '--case-insight-grain-overlay-strength',
-      0.38,
-    )
+    const baseColorHex = resolveCssColorToHex(el, fillCssVar, fillFallbackHex)
+    const overlayStrength = readTokenNumber(el, grainOverlayStrengthVar, 0.38)
 
     const url = bakeRosterCardFrameGrainImage({
       widthCss: w,

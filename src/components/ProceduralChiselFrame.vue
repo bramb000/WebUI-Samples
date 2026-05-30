@@ -8,29 +8,31 @@ const props = withDefaults(
     color?: string
     /** Cards use a prebaked static rim; live ink is reserved for work panels. */
     hoverFlame?: boolean
-    /** Multiply grain baked to full plate + bleed; masked by the chisel bake. */
-    textureGrainUrl?: string | null
+    /** Gutter beyond bounds for deckled rim (parchment uses a larger bleed). */
+    bleedPx?: number
+    borderPx?: number
   }>(),
   {
     color: 'var(--case-insight-surface-before)',
     hoverFlame: false,
-    textureGrainUrl: null,
+    bleedPx: CARD_BLEED_PX,
+    borderPx: 8,
   },
 )
 
 const rootRef = ref<HTMLElement | null>(null)
-
-defineExpose({ rootEl: rootRef })
 const rimUrl = ref<string | null>(null)
 let cancelled = false
 let resizeObserver: ResizeObserver | null = null
 let rebakeTimer = 0
 
+const bleedCss = computed(() => `${props.bleedPx}px`)
+
 const rimStyle = computed(() => {
   if (!rimUrl.value) return undefined
   return {
     '--chisel-rim-image': `url("${rimUrl.value}")`,
-    '--chisel-bleed': `${CARD_BLEED_PX}px`,
+    '--chisel-bleed': bleedCss.value,
   } as Record<string, string>
 })
 
@@ -51,18 +53,18 @@ async function rebakeRim() {
   const trimmed = props.color.trim()
   const hex = /^#[0-9a-fA-F]{6}$/.test(trimmed) || /^#[0-9a-fA-F]{3}$/.test(trimmed)
     ? trimmed
-    : resolveCssColorToHex(el, props.color, '#b84e55')
+    : resolveCssColorToHex(el, props.color, '#c4565e')
   const url = bakeChiselRimImage({
     widthCss: r.width,
     heightCss: r.height,
     colorHex: hex,
-    bleedPx: CARD_BLEED_PX,
+    bleedPx: props.bleedPx,
     depthEffect: 0,
     cleanRim: false,
     flatRim: false,
     panelFill: true,
     monotoneFill: true,
-    borderPx: 8,
+    borderPx: props.borderPx,
   })
   if (!cancelled && url) rimUrl.value = url
 }
@@ -101,13 +103,6 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="rootRef" class="chisel-frame" :style="rimStyle">
-    <div
-      v-if="textureGrainUrl && rimUrl"
-      class="chisel-frame__texture"
-      aria-hidden="true"
-    >
-      <img class="chisel-frame__texture-img" :src="textureGrainUrl" alt="" />
-    </div>
     <div class="chisel-frame__body">
       <slot />
     </div>
@@ -140,33 +135,6 @@ onBeforeUnmount(() => {
   background-repeat: no-repeat;
   background-position: center;
   pointer-events: none;
-}
-
-/* Paint grain — full piece, clipped to the baked plate alpha */
-.chisel-frame__texture {
-  position: absolute;
-  inset: calc(-1 * var(--chisel-bleed, 16px));
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
-  -webkit-mask-image: var(--chisel-rim-image, none);
-  mask-image: var(--chisel-rim-image, none);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-mode: alpha;
-  mask-mode: alpha;
-}
-
-.chisel-frame__texture-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  mix-blend-mode: var(--case-insight-grain-blend, multiply);
-  opacity: var(--case-insight-grain-opacity, 0.58);
-  user-select: none;
 }
 
 .chisel-frame__body {

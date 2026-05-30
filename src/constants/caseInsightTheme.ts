@@ -2,7 +2,7 @@
 export const CASE_INSIGHT_THEME = {
   before: {
     accent: '#ffc9c9',
-    surface: '#b84e55',
+    surface: '#c4565e',
   },
   after: {
     accent: '#b8ffd0',
