@@ -8,14 +8,19 @@ const props = withDefaults(
     color?: string
     /** Cards use a prebaked static rim; live ink is reserved for work panels. */
     hoverFlame?: boolean
+    /** Multiply grain baked to full plate + bleed; masked by the chisel bake. */
+    textureGrainUrl?: string | null
   }>(),
   {
     color: 'var(--case-insight-surface-before)',
     hoverFlame: false,
+    textureGrainUrl: null,
   },
 )
 
 const rootRef = ref<HTMLElement | null>(null)
+
+defineExpose({ rootEl: rootRef })
 const rimUrl = ref<string | null>(null)
 let cancelled = false
 let resizeObserver: ResizeObserver | null = null
@@ -96,6 +101,13 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="rootRef" class="chisel-frame" :style="rimStyle">
+    <div
+      v-if="textureGrainUrl && rimUrl"
+      class="chisel-frame__texture"
+      aria-hidden="true"
+    >
+      <img class="chisel-frame__texture-img" :src="textureGrainUrl" alt="" />
+    </div>
     <div class="chisel-frame__body">
       <slot />
     </div>
@@ -117,6 +129,7 @@ onBeforeUnmount(() => {
 }
 
 /* Baked plate (fill + deckle) — must live in DOM; page bg sits above fixed WebGL canvas */
+/* Baked plate: fill + deckled border in one tone */
 .chisel-frame::before {
   content: '';
   position: absolute;
@@ -129,9 +142,36 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
+/* Paint grain — full piece, clipped to the baked plate alpha */
+.chisel-frame__texture {
+  position: absolute;
+  inset: calc(-1 * var(--chisel-bleed, 16px));
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask-image: var(--chisel-rim-image, none);
+  mask-image: var(--chisel-rim-image, none);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+}
+
+.chisel-frame__texture-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  mix-blend-mode: var(--case-insight-grain-blend, multiply);
+  opacity: var(--case-insight-grain-opacity, 0.58);
+  user-select: none;
+}
+
 .chisel-frame__body {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;

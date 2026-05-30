@@ -140,12 +140,13 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
     vec2 q = p - u_pCardCenter;
     float dBox = sdBox(q, u_innerHalf);
     float dFinal = getBorderDistance(p);
-    float densityMap = fbm(p * 4.0);
-    float paintThickness = smoothstep(-1.0, 1.0, densityMap);
-    float alphaMult = mix(1.0, paintThickness + 0.3, u_densityVar);
-
     vec3 finalColor = u_color;
-    finalColor *= alphaMult;
+    if (u_monotoneFill < 0.5) {
+      float densityMap = fbm(p * 4.0);
+      float paintThickness = smoothstep(-1.0, 1.0, densityMap);
+      float alphaMult = mix(1.0, paintThickness + 0.3, u_densityVar);
+      finalColor *= alphaMult;
+    }
 
     float borderAlpha = u_flatRim > 0.5
       ? 1.0 - smoothstep(-0.004, 0.016, dFinal)
@@ -330,9 +331,14 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
       : Math.min(0.18, (organicPx * 2) / Math.max(shortPx, 1))
   }
   if (opts.panelFill) {
-    bakeMaterial.uniforms.u_borderWidth.value = Math.max(borderNorm, 0.048)
-    bakeMaterial.uniforms.u_chiselDepth.value = 0.028
-    bakeMaterial.uniforms.u_chiselDensity.value = 9.5
+    bakeMaterial.uniforms.u_borderWidth.value = Math.max(
+      borderNorm,
+      opts.monotoneFill ? 0.038 : 0.048,
+    )
+    if (!opts.monotoneFill) {
+      bakeMaterial.uniforms.u_chiselDepth.value = 0.028
+      bakeMaterial.uniforms.u_chiselDensity.value = 9.5
+    }
   }
   if (flatRim && !cleanRim) {
     bakeMaterial.uniforms.u_chiselDepth.value = 0
