@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { captureVfxRenderStatus } from '../analytics'
 import { useInsightCardGrain } from '../composables/useInsightCardGrain'
 import {
   registerChiselFrame,
@@ -79,6 +80,7 @@ function startLiveFrame() {
     bleedPx: PANEL_BLEED_PX,
     skipAncestorClip: true,
   })
+  captureVfxRenderStatus('work_panel_chisel', { mode: 'webgl' })
 }
 
 onMounted(() => {

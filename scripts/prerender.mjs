@@ -25,6 +25,7 @@ const ROUTE_WAIT_SELECTOR = {
   '/work/list': '.featured-case-studies',
   '/work/guild-of-guardians': '.project-hero',
   '/work/rocksmith': '.project-hero',
+  '/work/cozy-corner': '.project-hero',
 }
 
 /** Block WebGL during prerender — headless CI can hang on Three.js init. */

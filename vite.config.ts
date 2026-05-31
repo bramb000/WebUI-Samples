@@ -12,6 +12,11 @@ const dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(file
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   base: '/',
+  server: {
+    watch: {
+      ignored: ['**/.tmp/**', '**/.tmp_pip/**'],
+    },
+  },
   build: {
     outDir: 'build',
     // Keep large textures as separate hashed files (default 4KB inline threshold).

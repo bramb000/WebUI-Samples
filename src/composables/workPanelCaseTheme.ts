@@ -5,4 +5,4 @@ import { ref } from 'vue'
  * stays `Work`, so `useCaseTheme` reads this ref to apply the same tokens as the
  * dedicated `/work/guild-of-guardians` and `/work/rocksmith` pages.
  */
-export const workPanelEmbeddedCaseStudyId = ref<'guild' | 'rocksmith' | null>(null)
+export const workPanelEmbeddedCaseStudyId = ref<'guild' | 'rocksmith' | 'cozy-corner' | null>(null)

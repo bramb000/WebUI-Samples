@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import "./design/book-tokens.css";
+/* Exclude temp analysis clones from Tailwind source scanning (prevents stale .tmp CSS deps) */
+@source not "../.tmp";
+@source not "../.tmp_pip";
 @variant dark (&:where(.dark, .dark *));
 
 /* ── UI Variables ── */
@@ -120,6 +123,10 @@
   --case-insight-on-fill:        #f5f2ec;
   --case-insight-on-fill-muted:  #cfc8bc;
   --case-insight-on-fill-subtle: #a8a198;
+  /* Paint grain on full chisel plate (masked by baked plate alpha) */
+  --case-insight-grain-overlay-strength: 0.42;
+  --case-insight-grain-opacity:          0.64;
+  --case-insight-grain-blend:            multiply;
   /* Project roster cards — discipline colour coding */
   --roster-discipline-product-design: #524f81;
   --roster-discipline-ui-design:       #00674f;
@@ -1152,7 +1159,7 @@ h5, h6 {
   --case-insight-surface-fill: var(--case-insight-surface-before);
 }
 
-/* Lift plates above section noise */
+/* Lift plates above section noise; grain is masked inside ProceduralChiselFrame */
 .insight-frame,
 .metric-frame {
   position: relative;

@@ -34,6 +34,7 @@ type Project = {
     label: string
   }
   clientName?: string
+  clientPrefix?: boolean
 }
 
 import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
@@ -149,6 +150,20 @@ const projects = ref<Project[]>([
     tech: ['code', 'layers', 'spark', 'cube'],
     roster: rosterMeta('Rocksmith+'),
     clientName: 'Ubisoft',
+  },
+  {
+    id: 'cozy-corner',
+    discipline: 'product-design',
+    title: 'Cozy Corner, A Warm Third Space',
+    subtitle: 'Realtime chat, voice & shared world',
+    tags: ['PIXEL', 'REALTIME', 'SOLO'],
+    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    thumb: projectArt('cozy-corner', 59),
+    splash: projectArt('cozy-corner', 59),
+    tech: ['layers', 'code', 'spark', 'cube'],
+    roster: rosterMeta('Cozy Corner'),
+    clientName: 'client work',
+    clientPrefix: false,
   },
   {
     id: 'login',
@@ -289,6 +304,7 @@ type EmbeddedImporter = () => Promise<{ default: any }>
 const embeddedProjectImportById: Record<Project['id'], EmbeddedImporter> = {
   guild: () => import('./ProjectGuild.vue'),
   rocksmith: () => import('./ProjectRocksmith.vue'),
+  'cozy-corner': () => import('./ProjectCozyCorner.vue'),
   login: () => import('./LoginInteraction.vue'),
   helldivers: () => import('./ExperimentHelldivers.vue'),
   'account-tray': () => import('./AccountTrayView.vue'),
@@ -302,6 +318,7 @@ const embeddedProjectImportById: Record<Project['id'], EmbeddedImporter> = {
 const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
   guild: defineAsyncComponent(embeddedProjectImportById.guild),
   rocksmith: defineAsyncComponent(embeddedProjectImportById.rocksmith),
+  'cozy-corner': defineAsyncComponent(embeddedProjectImportById['cozy-corner']),
   login: defineAsyncComponent(embeddedProjectImportById.login),
   helldivers: defineAsyncComponent(embeddedProjectImportById.helldivers),
   'account-tray': defineAsyncComponent(embeddedProjectImportById['account-tray']),
@@ -315,7 +332,9 @@ const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
 const displayedEmbeddedComponent = computed(
   () => embeddedProjectComponentById[displayedId.value] ?? null,
 )
-const isCaseStudyEmbedded = computed(() => displayedId.value === 'guild' || displayedId.value === 'rocksmith')
+const isCaseStudyEmbedded = computed(() =>
+  displayedId.value === 'guild' || displayedId.value === 'rocksmith' || displayedId.value === 'cozy-corner',
+)
 
 watch(
   [displayedId, isMobile],
@@ -324,7 +343,8 @@ watch(
       workPanelEmbeddedCaseStudyId.value = null
       return
     }
-    workPanelEmbeddedCaseStudyId.value = id === 'guild' || id === 'rocksmith' ? id : null
+    workPanelEmbeddedCaseStudyId.value =
+      id === 'guild' || id === 'rocksmith' || id === 'cozy-corner' ? id : null
   },
   { immediate: true },
 )
@@ -511,6 +531,7 @@ function onDone(trigger: number) {
                 :plate-grain="plateGrainBakes[p.id]"
                 :variant="p.clientName ? 'case-study' : 'default'"
                 :client-name="p.clientName"
+                :client-prefix="p.clientPrefix"
                 :selected="!isMobile && p.id === activeProject.id"
                 :pressed="p.id === pressedId"
                 :style="{

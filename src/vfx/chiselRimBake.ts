@@ -14,8 +14,15 @@ export type ChiselRimBakeOptions = {
   borderPx?: number
   /** 0 = flat tone matching interior fill; default card lighting is ~0.164 */
   depthEffect?: number
-  /** Insight cards: no angular cuts / wobble (clean rim in surface color). */
+  /**
+   * Removes angular chisel cuts, wobble, and organic deckle — yields a plain rectangle.
+   * Prefer tuning {@link organicAmpPx} to match `chiselFrameOverlay` instead.
+   */
   cleanRim?: boolean
+  /** Outer organic deckle in CSS px (0 = none; panel bake default is 14). */
+  organicAmpPx?: number
+  /** Micro border wobble (default 0.01; use 0 with {@link organicAmpPx} 0 for no deckle). */
+  wobble?: number
   /** Paint rim outside the card rect only (visible deckle on parchment). */
   outwardRim?: boolean
   /** Bake interior fill + deckled edge (parchment-style card plate). */
@@ -25,6 +32,8 @@ export type ChiselRimBakeOptions = {
 }
 
 export const CARD_BLEED_PX = 16
+/** Insight/metric cards: no organic deckle on the baked rim. */
+export const CARD_ORGANIC_AMP_PX = 0
 const MAX_BAKE_EDGE_PX = 1024
 
 const CHISEL_BAKE_FRAGMENT = /* glsl */ `
@@ -305,7 +314,7 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
     bakeMaterial.uniforms.u_chiselDepth.value = 0.0206
     bakeMaterial.uniforms.u_chiselChaos.value = 1.0
     bakeMaterial.uniforms.u_chiselDensity.value = 8.0
-    bakeMaterial.uniforms.u_wobble.value = 0.01
+    bakeMaterial.uniforms.u_wobble.value = opts.wobble ?? 0.01
   }
 
   const aspect = vw / Math.max(vh, 1)
@@ -325,7 +334,8 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   const borderNorm = borderPx / Math.max(shortPx, 1)
   bakeMaterial.uniforms.u_borderWidth.value = borderNorm
   if (!cleanRim) {
-    const organicPx = opts.panelFill ? 14 : 7
+    const organicPx =
+      opts.organicAmpPx ?? (opts.panelFill ? 14 : 7)
     bakeMaterial.uniforms.u_outerOrganicAmp.value = flatRim
       ? 0
       : Math.min(0.18, (organicPx * 2) / Math.max(shortPx, 1))

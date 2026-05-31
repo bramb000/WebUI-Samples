@@ -64,7 +64,7 @@ const achievementCards: AchievementCard[] = [
   },
   {
     id: 'home-achievement-ai',
-    title: 'Saving $100,000+ annually by automating agentic AI insights & processes for faster discovery',
+    title: 'Using agentic AI and mix medium research methods to drive decision worth millions of dollars',
     ...homeAchievementCardArt('ai'),
     roster: achievementRoster('AI'),
   },

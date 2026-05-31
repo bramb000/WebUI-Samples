@@ -24,6 +24,8 @@ interface Props {
   variant?: RosterCardVariant
   plateTypography?: RosterCardPlateTypography
   clientName?: string
+  /** When false, plate shows `clientName` only (no “for ” prefix). Default true. */
+  clientPrefix?: boolean
   selected?: boolean
   pressed?: boolean
   /** When false, skips scale/sway hover keyframes (e.g. home achievement strip). */
@@ -36,6 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
   selected: false,
   pressed: false,
   hoverMotion: true,
+  clientPrefix: true,
 })
 
 const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
@@ -128,7 +131,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
           class="thumbnail-client"
           :class="'type-roster-card-client'"
         >
-          for {{ clientName }}
+          {{ clientPrefix ? `for ${clientName}` : clientName }}
         </span>
       </div>
     </div>

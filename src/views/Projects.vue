@@ -65,6 +65,13 @@ const projects = [
     category: 'Web Design'
   },
   {
+    id: 'cozy-corner',
+    title: 'Cozy Corner, A Warm Third Space',
+    description: 'Real-time chat, voice rooms, shared world, and layered sprite avatars in a tactile pixel UI.',
+    route: '/work/cozy-corner',
+    category: 'Web Design'
+  },
+  {
     id: 'node-graph',
     title: 'Node Graph Visual Scripting',
     description: 'Visual Scripting UI with Excel inspired help section.',

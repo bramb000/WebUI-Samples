@@ -9,6 +9,7 @@ import loginCard from './Login Interaction.webp'
 import voiceChatCard from './AI Voice Chat.webp'
 import pataponCard from './Rhythm Game.webp'
 import jediCard from './laser sword.webp'
+import cozyCornerCard from './Cozy Corner.webp'
 
 export const ROSTER_CARD_IMAGE_BY_ID: Partial<Record<string, string>> = {
   guild: guildCard,
@@ -18,6 +19,7 @@ export const ROSTER_CARD_IMAGE_BY_ID: Partial<Record<string, string>> = {
   'voice-chat': voiceChatCard,
   patapon: pataponCard,
   jedi: jediCard,
+  'cozy-corner': cozyCornerCard,
 }
 
 export function rosterCardImage(id: string): string | undefined {

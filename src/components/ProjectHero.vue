@@ -36,7 +36,10 @@ defineProps<Props>();
     </div>
 
     <!-- Metadata Grid -->
-    <div class="hero-meta-grid panel-recessed panel-recessed--borderless panel-recessed--pencil-frame">
+    <div
+      class="hero-meta-grid panel-recessed panel-recessed--borderless panel-recessed--pencil-frame"
+      :class="{ 'hero-meta-grid--no-team': !$slots.team }"
+    >
       <div class="hero-meta-cell">
         <div class="meta-label">
           <span class="type-meta-label">Role</span>
@@ -49,7 +52,7 @@ defineProps<Props>();
         </div>
         <p class="type-meta-value">{{ timeline }}</p>
       </div>
-      <div class="hero-meta-cell hero-meta-cell--wide">
+      <div v-if="$slots.team" class="hero-meta-cell hero-meta-cell--wide">
         <div class="meta-label">
           <span class="type-meta-label">Team</span>
         </div>
@@ -130,6 +133,7 @@ defineProps<Props>();
 }
 @media (min-width: 768px) {
   .hero-meta-grid { grid-template-columns: 1fr 1fr 2fr; }
+  .hero-meta-grid--no-team { grid-template-columns: 1fr 1fr; }
 }
 
 .hero-meta-cell {

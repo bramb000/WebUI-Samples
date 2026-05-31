@@ -9,6 +9,7 @@ import { workPanelEmbeddedCaseStudyId } from './workPanelCaseTheme';
 const ROUTE_THEME_MAP: Record<string, string> = {
   ProjectGuild:     'tinkerer',   // Furnace Amber  — Live-ops, data-driven systems
   ProjectRocksmith: 'alchemist',  // Spectral Teal  — Multi-platform engineering
+  ProjectCozyCorner: 'illusionist', // Arcane Purple — Creative / pixel social app
   // ProjectPaperRPG: 'illusionist', // Arcane Purple — Creative / narrative work
 };
 
@@ -16,6 +17,7 @@ const ROUTE_THEME_MAP: Record<string, string> = {
 const EMBEDDED_CASE_STUDY_THEME_MAP: Record<string, string> = {
   guild: 'tinkerer',
   rocksmith: 'alchemist',
+  'cozy-corner': 'illusionist',
 };
 
 /**

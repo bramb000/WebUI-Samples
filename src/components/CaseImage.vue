@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useId } from 'vue'
 import CaseLightboxOverlay from './CaseLightboxOverlay.vue'
 import { useCaseLightbox } from '../composables/useCaseLightbox'
+
+const captionId = useId()
 
 const props = defineProps<{
   src: string
@@ -28,6 +31,8 @@ const { isOpen, open, close } = useCaseLightbox()
       <img
         :src="props.src"
         :alt="props.alt"
+        :title="props.caption"
+        :aria-describedby="props.caption ? captionId : undefined"
         :loading="props.priority ? 'eager' : 'lazy'"
         :fetchpriority="props.priority ? 'high' : 'auto'"
         decoding="async"
@@ -39,6 +44,7 @@ const { isOpen, open, close } = useCaseLightbox()
     </button>
     <figcaption
       v-if="props.caption"
+      :id="captionId"
       class="type-case-caption text-center"
     >
       {{ props.caption }}
@@ -54,6 +60,7 @@ const { isOpen, open, close } = useCaseLightbox()
       <img
         :src="props.src"
         :alt="props.alt"
+        :title="props.caption"
         class="lightbox-image"
       />
     </CaseLightboxOverlay>

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 /**
  * Looping case-study clip — prefer WebM over GIF. Defers decode until near viewport unless priority.
+ * Holds the last frame for 5s before restarting (no native loop attribute).
  */
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, useId } from 'vue'
 import CaseLightboxOverlay from './CaseLightboxOverlay.vue'
 import { useCaseLightbox } from '../composables/useCaseLightbox'
+
+const END_HOLD_MS = 5000
 
 const props = defineProps<{
   src: string
@@ -18,12 +21,35 @@ const props = defineProps<{
 const { isOpen, open, close } = useCaseLightbox()
 const root = ref<HTMLElement | null>(null)
 const shouldPlay = ref(!!props.priority)
+const captionId = useId()
 let observer: IntersectionObserver | null = null
+const holdTimeouts = new Map<HTMLVideoElement, ReturnType<typeof setTimeout>>()
 
 const mediaClass = [
   'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
   props.imgClass,
 ]
+
+function clearHoldFor(video: HTMLVideoElement) {
+  const timeout = holdTimeouts.get(video)
+  if (timeout) {
+    clearTimeout(timeout)
+    holdTimeouts.delete(video)
+  }
+}
+
+function onVideoEnded(event: Event) {
+  const video = event.target as HTMLVideoElement
+  clearHoldFor(video)
+  holdTimeouts.set(
+    video,
+    setTimeout(() => {
+      video.currentTime = 0
+      void video.play()
+      holdTimeouts.delete(video)
+    }, END_HOLD_MS),
+  )
+}
 
 onMounted(() => {
   if (props.priority) return
@@ -41,6 +67,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   observer?.disconnect()
+  for (const timeout of holdTimeouts.values()) clearTimeout(timeout)
+  holdTimeouts.clear()
 })
 </script>
 
@@ -58,12 +86,14 @@ onUnmounted(() => {
         :poster="props.poster"
         :class="mediaClass"
         autoplay
-        loop
         muted
         playsinline
         disablepictureinpicture
         :preload="props.priority ? 'auto' : 'none'"
         :aria-label="props.alt"
+        :title="props.caption"
+        :aria-describedby="props.caption ? captionId : undefined"
+        @ended="onVideoEnded"
       />
     </button>
     <div
@@ -75,6 +105,7 @@ onUnmounted(() => {
     />
     <figcaption
       v-if="props.caption"
+      :id="captionId"
       class="type-case-caption text-center"
     >
       {{ props.caption }}
@@ -92,11 +123,13 @@ onUnmounted(() => {
         :poster="props.poster"
         class="lightbox-video"
         autoplay
-        loop
         muted
         playsinline
         disablepictureinpicture
         :aria-label="props.alt"
+        :title="props.caption"
+        :aria-describedby="props.caption ? captionId : undefined"
+        @ended="onVideoEnded"
       />
     </CaseLightboxOverlay>
   </figure>

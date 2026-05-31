@@ -5,6 +5,7 @@ import {
   TESTIMONIAL_BOOK_ENTRIES,
   TESTIMONIAL_BOOK_LEAVES,
 } from '../../constants/testimonialBookData'
+import { captureVfxRenderStatus } from '../../analytics'
 import { canUseWebGL } from '../../composables/canUseWebGL'
 import { useReducedMotion } from '../../composables/useReducedMotion'
 import { useScrollProgress } from '../../composables/useScrollProgress'
@@ -73,19 +74,36 @@ async function mountBook() {
   }
 }
 
+function reportBookRenderStatus() {
+  if (webglInitFailed.value) {
+    captureVfxRenderStatus('detective_book', { mode: 'init_failed' })
+    return
+  }
+  if (useStaticFallback.value) {
+    captureVfxRenderStatus('detective_book', {
+      mode: 'static_fallback',
+      reason: 'webgl_unavailable',
+    })
+    return
+  }
+  captureVfxRenderStatus('detective_book', { mode: 'webgl' })
+}
+
 function onResize() {
   bookScene?.resize()
 }
 
 watch(
   () => [useStaticFallback.value, canvasRef.value, reducedMotion.value] as const,
-  () => void mountBook(),
+  () => {
+    void mountBook().then(() => reportBookRenderStatus())
+  },
   { flush: 'post' },
 )
 
 onMounted(() => {
   webglSupported.value = canUseWebGL()
-  void mountBook()
+  void mountBook().then(() => reportBookRenderStatus())
   window.addEventListener('resize', onResize, { passive: true })
 })
 

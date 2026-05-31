@@ -103,6 +103,12 @@ const routes = [
         meta: seo('VoiceChatSimulation'),
     },
     {
+        path: '/work/cozy-corner',
+        name: 'ProjectCozyCorner',
+        component: () => import('../views/ProjectCozyCorner.vue'),
+        meta: { ...seo('ProjectCozyCorner'), sitemap: true, prerender: true },
+    },
+    {
         path: '/micro-projects/sales-modal',
         redirect: '/work/sales-modal',
     },

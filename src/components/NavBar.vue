@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { captureEvent } from '../analytics';
+import { captureEvent, captureVfxRenderStatus } from '../analytics';
 import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
 
@@ -11,6 +11,11 @@ const showWisp = computed(() => !lowPower.value);
 
 const route = useRoute();
 const isMenuOpen = ref(false);
+
+watch(showWisp, (show) => {
+  if (!show)
+    captureVfxRenderStatus('nav_wisp', { mode: 'disabled', reason: 'low_power' })
+}, { immediate: true })
 
 watch(isMenuOpen, (isOpen) => {
   if (isOpen) {

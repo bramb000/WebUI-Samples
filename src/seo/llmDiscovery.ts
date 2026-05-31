@@ -12,6 +12,7 @@ const LLM_MIRROR_BY_ROUTE: Record<string, string> = {
   '/work/list': '/llm/work-list.txt',
   '/work/guild-of-guardians': '/llm/guild-of-guardians.txt',
   '/work/rocksmith': '/llm/rocksmith.txt',
+  '/work/cozy-corner': '/llm/cozy-corner.txt',
 }
 
 export function llmMirrorPathForRoute(routePath: string): string | null {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import * as THREE from 'three';
+import { captureVfxRenderStatus } from '../analytics';
 import { wispState } from '../composables/wispState';
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -275,6 +276,7 @@ onMounted(() => {
   document.addEventListener('visibilitychange', onVisibilityChange);
 
   animate();
+  captureVfxRenderStatus('nav_wisp', { mode: 'webgl' });
 });
 
 onUnmounted(() => {

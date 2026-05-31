@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { CASE_INSIGHT_THEME } from '../constants/caseInsightTheme'
+import { useInsightCardGrain } from '../composables/useInsightCardGrain'
 import ProceduralChiselFrame from './ProceduralChiselFrame.vue'
 
 const props = withDefaults(
@@ -28,6 +29,21 @@ const surfaceFill = computed(() =>
 
 const surfaceHex = computed(() => CASE_INSIGHT_THEME[props.theme].surface)
 
+const grainSeed = computed(() => {
+  const label = `${props.stat ?? ''}-${props.statLabel ?? ''}-${props.theme}`
+  let h = 0
+  for (let i = 0; i < label.length; i++)
+    h = (h * 31 + label.charCodeAt(i)) | 0
+  return Math.abs(h) % 1000
+})
+
+const frameRef = ref<{ rootEl: HTMLElement | null } | null>(null)
+const frameEl = computed(() => frameRef.value?.rootEl ?? null)
+
+const { grainUrl, scheduleRebake } = useInsightCardGrain(frameEl, grainSeed)
+
+watch([surfaceHex, () => props.theme], () => scheduleRebake())
+
 const wrapStyle = computed(() => ({
   '--insight-accent': frameAccent.value,
   '--case-insight-surface-fill': surfaceFill.value,
@@ -36,8 +52,10 @@ const wrapStyle = computed(() => ({
 
 <template>
   <ProceduralChiselFrame
+    ref="frameRef"
     class="insight-frame"
     :color="surfaceHex"
+    :texture-grain-url="grainUrl"
     :hover-flame="false"
   >
     <div class="insight-wrap" :style="wrapStyle">

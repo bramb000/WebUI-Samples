@@ -7,6 +7,7 @@ export const PROJECT_ROUTE_BY_ID: Record<string, string> = {
   'account-tray': '/work/account-tray',
   'sales-modal': '/work/sales-modal',
   'voice-chat': '/work/voice-chat',
+  'cozy-corner': '/work/cozy-corner',
   'node-graph': '/node-graph',
   patapon: '/experiment/patapon',
   jedi: '/experiment/jedi',

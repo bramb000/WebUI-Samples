@@ -19,6 +19,7 @@ const LLM_MIRROR_FILES = [
   'work-list.txt',
   'guild-of-guardians.txt',
   'rocksmith.txt',
+  'cozy-corner.txt',
 ]
 
 function htmlPathForRoute(route) {

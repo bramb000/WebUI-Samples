@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { bakeChiselRimImage, CARD_BLEED_PX } from '../vfx/chiselRimBake'
+import {
+  bakeChiselRimImage,
+  CARD_BLEED_PX,
+  CARD_ORGANIC_AMP_PX,
+} from '../vfx/chiselRimBake'
 import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
 const props = withDefaults(
@@ -8,19 +12,24 @@ const props = withDefaults(
     color?: string
     /** Cards use a prebaked static rim; live ink is reserved for work panels. */
     hoverFlame?: boolean
-    /** Gutter beyond bounds for deckled rim (parchment uses a larger bleed). */
+    /** Gutter beyond bounds for chisel rim bleed (parchment uses a larger bleed). */
     bleedPx?: number
     borderPx?: number
+    /** Multiply grain baked to full plate + bleed; masked by the chisel bake. */
+    textureGrainUrl?: string | null
   }>(),
   {
     color: 'var(--case-insight-surface-before)',
     hoverFlame: false,
     bleedPx: CARD_BLEED_PX,
     borderPx: 8,
+    textureGrainUrl: null,
   },
 )
 
 const rootRef = ref<HTMLElement | null>(null)
+
+defineExpose({ rootEl: rootRef })
 const rimUrl = ref<string | null>(null)
 let cancelled = false
 let resizeObserver: ResizeObserver | null = null
@@ -60,10 +69,10 @@ async function rebakeRim() {
     colorHex: hex,
     bleedPx: props.bleedPx,
     depthEffect: 0,
-    cleanRim: false,
     flatRim: false,
     panelFill: true,
     monotoneFill: true,
+    organicAmpPx: CARD_ORGANIC_AMP_PX,
     borderPx: props.borderPx,
   })
   if (!cancelled && url) rimUrl.value = url
@@ -88,7 +97,7 @@ onMounted(() => {
 })
 
 watch(
-  () => props.color,
+  () => [props.color, props.borderPx, props.bleedPx] as const,
   () => scheduleRebake(),
 )
 
@@ -103,6 +112,13 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="rootRef" class="chisel-frame" :style="rimStyle">
+    <div
+      v-if="textureGrainUrl && rimUrl"
+      class="chisel-frame__texture"
+      aria-hidden="true"
+    >
+      <img class="chisel-frame__texture-img" :src="textureGrainUrl" alt="" />
+    </div>
     <div class="chisel-frame__body">
       <slot />
     </div>
@@ -124,7 +140,7 @@ onBeforeUnmount(() => {
 }
 
 /* Baked plate (fill + deckle) — must live in DOM; page bg sits above fixed WebGL canvas */
-/* Baked plate: fill + deckled border in one tone */
+/* Baked plate: fill + chisel border in one tone */
 .chisel-frame::before {
   content: '';
   position: absolute;
@@ -135,6 +151,33 @@ onBeforeUnmount(() => {
   background-repeat: no-repeat;
   background-position: center;
   pointer-events: none;
+}
+
+/* Paint grain — full piece, clipped to the baked plate alpha */
+.chisel-frame__texture {
+  position: absolute;
+  inset: calc(-1 * var(--chisel-bleed, 16px));
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask-image: var(--chisel-rim-image, none);
+  mask-image: var(--chisel-rim-image, none);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-mode: alpha;
+  mask-mode: alpha;
+}
+
+.chisel-frame__texture-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  mix-blend-mode: var(--case-insight-grain-blend, multiply);
+  opacity: var(--case-insight-grain-opacity, 0.58);
+  user-select: none;
 }
 
 .chisel-frame__body {

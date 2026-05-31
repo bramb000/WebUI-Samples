@@ -21,6 +21,13 @@ export function initAnalyticsDeferred(): Promise<PostHog | null> {
           api_host: import.meta.env.VITE_POSTHOG_HOST || 'https://us.i.posthog.com',
           person_profiles: 'identified_only',
           capture_pageview: false,
+          // Canvas/WebGL is opt-in in PostHog replay settings (no PII masking). Tunes capture when enabled.
+          session_recording: {
+            captureCanvas: {
+              canvasFps: 2,
+              canvasQuality: '0.35',
+            },
+          },
         })
         posthogInstance = posthog
         ;(window as Window & { posthog?: PostHog }).posthog = posthog
@@ -47,6 +54,24 @@ export function captureEvent(
 ) {
   void initAnalyticsDeferred().then((ph) => {
     ph?.capture(event, properties)
+  })
+}
+
+/** Correlate session replay with live WebGL vs static fallbacks (canvas is often blank in replay). */
+export type VfxRenderMode = 'webgl' | 'static_fallback' | 'disabled' | 'init_failed'
+
+export function captureVfxRenderStatus(
+  component: string,
+  properties: {
+    mode: VfxRenderMode
+    reason?: string
+  },
+) {
+  captureEvent('vfx_render_status', {
+    component,
+    mode: properties.mode,
+    ...(properties.reason ? { reason: properties.reason } : {}),
+    path: typeof window !== 'undefined' ? window.location.pathname : '',
   })
 }
 

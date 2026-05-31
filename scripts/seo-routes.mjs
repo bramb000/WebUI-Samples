@@ -6,6 +6,7 @@ export const INDEXABLE_PATHS = [
   '/work/list',
   '/work/guild-of-guardians',
   '/work/rocksmith',
+  '/work/cozy-corner',
 ]
 
 export const SITEMAP_ENTRIES = [
@@ -15,4 +16,5 @@ export const SITEMAP_ENTRIES = [
   { loc: '/work/list', changefreq: 'weekly', priority: '0.85' },
   { loc: '/work/guild-of-guardians', changefreq: 'monthly', priority: '0.9' },
   { loc: '/work/rocksmith', changefreq: 'monthly', priority: '0.9' },
+  { loc: '/work/cozy-corner', changefreq: 'monthly', priority: '0.85' },
 ]
