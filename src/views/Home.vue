@@ -374,11 +374,9 @@ onMounted(async () => {
     margin-block: 0;
   }
 
-  .home-achievement-card__motion {
-    opacity: 1;
-    transform: none;
-    animation: none !important;
-    will-change: auto;
+  /* Keep the entrance stagger on mobile; skip the infinite float loop (battery + small viewports). */
+  .home-achievements--entered .home-achievement-card__motion {
+    animation: home-achievement-jump 0.82s var(--ease-mechanical-spring) var(--home-card-stagger, 0ms) forwards;
   }
 }
 </style>

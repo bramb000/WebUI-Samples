@@ -13,6 +13,4 @@ app.use(router)
 void initAnalyticsDeferred()
 setupAnalytics(router)
 
-void router.isReady().then(() => {
-  app.mount('#app')
-})
+app.mount('#app')

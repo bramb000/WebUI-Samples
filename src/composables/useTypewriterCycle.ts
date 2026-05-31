@@ -65,8 +65,15 @@ export function useTypewriterCycle(
       return
 
     if (reducedMotion?.value) {
-      displayed.value = phrases[0] ?? ''
       phraseIndex.value = 0
+      displayed.value = phrases[0] ?? ''
+      if (phrases.length > 1) {
+        schedule(() => {
+          phraseIndex.value = (phraseIndex.value + 1) % phrases.length
+          displayed.value = phrases[phraseIndex.value] ?? ''
+          start()
+        }, holdMs * 2)
+      }
       return
     }
 
@@ -75,7 +82,10 @@ export function useTypewriterCycle(
     stepType()
   }
 
-  onMounted(start)
+  onMounted(() => {
+    // Defer one frame so co-located useReducedMotion() has synced from matchMedia.
+    requestAnimationFrame(() => start())
+  })
 
   onUnmounted(clearTimer)
 

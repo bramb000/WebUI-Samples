@@ -49,9 +49,9 @@ useCaseTheme();
     ]">
       <router-view v-slot="{ Component }">
         <transition v-if="!isFullScreen" name="fade" mode="out-in">
-          <component :is="Component" />
+          <component :is="Component" :key="route.path" />
         </transition>
-        <component v-else :is="Component" />
+        <component v-else :is="Component" :key="route.path" />
       </router-view>
     </main>
 
