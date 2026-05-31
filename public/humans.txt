@@ -6,6 +6,13 @@ https://bramha.work/
 
 /* CONTACT */
 LinkedIn: https://www.linkedin.com/in/bramdal/
+Email: hello@bramha.work
 
 /* OPEN TO */
 Game designer, product designer, UI/UX designer, product manager — games industry
+
+/* LLM / AI PARSING */
+Summary: https://bramha.work/llms.txt
+Full context: https://bramha.work/llms-full.txt
+Plain-text pages: https://bramha.work/llm/index.txt
+Well-known: https://bramha.work/.well-known/llms.txt

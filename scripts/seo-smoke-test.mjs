@@ -12,6 +12,15 @@ const BUILD = path.join(ROOT, 'build')
 
 const PHRASE = 'UX designer for games'
 
+const LLM_MIRROR_FILES = [
+  'home.txt',
+  'about.txt',
+  'work.txt',
+  'work-list.txt',
+  'guild-of-guardians.txt',
+  'rocksmith.txt',
+]
+
 function htmlPathForRoute(route) {
   if (route === '/') return path.join(BUILD, 'index.html')
   return path.join(BUILD, route.replace(/^\//, ''), 'index.html')
@@ -34,6 +43,13 @@ for (const route of INDEXABLE_PATHS) {
   if (!/name="description"/i.test(html)) {
     console.error(`FAIL: ${route} missing meta description`)
     failed++
+  }
+  if (/127\.0\.0\.1|localhost:\d+/i.test(html)) {
+    console.error(`FAIL: ${route} prerender contains localhost URLs`)
+    failed++
+  }
+  if (!/rel="llms-txt"/i.test(html) && route === '/') {
+    console.error('FAIL: home prerender missing llms-txt link (check @unhead injection after mount)')
   }
 }
 
@@ -63,9 +79,33 @@ for (const name of ['llms.txt', 'llms-full.txt', 'robots.txt', 'sitemap.xml']) {
   }
 }
 
+for (const name of LLM_MIRROR_FILES) {
+  const file = path.join(BUILD, 'llm', name)
+  if (!fs.existsSync(file)) {
+    console.error(`FAIL: build/llm/${name} missing`)
+    failed++
+  }
+}
+
+if (!fs.existsSync(path.join(BUILD, 'llm', 'index.txt'))) {
+  console.error('FAIL: build/llm/index.txt missing')
+  failed++
+}
+
+if (!fs.existsSync(path.join(BUILD, '.well-known', 'llms.txt'))) {
+  console.error('FAIL: build/.well-known/llms.txt missing')
+  failed++
+}
+
+const llmsTxt = fs.readFileSync(path.join(BUILD, 'llms.txt'), 'utf8')
+if (!llmsTxt.includes('/llm/index.txt')) {
+  console.error('FAIL: llms.txt missing plain-text mirror index reference')
+  failed++
+}
+
 if (failed > 0) {
   console.error(`seo-smoke-test: ${failed} failure(s)`)
   process.exit(1)
 }
 
-console.log(`seo-smoke-test: OK (${INDEXABLE_PATHS.length} prerendered routes)`)
+console.log(`seo-smoke-test: OK (${INDEXABLE_PATHS.length} prerendered routes, ${LLM_MIRROR_FILES.length} LLM mirrors)`)

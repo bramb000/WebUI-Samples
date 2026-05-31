@@ -49,6 +49,9 @@ jobs:
       - name: Prerender routes
         run: node scripts/prerender.mjs
 
+      - name: Generate LLM plain-text mirrors
+        run: node scripts/generate-llm-mirror.mjs
+
       - name: Generate sitemap
         run: node scripts/generate-sitemap.mjs
 

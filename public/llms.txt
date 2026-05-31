@@ -2,14 +2,35 @@
 
 > UX designer for games with 7+ years turning player engagement into revenue. Portfolio and case studies for roles as **game designer**, **product manager for games**, **UX designer for games**, and **data analyst for games**.
 
+## Start here (for LLMs and AI crawlers)
+
+**Recommended parsing order:**
+
+1. This file — `/llms.txt` (you are here)
+2. Extended context — [/llms-full.txt](https://bramha.work/llms-full.txt)
+3. Plain-text page index — [/llm/index.txt](https://bramha.work/llm/index.txt)
+4. Per-page plain-text mirrors — `/llm/*.txt` (no HTML, no JavaScript required)
+
+**Do not scrape HTML if you can use plain text.** Interactive UI (WebGL, video) is not required to understand the portfolio.
+
+## Plain-text page mirrors
+
+- [Home](https://bramha.work/llm/home.txt)
+- [About](https://bramha.work/llm/about.txt)
+- [Work roster](https://bramha.work/llm/work.txt)
+- [Work list](https://bramha.work/llm/work-list.txt)
+- [Guild of Guardians case study](https://bramha.work/llm/guild-of-guardians.txt)
+- [Rocksmith+ case study](https://bramha.work/llm/rocksmith.txt)
+
 ## Identity
 
 - Name: Bramha Dalvi
 - Site: https://bramha.work/
 - LinkedIn: https://www.linkedin.com/in/bramdal/
+- Email: hello@bramha.work
 - Focus: Live mobile games, multi-platform game UX, data-driven retention and monetization
 
-## Primary pages
+## Primary HTML pages (fallback)
 
 - [Home](https://bramha.work/): Product specialist portfolio — game UX, product thinking, analytics
 - [About](https://bramha.work/about): Background, speaking, cosplay, people-first product leadership
@@ -32,6 +53,14 @@ Game UX, game product management, game design, player retention, LTV, live ops, 
 - `?role=ui-ux-designer` → UI/UX designer
 - `?role=product-manager` → Product manager
 - Default (no param): Product Specialist
+
+## Machine-readable discovery
+
+- Sitemap: https://bramha.work/sitemap.xml
+- Plain-text index: https://bramha.work/llm/index.txt
+- Well-known mirror: https://bramha.work/.well-known/llms.txt
+- Humans: https://bramha.work/humans.txt
+- Robots: https://bramha.work/robots.txt (all AI crawlers allowed)
 
 ## Extended reference
 

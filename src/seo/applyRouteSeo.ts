@@ -9,6 +9,7 @@ import {
   SITE_TAGLINE,
 } from './site'
 import { parseCampaignRoleParam, labelForCampaignRole } from '../constants/campaignRoles'
+import { llmDiscoveryHead } from './llmDiscovery'
 import { DEFAULT_ROUTE_SEO, ROUTE_SEO } from './routeMeta'
 import type { RouteMetaSeo } from './types'
 
@@ -28,6 +29,9 @@ export function useRouteSeo(route: RouteLocationNormalizedLoaded) {
       const meta = seo.value
       const keywords = meta.keywords?.length ? joinKeywords(meta.keywords) : joinKeywords()
       const robots = meta.robots ?? 'index, follow, max-image-preview:large'
+      const indexable = !robots.includes('noindex')
+      const routePath = route.fullPath.split('?')[0] || '/'
+      const llmHead = llmDiscoveryHead(routePath, { indexable })
 
       const campaignRole = parseCampaignRoleParam(route.query.role)
       const campaignTitle =
@@ -53,8 +57,9 @@ export function useRouteSeo(route: RouteLocationNormalizedLoaded) {
           { name: 'twitter:title', content: campaignTitle },
           { name: 'twitter:description', content: meta.description },
           { name: 'twitter:image', content: ogImage.value },
+          ...llmHead.meta,
         ],
-        link: [{ rel: 'canonical', href: canonical.value }],
+        link: [{ rel: 'canonical', href: canonical.value }, ...llmHead.link],
       }
     }),
   )

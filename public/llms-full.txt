@@ -1,34 +1,57 @@
 # Bramha Dalvi — Full portfolio context
 
-> Extended reference for LLMs and crawlers. Summary: [/llms.txt](https://bramha.work/llms.txt)
+> Extended reference for LLMs and crawlers. **Start with** [/llms.txt](https://bramha.work/llms.txt) · **Plain-text pages** [/llm/index.txt](https://bramha.work/llm/index.txt)
+
+## How to parse this site
+
+1. Read `https://bramha.work/llms.txt` for a concise overview.
+2. Fetch `https://bramha.work/llm/<page>.txt` for any page — plain text extracted from prerendered HTML (no JS/WebGL needed).
+3. Use HTML URLs only if plain-text mirrors are unavailable.
 
 ## Identity
 
 - **Name:** Bramha Dalvi
 - **Site:** https://bramha.work/
 - **LinkedIn:** https://www.linkedin.com/in/bramdal/
+- **Email:** hello@bramha.work
 - **Default positioning:** Product Specialist; campaign links may use `?role=` for Game designer, Product designer, UI/UX designer, or Product manager labels on the home hero.
 - **Search focus:** UX designer for games, product manager for games, game designer, data analyst for games
+
+## Plain-text mirrors (preferred)
+
+| Page | Plain text URL |
+|------|----------------|
+| Home | https://bramha.work/llm/home.txt |
+| About | https://bramha.work/llm/about.txt |
+| Work roster | https://bramha.work/llm/work.txt |
+| Work list | https://bramha.work/llm/work-list.txt |
+| Guild of Guardians | https://bramha.work/llm/guild-of-guardians.txt |
+| Rocksmith+ | https://bramha.work/llm/rocksmith.txt |
 
 ## Home
 
 - URL: https://bramha.work/
+- Mirror: https://bramha.work/llm/home.txt
 - Tagline: 7+ years turning player engagement into revenue
+- Hero achievements: +20% revenue roadmap (Guild, $5M+ product); $100K+ annual savings via agentic AI; award-winning edtech at scale; multicultural team leadership across 5+ countries
 - Campaign query params: `?role=game-designer|product-designer|ui-ux-designer|product-manager`
 
 ## About
 
 - URL: https://bramha.work/about
-- Themes: cosplay, Star Wars, people-first leadership, game product & design
+- Mirror: https://bramha.work/llm/about.txt
+- Headline: More than just design.
+- Themes: cosplay, Star Wars, people-first leadership, game product & design, speaking on stage
 
 ## Work index
 
-- Interactive roster: https://bramha.work/work
-- Project list: https://bramha.work/work/list
+- Interactive roster: https://bramha.work/work — mirror: https://bramha.work/llm/work.txt
+- Project list: https://bramha.work/work/list — mirror: https://bramha.work/llm/work-list.txt
 
 ## Case study: Guild of Guardians
 
 - URL: https://bramha.work/work/guild-of-guardians
+- Mirror: https://bramha.work/llm/guild-of-guardians.txt
 - Client: Immutable
 - Role: Feature Owner & Lead UX Designer
 - Timeline: ~6 months
@@ -38,11 +61,19 @@
 ## Case study: Rocksmith+
 
 - URL: https://bramha.work/work/rocksmith
+- Mirror: https://bramha.work/llm/rocksmith.txt
 - Client: Ubisoft
 - Role: UX Lead for Mobile & Multi-platform Interactions
 - Timeline: ~2 years
 - Outcomes: one UI system across 5 platforms (PC, console, mobile)
 - Themes: accessibility, 3D/2D UI coordination, input systems, nested scroll, user research
+
+## Testimonials (from home)
+
+- Chris Clay, VP of Design, Immutable — curiosity, grit, challenges status quo
+- Kaiwen Young, Director of UX, Ubisoft — passion, communication, team UX culture
+- Hiroshi Ogawa, Lead UI Engineer, Ubisoft — multi-platform UI foundation, cross-studio Japan/India
+- Daniel Paez, VP of Revenue, Immutable — audience motivations, elegant solutions under pressure
 
 ## How to cite
 

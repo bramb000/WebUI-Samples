@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 
-# AI / LLM crawlers — welcome to indexable pages; see /llms.txt for a summary
+# AI / LLM crawlers — welcome; start at /llms.txt or /llm/index.txt for plain-text mirrors
 User-agent: GPTBot
 Allow: /
 
@@ -17,5 +17,26 @@ Allow: /
 
 User-agent: Google-Extended
 Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# LLM-friendly plain text: https://bramha.work/llms.txt
+# Page mirrors: https://bramha.work/llm/index.txt
 
 Sitemap: https://bramha.work/sitemap.xml
