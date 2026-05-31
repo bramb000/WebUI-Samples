@@ -139,7 +139,9 @@ onBeforeUnmount(() => {
         />
 
         <div class="detective-book-hud pointer-events-none">
-          <p class="label-segment detective-book-hud__hint">Scroll to turn the pages</p>
+          <p class="type-body text-[var(--color-text-muted)] detective-book-hud__hint">
+            Scroll to turn the pages
+          </p>
         </div>
       </template>
     </div>

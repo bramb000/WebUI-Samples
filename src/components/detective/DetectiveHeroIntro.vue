@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { DEFAULT_ROLE_LABEL } from '../../constants/campaignRoles'
+import {
+  HERO_TAGLINE_LONGEST_TAIL,
+  HERO_TAGLINE_PHRASES,
+  HERO_TAGLINE_TAILS,
+  parseHeroTaglineTailSegments,
+} from '../../constants/heroTaglinePhrases'
+import { useReducedMotion } from '../../composables/useReducedMotion'
+import { useTypewriterCycle } from '../../composables/useTypewriterCycle'
 
 withDefaults(
   defineProps<{
@@ -7,6 +16,20 @@ withDefaults(
   }>(),
   { roleLabel: DEFAULT_ROLE_LABEL },
 )
+
+const reducedMotion = useReducedMotion()
+const { displayed: taglineTail, phraseIndex } = useTypewriterCycle(HERO_TAGLINE_TAILS, {
+  reducedMotion,
+})
+
+const taglineSegments = computed(() =>
+  parseHeroTaglineTailSegments(
+    taglineTail.value,
+    HERO_TAGLINE_PHRASES[phraseIndex.value]!,
+  ),
+)
+
+const showCursor = computed(() => !reducedMotion.value)
 </script>
 
 <template>
@@ -22,7 +45,28 @@ withDefaults(
     <p class="type-hero-tagline detective-hero-intro__tagline">
       <span class="detective-hero-intro__tagline-line">7 years of experience in</span>
       <span class="detective-hero-intro__tagline-line detective-hero-intro__tagline-line--sub">
-        turning <span class="text-accent">engagement</span> into <span class="text-accent">revenue</span>
+        turning
+        <span class="detective-hero-intro__cycle">
+          <span class="detective-hero-intro__cycle-ghost" aria-hidden="true">
+            {{ HERO_TAGLINE_LONGEST_TAIL }}
+          </span>
+          <span
+            class="detective-hero-intro__cycle-active"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span
+              v-for="segment in taglineSegments"
+              :key="`${segment.accent ? 'a' : 'n'}-${segment.text}`"
+              :class="{ 'text-accent': segment.accent }"
+            >{{ segment.text }}</span>
+            <span
+              v-if="showCursor"
+              class="detective-hero-intro__cursor"
+              aria-hidden="true"
+            >|</span>
+          </span>
+        </span>
       </span>
     </p>
   </header>
@@ -75,6 +119,39 @@ withDefaults(
   white-space: nowrap;
 }
 
+.detective-hero-intro__cycle {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  margin-inline-start: 0.28em;
+}
+
+.detective-hero-intro__cycle-ghost {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.detective-hero-intro__cycle-active {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
+}
+
+.detective-hero-intro__cursor {
+  display: inline-block;
+  margin-inline-start: 1px;
+  color: var(--color-accent);
+  font-weight: 400;
+  animation: hero-tagline-cursor-blink 1s step-end infinite;
+}
+
+@keyframes hero-tagline-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 @media (max-width: 768px) {
   .detective-hero-intro {
     display: flex;
@@ -95,6 +172,17 @@ withDefaults(
 
   .detective-hero-intro__tagline-line--sub {
     white-space: normal;
+  }
+
+  .detective-hero-intro__cycle-ghost,
+  .detective-hero-intro__cycle-active {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detective-hero-intro__cursor {
+    animation: none;
   }
 }
 </style>

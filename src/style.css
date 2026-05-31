@@ -1326,14 +1326,11 @@ img.panel-recessed {
   to   { opacity: 1;   box-shadow: 0 0 14px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 40%, transparent); }
 }
 
-/* ── The Navigation Pill (Metallic Ledge & Mechanical Slide) ── */
+/* ── Navigation (flat bar) ── */
 .dl-nav-ledge-bg {
   background: var(--color-bg);
-  border-bottom: 2px solid var(--color-hover-bg);
-  box-shadow: 
-    0 15px 35px rgba(0,0,0,0.9),
-    0 5px 10px rgba(0,0,0,0.8),
-    inset 0 -1px 0 rgba(139, 115, 71, 0.2);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: none;
 }
 
 .seg-strip {
@@ -1404,8 +1401,6 @@ img.panel-recessed {
 
 /* Variance for Nav Tapes */
 .seg-btn:nth-child(even)::after { clip-path: var(--tear-2); }
-
-
 
 .seg-btn.active::after, .seg-btn:hover::after {
   background: var(--color-text);

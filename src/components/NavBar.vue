@@ -159,13 +159,11 @@ function onExternalNavClick(source: string) {
   text-transform: uppercase;
   color: var(--color-border-hi);
   text-decoration: none;
-  transition: color 150ms var(--ease-te-snap), text-shadow 150ms var(--ease-te-snap);
+  transition: color 150ms var(--ease-te-snap);
   line-height: 1;
-  text-shadow: 0 0 12px rgba(197, 168, 114, 0.3);
 }
 .nav-logo:hover {
   color: var(--color-text);
-  text-shadow: 0 0 20px rgba(197, 168, 114, 0.55);
 }
 
 .hamburger {
