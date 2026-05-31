@@ -27,7 +27,11 @@ useCaseStudySketchPanels(caseStudyRoot);
           role="Design Engineer"
           timeline="3 Days"
           :tags="['Next.js', 'Pixel UI', 'LiveKit']"
-        />
+        >
+          <template #team>
+            <p class="type-case-team">Solo</p>
+          </template>
+        </ProjectHero>
 
         <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
           <h2 class="type-case-section-accent">Summary</h2>
@@ -133,6 +137,16 @@ useCaseStudySketchPanels(caseStudyRoot);
             </p>
             <p class="type-case-body">
               Layout primitives (<code>Stack</code>, <code>Box</code>, <code>PageContainer</code>) consume spacing tokens directly, which means new auth or settings screens inherit rhythm by default. <strong>RevealText</strong>, swatch grids, and voice seat rings all pull from the same semantic set — the system stays small (~a dozen composed components) because tokens do the heavy lifting.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="type-case-subsection">Hand-drawn art</h3>
+            <p class="type-case-body-lg">
+              Every visual asset in the app is <strong>hand-drawn pixel art</strong> — character sprite sheets, chat backgrounds, 9-slice UI tiles, and scene layers. Some I drew myself; others were commissioned from pixel artists for specific sets. <strong>No AI-generated art</strong> was used anywhere in the project — the village’s warmth comes from human line work and deliberate colour choices, not generative fills.
+            </p>
+            <p class="type-case-body">
+              That constraint shaped the pipeline: sprites ship as authored PNG sheets, backgrounds stack as layered parallax PNGs, and UI skins use repeatable hand-painted border slices — all tuned by eye, not upscaled from models.
             </p>
           </div>
 

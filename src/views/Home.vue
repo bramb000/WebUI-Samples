@@ -58,7 +58,7 @@ const ACHIEVEMENT_DISCIPLINE: RosterDiscipline = 'product-design'
 const achievementCards: AchievementCard[] = [
   {
     id: 'home-achievement-guild',
-    title: 'Executed roadmap to increase revenue by 20%+ for product with $5M+ annual revenue',
+    title: 'Executed roadmaps to increase revenue by 20%+ for product with $5M+ annual revenue',
     ...homeAchievementCardArt('guild'),
     roster: achievementRoster('Guild'),
   },
