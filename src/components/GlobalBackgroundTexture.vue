@@ -11,7 +11,7 @@ const { grainUrl } = useGlobalBackgroundGrain(surfaceRef, seed)
   <Teleport to="body">
     <div class="global-bg-texture" aria-hidden="true">
       <div ref="surfaceRef" class="global-bg-texture__surface">
-        <img v-if="grainUrl" class="global-bg-texture__grain" :src="grainUrl" alt="" />
+        <img v-if="grainUrl" class="global-bg-texture__grain" :src="grainUrl" alt="" aria-hidden="true" />
       </div>
 
       <div class="global-bg-halftone global-bg-halftone--tl" />

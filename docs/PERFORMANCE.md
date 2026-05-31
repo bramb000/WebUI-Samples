@@ -38,7 +38,7 @@ npm run assets:inventory
 ### Worst offenders (format / size)
 
 - **GIFs** from video converters: 4–7MB each (guild `tldr/`, rocksmith `solution/`).
-- **PNGs** at full camera resolution: book `cover.png` etc. (~2.1MB), `019_frame-7.png` (7.2MB).
+- **PNGs** at full camera resolution: book `cover.png` etc. (~2.1MB), `019_other-games-ui-overlap.png` (7.2MB).
 - **“Thumbnail” WebPs** that are still 1.9–2.4MB (resize to display width).
 
 ### Recommended formats

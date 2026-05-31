@@ -19,18 +19,24 @@ const { isOpen, open, close } = useCaseLightbox()
 
 <template>
   <figure class="case-image space-y-2">
-    <img
-      :src="props.src"
-      :alt="props.alt"
-      :loading="props.priority ? 'eager' : 'lazy'"
-      :fetchpriority="props.priority ? 'high' : 'auto'"
-      decoding="async"
-      :class="[
-        'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
-        props.imgClass,
-      ]"
+    <button
+      type="button"
+      class="case-image__trigger"
+      :aria-label="`View enlarged: ${props.alt}`"
       @click="open"
-    />
+    >
+      <img
+        :src="props.src"
+        :alt="props.alt"
+        :loading="props.priority ? 'eager' : 'lazy'"
+        :fetchpriority="props.priority ? 'high' : 'auto'"
+        decoding="async"
+        :class="[
+          'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
+          props.imgClass,
+        ]"
+      />
+    </button>
     <figcaption
       v-if="props.caption"
       class="type-case-caption text-center"
@@ -42,6 +48,7 @@ const { isOpen, open, close } = useCaseLightbox()
       :open="isOpen"
       :caption="props.caption"
       :lightbox-badge="props.lightboxBadge"
+      :image-label="props.alt"
       @close="close"
     >
       <img
@@ -54,6 +61,16 @@ const { isOpen, open, close } = useCaseLightbox()
 </template>
 
 <style scoped>
+.case-image__trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  text-align: inherit;
+}
+
 .lightbox-image {
   max-width: 90vw;
   max-height: 80vh;

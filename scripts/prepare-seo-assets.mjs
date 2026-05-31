@@ -11,7 +11,7 @@ const ROOT = path.join(__dirname, '..')
 
 const ASSETS = [
   {
-    source: path.join(ROOT, 'src/assets/images/about/about-2.webp'),
+    source: path.join(ROOT, 'src/assets/images/about/about-speaking-on-stage.webp'),
     out: path.join(ROOT, 'public/og-image.jpg'),
     label: 'og-image.jpg',
   },

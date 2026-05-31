@@ -291,7 +291,7 @@ onUnmounted(() => {
 
 <template>
   <Teleport to="body">
-    <canvas ref="canvasRef" class="wisp-canvas"></canvas>
+    <canvas ref="canvasRef" class="wisp-canvas" aria-hidden="true"></canvas>
   </Teleport>
 </template>
 

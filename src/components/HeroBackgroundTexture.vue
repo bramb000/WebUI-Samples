@@ -18,7 +18,7 @@ const debugStatus = computed(() => (grainUrl.value ? 'ready' : 'pending'))
     :data-grain-bytes="debugBytes"
   >
     <div ref="surfaceRef" class="hero-bg-texture__surface">
-      <img v-if="grainUrl" class="hero-bg-texture__grain" :src="grainUrl" alt="" />
+      <img v-if="grainUrl" class="hero-bg-texture__grain" :src="grainUrl" alt="" aria-hidden="true" />
     </div>
 
     <div class="hero-bg-halftone hero-bg-halftone--tl" />

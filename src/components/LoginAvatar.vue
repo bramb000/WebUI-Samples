@@ -6,6 +6,7 @@
     <div 
       ref="lottieContainer" 
       class="login-card__avatar"
+      aria-hidden="true"
     ></div>
 
     <!-- Title -->

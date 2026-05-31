@@ -273,7 +273,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="flame-canvas" />
+  <canvas ref="canvasRef" class="flame-canvas" aria-hidden="true" />
 </template>
 
 <style scoped>

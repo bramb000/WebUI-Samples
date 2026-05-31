@@ -20,24 +20,24 @@ import outcomeAward from '../assets/images/rocksmith/context/004_outcome-1-2.png
 import kitchenContext from '../assets/images/rocksmith/research/005_rocksmith-kitchen-context.webp';
 import simpleSetup from '../assets/images/rocksmith/research/008_rocksmith-simple-setup-2.webp';
 import complexSetup from '../assets/images/rocksmith/research/009_rocksmith-complex-setup-2.webp';
-// Gallery images
-import gallery1 from '../assets/images/rocksmith/solution/010_img-20251109-wa0002-2-thumbnail.webp';
-import gallery2 from '../assets/images/rocksmith/solution/011_img-20251109-wa0009-2-thumbnail.webp';
-import gallery3 from '../assets/images/rocksmith/solution/012_img-20251109-wa0006-2-thumbnail.webp';
-import gallery4 from '../assets/images/rocksmith/solution/013_img-20251109-wa0011-2-thumbnail.webp';
-import gallery5 from '../assets/images/rocksmith/solution/014_img-20251109-wa0004-2-thumbnail.webp';
-import gallery6 from '../assets/images/rocksmith/solution/015_img-20251109-wa0010-2-thumbnail.webp';
-import gallery7 from '../assets/images/rocksmith/solution/016_img-20251109-wa0005-thumbnail.webp';
-import gallery8 from '../assets/images/rocksmith/solution/017_img-20251109-wa0012-2-thumbnail.webp';
+// User testing gallery
+import userTestingIpadHome from '../assets/images/rocksmith/solution/010_user-testing-ipad-home-screen-thumbnail.webp';
+import userTestingPhoneHome from '../assets/images/rocksmith/solution/011_user-testing-phone-home-screen-thumbnail.webp';
+import userTestingIpadSongDetail from '../assets/images/rocksmith/solution/012_user-testing-ipad-song-detail-thumbnail.webp';
+import userTestingPhoneSongDetail from '../assets/images/rocksmith/solution/013_user-testing-phone-song-detail-thumbnail.webp';
+import userTestingIpadTuning from '../assets/images/rocksmith/solution/014_user-testing-ipad-tuning-ui-thumbnail.webp';
+import userTestingPhoneTuning from '../assets/images/rocksmith/solution/015_user-testing-phone-tuning-ui-thumbnail.webp';
+import userTestingIpadGameplay from '../assets/images/rocksmith/solution/016_user-testing-ipad-gameplay-thumbnail.webp';
+import userTestingPhoneGameplay from '../assets/images/rocksmith/solution/017_user-testing-phone-gameplay-thumbnail.webp';
 // Solution
-import comparisonRocksmith from '../assets/images/rocksmith/solution/020_frame-8.webp';
+import comparisonRocksmith from '../assets/images/rocksmith/solution/020_rocksmith-no-ui-overlap.webp';
 import gpdWin4 from '../assets/images/rocksmith/solution/022_r-on-gpd-win4.webp';
-import accessibilityScale from '../assets/images/rocksmith/solution/023_img-20251109-wa0022.jpg';
-import marketingOnHand from '../assets/images/rocksmith/solution/024_ubdc-newsheader-960x540-us.jpg';
-import cognitiveLoad from '../assets/images/rocksmith/solution/025_img-0492.webp';
-import interactionMatrix from '../assets/images/rocksmith/solution/026_interaction-matrix-abstraction.png';
+import accessibilityScale from '../assets/images/rocksmith/solution/023_accessibility-ui-scale.webp';
+import marketingOnHand from '../assets/images/rocksmith/solution/024_ubdc-newsheader-960x540-us.webp';
+import cognitiveLoad from '../assets/images/rocksmith/solution/025_cognitive-load-problem.webp';
+import interactionMatrix from '../assets/images/rocksmith/solution/026_interaction-matrix-abstraction.webp';
 import inputSystem from '../assets/images/rocksmith/solution/027_input-system.webp';
-import mobileComponent from '../assets/images/rocksmith/solution/028_mobile-componenet-r-2.webp';
+import mobileComponent from '../assets/images/rocksmith/solution/028_mobile-touch-component.webp';
 import nestedScroll from '../assets/images/rocksmith/solution/031_nested-scroll-4.png';
 import nestedScrollSolution from '../assets/images/rocksmith/solution/032_nested-scroll-solution-trial-1-4.webp';
 import guitarController from '../assets/images/rocksmith/solution/033_guitar-controller-1-2.webp';
@@ -46,10 +46,10 @@ import controlSchemeConsole from '../assets/images/rocksmith/solution/038_rocksm
 import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksmith-screenshot-2025-12-24-09-01-25-06.webp';
 
 // Accessibility Colorblind Profiles
-import accessibilityColorblind1 from '../assets/images/rocksmith/accessibility/img-20251109-wa0014-2.webp';
-import accessibilityColorblind2 from '../assets/images/rocksmith/accessibility/img-20251109-wa0017-3.webp';
-import accessibilityColorblind3 from '../assets/images/rocksmith/accessibility/img_0459-1.webp';
-import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/img_0460-1.webp';
+import accessibilityColorblind1 from '../assets/images/rocksmith/accessibility/colorblind-accessibility-profile-1.webp';
+import accessibilityColorblind2 from '../assets/images/rocksmith/accessibility/colorblind-accessibility-profile-2.webp';
+import accessibilityColorblind3 from '../assets/images/rocksmith/accessibility/colorblind-accessibility-profile-3.webp';
+import accessibilityColorblind4 from '../assets/images/rocksmith/accessibility/colorblind-accessibility-profile-4.webp';
 
 const caseStudyRoot = ref<HTMLElement | null>(null);
 useCaseStudySketchPanels(caseStudyRoot);
@@ -236,14 +236,14 @@ useCaseStudySketchPanels(caseStudyRoot);
         <!-- Testing gallery -->
         <h3 class="type-case-subsection pt-4">User Testing Gallery</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <CaseImage :src="gallery1" alt="User testing photo 1" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery2" alt="User testing photo 2" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery3" alt="User testing photo 3" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery4" alt="User testing photo 4" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery5" alt="User testing photo 5" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery6" alt="User testing photo 6" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery7" alt="User testing photo 7" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="gallery8" alt="User testing photo 8" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingIpadHome" alt="iPad showing Rocksmith+ home screen during user testing on a carpet surface" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingPhoneHome" alt="Phone in landscape showing Rocksmith+ home screen with song carousels during user testing" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingIpadSongDetail" alt="iPad showing Rocksmith+ song detail page for Glow In The Dark by MOTHICA" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingPhoneSongDetail" alt="Phone in landscape showing Rocksmith+ song detail page with arrangement and difficulty controls" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingIpadTuning" alt="iPad showing Rocksmith+ 3D guitar tuning interface with highlighted E string" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingPhoneTuning" alt="Phone in landscape showing Rocksmith+ 3D guitar tuning interface during user testing" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingIpadGameplay" alt="iPad showing Rocksmith+ gameplay with color-coded note highway on the virtual fretboard" imgClass="w-full h-auto rounded-lg" />
+          <CaseImage :src="userTestingPhoneGameplay" alt="Phone in landscape showing Rocksmith+ gameplay with scrolling notes on the virtual fretboard" imgClass="w-full h-auto rounded-lg" />
         </div>
       </div>
     </section>

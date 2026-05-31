@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import cosplayImage from '../assets/images/about/about-1.webp';
-import speakingImage from '../assets/images/about/about-2.webp';
+import cosplayImage from '../assets/images/about/about-cosplay-convention.webp';
+import speakingImage from '../assets/images/about/about-speaking-on-stage.webp';
 import PrimaryButton from '../components/PrimaryButton.vue';
 </script>
 
@@ -20,10 +20,10 @@ import PrimaryButton from '../components/PrimaryButton.vue';
         <!-- Photo Gallery Stack -->
         <div class="photo-stack">
           <div class="photo-frame photo-back">
-            <img :src="cosplayImage" alt="Cosplay photo" fetchpriority="high" class="photo-img" />
+            <img :src="cosplayImage" alt="Bramha Dalvi in cosplay at a fan convention" fetchpriority="high" class="photo-img" />
           </div>
           <div class="photo-frame photo-front">
-            <img :src="speakingImage" alt="Bramha speaking on stage" fetchpriority="high" class="photo-img" />
+            <img :src="speakingImage" alt="Bramha Dalvi speaking on stage at a conference" fetchpriority="high" class="photo-img" />
           </div>
         </div>
       </section>

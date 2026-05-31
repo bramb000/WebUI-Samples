@@ -133,23 +133,27 @@ onMounted(async () => {
           v-for="(card, index) in achievementCards"
           :key="card.id"
           class="home-achievement-card"
-          :style="achievementCardMotionStyle(index)"
         >
-          <RosterCard
-            :ref="(el) => setThumbRef(card.id, el)"
-            :id="card.id"
-            :discipline="ACHIEVEMENT_DISCIPLINE"
-            :title="card.title"
-            :thumb="card.thumb"
-            :thumb-poster="card.thumbPoster"
-            :roster="card.roster"
-            :plate-grain="plateGrainBakes[card.id]"
-            variant="case-study"
-            :hover-motion="false"
-            :style="{
-              '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[ACHIEVEMENT_DISCIPLINE],
-            }"
-          />
+          <div
+            class="home-achievement-card__motion"
+            :style="achievementCardMotionStyle(index)"
+          >
+            <RosterCard
+              :ref="(el) => setThumbRef(card.id, el)"
+              :id="card.id"
+              :discipline="ACHIEVEMENT_DISCIPLINE"
+              :title="card.title"
+              :thumb="card.thumb"
+              :thumb-poster="card.thumbPoster"
+              :roster="card.roster"
+              :plate-grain="plateGrainBakes[card.id]"
+              variant="case-study"
+              :hover-motion="false"
+              :style="{
+                '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[ACHIEVEMENT_DISCIPLINE],
+              }"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -172,6 +176,7 @@ onMounted(async () => {
   --home-achievements-overlap: clamp(72px, 12vh, 140px);
   position: relative;
   width: 100%;
+  overflow-x: clip;
 }
 
 .home-page__container {
@@ -193,15 +198,12 @@ onMounted(async () => {
   min-height: var(--home-hero-min-height);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .home-hero-stage__texture {
   position: absolute;
   inset: 0;
-  width: 100vw;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .home-hero-stage__content {
@@ -209,10 +211,14 @@ onMounted(async () => {
   z-index: 1;
   flex: 1 1 auto;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   min-height: var(--home-hero-min-height);
-  padding-block: clamp(24px, 4vw, 48px);
+  padding-block: 0;
   box-sizing: border-box;
+}
+
+.home-hero-stage__content > :deep(.detective-hero-intro) {
+  flex: 1 1 auto;
 }
 
 /* ── Achievements (overlap + motion) ── */
@@ -255,23 +261,29 @@ onMounted(async () => {
   }
 }
 
-/* Motion wrapper — separate from RosterCard so calm-hover settleBack cannot override enter */
+/* Stable grid cell hit target; enter + float run on __motion so bob doesn’t steal hover */
 .home-achievement-card {
   position: relative;
   z-index: 1;
   min-width: 0;
   width: 100%;
-  opacity: 0;
-  transform: translateY(36px) scale(0.98);
-  transform-origin: center bottom;
-  will-change: transform, opacity;
+  padding-block: var(--home-achievement-float-amp, 8px);
+  margin-block: calc(-1 * var(--home-achievement-float-amp, 8px));
+  box-sizing: content-box;
 }
 
 .home-achievement-card:hover {
   z-index: 80;
 }
 
-.home-achievements--entered .home-achievement-card {
+.home-achievement-card__motion {
+  opacity: 0;
+  transform: translateY(36px) scale(0.98);
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+.home-achievements--entered .home-achievement-card__motion {
   animation:
     home-achievement-jump 0.82s var(--ease-mechanical-spring) var(--home-card-stagger, 0ms) forwards,
     home-achievement-float var(--home-achievement-float-duration) linear
@@ -325,7 +337,7 @@ onMounted(async () => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-achievement-card {
+  .home-achievement-card__motion {
     opacity: 1;
     transform: none;
     animation: none !important;
@@ -362,6 +374,11 @@ onMounted(async () => {
   }
 
   .home-achievement-card {
+    padding-block: 0;
+    margin-block: 0;
+  }
+
+  .home-achievement-card__motion {
     opacity: 1;
     transform: none;
     animation: none !important;

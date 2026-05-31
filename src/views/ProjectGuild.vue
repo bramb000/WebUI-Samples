@@ -19,12 +19,12 @@ import kShapeProblem from '../assets/images/guild/tldr/010_k-shape-problem.png';
 import persona from '../assets/images/guild/tldr/011_persona-3.webp';
 import gameLoopNegative from '../assets/images/guild/tldr/012_game-loop-negative-2.png';
 import gameLoopPositive from '../assets/images/guild/tldr/013_game-loop-positive.png';
-import wireframeFlow from '../assets/images/guild/tldr/014_frame-68.webp';
-import handSketches from '../assets/images/guild/tldr/015_img-0528-1.webp';
+import wireframeFlow from '../assets/images/guild/tldr/014_afk-wireframe-flow.webp';
+import handSketches from '../assets/images/guild/tldr/015_hand-sketches.webp';
 import afkTest1 from '../assets/images/guild/tldr/016_afk-rewards-test-1-thumbnail.webp';
 import afkTest2 from '../assets/images/guild/tldr/017_afk-rewards-test-2-thumbnail.webp';
 import wireframe from '../assets/images/guild/tldr/018_wireframe.png';
-import afkMockupRough from '../assets/images/guild/tldr/020_frame-20.webp';
+import afkMockupRough from '../assets/images/guild/tldr/020_afk-mockup-rough-in-engine.webp';
 import userFlowFigma from '../assets/images/guild/tldr/025_figma-user-flow-2.webp';
 import surveyEnjoyment from '../assets/images/guild/tldr/026_screenshot-2026-01-10-075400-2.png';
 import surveyTimers from '../assets/images/guild/tldr/027_timer-survey-question.png';
@@ -39,12 +39,12 @@ import progressionWireframe from '../assets/images/guild/tldr/036_visual-progres
 import progBeforeImg from '../assets/images/guild/tldr/037_screenshot-20250915-114738-guild-of-guardians-thumbnail.webp';
 import progAfterImg from '../assets/images/guild/tldr/038_screenshot-20251105-150223-guild-of-guardians-1-thumbnail.webp';
 import dailyCalendar from '../assets/images/guild/tldr/039_screenshot-20251210-075732-guild-of-guardians.webp';
-import legendaryHero from '../assets/images/guild/tldr/040_image-3.webp';
+import legendaryHero from '../assets/images/guild/tldr/040_legendary-hero-design.webp';
 import oldOffer from '../assets/images/guild/tldr/041_screenshot-20251117-090321-guild-of-guardians.webp';
 import newOffer from '../assets/images/guild/tldr/042_new-offer.webp';
-import offerWireframe from '../assets/images/guild/tldr/043_image-5.webp';
-import offerIteration2 from '../assets/images/guild/tldr/044_image-6.webp';
-import offerIteration3 from '../assets/images/guild/tldr/045_image-4.webp';
+import offerWireframe from '../assets/images/guild/tldr/043_offer-stage-1-wireframe.webp';
+import offerIteration2 from '../assets/images/guild/tldr/044_offer-stage-2-iteration.webp';
+import offerIteration3 from '../assets/images/guild/tldr/045_offer-stage-3-iteration.webp';
 import smootherBellCurve from '../assets/images/guild/result/046_smoother-bell-curve.png';
 import retentionGrowth from '../assets/images/guild/result/047_retention-growth-2.png';
 // Before/After gallery
@@ -161,10 +161,34 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
       <!-- Before/After Comparions -->
       <div class="space-y-8">
-        <CaseBeforeAfter :beforeImage="galBeforeGoal" :afterImage="galAfterGoal" caption="Visual goal setting: Players clearly see their progression path." />
-        <CaseBeforeAfter :beforeImage="galBeforeOffer" :afterImage="galAfterOffer" caption="Monetisation Offers: Lore-driven context outperforms generic popups." />
-        <CaseBeforeAfter :beforeImage="galBeforeRecs" :afterImage="galAfterRecs" caption="Recommendations: Showing successful community teams increases win rates." />
-        <CaseBeforeAfter :beforeImage="galBeforeAnticipation" :afterImage="galAfterAnticipation" caption="Anticipation: A clear goal and timeline for the next session." />
+        <CaseBeforeAfter
+          :beforeImage="galBeforeGoal"
+          :afterImage="galAfterGoal"
+          before-alt="Before — no visual progression path on the dungeon map"
+          after-alt="After — clear visual goal setting with checkpoints on the progression path"
+          caption="Visual goal setting: Players clearly see their progression path."
+        />
+        <CaseBeforeAfter
+          :beforeImage="galBeforeOffer"
+          :afterImage="galAfterOffer"
+          before-alt="Before — generic monetisation popup with no lore or context"
+          after-alt="After — lore-driven offer with clear value proposition and context"
+          caption="Monetisation Offers: Lore-driven context outperforms generic popups."
+        />
+        <CaseBeforeAfter
+          :beforeImage="galBeforeRecs"
+          :afterImage="galAfterRecs"
+          before-alt="Before — no hero recommendations after a failed dungeon attempt"
+          after-alt="After — recommended heroes based on successful community team data"
+          caption="Recommendations: Showing successful community teams increases win rates."
+        />
+        <CaseBeforeAfter
+          :beforeImage="galBeforeAnticipation"
+          :afterImage="galAfterAnticipation"
+          before-alt="Before — exit screen with no return timeline or goal"
+          after-alt="After — exit screen showing a clear return goal and countdown timeline"
+          caption="Anticipation: A clear goal and timeline for the next session."
+        />
       </div>
     </section>
 
@@ -392,7 +416,13 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="recommendedWireframe" alt="Recommended heroes wireframe" caption="Initial wireframe for recommended heroes" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="py-4">
-          <CaseBeforeAfter :beforeImage="recsBeforeImg" :afterImage="recsAfterImg" caption="Recommendations guiding players using community data without forcing teams." />
+          <CaseBeforeAfter
+            :beforeImage="recsBeforeImg"
+            :afterImage="recsAfterImg"
+            before-alt="Before — defeat screen with no hero recommendations"
+            after-alt="After — defeat screen showing recommended heroes from community data"
+            caption="Recommendations guiding players using community data without forcing teams."
+          />
         </div>
         <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
           <CaseInsight stat="~70% users" statLabel="Changed their comp after loss #1 (up from 50%)" theme="after" />
@@ -410,7 +440,13 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="progressionWireframe" alt="Visual progression wireframe" caption="Initial wireframe of visual goal setting" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <div class="py-4">
-          <CaseBeforeAfter :beforeImage="progBeforeImg" :afterImage="progAfterImg" caption="A clear visual path with checkpoints replaced the old system where players start from the beginning." />
+          <CaseBeforeAfter
+            :beforeImage="progBeforeImg"
+            :afterImage="progAfterImg"
+            before-alt="Before — dungeon progression restarts from the beginning after each loss"
+            after-alt="After — checkpoint-based progression path with visible milestones"
+            caption="A clear visual path with checkpoints replaced the old system where players start from the beginning."
+          />
         </div>
 
         <!-- Daily Calendar -->

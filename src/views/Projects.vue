@@ -161,6 +161,7 @@ const getThemeColor = (category: string) => {
           :key="filter"
           @click="activeFilter = filter"
           :class="['ui-filter-tab', activeFilter === filter ? 'active' : '']"
+          :aria-pressed="activeFilter === filter"
         >
           {{ filter }}
         </button>

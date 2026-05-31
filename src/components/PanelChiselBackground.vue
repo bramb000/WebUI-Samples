@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
         :style="textureStyle"
         aria-hidden="true"
       >
-        <img class="panel-chisel-bg__texture-img" :src="grainUrl" alt="" />
+        <img class="panel-chisel-bg__texture-img" :src="grainUrl" alt="" aria-hidden="true" />
       </div>
       <div class="panel-chisel-bg__content">
         <slot />

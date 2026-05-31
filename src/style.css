@@ -193,6 +193,18 @@
   --leading-display-hero-line: var(--leading-display);
   --leading-hero-name-role:    0.845;
   --hero-name-role-overlap:    var(--grid-1);
+  /* Hero tagline — two lines; px values on 4px grid */
+  --text-hero-tagline-min: 12px;
+  --text-hero-tagline-max: 24px;
+  --text-hero-tagline-fluid: 12px + 1vw;
+  --text-hero-tagline: clamp(
+    var(--text-hero-tagline-min),
+    var(--text-hero-tagline-fluid),
+    var(--text-hero-tagline-max)
+  );
+  --leading-hero-tagline: var(--leading-snug);
+  --hero-thirds-first-line: 33.333%;
+  --hero-thirds-second-line: 66.666%;
   --leading-snug:       1.3;
   --leading-body:       1.625;
   --leading-body-sm:    1.6;
@@ -382,6 +394,15 @@ h5, h6 {
 .type-hero-stack > .type-hero-role {
   line-height: var(--leading-hero-name-role);
   margin-block-start: calc(-1 * var(--hero-name-role-overlap));
+}
+.type-hero-tagline {
+  font-family: var(--font-display);
+  font-size: var(--text-hero-tagline);
+  font-weight: 500;
+  letter-spacing: var(--tracking-heading-tight);
+  line-height: var(--leading-hero-tagline);
+  color: var(--color-text-muted);
+  text-transform: none;
 }
 
 /* Case study layout — explicit display headings (avoid matching type-case-body*, etc.) */

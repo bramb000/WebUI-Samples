@@ -548,6 +548,7 @@ onUnmounted(() => {
           <canvas 
             ref="canvasRef" 
             class="absolute inset-x-0 inset-y-0 w-full h-full rounded-full z-10 pointer-events-none"
+            aria-hidden="true"
           ></canvas>
 
           <!-- Inner glow for active states -->

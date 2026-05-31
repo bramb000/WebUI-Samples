@@ -46,20 +46,26 @@ onUnmounted(() => {
 
 <template>
   <figure ref="root" class="case-loop space-y-2">
-    <video
+    <button
       v-if="shouldPlay"
-      :src="props.src"
-      :poster="props.poster"
-      :class="mediaClass"
-      autoplay
-      loop
-      muted
-      playsinline
-      disablepictureinpicture
-      :preload="props.priority ? 'auto' : 'none'"
-      :aria-label="props.alt"
+      type="button"
+      class="case-loop__trigger"
+      :aria-label="`View enlarged: ${props.alt}`"
       @click="open"
-    />
+    >
+      <video
+        :src="props.src"
+        :poster="props.poster"
+        :class="mediaClass"
+        autoplay
+        loop
+        muted
+        playsinline
+        disablepictureinpicture
+        :preload="props.priority ? 'auto' : 'none'"
+        :aria-label="props.alt"
+      />
+    </button>
     <div
       v-else
       class="case-loop__placeholder w-full min-h-[12rem] rounded-xl bg-[var(--color-elevated)]"
@@ -77,6 +83,7 @@ onUnmounted(() => {
     <CaseLightboxOverlay
       :open="isOpen"
       :caption="props.caption"
+      :image-label="props.alt"
       @close="close"
     >
       <video
@@ -96,6 +103,16 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.case-loop__trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  text-align: inherit;
+}
+
 .lightbox-video {
   max-width: 90vw;
   max-height: 80vh;
