@@ -6,7 +6,7 @@ export type TestimonialEntry = {
   quote: string
 }
 
-/** Home testimonial book — order: Chris Clay, Kaiwen, Hiroshi, Dan */
+/** Home testimonial book — order: Chris Clay, Kaiwen, Tianhao, Hiroshi, Dan */
 export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
   {
     name: 'Chris Clay',
@@ -21,10 +21,16 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
       'Bramha\'s passion, knowledge and communication style contributed greatly to the quality of our project and team UX culture.',
   },
   {
+    name: 'Tianhao Kang',
+    role: 'Head of Studio at Mineloader Studios',
+    quote:
+      'Bramha thrives in cross-functional teams, translating data insights into actionable design, analytics and improvements. His results-focused, data-led mindset elevates the project, while his open communication style fosters trust and efficiency among teammates.',
+  },
+  {
     name: 'Hiroshi Ogawa',
     role: 'Lead UI Engineer, Ubisoft',
     quote:
-      'Bramha made the foundation of Multi-platform UI, which was one of the biggest challenges in the project. His knowledge and insight always pushed our discussion forward. A clear design-based dialogue was productive and helpful in the cross-studio project in Japan and India. I respect his courage to accept the change, which is UX/UI design\'s most challenging part of improving the game while managing our resources.',
+      'His knowledge and insight always pushed our discussion forward. A clear design-based dialogue was productive and helpful in the cross-studio project in Japan and India. I respect his courage to accept the change, which is UX/UI design\'s most challenging part of improving the game while managing our resources.',
   },
   {
     name: 'Daniel Paez',
