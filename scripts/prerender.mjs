@@ -104,6 +104,11 @@ function outFileForRoute(route) {
   return path.join(dir, 'index.html')
 }
 
+/** Preview server origin must not leak into static HTML (triggers Chrome local-network prompts). */
+function sanitizePrerenderHtml(html) {
+  return html.replace(/https?:\/\/(?:127\.0\.0\.1|localhost):\d+/g, '')
+}
+
 if (!fs.existsSync(BUILD_DIR)) {
   console.error('prerender: build/ not found — run vite build first')
   process.exit(1)
@@ -133,7 +138,7 @@ try {
     await page.waitForSelector(selector, { timeout: 45_000 }).catch(() => {})
     await page.waitForTimeout(1200)
 
-    const html = await page.content()
+    const html = sanitizePrerenderHtml(await page.content())
     const outFile = outFileForRoute(route)
     fs.mkdirSync(path.dirname(outFile), { recursive: true })
     fs.writeFileSync(outFile, html)

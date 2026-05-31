@@ -3,8 +3,10 @@
  * (the card region without project art). Alpha from paint mask, stretched to fit.
  */
 import * as THREE from 'three'
+import paintMaskUrl from '../shaders/IMG_0558.webp'
 
-export const ROSTER_PAINT_MASK_URL = new URL('../shaders/IMG_0558.webp', import.meta.url).href
+/** Root-relative path from Vite — avoids baking localhost preview URLs into prerendered HTML. */
+export const ROSTER_PAINT_MASK_URL = paintMaskUrl
 
 /** Peak alpha in source PNG (8-bit); used to normalize the mask. */
 const PAINT_MASK_ALPHA_MAX = 189 / 255
