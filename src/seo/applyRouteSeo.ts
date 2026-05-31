@@ -8,7 +8,7 @@ import {
   SITE_NAME,
   SITE_TAGLINE,
 } from './site'
-import { isCampaignRoleKey, labelForCampaignRole } from '../constants/campaignRoles'
+import { parseCampaignRoleParam, labelForCampaignRole } from '../constants/campaignRoles'
 import { DEFAULT_ROUTE_SEO, ROUTE_SEO } from './routeMeta'
 import type { RouteMetaSeo } from './types'
 
@@ -29,11 +29,10 @@ export function useRouteSeo(route: RouteLocationNormalizedLoaded) {
       const keywords = meta.keywords?.length ? joinKeywords(meta.keywords) : joinKeywords()
       const robots = meta.robots ?? 'index, follow, max-image-preview:large'
 
-      const roleRaw = route.query.role
-      const roleParam = Array.isArray(roleRaw) ? roleRaw[0] : roleRaw
+      const campaignRole = parseCampaignRoleParam(route.query.role)
       const campaignTitle =
-        route.name === 'Home' && typeof roleParam === 'string' && isCampaignRoleKey(roleParam)
-          ? `${meta.title} · ${labelForCampaignRole(roleParam)}`
+        route.name === 'Home' && campaignRole
+          ? `${meta.title} · ${labelForCampaignRole(campaignRole)}`
           : meta.title
 
       return {

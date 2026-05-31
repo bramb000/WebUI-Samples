@@ -1,10 +1,10 @@
 export const DEFAULT_ROLE_LABEL = 'Product Specialist' as const
 
 export const CAMPAIGN_ROLE_LABELS = {
-  'game-designer': 'Game designer',
-  'product-designer': 'Product designer',
-  'ui-ux-designer': 'UI/UX designer',
-  'product-manager': 'Product manager',
+  'game-designer': 'Game Designer',
+  'product-designer': 'Product Designer',
+  'ui-ux-designer': 'UI/UX Designer',
+  'product-manager': 'Product Manager',
 } as const
 
 export type CampaignRoleKey = keyof typeof CAMPAIGN_ROLE_LABELS
@@ -13,6 +13,18 @@ const SESSION_KEY = 'bramha_campaign_role'
 
 export function isCampaignRoleKey(value: string): value is CampaignRoleKey {
   return value in CAMPAIGN_ROLE_LABELS
+}
+
+/** Normalize `?role=` values (`game designer`, `game_designer` → `game-designer`). */
+export function normalizeCampaignRoleParam(value: string): string {
+  return value.trim().toLowerCase().replace(/_/g, '-').replace(/\s+/g, '-')
+}
+
+export function parseCampaignRoleParam(raw: unknown): CampaignRoleKey | null {
+  const value = Array.isArray(raw) ? raw[0] : raw
+  if (typeof value !== 'string') return null
+  const normalized = normalizeCampaignRoleParam(value)
+  return isCampaignRoleKey(normalized) ? normalized : null
 }
 
 export function labelForCampaignRole(key: CampaignRoleKey): string {

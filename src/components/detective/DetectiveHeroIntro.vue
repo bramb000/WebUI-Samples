@@ -1,21 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { DEFAULT_ROLE_LABEL } from '../../constants/campaignRoles'
 import {
   HERO_TAGLINE_LONGEST_TAIL,
   HERO_TAGLINE_PHRASES,
   HERO_TAGLINE_TAILS,
   parseHeroTaglineTailSegments,
 } from '../../constants/heroTaglinePhrases'
+import { useCampaignRole } from '../../composables/useCampaignRole'
 import { useReducedMotion } from '../../composables/useReducedMotion'
 import { useTypewriterCycle } from '../../composables/useTypewriterCycle'
 
-withDefaults(
-  defineProps<{
-    roleLabel?: string
-  }>(),
-  { roleLabel: DEFAULT_ROLE_LABEL },
-)
+const { roleLabel } = useCampaignRole()
 
 const reducedMotion = useReducedMotion()
 const { displayed: taglineTail, phraseIndex } = useTypewriterCycle(HERO_TAGLINE_TAILS, {
