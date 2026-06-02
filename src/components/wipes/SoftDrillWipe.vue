@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
 .layer {
   position: absolute;
   inset: 0;
-  background: #111111;
+  background: var(--color-bg);
 }
 
 /* Soft edge is a gradient “front” riding the clip-path. */
@@ -176,7 +176,7 @@ onBeforeUnmount(() => {
 
 /* Loading indicator: very subtle shimmer sweep */
 .layer.loading {
-  background: #111111;
+  background: var(--color-bg);
 }
 .layer.loading::after {
   display: none;

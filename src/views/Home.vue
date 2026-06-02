@@ -7,10 +7,8 @@ import PrimaryButton from '../components/PrimaryButton.vue'
 import RosterCard from '../components/RosterCard.vue'
 import { homeAchievementCardArt } from '../assets/images/home-achievement-cards/homeAchievementCardImages'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
-import {
-  ROSTER_DISCIPLINE_ACCENT,
-  type RosterDiscipline,
-} from '../constants/rosterDiscipline'
+import { rosterCardPaletteFromTokens } from '../constants/rosterCardPalette'
+import type { RosterDiscipline } from '../constants/rosterDiscipline'
 import type { RosterCardRoster } from '../components/RosterCard.vue'
 
 /** Matches NavBar fixed height in App layout */
@@ -24,11 +22,12 @@ type AchievementCard = {
   roster: RosterCardRoster
 }
 
-function achievementRoster(label: string, hue = 42): RosterCardRoster {
+function achievementRoster(label: string): RosterCardRoster {
+  const { color1, color2 } = rosterCardPaletteFromTokens()
   return {
     points: '2,4 98,2 100,96 96,100 4,98 0,12',
-    color1: `hsl(${hue}, 38%, 28%)`,
-    color2: `hsl(${(hue + 24) % 360}, 36%, 14%)`,
+    color1,
+    color2,
     label,
   }
 }
@@ -144,10 +143,8 @@ onMounted(async () => {
               :roster="card.roster"
               :plate-grain="plateGrainBakes[card.id]"
               variant="case-study"
+              show-media
               :hover-motion="false"
-              :style="{
-                '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[ACHIEVEMENT_DISCIPLINE],
-              }"
             />
           </div>
         </div>

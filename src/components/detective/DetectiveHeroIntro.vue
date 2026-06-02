@@ -29,19 +29,19 @@ const showCursor = computed(() => !reducedMotion.value)
 
 <template>
   <header class="detective-hero-intro">
-    <div class="type-hero-stack detective-hero-intro__headline">
-      <h1 class="type-display-hero detective-hero-intro__title">
-        <span class="type-display-hero-name text-accent">Bramha</span>
+    <div class="detective-hero-intro__headline type-hero-stack">
+      <h1 class="type-hero-name text-accent detective-hero-intro__title">
+        Bramha
       </h1>
-      <h2 class="type-hero-role text-accent detective-hero-intro__role">
+      <p class="type-hero-role detective-hero-intro__role">
         {{ roleLabel }}
-      </h2>
+      </p>
     </div>
+
     <p class="type-hero-tagline detective-hero-intro__tagline">
       <span class="detective-hero-intro__tagline-line">7 years of experience in</span>
       <span class="detective-hero-intro__tagline-line detective-hero-intro__tagline-line--sub">
-        turning
-        <span class="detective-hero-intro__cycle">
+        turning <span class="detective-hero-intro__cycle">
           <span class="detective-hero-intro__cycle-ghost" aria-hidden="true">
             {{ HERO_TAGLINE_LONGEST_TAIL }}
           </span>
@@ -70,40 +70,40 @@ const showCursor = computed(() => !reducedMotion.value)
 <style scoped>
 .detective-hero-intro {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
+  max-width: 38rem;
   min-height: var(--home-hero-min-height, calc(100vh - 72px));
   height: var(--home-hero-min-height, calc(100vh - 72px));
   box-sizing: border-box;
+  padding-block: var(--grid-6) var(--grid-7);
 }
 
 .detective-hero-intro__headline {
-  position: absolute;
-  inset-inline: 0;
-  top: var(--hero-thirds-first-line);
-  transform: translateY(-50%);
   margin: 0;
 }
 
 .detective-hero-intro__title {
   margin: 0;
-  text-shadow: 0 0 40px color-mix(in srgb, var(--color-accent) 12%, transparent);
+  text-shadow: 0 0 32px color-mix(in srgb, var(--color-accent) 14%, transparent);
 }
 
-.detective-hero-intro__headline .type-display-hero-name {
-  margin-block-end: calc(-1 * var(--hero-name-role-overlap));
+/* Override global h1/h2 display defaults inside the hero */
+.detective-hero-intro__title {
+  font-weight: var(--font-weight-hero-name);
+  letter-spacing: var(--tracking-hero-name);
 }
 
 .detective-hero-intro__role {
   margin: 0;
-  text-shadow: 0 0 24px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .detective-hero-intro__tagline {
-  position: absolute;
-  inset-inline: 0;
-  top: var(--hero-thirds-second-line);
-  transform: translateY(-50%);
-  margin: 0;
+  margin: var(--hero-headline-tagline-gap) 0 0;
+  max-width: 100%;
 }
 
 .detective-hero-intro__tagline-line {
@@ -118,7 +118,7 @@ const showCursor = computed(() => !reducedMotion.value)
   position: relative;
   display: inline-block;
   vertical-align: top;
-  margin-inline-start: 0.28em;
+  margin-inline-start: 0;
 }
 
 .detective-hero-intro__cycle-ghost {
@@ -149,20 +149,20 @@ const showCursor = computed(() => !reducedMotion.value)
 
 @media (max-width: 768px) {
   .detective-hero-intro {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: var(--grid-4);
+    max-width: none;
     min-height: auto;
     height: auto;
-    padding-block: 24px 16px;
+    padding-block: var(--grid-5) var(--grid-4);
     text-align: center;
   }
 
-  .detective-hero-intro__headline,
+  .detective-hero-intro__headline {
+    align-items: center;
+  }
+
   .detective-hero-intro__tagline {
-    position: static;
-    transform: none;
+    margin-top: var(--grid-4);
   }
 
   .detective-hero-intro__tagline-line--sub {

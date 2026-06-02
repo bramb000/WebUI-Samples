@@ -18,29 +18,32 @@
 }
 
 @theme {
-  /* ── Core Palette ── */
-  --color-bg:          #111113;   /* Obsidian */
-  --color-surface:     #1C1C21;   /* Charcoal surface */
-  --color-elevated:    #2A2A32;   /* Lighter panel */
-  --color-text:        #EBE6E0;   /* Bone white / Parchment */
-  --color-text-muted:  #A3A3A3;   /* Tarnished silver */
-  --color-border:      #8B7347;   /* Tarnished brass */
-  --color-border-hi:   #C5A872;   /* Polished brass highlight */
-  --color-accent:      #C5A872;   /* Primary interactive = brass */
-  --color-accent-dark: #8B7347;   /* Pressed / shadow state */
-  --color-accent-rim:  #D4BE94;   /* Highlight rim on buttons */
-  --color-hover-bg:    #222228;
-  --color-lcd:         #080808;
-  --color-lcd-text:    #C5A872;   /* Default LCD readout — overridden per hero theme */
+  /* ── Core Palette (60 / 30 / 10 — light mode) ── */
+  /* 60% dominant — page canvas (midpoint white ↔ parchment; synced in :root) */
+  --color-bg:          #f5f2eb;
+  /* 30% secondary — panels, containers (parchment) */
+  --color-surface:     #ebe4d6;
+  --color-elevated:    #f2ece2;
+  /* Ink on light surfaces */
+  --color-text:        #1a1814;
+  --color-text-muted:  #5c564c;
+  /* Structure + 10% primary — dark graphite grey */
+  --color-border:      #b8b2a6;
+  --color-border-hi:   #4a5058;
+  --color-accent:      #2f3339;
+  --color-accent-dark: #1c1f23;
+  --color-accent-rim:  #4a5058;
+  --color-hover-bg:    #e0d8c8;
+  --color-lcd:         #e8e4dc;
+  --color-lcd-text:    #2f3339;
 
   /* ── Typefaces ── */
-  /* Primary headers — homepage hero ("Hi, I'm Bramha") */
-  --font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
-  /* Expressive script — hero role line ("Product Specialist") */
-  --font-script:  'Imperial Script', 'Snell Roundhand', 'Segoe Script', cursive;
-  /* Body copy + parchment panel UI labels (case study kickers, badges, meta) */
-  --font-sans:    'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  /* No monospace in the design system — map Tailwind font-mono to Barlow */
+  /* Headers + hero role line — Comic Relief (@see https://fonts.google.com/specimen/Comic+Relief) */
+  --font-display: 'Comic Relief', cursive;
+  --font-role:    var(--font-display);
+  /* Body copy + UI labels (@see https://fonts.google.com/specimen/Lexend) */
+  --font-sans:    'Lexend', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* No monospace in the design system — map Tailwind font-mono to Lexend */
   --font-mono:    var(--font-sans);
 }
 
@@ -66,11 +69,19 @@
   --grid-7: calc(var(--grid-unit) * 7);
   --grid-8: calc(var(--grid-unit) * 8);
 
+  /* Fixed NavBar shell (see NavBar.vue .dl-nav-shell) */
+  --nav-height: calc(var(--grid-unit) * 9); /* 72px */
+  /* Deckled panel rim bleed (PanelChiselBackground) */
+  --panel-chisel-bleed: 36px;
+  /* `/work` detail parchment — symmetric gap nav↔deckle and deckle↔viewport bottom */
+  --work-detail-gutter: var(--grid-2);
+  --work-panel-padding-inline: var(--grid-3);
+
   /* UI design tokens */
   --dl-border-width:  2px;
   --dl-border-radius: 4px;
-  --dl-shadow-deep:   0px 8px 16px rgba(0, 0, 0, 0.8);
-  --dl-glow-global:   0 0 10px rgba(197, 168, 114, 0.15);
+  --dl-shadow-deep:   0px 6px 18px rgba(26, 24, 20, 0.08);
+  --dl-glow-global:   0 1px 0 rgba(26, 24, 20, 0.06);
 
   /* Square frame — case study panels, metric/insight cards, testimonial cards, chips */
   --dl-frame-width:   4px;
@@ -78,7 +89,7 @@
   --dl-frame-color:   var(--color-border);
   --dl-card-frame-width:  var(--dl-frame-width);
   --dl-card-frame-radius: var(--dl-frame-radius);
-  --dl-card-frame-color:  var(--case-insight-surface-fill, #3a2c2e);
+  --dl-card-frame-color:  var(--case-insight-surface-fill, var(--color-accent));
 
   /* Case study panel interior (see `.case-study-panel`) */
   --dl-panel-padding-inline: calc(var(--grid-5) / 2);
@@ -95,13 +106,15 @@
   --noise-svg: url('data:image/svg+xml,%3Csvg viewBox%3D"0 0 200 200" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%3E%3Cfilter id%3D"n"%3E%3CfeTurbulence type%3D"fractalNoise" baseFrequency%3D"1.5" numOctaves%3D"3" stitchTiles%3D"stitch"%2F%3E%3C%2Ffilter%3E%3Crect width%3D"100%25" height%3D"100%25" filter%3D"url(%23n)"%2F%3E%3C%2Fsvg%3E');
 
   /* Global page background texture (baked, extremely subtle) */
-  --global-bg-grain-overlay-strength: 0.14;
-  --global-bg-grain-opacity: 0.12;
-  --global-bg-halftone-opacity: 0.045;
+  --global-bg-grain-overlay-strength: 0.1;
+  --global-bg-grain-opacity: 0.08;
+  --global-bg-halftone-opacity: 0.035;
 
   /* Parchment work-detail panel (fill + rim share one token family) */
   --paper-surface-fill:       #ebe4d6;
   --paper-surface-fill-deep:  #e0d8c8;
+  /* Page canvas — halfway between white and parchment */
+  --color-bg: color-mix(in srgb, #ffffff 50%, var(--paper-surface-fill) 50%);
   /* Rim matches fill — procedural stroke reads as deckled paper, not brass */
   --paper-surface-rim:        #ebe4d6;
   --paper-surface-rim-hi:     #f2ece2;
@@ -113,12 +126,38 @@
   --paper-grain-opacity:          0.48;
   --paper-grain-blend:            multiply;
 
+  /* Roster + home achievement cards — parchment primary (grain bake reads --roster-card-grain-base) */
+  --roster-card-surface:          var(--paper-surface-fill);
+  --roster-card-surface-deep:     var(--paper-surface-fill-deep);
+  --roster-card-surface-rim:      var(--paper-surface-rim-hi);
+  /* Roster card borders — fixed graphite (independent of page accent) */
+  --roster-graphite-rim:          #4a5058;
+  --roster-graphite:              #2f3339;
+  --roster-graphite-deep:         #1c1f23;
+  --roster-card-border:           var(--roster-graphite-rim);
+  --roster-card-border-hover:     var(--roster-graphite);
+  --roster-card-border-selected:  var(--roster-graphite-deep);
+  --roster-card-text:             var(--paper-on-fill-text);
+  --roster-card-text-muted:       var(--paper-on-fill-text-muted);
+  --roster-card-plate-base:       var(--paper-surface-fill);
+  --roster-card-grain-base:       var(--paper-surface-fill-deep);
+  --roster-card-grain-strength:   0.19;
+  --roster-card-grain-opacity:    0.41;
+  --roster-card-grain-fallback-opacity: 0.21;
+  --roster-card-shadow:
+    0 1px 0 color-mix(in srgb, white 55%, transparent) inset,
+    0 8px 20px rgba(26, 24, 20, 0.1);
+  --roster-card-shadow-hover:
+    0 1px 0 color-mix(in srgb, white 60%, transparent) inset,
+    0 0 0 1px color-mix(in srgb, var(--roster-graphite) 22%, transparent),
+    0 12px 26px rgba(26, 24, 20, 0.14);
+
   /* Case study insight cards — before (issue) / after (fixed); hex synced in caseInsightTheme.ts */
   --case-insight-before:     #ffc9c9;
   --case-insight-after:      #b8ffd0;
   --case-insight-surface-before:     #c4565e;
   --case-insight-surface-after:      #3dba6a;
-  /* Dark insight/metric interiors — never inherit paper or hero theme text */
+  /* Dark insight/metric interiors — never inherit paper surface text */
   --case-insight-fill-base:      #121110;
   --case-insight-on-fill:        #f5f2ec;
   --case-insight-on-fill-muted:  #cfc8bc;
@@ -127,10 +166,6 @@
   --case-insight-grain-overlay-strength: 0.42;
   --case-insight-grain-opacity:          0.64;
   --case-insight-grain-blend:            multiply;
-  /* Project roster cards — discipline colour coding */
-  --roster-discipline-product-design: #524f81;
-  --roster-discipline-ui-design:       #00674f;
-
   /* Roster card name-plate typography (work grid default) */
   --text-roster-card-title:   clamp(11px, 3.4cqi, 14px);
   --text-roster-card-client:  clamp(9px, 2.8cqi, 11px);
@@ -169,11 +204,8 @@
   --roster-achievement-plate-padding: 12px 14px;
 
   /* ── Type scale (size / tracking / leading) ── */
-  --text-display-hero:           clamp(3.25rem, 10vw, 6rem);
-  --text-display-hero-greeting:  calc(var(--text-display-hero) * 0.5);
   --text-page-title:    clamp(3rem, 10vw, 5.25rem);
   --text-hero-title:    clamp(1.75rem, 6vw, 3.25rem);
-  --text-hero-role:     clamp(2.75rem, 9vw, 5rem);
   --text-section-title: clamp(1.25rem, 3.5vw, 1.75rem);
   --text-card-title:    1.0625rem;
   --text-heading-major: 2.25rem;
@@ -196,11 +228,8 @@
   --leading-display:    1;
   --leading-tight:      1.1;
   --leading-script:     1.05;
-  /* Homepage hero — greeting ↔ name use normal display leading; name ↔ role slight tuck */
-  --leading-display-hero-line: var(--leading-display);
-  --leading-hero-name-role:    0.845;
-  --hero-name-role-overlap:    var(--grid-1);
-  /* Hero tagline — two lines; px values on 4px grid */
+  /* Homepage hero — 3-level hierarchy (name → role → tagline) */
+  --text-hero-name: clamp(2.25rem, 4.5vw + 1rem, 3.75rem);
   --text-hero-tagline-min: 12px;
   --text-hero-tagline-max: 24px;
   --text-hero-tagline-fluid: 12px + 1vw;
@@ -209,9 +238,22 @@
     var(--text-hero-tagline-fluid),
     var(--text-hero-tagline-max)
   );
+  --text-hero-role: var(--text-hero-tagline);
+  --font-weight-hero-name: 700;
+  --font-weight-hero-role: 500;
+  --font-weight-hero-tagline: 500;
+  --leading-hero-name: var(--leading-tight);
   --leading-hero-tagline: var(--leading-snug);
-  --hero-thirds-first-line: 33.333%;
-  --hero-thirds-second-line: 66.666%;
+  --leading-hero-role: var(--leading-hero-tagline);
+  --tracking-hero-name: var(--tracking-display);
+  --tracking-hero-tagline: var(--tracking-heading-tight);
+  --tracking-hero-role: var(--tracking-hero-tagline);
+  --hero-headline-gap: var(--grid-1);
+  --hero-headline-tagline-gap: var(--grid-5);
+  /* Legacy stacked hero (greeting + name) */
+  --text-display-hero: var(--text-hero-name);
+  --text-display-hero-greeting: calc(var(--text-hero-name) * 0.5);
+  --leading-display-hero-line: var(--leading-hero-name);
   --leading-snug:       1.3;
   --leading-body:       1.625;
   --leading-body-sm:    1.6;
@@ -247,62 +289,18 @@
   --color-text:              var(--paper-on-fill-text);
   --color-text-muted:        var(--paper-on-fill-text-muted);
   --color-surface:           var(--paper-surface-fill-deep);
-  --color-elevated:          #f2ece2;
+  --color-elevated:          var(--paper-surface-rim-hi);
   --color-bg:                var(--paper-surface-fill);
-  --color-border:            var(--paper-surface-rim);
-  --color-border-hi:         var(--paper-surface-rim-hi);
+  --color-border:            var(--paper-on-fill-border);
+  --color-border-hi:         var(--color-accent-rim);
   --color-hover-bg:          #ddd5c6;
   --color-lcd:               #d8d0c2;
-  --color-lcd-text:          #3d3830;
-  --color-accent:            #6b5a32;
-  --color-accent-dark:       #524724;
-  --color-accent-rim:        #8b7347;
+  --color-lcd-text:          #2f3339;
   --dl-glow-global:          0 1px 0 color-mix(in srgb, var(--paper-surface-rim-hi) 40%, transparent);
   color: var(--color-text);
 }
 
-/* ── Case Study Hero Themes
-   Applied to <html> via useCaseTheme composable on route change.
-   Overrides accent tokens — all components inherit automatically.
-── */
-
-/* The Alchemist — Rocksmith+ (spectral teal, precision/transformation) */
-[data-theme="alchemist"] {
-  --color-border:      #2C6B74;
-  --color-border-hi:   #45F0D1;
-  --color-accent:      #45F0D1;
-  --color-accent-dark: #2C6B74;
-  --color-accent-rim:  #80F7E5;
-  --color-surface:     #121A1C;
-  --color-lcd-text:    #45F0D1;
-  --dl-glow-global:    0 0 15px rgba(69, 240, 209, 0.3);
-}
-
-/* The Illusionist — Paper RPG / Creative (arcane purple, narrative) */
-[data-theme="illusionist"] {
-  --color-border:      #6A3E75;
-  --color-border-hi:   #B873D3;
-  --color-accent:      #B873D3;
-  --color-accent-dark: #6A3E75;
-  --color-accent-rim:  #CF9FE0;
-  --color-surface:     #18131A;
-  --color-lcd-text:    #B873D3;
-  --dl-glow-global:    0 0 15px rgba(184, 115, 211, 0.3);
-}
-
-/* The Tinkerer — Guild of Guardians (furnace amber, live-ops, mechanical) */
-[data-theme="tinkerer"] {
-  --color-border:      #8C4A28;
-  --color-border-hi:   #E67E22;
-  --color-accent:      #E67E22;
-  --color-accent-dark: #8C4A28;
-  --color-accent-rim:  #F0A050;
-  --color-surface:     #1A1512;
-  --color-lcd-text:    #E67E22;
-  --dl-glow-global:    0 0 15px rgba(230, 126, 34, 0.3);
-}
-
-/* ── Smooth theme crossfade ── */
+/* ── Global token transitions ── */
 html, body, nav {
   transition:
     background-color 0.35s var(--ease-te-snap),
@@ -345,10 +343,10 @@ h5, h6 {
 
 .type-display-hero {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--font-weight-hero-name);
   font-size: var(--text-display-hero);
-  letter-spacing: var(--tracking-display);
-  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-hero-name);
+  line-height: var(--leading-hero-name);
   color: var(--color-text);
 }
 .type-page-title {
@@ -367,13 +365,22 @@ h5, h6 {
   line-height: var(--leading-tight);
   color: var(--color-text);
 }
-.type-hero-role {
-  font-family: var(--font-script);
-  font-weight: 400;
-  font-size: var(--text-hero-role);
-  letter-spacing: var(--tracking-script);
-  line-height: var(--leading-script);
+.type-hero-name {
+  font-family: var(--font-display);
+  font-size: var(--text-hero-name);
+  font-weight: var(--font-weight-hero-name);
+  letter-spacing: var(--tracking-hero-name);
+  line-height: var(--leading-hero-name);
   color: var(--color-text);
+  text-transform: none;
+}
+.type-hero-role {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-hero-role);
+  font-size: var(--text-hero-role);
+  letter-spacing: var(--tracking-hero-role);
+  line-height: var(--leading-hero-role);
+  color: var(--color-text-muted);
   text-transform: none;
 }
 .type-display-hero--stacked {
@@ -386,27 +393,25 @@ h5, h6 {
   line-height: var(--leading-display-hero-line);
 }
 .type-display-hero-name {
-  line-height: var(--leading-display-hero-line);
+  font-size: var(--text-hero-name);
+  font-weight: var(--font-weight-hero-name);
+  line-height: var(--leading-hero-name);
+  letter-spacing: var(--tracking-hero-name);
 }
 .type-hero-stack {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: var(--hero-headline-gap);
 }
 .type-hero-stack > .type-display-hero {
   margin-block-end: 0;
 }
-.type-hero-stack .type-display-hero--stacked .type-display-hero-name {
-  margin-block-end: calc(-1 * var(--hero-name-role-overlap));
-}
-.type-hero-stack > .type-hero-role {
-  line-height: var(--leading-hero-name-role);
-  margin-block-start: calc(-1 * var(--hero-name-role-overlap));
-}
 .type-hero-tagline {
   font-family: var(--font-display);
   font-size: var(--text-hero-tagline);
-  font-weight: 500;
-  letter-spacing: var(--tracking-heading-tight);
+  font-weight: var(--font-weight-hero-tagline);
+  letter-spacing: var(--tracking-hero-tagline);
   line-height: var(--leading-hero-tagline);
   color: var(--color-text-muted);
   text-transform: none;
@@ -415,6 +420,7 @@ h5, h6 {
 /* Case study layout — explicit display headings (avoid matching type-case-body*, etc.) */
 .case-study-layout :is(
   .type-hero-title,
+  .type-hero-name,
   .type-display-hero,
   .type-case-section,
   .type-case-section-accent,
@@ -857,9 +863,9 @@ h5, h6 {
 }
 
 @keyframes dl-spectral-pulse {
-  0% { text-shadow: 0 0 10px color-mix(in srgb, var(--color-accent) 20%, transparent); color: var(--color-text); }
-  50% { text-shadow: 0 0 25px color-mix(in srgb, var(--color-accent) 60%, transparent), 0 0 40px color-mix(in srgb, var(--color-accent) 30%, transparent); color: #fff; }
-  100% { text-shadow: 0 0 10px color-mix(in srgb, var(--color-accent) 20%, transparent); color: var(--color-text); }
+  0% { text-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 18%, transparent); color: var(--color-text); }
+  50% { text-shadow: 0 0 16px color-mix(in srgb, var(--color-accent) 35%, transparent); color: var(--color-accent); }
+  100% { text-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 18%, transparent); color: var(--color-text); }
 }
 
 @keyframes dl-clunk {
@@ -1172,6 +1178,22 @@ h5, h6 {
   min-width: 0;
 }
 
+/* Standalone case-study TOC — sticky beneath fixed nav */
+@media (min-width: 1280px) {
+  .case-study-layout .toc-sidebar-column {
+    align-self: start;
+    overflow: visible;
+  }
+
+  .case-study-layout .toc-sidebar-sticky {
+    position: sticky !important;
+    top: calc(var(--nav-height) + var(--grid-4)) !important;
+    z-index: 30;
+    height: fit-content;
+    max-height: calc(100vh - var(--nav-height) - var(--grid-4));
+  }
+}
+
 /* Case study TOC — vertically centred inside parchment scrollport when sticky */
 .dl-embedded--case .toc-sidebar-column {
   /* Override `hidden xl:block` — TOC must stay visible in the narrow embedded scrollport */
@@ -1294,8 +1316,8 @@ img.panel-recessed {
   border: var(--dl-border-width) solid var(--color-border);
   border-radius: var(--dl-border-radius);
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.8),
-    inset 0 0 0 1px rgba(139, 115, 71, 0.2),
+    0 0 0 1px color-mix(in srgb, var(--color-text) 6%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 12%, transparent),
     var(--dl-glow-global);
 }
 
@@ -1333,10 +1355,26 @@ img.panel-recessed {
   to   { opacity: 1;   box-shadow: 0 0 14px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 40%, transparent); }
 }
 
+/* Fixed nav — reserve top band (all pages except `/work`, which uses `.work-stage`) */
+main.main-below-nav {
+  padding-top: var(--nav-height);
+  box-sizing: border-box;
+}
+
+/* Work roster — main sits below fixed nav; height excludes nav band */
+main.work-stage {
+  margin-top: var(--nav-height);
+  height: calc(100vh - var(--nav-height));
+  min-height: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
 /* ── Navigation (flat bar) ── */
 .dl-nav-ledge-bg {
   background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: none;
   box-shadow: none;
 }
 
@@ -1345,9 +1383,9 @@ img.panel-recessed {
   z-index: 60; /* Above wisp/flame canvas layer */
   align-items: center;
   gap: 8px;
-  background: rgba(0,0,0,0.6);
+  background: color-mix(in srgb, var(--color-surface) 88%, white);
   padding: 4px 12px;
-  border: 1px solid rgba(235, 230, 224, 0.05);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
   clip-path: polygon(0 0, 98% 0, 100% 100%, 2% 100%);
 }
 
@@ -1459,7 +1497,7 @@ img.panel-recessed {
 
 .ui-filter-tab {
   position: relative;
-  background: rgba(0, 0, 0, 0.3);
+  background: color-mix(in srgb, var(--color-surface) 72%, white);
   color: var(--color-text-muted);
   font-family: var(--font-sans);
   font-size: var(--text-filter-tab);
@@ -1476,7 +1514,7 @@ img.panel-recessed {
   content: '';
   position: absolute;
   inset: 5px;
-  border: 1px solid rgba(235, 230, 224, 0.1);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
   clip-path: polygon(0% 0%, 20% 0%, 10% 50%, 20% 100%, 0% 100%, 100% 100%, 80% 100%, 90% 50%, 80% 0%, 100% 0%);
   opacity: 0;
   transition: opacity 150ms ease;
@@ -1496,7 +1534,7 @@ img.panel-recessed {
 .ui-filter-tab:hover::before, 
 .ui-filter-tab.active::before {
   opacity: 1;
-  border-color: rgba(17, 17, 19, 0.3);
+  border-color: color-mix(in srgb, var(--color-bg) 35%, transparent);
 }
 
 .ui-filter-tab.active {

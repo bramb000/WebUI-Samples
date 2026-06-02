@@ -35,7 +35,7 @@ function rebakeRing(attempt = 0) {
     return
   }
 
-  const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#6b5a32')
+  const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#2f3339')
   const rawW = r.width + TOC_RING_PAD_PX * 2
   const rawH = r.height + TOC_RING_PAD_PX * 2 + 6
   const { widthCss, heightCss } = quantizePencilBakeDimensions(rawW, rawH, 'frame')

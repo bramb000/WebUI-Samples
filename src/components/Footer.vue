@@ -84,12 +84,11 @@ const trackEmailClick = () => {
 /* ── Obsidian Mounting Plate ── */
 .footer-plate {
   margin-top: 96px;
-  background: #111113; /* Void Black */
-  border-top: 2px solid #222;
+  background: var(--color-surface);
+  border-top: 2px solid var(--color-border);
   box-shadow:
-    inset 0 10px 30px rgba(0, 0, 0, 0.9),
-    0 -1px 0 rgba(139, 115, 71, 0.2),
-    0 -5px 15px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 color-mix(in srgb, white 65%, transparent),
+    0 -4px 20px rgba(26, 24, 20, 0.06);
 }
 
 /* Brass accent seam — occult gradient, not flat orange */
@@ -127,7 +126,7 @@ const trackEmailClick = () => {
   }
 }
 
-/* ── Display Heading — Cinzel with occult glow ── */
+/* ── Display Heading — primary with accent glow ── */
 .footer-heading {
   font-family: var(--font-display);
   font-weight: 700;

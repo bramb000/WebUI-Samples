@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, inject, nextTick, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { NAV_SCROLL_REFRESH_KEY } from '../composables/useNavAutoHide'
 import SoftDrillWipe from '../components/wipes/SoftDrillWipe.vue'
 import PanelChiselBackground from '../components/PanelChiselBackground.vue'
 import RosterCard from '../components/RosterCard.vue'
 import { startCrumple } from '../composables/paperCrumple'
+/* Hover flame (WebGL comic fire under roster card art) — disabled; see `projectFlameSingleton.ts`
 import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } from '../vfx/projectFlameSingleton'
-import { workPanelEmbeddedCaseStudyId } from '../composables/workPanelCaseTheme'
+*/
 import { useIsMobile } from '../composables/useIsMobile'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
 import { PROJECT_ROUTE_BY_ID } from '../constants/projectRoutes'
-import {
-  ROSTER_DISCIPLINE_ACCENT,
-  type RosterDiscipline,
-} from '../constants/rosterDiscipline'
+import { rosterCardPaletteFromTokens } from '../constants/rosterCardPalette'
+import type { RosterDiscipline } from '../constants/rosterDiscipline'
 
 type TechIcon = 'code' | 'cube' | 'layers' | 'spark'
 
@@ -44,14 +44,14 @@ const procedural = (seed: number) =>
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
       <defs>
         <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#0b0b0d"/>
-          <stop offset="0.45" stop-color="#111114"/>
-          <stop offset="1" stop-color="#0b0b0d"/>
+          <stop offset="0" stop-color="#f3efe6"/>
+          <stop offset="0.45" stop-color="#f5f2eb"/>
+          <stop offset="1" stop-color="#f3efe6"/>
         </linearGradient>
         <radialGradient id="r" cx="70%" cy="25%" r="80%">
-          <stop offset="0" stop-color="rgba(57,255,20,0.18)"/>
-          <stop offset="0.45" stop-color="rgba(70,240,209,0.10)"/>
-          <stop offset="1" stop-color="rgba(0,0,0,0)"/>
+          <stop offset="0" stop-color="rgba(235,228,214,0.55)"/>
+          <stop offset="0.45" stop-color="rgba(47,51,57,0.1)"/>
+          <stop offset="1" stop-color="rgba(255,255,255,0)"/>
         </radialGradient>
         <filter id="n">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="${seed}"/>
@@ -106,15 +106,8 @@ function generateTornPaperPolygon() {
   return points.join(' ')
 }
 
-function randomPalette() {
-  const h1 = Math.floor(Math.random() * 360)
-  const color1 = `hsl(${h1}, 40%, 30%)`
-  const color2 = `hsl(${(h1 + 40) % 360}, 40%, 15%)`
-  return { color1, color2 }
-}
-
 function rosterMeta(title: string) {
-  const { color1, color2 } = randomPalette()
+  const { color1, color2 } = rosterCardPaletteFromTokens()
   const points = generateTornPaperPolygon()
   const label = title.split(' ')[0] ?? title
   return { points, color1, color2, label }
@@ -131,7 +124,7 @@ const projects = ref<Project[]>([
     title: 'Repairing stickiness to increase revenue',
     subtitle: 'Retention & Live-Ops Systems',
     tags: ['MOBILE', 'UX', 'DATA'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('guild', 17),
     splash: projectArt('guild', 17),
     tech: ['layers', 'cube', 'code', 'spark'],
@@ -144,7 +137,7 @@ const projects = ref<Project[]>([
     title: 'Making guitar accessible to 1M+ users',
     subtitle: 'Cross-Platform UI System',
     tags: ['SYSTEMS', 'ACCESS', 'SHIPPED'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('rocksmith', 19),
     splash: projectArt('rocksmith', 19),
     tech: ['code', 'layers', 'spark', 'cube'],
@@ -157,7 +150,7 @@ const projects = ref<Project[]>([
     title: 'Cozy Corner, A Warm Third Space',
     subtitle: 'Realtime chat, voice & shared world',
     tags: ['PIXEL', 'REALTIME', 'SOLO'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('cozy-corner', 59),
     splash: projectArt('cozy-corner', 59),
     tech: ['layers', 'code', 'spark', 'cube'],
@@ -171,7 +164,7 @@ const projects = ref<Project[]>([
     title: 'Login Micro-Interaction',
     subtitle: 'Lottie-driven input tracking avatar',
     tags: ['PROTOTYPE', 'MOTION', 'UI'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('login', 23),
     splash: projectArt('login', 23),
     tech: ['spark', 'code', 'layers', 'cube'],
@@ -183,7 +176,7 @@ const projects = ref<Project[]>([
     title: 'Bringing UI to life',
     subtitle: 'Responsive 2D component with 3D assets',
     tags: ['GAME', 'JUICE', 'UI'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('helldivers', 29),
     splash: projectArt('helldivers', 29),
     tech: ['cube', 'spark', 'layers', 'code'],
@@ -195,7 +188,7 @@ const projects = ref<Project[]>([
     title: 'Analogue Usage Dashboard',
     subtitle: 'Brutalist tray with mechanical motion',
     tags: ['HUD', 'MOTION', 'DENSE'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('account-tray', 31),
     splash: projectArt('account-tray', 31),
     tech: ['layers', 'spark', 'code', 'cube'],
@@ -207,7 +200,7 @@ const projects = ref<Project[]>([
     title: 'Component-Driven Sales Modal',
     subtitle: 'Contextual pricing + banners',
     tags: ['UX', 'MODULAR', 'POLISH'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('sales-modal', 37),
     splash: projectArt('sales-modal', 37),
     tech: ['code', 'layers', 'cube', 'spark'],
@@ -219,7 +212,7 @@ const projects = ref<Project[]>([
     title: 'AI Voice Chat Simulation',
     subtitle: 'Visual communication + conversation',
     tags: ['AUDIO', 'UX', 'SYSTEMS'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('voice-chat', 41),
     splash: projectArt('voice-chat', 41),
     tech: ['spark', 'code', 'layers', 'cube'],
@@ -231,7 +224,7 @@ const projects = ref<Project[]>([
     title: 'Node Graph Visual Scripting',
     subtitle: 'Dense tool UI + help',
     tags: ['TOOLS', 'DENSE', 'UI'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('node-graph', 43),
     splash: projectArt('node-graph', 43),
     tech: ['cube', 'layers', 'code', 'spark'],
@@ -243,7 +236,7 @@ const projects = ref<Project[]>([
     title: 'Feel the rhythm through interaction',
     subtitle: 'Interaction breakdown & recreation',
     tags: ['GAME', 'SYSTEMS', 'FEEL'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('patapon', 47),
     splash: projectArt('patapon', 47),
     tech: ['layers', 'cube', 'code', 'spark'],
@@ -255,7 +248,7 @@ const projects = ref<Project[]>([
     title: 'Feel like a Jedi',
     subtitle: 'Combat design + interaction',
     tags: ['GAME', 'JUICE', 'UNITY'],
-    tagColors: ['#e5e5e5', '#e5e5e5', '#e5e5e5'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
     thumb: projectArt('jedi', 53),
     splash: projectArt('jedi', 53),
     tech: ['cube', 'spark', 'layers', 'code'],
@@ -329,24 +322,13 @@ const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
   jedi: defineAsyncComponent(embeddedProjectImportById.jedi),
 }
 
+const refreshNavScroll = inject<(() => void) | undefined>(NAV_SCROLL_REFRESH_KEY, undefined)
+
 const displayedEmbeddedComponent = computed(
   () => embeddedProjectComponentById[displayedId.value] ?? null,
 )
 const isCaseStudyEmbedded = computed(() =>
   displayedId.value === 'guild' || displayedId.value === 'rocksmith' || displayedId.value === 'cozy-corner',
-)
-
-watch(
-  [displayedId, isMobile],
-  ([id, mobile]) => {
-    if (mobile) {
-      workPanelEmbeddedCaseStudyId.value = null
-      return
-    }
-    workPanelEmbeddedCaseStudyId.value =
-      id === 'guild' || id === 'rocksmith' || id === 'cozy-corner' ? id : null
-  },
-  { immediate: true },
 )
 
 const pressedId = ref<string | null>(null)
@@ -362,7 +344,7 @@ const {
   rosterPaintMaskUrl,
 } = useRosterCardPaint()
 
-function onThumbEnter(e: PointerEvent, id: string) {
+function onThumbEnter(_e: PointerEvent, id: string) {
   if (isMobile.value) return
   hoveredId.value = id
   if (hoverDetachTimeout != null) {
@@ -370,9 +352,7 @@ function onThumbEnter(e: PointerEvent, id: string) {
     hoverDetachTimeout = null
   }
 
-  const thumb = e.currentTarget as HTMLElement
-  const innerCard = thumb.querySelector('.inner-card') as HTMLElement | null
-  if (innerCard) attachProjectFlameToThumbnail(thumb, innerCard)
+  // Flame: attachProjectFlameToThumbnail(e.currentTarget, innerCard)
   startCrumple()
 
   // Prefetch next detail chunk for a shorter blank hold.
@@ -385,7 +365,7 @@ function onThumbLeave(id: string) {
   if (hoverDetachTimeout != null) window.clearTimeout(hoverDetachTimeout)
   hoverDetachTimeout = window.setTimeout(() => {
     if (hoveredId.value == null && pressedId.value == null) {
-      detachProjectFlame()
+      // detachProjectFlame()
     }
     hoverDetachTimeout = null
   }, 70)
@@ -404,8 +384,7 @@ function onThumbDown(e: PointerEvent, id: string) {
     hoverDetachTimeout = null
   }
   const thumb = e.currentTarget as HTMLElement
-  const innerCard = thumb.querySelector('.inner-card') as HTMLElement | null
-  if (innerCard) attachProjectFlameToThumbnail(thumb, innerCard)
+  // Flame: attachProjectFlameToThumbnail(thumb, innerCard)
   startCrumple()
 
   try {
@@ -421,18 +400,26 @@ function onThumbUp(id: string) {
     if (path) void router.push(path)
     return
   }
-  if (hoveredId.value == null) detachProjectFlame()
+  // if (hoveredId.value == null) detachProjectFlame()
   selectProject(id)
 }
 
-let raf = 0
+function syncNavScrollListeners() {
+  nextTick(() => refreshNavScroll?.())
+}
+
+watch(displayedEmbeddedComponent, syncNavScrollListeners)
+
 onMounted(() => {
   observeGrid(gridContainerRef.value)
   scheduleRebake()
+  syncNavScrollListeners()
+  /* 24fps flame render loop — re-enable with attach/detach above
   if (isMobile.value) return
   const clockStart = performance.now()
   let lastFrame = clockStart
   const frameMs = 1000 / 24
+  let raf = 0
   const loop = () => {
     const now = performance.now()
     if (now - lastFrame >= frameMs) {
@@ -443,12 +430,8 @@ onMounted(() => {
     raf = requestAnimationFrame(loop)
   }
   raf = requestAnimationFrame(loop)
+  */
 })
-onBeforeUnmount(() => {
-  cancelAnimationFrame(raf)
-  workPanelEmbeddedCaseStudyId.value = null
-})
-
 function selectProject(id: string) {
   if (id === activeId.value) return
   transitionToken++
@@ -498,11 +481,11 @@ function onDone(trigger: number) {
 
 <template>
   <div class="dl-app">
-    <div class="dl-bg" />
-
     <div class="dl-shell">
       <div class="dl-grid">
-        <aside id="roster-pane" aria-label="Project roster">
+        <aside class="roster-pane-shell" aria-label="Project roster">
+          <div class="roster-pane__bg" aria-hidden="true" />
+          <div id="roster-pane" class="roster-pane__scroll">
           <div class="roster-header">Select Project</div>
 
           <div
@@ -514,7 +497,7 @@ function onDone(trigger: number) {
           >
             <template v-for="section in rosterSections" :key="section.label">
               <div
-                class="roster-section-header section-header border-b border-[var(--color-border)]"
+                class="roster-section-header section-header"
                 :class="{ 'roster-section-header--spaced': section.spaced }"
               >
                 <h3 class="type-eyebrow">{{ section.label }}</h3>
@@ -534,9 +517,6 @@ function onDone(trigger: number) {
                 :client-prefix="p.clientPrefix"
                 :selected="!isMobile && p.id === activeProject.id"
                 :pressed="p.id === pressedId"
-                :style="{
-                  '--roster-discipline-accent': ROSTER_DISCIPLINE_ACCENT[p.discipline],
-                }"
                 @pointerenter="(e) => onThumbEnter(e, p.id)"
                 @pointerleave="() => onThumbLeave(p.id)"
                 @pointermove="onThumbMove"
@@ -546,18 +526,18 @@ function onDone(trigger: number) {
               />
             </template>
           </div>
+          </div>
         </aside>
 
         <section v-if="!isMobile" class="dl-detail" aria-label="Project detail">
-          <PanelChiselBackground class="dl-detail__surface">
-          <div
-            v-if="displayedEmbeddedComponent"
-            class="dl-embedded"
-            :class="{ 'dl-embedded--case': isCaseStudyEmbedded }"
-          >
-            <component :is="displayedEmbeddedComponent" :key="displayedId" />
-          </div>
-
+          <PanelChiselBackground class="dl-detail__surface" work-stage-inset>
+            <div
+              v-if="displayedEmbeddedComponent"
+              class="dl-embedded"
+              :class="{ 'dl-embedded--case': isCaseStudyEmbedded }"
+            >
+              <component :is="displayedEmbeddedComponent" :key="displayedId" />
+            </div>
           </PanelChiselBackground>
 
           <SoftDrillWipe
@@ -578,10 +558,11 @@ function onDone(trigger: number) {
   width: 100%;
   height: 100%;
   min-height: 0;
-  /* Clip decorative bleed (.dl-bg); WebGL rim is fixed-canvas, not DOM overflow */
-  overflow: hidden;
-  background: #111111;
-  color: #eae7e2;
+  /* Clip horizontal bleed; allow deckled panel rim above the grid */
+  overflow-x: clip;
+  overflow-y: visible;
+  background: var(--color-bg);
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -611,26 +592,26 @@ function onDone(trigger: number) {
   }
 }
 
-.dl-bg {
+/* Roster column only — detail pane uses flat `--color-bg` (matches site canvas) */
+.roster-pane__bg {
   position: absolute;
-  /* Avoid negative inset — it enlarged scrollable overflow on html/body */
   inset: 0;
+  z-index: 0;
   background:
-    radial-gradient(circle at 15% 15%, rgba(70,240,209,0.06) 0%, transparent 45%),
-    radial-gradient(circle at 85% 25%, rgba(165,30,44,0.07) 0%, transparent 55%),
-    radial-gradient(circle at 40% 85%, rgba(57,255,20,0.06) 0%, transparent 55%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 80px),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 80px);
-  opacity: 0.6;
+    radial-gradient(circle at 15% 15%, rgba(47, 51, 57, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 85% 25%, rgba(74, 80, 88, 0.03) 0%, transparent 55%),
+    repeating-linear-gradient(90deg, rgba(26, 24, 20, 0.025) 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(0deg, rgba(26, 24, 20, 0.015) 0 1px, transparent 1px 80px);
+  opacity: 0.45;
   filter: blur(0.2px);
   pointer-events: none;
 }
-.dl-bg::after {
+.roster-pane__bg::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image: var(--noise-svg);
-  opacity: 0.10;
+  opacity: 0.06;
   mix-blend-mode: overlay;
 }
 
@@ -646,44 +627,55 @@ function onDone(trigger: number) {
   align-items: stretch;
 }
 
-#roster-pane {
+.roster-pane-shell {
   position: relative;
   height: 100%;
   max-height: 100%;
   min-height: 0;
   min-width: 0;
-  border-right: 1px solid #333;
-  overflow-y: auto;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.roster-pane__scroll {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow-y: scroll;
   overflow-x: clip;
-  background: rgba(17, 17, 17, 0.85);
-  backdrop-filter: blur(10px);
   padding: 24px 16px 32px;
   box-sizing: border-box;
   scroll-padding-bottom: 48px;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-accent) 42%, transparent)
+    color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
 }
 
-:deep(#roster-pane::-webkit-scrollbar) {
-  width: 8px;
+:deep(.roster-pane__scroll::-webkit-scrollbar) {
+  width: 10px;
+  -webkit-appearance: none;
 }
-:deep(#roster-pane::-webkit-scrollbar-track) {
-  background: transparent;
+:deep(.roster-pane__scroll::-webkit-scrollbar-track) {
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
   border-radius: 999px;
 }
-:deep(#roster-pane::-webkit-scrollbar-button) {
+:deep(.roster-pane__scroll::-webkit-scrollbar-button) {
   width: 0;
   height: 0;
   display: none;
 }
-:deep(#roster-pane::-webkit-scrollbar-thumb) {
-  background: rgba(255, 255, 255, 0.22);
+:deep(.roster-pane__scroll::-webkit-scrollbar-thumb) {
+  background: color-mix(in srgb, var(--color-accent) 38%, transparent);
   border-radius: 999px;
-  border: 2px solid rgba(0, 0, 0, 0);
+  border: 2px solid color-mix(in srgb, var(--color-accent) 10%, var(--color-bg));
   background-clip: padding-box;
+  min-height: 40px;
 }
-:deep(#roster-pane::-webkit-scrollbar-thumb:hover) {
-  background: rgba(255, 255, 255, 0.32);
+:deep(.roster-pane__scroll::-webkit-scrollbar-thumb:hover) {
+  background: color-mix(in srgb, var(--color-accent) 52%, transparent);
   background-clip: padding-box;
 }
 
@@ -721,7 +713,12 @@ function onDone(trigger: number) {
   height: 100%;
   max-height: 100%;
   overflow: visible;
-  background: transparent;
+  /* Same canvas as the rest of the site — no `.dl-bg` overlay in this column */
+  background: var(--color-bg);
+  /* 16px — matches bottom; deckle bleed sits in panel block padding below */
+  padding-block: var(--work-detail-gutter, var(--grid-2));
+  padding-inline: 0;
+  box-sizing: border-box;
 }
 
 .dl-detail__surface {
@@ -752,7 +749,7 @@ function onDone(trigger: number) {
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: auto;
-  padding: clamp(12px, 1.8vw, 20px) clamp(8px, 1.2vw, 16px) 48px;
+  padding: var(--grid-3) var(--grid-2) var(--grid-6);
   z-index: 1;
   box-sizing: border-box;
   scrollbar-width: thin;
@@ -774,8 +771,6 @@ function onDone(trigger: number) {
   --color-surface: var(--paper-surface-fill-deep);
   --color-elevated: #f2ece2;
   --color-border: var(--paper-surface-rim);
-  --color-accent: #6b5a32;
-  --color-accent-rim: #8b7347;
 }
 .dl-embedded--case :deep(.case-study-layout) {
   max-width: 100%;
@@ -848,13 +843,18 @@ function onDone(trigger: number) {
     grid-template-columns: 1fr;
   }
 
-  #roster-pane {
-    border-right: none;
+  .roster-pane-shell {
+    height: auto;
+    max-height: none;
+  }
+
+  .roster-pane__scroll {
     height: auto;
     max-height: none;
     overflow-y: visible;
     padding-inline: 8px;
   }
+
 }
 </style>
 

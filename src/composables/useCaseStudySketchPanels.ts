@@ -139,7 +139,7 @@ export function useCaseStudySketchPanels(rootRef: Ref<HTMLElement | null>) {
       return
     }
 
-    const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#3d3830')
+    const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#2f3339')
     const fill = resolveCssColorToHex(el, 'var(--color-surface)', '#e0d8c8')
 
     let variant: PencilBakeVariant = 'frame'

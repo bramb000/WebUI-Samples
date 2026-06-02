@@ -67,7 +67,7 @@ import PrimaryButton from '../components/PrimaryButton.vue';
   border: 2px solid var(--color-border);
   border-radius: 3px;
   box-shadow:
-    0 12px 36px rgba(0, 0, 0, 0.7),
+    0 12px 36px rgba(26, 24, 20, 0.12),
     var(--dl-glow-global);
   pointer-events: auto;
   transition: transform 500ms var(--ease-mechanical-spring), border-color 300ms ease;
@@ -75,8 +75,8 @@ import PrimaryButton from '../components/PrimaryButton.vue';
 .photo-frame:hover {
   border-color: var(--color-border-hi);
   box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.9),
-    0 0 20px var(--color-accent);
+    0 20px 50px rgba(26, 24, 20, 0.16),
+    0 0 16px color-mix(in srgb, var(--color-accent) 22%, transparent);
 }
 .photo-back {
   width: 60%;

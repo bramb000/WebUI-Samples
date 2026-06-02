@@ -1,3 +1,13 @@
+/**
+ * WebGL comic-flame overlay for project roster cards on `/work`.
+ *
+ * On pointer hover, `attachProjectFlameToThumbnail` inserts `#flame-wrapper` (a large
+ * off-card canvas) behind the card art and runs a procedural FBM flame shader that
+ * rises from the bottom edge. `tickProjectFlame` advances time and fades opacity in/out;
+ * `detachProjectFlame` fades out when the pointer leaves.
+ *
+ * Wiring lives in `ProjectSelect.vue` (currently commented out — hover uses crumple only).
+ */
 import * as THREE from 'three'
 
 let inited = false

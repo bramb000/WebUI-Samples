@@ -25,7 +25,7 @@ export function useGlobalBackgroundGrain(surfaceRef: Ref<HTMLElement | null>, se
       return
     }
 
-    const baseColorHex = resolveCssColorToHex(el, 'var(--color-bg)', '#111113')
+    const baseColorHex = resolveCssColorToHex(el, 'var(--color-bg)', '#f5f2eb')
     const overlayStrength = readTokenNumber(el, '--global-bg-grain-overlay-strength', 0.14)
 
     const url = bakeRosterCardFrameGrainImage({

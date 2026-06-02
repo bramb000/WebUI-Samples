@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, provide, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { captureEvent, captureVfxRenderStatus } from '../analytics';
 import { useLowPowerMode } from '../composables/useLowPowerMode';
+import { NAV_SCROLL_REFRESH_KEY, useNavAutoHide } from '../composables/useNavAutoHide';
 import { setWispHover, triggerWispClick } from '../composables/wispState';
 
 const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
@@ -11,6 +12,10 @@ const showWisp = computed(() => !lowPower.value);
 
 const route = useRoute();
 const isMenuOpen = ref(false);
+
+const { scrolledAway: navScrolledAway, refresh: refreshNavScroll } = useNavAutoHide();
+provide(NAV_SCROLL_REFRESH_KEY, refreshNavScroll);
+const isNavHidden = computed(() => navScrolledAway.value && !isMenuOpen.value);
 
 watch(showWisp, (show) => {
   if (!show)
@@ -57,10 +62,13 @@ function onExternalNavClick(source: string) {
 </script>
 
 <template>
-  <div class="dl-nav-ledge-bg fixed top-0 w-full z-[90]" style="height: 72px;"></div>
+  <header
+    class="dl-nav-shell"
+    :class="{ 'dl-nav-shell--hidden': isNavHidden }"
+  >
+  <div class="dl-nav-ledge-bg" aria-hidden="true"></div>
   <nav
-    class="w-full flex justify-between md:justify-center items-center sticky top-0 z-[100] py-4 px-6 md:px-12"
-    style="height: 72px; transition: background-color 0.25s var(--ease-te-snap), color 0.25s var(--ease-te-snap);"
+    class="dl-nav-bar w-full flex justify-between md:justify-center items-center py-4 px-6 md:px-12"
   >
     <WebGLWisp v-if="showWisp" />
 
@@ -153,9 +161,52 @@ function onExternalNavClick(source: string) {
       </transition>
     </Teleport>
   </nav>
+  </header>
 </template>
 
 <style scoped>
+.dl-nav-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  height: 72px;
+  transition: transform 0.28s var(--ease-te-snap);
+  will-change: transform;
+}
+
+.dl-nav-shell--hidden {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.dl-nav-ledge-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.dl-nav-bar {
+  position: relative;
+  z-index: 1;
+  height: 72px;
+  box-sizing: border-box;
+  transition:
+    background-color 0.25s var(--ease-te-snap),
+    color 0.25s var(--ease-te-snap);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-nav-shell {
+    transition-duration: 0.01ms;
+  }
+  .dl-nav-shell--hidden {
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
 .nav-logo {
   font-family: var(--font-display);
   font-weight: 700;
@@ -197,7 +248,7 @@ function onExternalNavClick(source: string) {
   flex-direction: column;
   align-items: center;
   z-index: 95;
-  box-shadow: inset 0 4px 24px rgba(0,0,0,0.9);
+  box-shadow: inset 0 4px 24px rgba(26, 24, 20, 0.08);
 }
 .mobile-seam {
   position: absolute;

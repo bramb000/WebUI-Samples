@@ -93,12 +93,17 @@ function getCumulativeClipRect(el: HTMLElement, winW: number, winH: number): Css
   return clip
 }
 
-/** Fixed header strip is not an ancestor of cards; clip frame pixels below it when visible. */
-function applyFixedNavClip(clip: CssBox, winH: number): CssBox {
+/**
+ * Fixed header strip is not an ancestor of cards; clip frame pixels below it when
+ * the rim bleeds into the nav band. Panels that start below the nav (e.g. `/work`
+ * detail) must not be clipped or the deckled top edge renders as a straight cut.
+ */
+function applyFixedNavClip(clip: CssBox, winH: number, frameExpandedTop: number): CssBox {
   const ledge = document.querySelector('.dl-nav-ledge-bg')
   if (!(ledge instanceof HTMLElement)) return clip
   const br = ledge.getBoundingClientRect()
   if (br.height < 1 || br.bottom <= 0 || br.top >= winH) return clip
+  if (frameExpandedTop >= br.bottom - 0.5) return clip
   return intersectBoxes(clip, {
     left: -1e6,
     top: br.bottom,
@@ -447,7 +452,7 @@ function ensureGl() {
       if (!entry.skipAncestorClip) {
         clip = getCumulativeClipRect(entry.el, winW, winH)
       }
-      clip = applyFixedNavClip(clip, winH)
+      clip = applyFixedNavClip(clip, winH, exT)
       const draw = intersectBoxes(expanded, clip)
       if (draw.right - draw.left < 2 || draw.bottom - draw.top < 2) continue
 

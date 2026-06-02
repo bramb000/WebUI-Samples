@@ -56,7 +56,7 @@ const { grainUrl } = useGlobalBackgroundGrain(surfaceRef, seed)
   height: min(34vmin, 360px);
   opacity: var(--global-bg-halftone-opacity, 0.045);
   mix-blend-mode: soft-light;
-  background-image: radial-gradient(circle, rgb(255 255 255 / 0.22) 0 1px, transparent 1.8px);
+  background-image: radial-gradient(circle, rgb(26 24 20 / 0.1) 0 1px, transparent 1.8px);
   background-size: 11px 11px;
   filter: blur(0.2px);
 }

@@ -1,13 +1,10 @@
 import { onBeforeUnmount, ref } from 'vue'
 import {
-  ROSTER_DISCIPLINE_ACCENT,
-  type RosterDiscipline,
-} from '../constants/rosterDiscipline'
-import {
   bakeRosterCardFrameGrainImage,
   onRosterPaintMaskReady,
   ROSTER_PAINT_MASK_URL,
 } from '../vfx/rosterCardPaintBake'
+import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
 /** Text plate band (no image) — bottom of card. */
 const NAME_PLATE_FRAC = 0.4
@@ -57,15 +54,26 @@ export function useRosterCardPaint() {
         pending = true
         continue
       }
-      const plateH = r.height * NAME_PLATE_FRAC
-      const discipline = (el.dataset.rosterDiscipline ?? 'ui-design') as RosterDiscipline
-      const baseColorHex = ROSTER_DISCIPLINE_ACCENT[discipline] ?? ROSTER_DISCIPLINE_ACCENT['ui-design']
+      const plateEl = card?.querySelector('.card-name-plate') as HTMLElement | null
+      const plateRect = plateEl?.getBoundingClientRect()
+      const plateH =
+        plateRect && plateRect.height >= 8
+          ? plateRect.height
+          : r.height * NAME_PLATE_FRAC
+      const baseColorHex = resolveCssColorToHex(
+        card ?? el,
+        'var(--roster-card-grain-base)',
+        '#e0d8c8',
+      )
+      const overlayStrength = Number.parseFloat(
+        getComputedStyle(card ?? el).getPropertyValue('--roster-card-grain-strength').trim(),
+      )
       const url = bakeRosterCardFrameGrainImage({
         widthCss: r.width,
         heightCss: plateH,
         baseColorHex,
         seed: seedFromId(id),
-        overlayStrength: 0.38,
+        overlayStrength: Number.isFinite(overlayStrength) ? overlayStrength : 0.19,
       })
       if (!url) {
         pending = true

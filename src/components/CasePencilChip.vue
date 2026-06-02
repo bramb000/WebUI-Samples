@@ -70,7 +70,7 @@ function rebakeDetached(attempt = 0) {
     return
   }
 
-  const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#6b5a32')
+  const stroke = resolveCssColorToHex(el, 'var(--color-accent)', '#2f3339')
   const { widthCss, heightCss } = quantizePencilBakeDimensions(r.width, r.height, 'frame')
   const bakeKey = `chip-detached|${widthCss}|${heightCss}|${stroke}`
   if (detachedBakeKey === bakeKey && el.classList.contains('pencil-baked'))

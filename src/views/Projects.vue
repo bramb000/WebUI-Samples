@@ -11,7 +11,6 @@ const featuredCaseStudies = [
     description: 'Data-driven UX on a live mobile RPG: +25% D7 retention, +12% D7 LTV.',
     route: '/work/guild-of-guardians',
     image: rosterCardImage('guild'),
-    theme: '#B873D3',
   },
   {
     id: 'rocksmith',
@@ -19,7 +18,6 @@ const featuredCaseStudies = [
     description: 'One scalable UI system across five platforms for a music learning game.',
     route: '/work/rocksmith',
     image: rosterCardImage('rocksmith'),
-    theme: '#45F0D1',
   },
 ] as const
 
@@ -115,11 +113,6 @@ const trackFeaturedCaseStudyClick = (id: string) => {
   captureEvent('case_study_clicked', { project_id: id, source: 'work_list_featured' })
 }
 
-const getThemeColor = (category: string) => {
-  if (category === 'Game Design') return '#B873D3'; // Arcane Purple
-  if (category === 'Web Design') return '#45F0D1'; // Spectral Green
-  return '#8B7347'; // Default Occult Gold
-}
 </script>
 
 <template>
@@ -140,7 +133,6 @@ const getThemeColor = (category: string) => {
           :key="study.id"
           :to="study.route"
           class="featured-case-study"
-          :style="{ '--featured-theme': study.theme }"
           @click="trackFeaturedCaseStudyClick(study.id)"
         >
           <img
@@ -183,7 +175,7 @@ const getThemeColor = (category: string) => {
         :to="project.route"
         @click="trackMicroProjectClick(project)"
         class="roster-card"
-        :style="{ '--theme-color': getThemeColor(project.category), 'animation-delay': `${index * 0.05}s` }"
+        :style="{ 'animation-delay': `${index * 0.05}s` }"
       >
         <!-- Layer 1: The Void Background -->
         <div class="card-layer void-background"></div>
@@ -235,8 +227,8 @@ const getThemeColor = (category: string) => {
 }
 
 .featured-case-study:hover {
-  border-color: var(--featured-theme, var(--color-accent));
-  box-shadow: 0 0 20px color-mix(in srgb, var(--featured-theme, var(--color-accent)) 25%, transparent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 
 .featured-case-study__thumb {
@@ -327,7 +319,7 @@ const getThemeColor = (category: string) => {
 /* ── LAYER 2: Z-10 Jagged Frame ── */
 .roster-frame {
   z-index: 10;
-  background: linear-gradient(135deg, #1A1A1D 0%, #0D0D0F 100%);
+  background: linear-gradient(135deg, var(--paper-surface-fill-deep) 0%, var(--paper-surface-fill) 100%);
   clip-path: polygon(
     4% 0%, 100% 0%, 
     100% 88%, 94% 100%, 
@@ -335,14 +327,14 @@ const getThemeColor = (category: string) => {
   );
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 0 0 2px var(--theme-color);
+  box-shadow: inset 0 0 0 2px var(--color-accent);
   transition: box-shadow 200ms ease;
   pointer-events: none;
 }
 
 .roster-card:hover .roster-frame {
-  box-shadow: inset 0 0 0 4px var(--theme-color);
-  filter: drop-shadow(0 0 15px color-mix(in srgb, var(--theme-color) 40%, transparent));
+  box-shadow: inset 0 0 0 4px var(--color-accent);
+  filter: drop-shadow(0 0 15px color-mix(in srgb, var(--color-accent) 40%, transparent));
 }
 
 .roster-noise {
@@ -366,7 +358,7 @@ const getThemeColor = (category: string) => {
   right: -5%;
   width: 40%;
   height: 115%;
-  background: linear-gradient(to top, var(--theme-color) 0%, transparent 80%);
+  background: linear-gradient(to top, var(--color-accent) 0%, transparent 80%);
   opacity: 0.1;
   transform-origin: bottom center;
   transition: opacity 300ms ease, transform 300ms ease;
@@ -397,7 +389,7 @@ const getThemeColor = (category: string) => {
   font-family: var(--font-sans);
   font-size: var(--text-filter-tab);
   font-weight: 900;
-  background: var(--theme-color);
+  background: var(--color-accent);
   color: var(--color-bg);
   padding: 4px 10px;
   clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
@@ -405,7 +397,7 @@ const getThemeColor = (category: string) => {
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: var(--tracking-button);
-  box-shadow: 0 4px 10px color-mix(in srgb, var(--theme-color) 50%, transparent);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--color-accent) 50%, transparent);
 }
 
 .tile-body {
@@ -423,13 +415,13 @@ const getThemeColor = (category: string) => {
   letter-spacing: 0.02em;
   color: var(--color-text);
   margin: 0;
-  text-shadow: 0 0 15px color-mix(in srgb, var(--theme-color) 40%, transparent);
+  text-shadow: 0 0 15px color-mix(in srgb, var(--color-accent) 40%, transparent);
   transition: color 200ms ease, text-shadow 200ms ease;
 }
 
 .roster-card:hover .tile-title {
   color: var(--color-text);
-  text-shadow: 0 0 25px var(--theme-color);
+  text-shadow: 0 0 25px var(--color-accent);
 }
 
 .tile-desc {
@@ -452,16 +444,16 @@ const getThemeColor = (category: string) => {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: var(--tracking-label-md);
-  background: rgba(0, 0, 0, 0.5);
-  color: var(--theme-color);
+  background: color-mix(in srgb, var(--color-text) 8%, var(--color-surface));
+  color: var(--color-accent);
   padding: 10px 20px;
   clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
-  border-left: 4px solid var(--theme-color);
+  border-left: 4px solid var(--color-accent);
   transition: all 200ms ease;
 }
 
 .roster-card:hover .roster-btn {
-  background: color-mix(in srgb, var(--theme-color) 20%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
   color: var(--color-text);
 }
 </style>

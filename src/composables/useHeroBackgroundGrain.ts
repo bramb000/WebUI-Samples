@@ -35,7 +35,7 @@ export function useHeroBackgroundGrain(surfaceRef: Ref<HTMLElement | null>, seed
       return
     }
 
-    const baseColorHex = resolveCssColorToHex(el, 'var(--color-bg)', '#111113')
+    const baseColorHex = resolveCssColorToHex(el, 'var(--color-bg)', '#f5f2eb')
     const overlayStrength = readTokenNumber(el, '--hero-bg-grain-overlay-strength', 0.16)
 
     const url = bakeRosterCardFrameGrainImage({

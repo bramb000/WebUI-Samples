@@ -6,14 +6,14 @@ import NavBar from './components/NavBar.vue';
 import Footer from './components/Footer.vue';
 import GlobalBackgroundTexture from './components/GlobalBackgroundTexture.vue';
 import SeoStructuredData from './components/SeoStructuredData.vue';
-import { useCaseTheme } from './composables/useCaseTheme';
-
 const route = useRoute();
 useRouteSeo(route);
 const isHeroSelect = computed(() => route.path === '/work');
 const isHome = computed(() => route.path === '/');
 const isAbout = computed(() => route.path === '/about');
 const isFullScreen = computed(() => route.query.fullscreen === 'true');
+/** Fixed nav does not reserve flow space — offset main except `/work` (uses `.work-stage`). */
+const mainBelowNav = computed(() => !isFullScreen.value && !isHeroSelect.value);
 const isConstrainedMain = computed(
   () =>
     !isFullScreen.value
@@ -23,8 +23,6 @@ const isConstrainedMain = computed(
     && !route.path.startsWith('/work/'),
 );
 
-// Applies data-theme on <html> for case study Hero theming
-useCaseTheme();
 </script>
 
 <template>
@@ -33,7 +31,7 @@ useCaseTheme();
       'flex flex-col min-h-screen font-sans',
       isFullScreen
         ? 'h-screen overflow-hidden bg-transparent text-[var(--color-text)]'
-        : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-border-hi)] selection:text-[#111113]',
+        : 'bg-[var(--color-bg)] text-[var(--color-text)] selection:bg-[var(--color-accent)] selection:text-[var(--color-bg)]',
     ]"
   >
     <SeoStructuredData />
@@ -41,9 +39,9 @@ useCaseTheme();
     <NavBar v-if="!isFullScreen" />
     
     <main :class="[
-      'flex-grow w-full', 
-      // Hero Select needs a full-bleed stage (but still a normal page w/ Nav).
-      isHeroSelect ? 'md:h-[calc(100vh-72px)] md:min-h-0 md:overflow-hidden' : '',
+      'flex-grow w-full',
+      mainBelowNav ? 'main-below-nav' : '',
+      isHeroSelect ? 'work-stage' : '',
       isConstrainedMain ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : '',
       isHome || isAbout ? 'py-0' : '',
     ]">
@@ -65,6 +63,18 @@ useCaseTheme();
           <stop offset="50%" stop-color="rgba(0,0,0,0.1)" />
           <stop offset="100%" stop-color="rgba(0,0,0,0.85)" />
         </linearGradient>
+
+        <!-- Roster cards — hand-drawn pencil stroke (see RosterCard .inner-card::before) -->
+        <filter id="roster-pencil-border" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.052" numOctaves="3" seed="19" result="coarse" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.18" numOctaves="2" seed="53" result="fine" />
+          <feDisplacementMap in="SourceGraphic" in2="coarse" scale="1.15" xChannelSelector="R" yChannelSelector="G" result="wobble" />
+          <feDisplacementMap in="wobble" in2="fine" scale="0.45" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <filter id="roster-pencil-border-alt" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.061" numOctaves="2" seed="37" result="coarse" />
+          <feDisplacementMap in="SourceGraphic" in2="coarse" scale="0.9" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
 
         <!-- Demo: paper crumple (displacement) -->
         <filter id="paper-crumple" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">

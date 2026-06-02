@@ -16,9 +16,12 @@ interface Props {
   id: string
   discipline: RosterDiscipline
   title: string
-  thumb: string
+  /** Project art / video — only when `showMedia` is true (e.g. home achievements). */
+  thumb?: string
   /** WebP/PNG poster while a `.webm` thumb decodes */
   thumbPoster?: string
+  /** When false, card is parchment + title only (work roster grid). */
+  showMedia?: boolean
   roster: RosterCardRoster
   plateGrain?: string
   variant?: RosterCardVariant
@@ -39,9 +42,12 @@ const props = withDefaults(defineProps<Props>(), {
   pressed: false,
   hoverMotion: true,
   clientPrefix: true,
+  showMedia: false,
 })
 
-const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
+const isThumbVideo = computed(
+  () => props.showMedia && !!props.thumb && /\.webm($|\?)/i.test(props.thumb),
+)
 </script>
 
 <template>
@@ -51,6 +57,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
       `thumbnail--${discipline}`,
       {
         'thumbnail--case-study': variant === 'case-study',
+        'thumbnail--text-only': !showMedia,
         'thumbnail--achievement-plate': plateTypography === 'achievement',
         'thumbnail--calm-hover': !hoverMotion,
         selected,
@@ -67,9 +74,10 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
       :class="{
         'inner-card--case-study': variant === 'case-study',
         'inner-card--case-study-solo': variant === 'case-study' && !clientName,
+        'inner-card--text-only': !showMedia,
       }"
     >
-      <div class="card-art">
+      <div v-if="showMedia" class="card-art">
         <video
           v-if="isThumbVideo"
           class="card-art-img"
@@ -140,6 +148,8 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 
 <style scoped>
 .thumbnail {
+  --roster-plate-base: var(--roster-card-plate-base);
+  --roster-grain-fallback: var(--roster-card-grain-base);
   aspect-ratio: 1 / 1.4;
   cursor: pointer;
   position: relative;
@@ -151,6 +161,14 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 
 .thumbnail--case-study {
   aspect-ratio: 1 / 1.72;
+}
+
+.thumbnail--text-only {
+  aspect-ratio: 1 / 1.12;
+}
+
+.thumbnail--text-only.thumbnail--case-study {
+  aspect-ratio: 1 / 1.28;
 }
 
 .inner-card {
@@ -168,18 +186,48 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
     'art'
     'plate';
   border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.72);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.05) inset,
-    0 10px 24px rgba(0, 0, 0, 0.58);
-  background: #0e0e11;
-  transition:
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
+  border: none;
+  box-shadow: var(--roster-card-shadow);
+  background: var(--roster-card-surface);
+  --roster-sketch-stroke: 2px;
+  transition: box-shadow 0.15s ease;
+}
+
+/* Pencil sketch rim — width jitter via layered strokes + noise displacement (max 2px / 4px selected) */
+.inner-card::before,
+.inner-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 15;
+  border-style: solid;
+  border-color: var(--roster-card-border);
+  transition: border-color 0.15s ease, border-width 0.15s ease, opacity 0.15s ease;
+}
+
+.inner-card::before {
+  border-width: var(--roster-sketch-stroke);
+  filter: url(#roster-pencil-border);
+}
+
+.inner-card::after {
+  inset: 1px;
+  border-radius: 11px;
+  border-width: 1px;
+  opacity: 0.42;
+  filter: url(#roster-pencil-border-alt);
 }
 
 .inner-card--case-study {
   grid-template-rows: 58fr 42fr;
+}
+
+.inner-card--text-only {
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: 'plate';
 }
 
 .card-art {
@@ -189,7 +237,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: #0a0a0d;
+  background: var(--roster-card-surface-deep);
 }
 
 .card-art-img {
@@ -198,12 +246,6 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   object-fit: cover;
   object-position: center center;
   display: block;
-}
-
-.thumbnail--product-design,
-.thumbnail--ui-design {
-  --roster-plate-base: color-mix(in srgb, var(--roster-discipline-accent) 34%, #121016);
-  --roster-grain-fallback: color-mix(in srgb, var(--roster-discipline-accent) 58%, #1a181e);
 }
 
 .card-name-plate {
@@ -215,7 +257,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   overflow: hidden;
   isolation: isolate;
   background-color: var(--roster-plate-base);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 45%, transparent);
 }
 
 .card-plate-grain {
@@ -227,7 +269,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   display: block;
   object-fit: fill;
   mix-blend-mode: multiply;
-  opacity: 0.82;
+  opacity: var(--roster-card-grain-opacity, 0.41);
   pointer-events: none;
   user-select: none;
 }
@@ -243,7 +285,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   -webkit-mask-mode: alpha;
   mask-mode: alpha;
   mix-blend-mode: multiply;
-  opacity: 0.42;
+  opacity: var(--roster-card-grain-fallback-opacity, 0.21);
 }
 
 .paper-svg {
@@ -282,12 +324,38 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   box-sizing: border-box;
 }
 
-.inner-card--case-study .thumbnail-content {
+.inner-card--case-study:not(.inner-card--text-only) .thumbnail-content {
   justify-content: flex-end;
 }
 
+.inner-card--text-only .thumbnail-content {
+  justify-content: center;
+}
+
+/* Work grid case studies — title centred in plate, client along bottom edge */
+.inner-card--text-only.inner-card--case-study:not(.inner-card--case-study-solo) .thumbnail-content {
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.inner-card--text-only.inner-card--case-study:not(.inner-card--case-study-solo) .thumbnail-label {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block: 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.inner-card--text-only.inner-card--case-study:not(.inner-card--case-study-solo) .thumbnail-client {
+  flex: 0 0 auto;
+  margin-top: 0;
+  width: 100%;
+}
+
 .thumbnail-label {
-  color: #f5f3ef;
+  color: var(--roster-card-text);
   transition: color 0.15s, text-shadow 0.15s;
   overflow-wrap: anywhere;
   text-wrap: balance;
@@ -307,7 +375,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 }
 
 .thumbnail-client {
-  color: color-mix(in srgb, #f5f3ef 72%, var(--roster-discipline-accent));
+  color: var(--roster-card-text-muted);
   margin-top: auto;
 }
 
@@ -363,63 +431,44 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   filter: url(#paper-crumple);
 }
 
+.thumbnail:hover:not(.selected) .inner-card::before,
+.thumbnail:hover:not(.selected) .inner-card::after {
+  border-color: var(--roster-card-border-hover);
+}
+
 .thumbnail:hover .inner-card,
 .thumbnail.selected .inner-card {
-  border-color: color-mix(in srgb, var(--roster-discipline-accent) 65%, transparent);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.05) inset,
-    0 0 0 1px color-mix(in srgb, var(--roster-discipline-accent) 45%, transparent),
-    0 0 14px color-mix(in srgb, var(--roster-discipline-accent) 32%, transparent),
-    0 12px 26px rgba(0, 0, 0, 0.65);
+  box-shadow: var(--roster-card-shadow-hover);
 }
 
 .thumbnail.selected .inner-card {
-  --selected-gold: #f5c453;
-  --selected-gold-soft: rgba(245, 196, 83, 0.28);
-  --selected-gold-ring: rgba(245, 196, 83, 0.55);
-  border-color: color-mix(in srgb, var(--selected-gold) 92%, transparent);
+  --roster-sketch-stroke: 4px;
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
-    0 0 0 1px var(--selected-gold-ring),
-    0 0 18px var(--selected-gold-soft),
-    0 12px 26px rgba(0, 0, 0, 0.65);
+    0 1px 0 color-mix(in srgb, white 55%, transparent) inset,
+    0 0 12px color-mix(in srgb, var(--roster-graphite-deep) 14%, transparent),
+    0 12px 26px rgba(26, 24, 20, 0.14);
+}
+
+.thumbnail.selected .inner-card::before,
+.thumbnail.selected .inner-card::after {
+  border-color: var(--roster-card-border-selected);
 }
 
 .thumbnail.selected .inner-card::after {
-  content: '';
-  position: absolute;
-  inset: -32%;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 12;
-  background-image: linear-gradient(
-    90deg,
-    transparent 0,
-    transparent calc(50% - 6px),
-    rgba(255, 255, 255, 0.18) calc(50% - 6px),
-    rgba(255, 255, 255, 0.98) calc(50% - 4px),
-    rgba(255, 255, 255, 0.98) calc(50% + 4px),
-    rgba(255, 255, 255, 0.18) calc(50% + 6px),
-    transparent calc(50% + 6px),
-    transparent calc(50% + 8px),
-    rgba(255, 255, 255, 0.92) calc(50% + 8px),
-    rgba(255, 255, 255, 0.92) calc(50% + 10px),
-    transparent calc(50% + 10px),
-    transparent 100%
-  );
-  opacity: 0.78;
-  mix-blend-mode: normal;
-  animation: selectedGoldSweep 7s cubic-bezier(0.2, 0.9, 0.2, 1) infinite;
-  transform: translate3d(-55%, 0, 0) rotate(45deg);
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  contain: paint;
+  inset: 2px;
+  border-radius: 10px;
+  border-width: 1.5px;
+  opacity: 0.5;
 }
 
 .thumbnail:hover .card-poly,
 .thumbnail.selected .card-poly {
-  stroke: #20ffb0;
-  filter: drop-shadow(0 0 4px rgba(32, 255, 176, 0.6));
+  stroke: var(--roster-graphite);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--roster-graphite) 35%, transparent));
+}
+
+.thumbnail.selected .card-poly {
+  stroke: var(--roster-graphite-deep);
 }
 
 .thumbnail:hover .card-overlay,
@@ -431,8 +480,8 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
 .thumbnail.selected .thumbnail-label,
 .thumbnail:hover .thumbnail-client,
 .thumbnail.selected .thumbnail-client {
-  color: #ffffff;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
+  color: var(--roster-card-text);
+  text-shadow: 0 1px 6px color-mix(in srgb, var(--roster-card-surface-deep) 65%, transparent);
 }
 
 .thumbnail.pressed {
@@ -472,20 +521,15 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   100% { transform: rotate(0deg); }
 }
 
-@keyframes selectedGoldSweep {
-  0% { transform: translate3d(-55%, 0, 0) rotate(45deg); opacity: 0; }
-  6% { opacity: 0.78; }
-  14% { transform: translate3d(55%, 0, 0) rotate(45deg); opacity: 0; }
-  100% { transform: translate3d(55%, 0, 0) rotate(45deg); opacity: 0; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .thumbnail.selected .inner-card::after {
-    animation: none;
-    opacity: 0;
+  .inner-card::before,
+  .inner-card::after {
+    filter: none;
   }
 }
 
+/* Positions WebGL flame canvas from `projectFlameSingleton` when hover flame is enabled */
+/*
 :deep(#flame-wrapper) {
   position: absolute;
   z-index: 5;
@@ -500,6 +544,7 @@ const isThumbVideo = computed(() => /\.webm($|\?)/i.test(props.thumb))
   width: 100% !important;
   height: 100% !important;
   display: block;
-  filter: drop-shadow(0px 0px 8px rgba(32, 255, 176, 0.4));
+  filter: drop-shadow(0px 0px 8px color-mix(in srgb, var(--color-accent) 28%, transparent));
 }
+*/
 </style>

@@ -62,7 +62,7 @@ const debugStatus = computed(() => (grainUrl.value ? 'ready' : 'pending'))
   height: min(30vmin, 320px);
   opacity: var(--hero-bg-halftone-opacity, 0.02);
   mix-blend-mode: soft-light;
-  background-image: radial-gradient(circle, rgb(255 255 255 / 0.14) 0 1px, transparent 1.9px);
+  background-image: radial-gradient(circle, rgb(26 24 20 / 0.08) 0 1px, transparent 1.9px);
   background-size: 13px 13px;
   background-repeat: repeat;
   filter: blur(0.4px);

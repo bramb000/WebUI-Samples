@@ -156,9 +156,9 @@ function ensureRosterPaintBakeGl(): boolean {
   bakeMaterial = new THREE.ShaderMaterial({
     uniforms: {
       u_resolution: { value: new THREE.Vector2(1, 1) },
-      u_baseColor: { value: new THREE.Color('#1a181e') },
+      u_baseColor: { value: new THREE.Color('#e0d8c8') },
       u_hueBias: { value: 0.0 },
-      u_overlayStrength: { value: 0.38 },
+      u_overlayStrength: { value: 0.19 },
       u_paintMask: { value: paintMaskTex },
     },
     vertexShader,
@@ -214,8 +214,8 @@ export function bakeRosterCardFrameGrainImage(opts: RosterCardFrameGrainBakeOpti
   bakeRenderer.clear(true, true, true)
 
   const seed = opts.seed ?? 0
-  const base = new THREE.Color(opts.baseColorHex ?? '#1a181e')
-  const strength = opts.overlayStrength ?? 0.38
+  const base = new THREE.Color(opts.baseColorHex ?? '#e0d8c8')
+  const strength = opts.overlayStrength ?? 0.19
 
   bakeMaterial.uniforms.u_resolution.value.set(vw, vh)
   bakeMaterial.uniforms.u_baseColor.value.copy(base)

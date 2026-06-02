@@ -13,6 +13,14 @@ const PAPER_STROKE = '#ebe4d6'
 /** Deckled edge bleeds into `.panel-chisel-bg` padding gutter */
 const PANEL_BLEED_PX = 36
 
+withDefaults(
+  defineProps<{
+    /** `/work` detail column — symmetric 8pt gutter + bleed on block axis */
+    workStageInset?: boolean
+  }>(),
+  { workStageInset: false },
+)
+
 const trackRef = ref<HTMLElement | null>(null)
 let frameId: number | null = null
 let cancelled = false
@@ -114,7 +122,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="panel-chisel-bg" data-surface="paper">
+  <div
+    class="panel-chisel-bg"
+    :class="{ 'panel-chisel-bg--work-stage': workStageInset }"
+    data-surface="paper"
+  >
     <div ref="trackRef" class="panel-chisel-bg__sheet">
       <div
         v-if="grainUrl && maskRimUrl"
@@ -144,7 +156,12 @@ onBeforeUnmount(() => {
   overflow: visible;
   color: var(--color-text);
   box-sizing: border-box;
-  padding: 40px;
+  padding: var(--grid-5);
+}
+
+.panel-chisel-bg--work-stage {
+  padding-block: var(--panel-chisel-bleed, 36px);
+  padding-inline: var(--work-panel-padding-inline, var(--grid-3));
 }
 
 .panel-chisel-bg__sheet {
