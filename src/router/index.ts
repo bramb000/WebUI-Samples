@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteLocationGeneric } from 'vue-router'
 import { INDEXABLE_PATHS } from '../seo/indexablePaths'
 import { ROUTE_SEO } from '../seo/routeMeta'
 import type { RouteMetaSeo } from '../seo/types'
@@ -21,6 +21,13 @@ const routes = [
         name: 'Work',
         component: () => import('../views/ProjectSelect.vue'),
         meta: { ...seo('Work'), sitemap: true, prerender: true },
+    },
+    {
+        path: '/work/select/:projectId',
+        redirect: (to: RouteLocationGeneric) => ({
+            path: '/work',
+            query: { project: String(to.params.projectId ?? '') },
+        }),
     },
     {
         path: '/about',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, inject, nextTick, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { NAV_SCROLL_REFRESH_KEY } from '../composables/useNavAutoHide'
 import SoftDrillWipe from '../components/wipes/SoftDrillWipe.vue'
 import PanelChiselBackground from '../components/PanelChiselBackground.vue'
@@ -12,6 +12,7 @@ import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } f
 import { useIsMobile } from '../composables/useIsMobile'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
 import { PROJECT_ROUTE_BY_ID } from '../constants/projectRoutes'
+import { resolveWorkProjectSlug, workProjectQuery } from '../constants/workProjectSlug'
 import { rosterCardPaletteFromTokens } from '../constants/rosterCardPalette'
 import type { RosterDiscipline } from '../constants/rosterDiscipline'
 
@@ -276,6 +277,7 @@ const rosterSections = computed(() => [
 ])
 
 const router = useRouter()
+const route = useRoute()
 const isMobile = useIsMobile()
 
 const activeId = ref(projects.value[0]?.id ?? '')
@@ -408,12 +410,67 @@ function syncNavScrollListeners() {
   nextTick(() => refreshNavScroll?.())
 }
 
+type EmbeddedProjectId = keyof typeof embeddedProjectImportById
+
+function isEmbeddedProjectId(id: string): id is EmbeddedProjectId {
+  return id in embeddedProjectImportById
+}
+
+function routeProjectSlug(): string | null {
+  const q = route.query.project
+  if (typeof q === 'string' && q.trim())
+    return q
+  if (Array.isArray(q) && typeof q[0] === 'string' && q[0].trim())
+    return q[0]
+  const hash = route.hash.replace(/^#/, '').trim()
+  return hash || null
+}
+
+function syncRouteToProject(id: string) {
+  if (route.path !== '/work')
+    return
+  if (route.query.project === id)
+    return
+  router.replace({ path: '/work', query: workProjectQuery(id) })
+}
+
+function applyRouteProject(options: { animate?: boolean } = {}) {
+  const id = resolveWorkProjectSlug(routeProjectSlug())
+  if (!id || !isEmbeddedProjectId(id))
+    return
+
+  if (isMobile.value) {
+    const path = PROJECT_ROUTE_BY_ID[id]
+    if (path)
+      void router.replace(path)
+    return
+  }
+
+  if (id === activeId.value)
+    return
+
+  if (options.animate === false) {
+    activeId.value = id
+    displayedId.value = id
+    embeddedProjectImportById[id]?.().catch(() => {})
+    return
+  }
+
+  selectProject(id, { syncRoute: false })
+}
+
 watch(displayedEmbeddedComponent, syncNavScrollListeners)
+
+watch(
+  () => [route.query.project, route.hash] as const,
+  () => applyRouteProject({ animate: true }),
+)
 
 onMounted(() => {
   observeGrid(gridContainerRef.value)
   scheduleRebake()
   syncNavScrollListeners()
+  applyRouteProject({ animate: false })
   /* 24fps flame render loop — re-enable with attach/detach above
   if (isMobile.value) return
   const clockStart = performance.now()
@@ -432,8 +489,11 @@ onMounted(() => {
   raf = requestAnimationFrame(loop)
   */
 })
-function selectProject(id: string) {
-  if (id === activeId.value) return
+function selectProject(id: string, options: { syncRoute?: boolean } = {}) {
+  if (options.syncRoute !== false)
+    syncRouteToProject(id)
+  if (id === activeId.value)
+    return
   transitionToken++
   const token = transitionToken
   activeId.value = id
