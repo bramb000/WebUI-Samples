@@ -324,7 +324,7 @@ const isThumbVideo = computed(
   box-sizing: border-box;
 }
 
-.inner-card--case-study:not(.inner-card--text-only) .thumbnail-content {
+.inner-card--case-study:not(.inner-card--text-only):not(.inner-card--case-study-solo) .thumbnail-content {
   justify-content: flex-end;
 }
 

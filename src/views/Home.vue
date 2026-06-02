@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import DetectiveHeroIntro from '../components/detective/DetectiveHeroIntro.vue'
 import TestimonialsLettersStage from '../components/testimonials/TestimonialsLettersStage.vue'
 import HeroBackgroundTexture from '../components/HeroBackgroundTexture.vue'
@@ -68,20 +68,29 @@ const achievementCards: AchievementCard[] = [
     roster: achievementRoster('AI'),
   },
   {
-    id: 'home-achievement-edtech',
-    title: 'Shipped award-winning edtech products to millions of learners',
-    ...homeAchievementCardArt('edtech'),
-    roster: achievementRoster('EdTech'),
-  },
-  {
     id: 'home-achievement-global',
-    title: 'Multicultural leader having managed teams in 5+ countries, timezones, and languages',
+    title: 'Managed teams in 5+ countries, timezone, and languages to ship globally successful products',
     ...homeAchievementCardArt('global'),
     roster: achievementRoster('Global'),
   },
 ]
 const gridRef = ref<HTMLElement | null>(null)
 const achievementsEntered = ref(false)
+const achievementsAnimate = ref(true)
+let rafId = 0
+
+function updateAchievementsMotion() {
+  achievementsAnimate.value = (window.scrollY || 0) <= 1
+}
+
+function onScroll() {
+  if (rafId)
+    return
+  rafId = requestAnimationFrame(() => {
+    rafId = 0
+    updateAchievementsMotion()
+  })
+}
 
 const {
   plateGrainBakes,
@@ -98,6 +107,17 @@ onMounted(async () => {
   requestAnimationFrame(() => {
     achievementsEntered.value = true
   })
+
+  updateAchievementsMotion()
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', onScroll)
+  if (rafId)
+    cancelAnimationFrame(rafId)
 })
 </script>
 
@@ -117,7 +137,10 @@ onMounted(async () => {
     <section
       class="home-achievements"
       aria-label="Achievements"
-      :class="{ 'home-achievements--entered': achievementsEntered }"
+      :class="{
+        'home-achievements--entered': achievementsEntered,
+        'home-achievements--animate': achievementsAnimate,
+      }"
     >
       <div
         ref="gridRef"
@@ -143,8 +166,9 @@ onMounted(async () => {
               :roster="card.roster"
               :plate-grain="plateGrainBakes[card.id]"
               variant="case-study"
+              plate-typography="achievement"
               show-media
-              :hover-motion="false"
+              :hover-motion="true"
             />
           </div>
         </div>
@@ -240,12 +264,12 @@ onMounted(async () => {
 
 @media (min-width: 1025px) {
   .home-achievements__grid {
-    /* 4-up strip — width of two roster panes so each cell ≈ one work-grid 1fr column */
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* 3-up strip — proportional to work grid card width */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: min(
       100%,
       calc(
-        2 * (var(--roster-work-grid-pane-width) - var(--roster-work-grid-pane-padding-inline))
+        1.5 * (var(--roster-work-grid-pane-width) - var(--roster-work-grid-pane-padding-inline))
         + var(--roster-work-grid-gap)
         + var(--roster-work-grid-container-padding-inline)
       )
@@ -264,10 +288,75 @@ onMounted(async () => {
   padding-block: var(--home-achievement-float-amp, 8px);
   margin-block: calc(-1 * var(--home-achievement-float-amp, 8px));
   box-sizing: content-box;
+  /* Grid cell owns pointer events — not the bobbing motion layer */
+  pointer-events: auto;
+  cursor: default;
 }
 
 .home-achievement-card:hover {
   z-index: 80;
+}
+
+/* Motion + card visuals ignore pointer events so hover doesn’t flicker at edges */
+.home-achievement-card__motion,
+.home-achievement-card__motion :deep(.thumbnail),
+.home-achievement-card__motion :deep(.thumbnail *) {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Parent hit box drives the same crunch/pop + sway as RosterCard hover */
+.home-achievement-card:hover :deep(.thumbnail:not(.selected):not(.pressed)) {
+  animation: crunchAndPop 0.65s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
+}
+
+.home-achievement-card:not(:hover) :deep(.thumbnail:not(.selected):not(.pressed)) {
+  animation: settleBack 0.125s ease-out forwards;
+}
+
+.home-achievement-card:not(:hover) :deep(.thumbnail:not(.selected):not(.pressed) .inner-card) {
+  transition: transform 0.125s ease-out;
+}
+
+.home-achievement-card:hover :deep(.thumbnail .inner-card) {
+  animation: cardSway 4.1s ease-in-out infinite;
+  filter: url(#paper-crumple);
+  box-shadow: var(--roster-card-shadow-hover);
+}
+
+.home-achievement-card:hover :deep(.thumbnail:not(.selected) .inner-card::before),
+.home-achievement-card:hover :deep(.thumbnail:not(.selected) .inner-card::after) {
+  border-color: var(--roster-card-border-hover);
+}
+
+.home-achievement-card:hover :deep(.thumbnail .card-poly) {
+  stroke: var(--roster-graphite);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--roster-graphite) 35%, transparent));
+}
+
+.home-achievement-card:hover :deep(.thumbnail .card-overlay) {
+  opacity: 0;
+}
+
+.home-achievement-card:hover :deep(.thumbnail .thumbnail-label),
+.home-achievement-card:hover :deep(.thumbnail .thumbnail-client) {
+  color: var(--roster-card-text);
+  text-shadow: 0 1px 6px color-mix(in srgb, var(--roster-card-surface-deep) 65%, transparent);
+}
+
+/* Achievement copy — vertically centred in the name plate */
+.home-achievement-card :deep(.thumbnail-content) {
+  justify-content: center;
+}
+
+.home-achievement-card :deep(.thumbnail-label) {
+  margin-block: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
 }
 
 .home-achievement-card__motion {
@@ -277,11 +366,22 @@ onMounted(async () => {
   will-change: transform, opacity;
 }
 
-.home-achievements--entered .home-achievement-card__motion {
+.home-achievements--entered.home-achievements--animate .home-achievement-card__motion {
+  transition: none;
   animation:
     home-achievement-jump 0.82s var(--ease-mechanical-spring) var(--home-card-stagger, 0ms) forwards,
     home-achievement-float var(--home-achievement-float-duration) linear
       calc(0.82s + var(--home-card-float-phase, 0s)) infinite;
+}
+
+/* Scroll away from top — ease back to resting pose instead of snapping. */
+.home-achievements--entered:not(.home-achievements--animate) .home-achievement-card__motion {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: none !important;
+  transition:
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.48s ease-out;
 }
 
 @keyframes home-achievement-jump {
@@ -335,6 +435,7 @@ onMounted(async () => {
     opacity: 1;
     transform: none;
     animation: none !important;
+    transition: none !important;
   }
 }
 
@@ -354,7 +455,6 @@ onMounted(async () => {
   .home-page {
     --home-padding-inline: var(--grid-3);
     --home-achievements-overlap: var(--grid-5);
-    padding-bottom: var(--grid-4);
   }
 
   .home-hero-stage {
@@ -393,7 +493,7 @@ onMounted(async () => {
   }
 
   /* Keep the entrance stagger on mobile; skip the infinite float loop (battery + small viewports). */
-  .home-achievements--entered .home-achievement-card__motion {
+  .home-achievements--entered.home-achievements--animate .home-achievement-card__motion {
     animation: home-achievement-jump 0.82s var(--ease-mechanical-spring) var(--home-card-stagger, 0ms) forwards;
   }
 }

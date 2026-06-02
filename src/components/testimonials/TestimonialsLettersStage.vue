@@ -3,16 +3,16 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { TESTIMONIAL_BOOK_ENTRIES } from '../../constants/testimonialBookData'
 import TrifoldLetter from './TrifoldLetter.vue'
 
+/** Scroll-driven reveal runs this much longer than the base tuning. */
+const ANIMATION_LENGTH_SCALE = 1.45
+
 /**
  * Reveal begins when the “Testimonials” header top crosses this viewport line
  * (0.66 — achievements + CTA still in view when reveal begins).
  */
 const HEADER_TRIGGER_VP = 0.66
 /** Viewport heights of scroll after trigger to reach full unfold (1). */
-const REVEAL_SCROLL_VP = 0.38
-
-const SCROLL_TRACK_VH = 110
-const SCROLL_TRACK_VH_MOBILE = 95
+const REVEAL_SCROLL_VP = 0.38 * ANIMATION_LENGTH_SCALE
 
 const trackRef = ref<HTMLElement | null>(null)
 const headerRef = ref<HTMLElement | null>(null)
@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 
 const letters = computed(() =>
   TESTIMONIAL_BOOK_ENTRIES.filter((e) =>
-    e.name === 'Chris Clay' || e.name === 'Daniel Paez' || e.name === 'Tianhao Kang',
+    e.name === 'Chris Clay' || e.name === 'Jill Priya Keshyap' || e.name === 'Tianhao Kang',
   ).map((entry, idx) => ({
     id: `${entry.name}-${idx}`,
     ...entry,
@@ -99,12 +99,8 @@ function mobileAnchors(): Anchor[] {
 
 const anchors = computed(() => (isMobileLayout.value ? mobileAnchors() : desktopAnchors()))
 
-const scrollTrackVh = computed(() =>
-  isMobileLayout.value ? SCROLL_TRACK_VH_MOBILE : SCROLL_TRACK_VH,
-)
-
 function letterProgress(globalP: number, idx: number) {
-  const stagger = idx * 0.06
+  const stagger = idx * 0.06 * ANIMATION_LENGTH_SCALE
   return clamp01((globalP - stagger) / 0.9)
 }
 </script>
@@ -115,7 +111,6 @@ function letterProgress(globalP: number, idx: number) {
     ref="trackRef"
     class="letters-track"
     :class="{ 'letters-track--mobile': isMobileLayout }"
-    :style="{ '--letters-track-vh': String(scrollTrackVh) }"
     aria-label="Testimonials"
   >
     <div
@@ -155,15 +150,16 @@ function letterProgress(globalP: number, idx: number) {
 <style scoped>
 .letters-track {
   position: relative;
-  height: calc(var(--letters-track-vh, 360) * 1vh);
   background: var(--color-bg);
+  /* Match home section rhythm (see .home-cta padding-block) */
+  padding-bottom: var(--grid-6);
 }
 
 .letters-stage {
   z-index: 0;
   overflow: visible;
   position: relative;
-  min-height: min(72vh, 720px);
+  min-height: min(68vh, 640px);
 }
 
 .letters-stage__bg {
@@ -202,8 +198,8 @@ function letterProgress(globalP: number, idx: number) {
   }
 
   .letters-stage {
-    min-height: 52rem;
-    padding-block: var(--grid-7) var(--grid-8);
+    min-height: min(78vh, 44rem);
+    padding-block: var(--grid-4) 0;
   }
 
   .letters-hud {

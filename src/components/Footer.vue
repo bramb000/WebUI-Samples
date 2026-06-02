@@ -83,7 +83,7 @@ const trackEmailClick = () => {
 <style scoped>
 /* ── Obsidian Mounting Plate ── */
 .footer-plate {
-  margin-top: 96px;
+  margin-top: var(--grid-8);
   background: var(--color-surface);
   border-top: 2px solid var(--color-border);
   box-shadow:

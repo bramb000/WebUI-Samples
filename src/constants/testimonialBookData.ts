@@ -12,7 +12,7 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
     name: 'Chris Clay',
     role: 'VP of Design, Immutable',
     quote:
-      'If there was a challenge that needed solving, Bramha was always willing to step in and try to solve it with curiosity, grit, and determination. If you\'re looking for someone who will challenge the status quo, ask the right questions, and search for the best answers, Bramha is someone I\'d recommend.',
+      'His curiosity and desire to improve himself extends to how he designs. He\'s constantly analysing what\'s working and how to improve it',
   },
   {
     name: 'Kaiwen Young',
@@ -33,10 +33,10 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
       'His knowledge and insight always pushed our discussion forward. A clear design-based dialogue was productive and helpful in the cross-studio project in Japan and India. I respect his courage to accept the change, which is UX/UI design\'s most challenging part of improving the game while managing our resources.',
   },
   {
-    name: 'Daniel Paez',
-    role: 'Head of Product',
+    name: 'Jill Priya Keshyap',
+    role: 'Head of Product, Immutable',
     quote:
-      'Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions.',
+      'The combination of hands-on product thinking, strong technical intuition, and elegant design is extremely hard to find. It makes Bramha the go to person for cross-functional teams',
   },
 ]
 
