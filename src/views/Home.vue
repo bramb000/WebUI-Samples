@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
 import DetectiveHeroIntro from '../components/detective/DetectiveHeroIntro.vue'
-import DetectiveBookStage from '../components/detective/DetectiveBookStage.vue'
+import TestimonialsLettersStage from '../components/testimonials/TestimonialsLettersStage.vue'
 import HeroBackgroundTexture from '../components/HeroBackgroundTexture.vue'
 import PrimaryButton from '../components/PrimaryButton.vue'
 import RosterCard from '../components/RosterCard.vue'
@@ -159,7 +159,7 @@ onMounted(async () => {
       </div>
     </section>
 
-    <DetectiveBookStage />
+    <TestimonialsLettersStage />
   </div>
 </template>
 
@@ -167,6 +167,7 @@ onMounted(async () => {
 .home-page {
   --home-hero-min-height: calc(100vh - var(--home-nav-offset, 72px));
   --home-achievements-overlap: clamp(72px, 12vh, 140px);
+  --home-padding-inline: clamp(var(--grid-3), 4vw, 3rem);
   position: relative;
   width: 100%;
   overflow-x: clip;
@@ -176,7 +177,7 @@ onMounted(async () => {
   width: 100%;
   max-width: 80rem;
   margin-inline: auto;
-  padding-inline: clamp(1.5rem, 4vw, 3rem);
+  padding-inline: var(--home-padding-inline);
   box-sizing: border-box;
 }
 
@@ -350,6 +351,12 @@ onMounted(async () => {
 }
 
 @media (max-width: 767px) {
+  .home-page {
+    --home-padding-inline: var(--grid-3);
+    --home-achievements-overlap: var(--grid-5);
+    padding-bottom: var(--grid-4);
+  }
+
   .home-hero-stage {
     min-height: auto;
   }
@@ -357,18 +364,32 @@ onMounted(async () => {
   .home-hero-stage__content {
     min-height: auto;
     align-items: stretch;
+    padding-block: var(--grid-4) var(--grid-2);
   }
 
   .home-achievements {
-    margin-top: calc(-1 * clamp(32px, 8vw, 64px));
-    padding-bottom: clamp(16px, 4vw, 28px);
-    /* dl-shell 12px + roster-pane 8px — grid adds another 8px via .roster-card-grid */
-    padding-inline: 20px;
+    margin-top: calc(-1 * var(--home-achievements-overlap));
+    padding-inline: 0;
+    padding-bottom: var(--grid-3);
+  }
+
+  .home-achievements__grid {
+    gap: var(--grid-2);
+    padding-inline: var(--home-padding-inline);
+    padding-bottom: var(--grid-3);
   }
 
   .home-achievement-card {
     padding-block: 0;
     margin-block: 0;
+  }
+
+  .home-cta {
+    padding-block: var(--grid-4) var(--grid-3);
+  }
+
+  .home-cta__inner {
+    padding-inline: var(--home-padding-inline);
   }
 
   /* Keep the entrance stagger on mobile; skip the infinite float loop (battery + small viewports). */

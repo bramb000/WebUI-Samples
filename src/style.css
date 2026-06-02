@@ -566,7 +566,7 @@ h5, h6 {
   color: var(--color-accent);
 }
 .type-case-testimonial-role {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: var(--text-testimonial-role);
   font-weight: 700;
   text-transform: uppercase;
@@ -1186,8 +1186,13 @@ h5, h6 {
   }
 
   .case-study-layout .toc-sidebar-sticky {
-    position: sticky !important;
+    /* Sticky is unreliable if any ancestor creates a scroll/contain context.
+       Use fixed positioning to keep the TOC anchored. */
+    position: fixed !important;
     top: calc(var(--nav-height) + var(--grid-4)) !important;
+    /* Align to the right edge of the `max-w-7xl` case-study container. */
+    right: max(var(--grid-6), calc((100vw - 80rem) / 2));
+    width: 18rem;
     z-index: 30;
     height: fit-content;
     max-height: calc(100vh - var(--nav-height) - var(--grid-4));
@@ -1208,8 +1213,12 @@ h5, h6 {
 }
 
 .dl-embedded--case .toc-sidebar-sticky {
-  position: sticky;
-  top: clamp(20px, 2.5vw, 32px);
+  /* Override standalone fixed TOC */
+  position: sticky !important;
+  top: clamp(20px, 2.5vw, 32px) !important;
+  right: auto;
+  width: 100%;
+  max-height: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1386,7 +1395,9 @@ main.work-stage {
   background: color-mix(in srgb, var(--color-surface) 88%, white);
   padding: 4px 12px;
   border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
-  clip-path: polygon(0 0, 98% 0, 100% 100%, 2% 100%);
+  /* Avoid clip-path here — it can visually “mask” the nav on some pages. */
+  border-radius: 4px;
+  overflow: visible;
 }
 
 .seg-btn {

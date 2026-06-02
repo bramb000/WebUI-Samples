@@ -147,30 +147,44 @@ const showCursor = computed(() => !reducedMotion.value)
   50% { opacity: 0; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .detective-hero-intro {
     align-items: center;
     max-width: none;
     min-height: auto;
     height: auto;
-    padding-block: var(--grid-5) var(--grid-4);
+    padding-block: var(--grid-3) var(--grid-2);
     text-align: center;
   }
 
   .detective-hero-intro__headline {
     align-items: center;
+    width: 100%;
   }
 
   .detective-hero-intro__tagline {
     margin-top: var(--grid-4);
+    padding-inline: var(--grid-1);
+  }
+
+  .detective-hero-intro__tagline-line {
+    line-height: var(--leading-snug);
   }
 
   .detective-hero-intro__tagline-line--sub {
     white-space: normal;
   }
 
-  .detective-hero-intro__cycle-ghost,
+  .detective-hero-intro__cycle {
+    display: inline;
+  }
+
+  .detective-hero-intro__cycle-ghost {
+    display: none;
+  }
+
   .detective-hero-intro__cycle-active {
+    position: static;
     white-space: normal;
   }
 }

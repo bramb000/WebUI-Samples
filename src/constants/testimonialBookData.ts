@@ -22,7 +22,7 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
   },
   {
     name: 'Tianhao Kang',
-    role: 'Head of Studio at Mineloader Studios',
+    role: 'CTO, Mineloader Studios',
     quote:
       'Bramha thrives in cross-functional teams, translating data insights into actionable design, analytics and improvements. His results-focused, data-led mindset elevates the project, while his open communication style fosters trust and efficiency among teammates.',
   },
@@ -34,7 +34,7 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
   },
   {
     name: 'Daniel Paez',
-    role: 'VP of Revenue, Immutable',
+    role: 'Head of Product',
     quote:
       'Bramha was always able to breakdown each design decision into its core target audiences and their motivations, helping cut through the franticness and rash decision-making and driving towards elegant, effective solutions.',
   },
