@@ -99,7 +99,8 @@
 
   /* CTA outline — torn-tape silhouette at rest, fills on hover */
   --cta-outline-stroke:       4px;
-  --cta-outline-color:        color-mix(in srgb, var(--color-text) 68%, transparent);
+  --cta-label-color:          var(--color-text);
+  --cta-outline-color:        var(--color-text);
   --cta-outline-color-hover:  var(--color-text);
 
   /* Noise texture SVG */
@@ -191,17 +192,18 @@
   );
   --roster-card-width-work-grid: var(--roster-card-cell-width);
 
-  /* Home achievement strip — same footprint as work grid cards */
-  --roster-card-width-home-achievement: var(--roster-card-width-work-grid);
-
-  /* Home achievement strip — same plate type as work grid; no “for” prefix via RosterCard */
-  --text-roster-achievement-title: var(--text-roster-card-title);
+  /* Home achievement strip — ~20% larger than work grid cells (232px vs ~193px desktop) */
+  --home-achievement-card-width: 232px;
+  --home-achievement-card-width-mobile: 176px;
+  --home-achievement-grid-gap: var(--grid-2);
+  --roster-card-width-home-achievement: var(--home-achievement-card-width);
+  --text-roster-achievement-title: clamp(13px, 4cqi, 17px);
   --text-roster-achievement-client: var(--text-roster-card-client);
   --leading-roster-achievement-title: var(--leading-roster-card-title);
   --leading-roster-achievement-client: var(--leading-roster-card-client);
   --tracking-roster-achievement-title: var(--tracking-roster-card-title);
   --tracking-roster-achievement-client: var(--tracking-roster-card-client);
-  --roster-achievement-plate-padding: 12px 14px;
+  --roster-achievement-plate-padding: 14px 16px;
 
   /* ── Type scale (size / tracking / leading) ── */
   --text-page-title:    clamp(3rem, 10vw, 5.25rem);
@@ -701,7 +703,7 @@ h5, h6 {
 .dl-button-master {
   position: relative;
   background: transparent; /* Wrapper is unclipped */
-  color: var(--color-text);
+  color: var(--cta-label-color);
   border: none;
   padding: 0.9rem 2.4rem;
   font-family: var(--font-display);
@@ -1477,7 +1479,7 @@ main.work-stage {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--tracking-label-md);
-  border: 1px solid color-mix(in srgb, var(--color-border) 30%, transparent);
+  border: 1px solid var(--color-border);
   cursor: default;
   transition: all 200ms var(--ease-te-snap);
 }

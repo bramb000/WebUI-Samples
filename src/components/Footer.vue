@@ -138,13 +138,12 @@ const trackEmailClick = () => {
 
 .footer-subheading {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-label);
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-label);
   color: var(--color-text-muted);
   margin: 0;
-  opacity: 0.75;
 }
 
 /* ── Tags ── */
@@ -159,10 +158,10 @@ const trackEmailClick = () => {
   display: flex;
 }
 
-/* ── Divider — brass hairline ── */
+/* ── Divider ── */
 .footer-divider {
-  border-top: 1px solid var(--color-border);
-  opacity: 0.4;
+  border-top: var(--dl-border-width) solid var(--color-border);
+  margin: 0;
 }
 
 /* ── Bottom ── */
@@ -181,13 +180,12 @@ const trackEmailClick = () => {
 
 .footer-copyright {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-label-sm);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.22em;
+  letter-spacing: var(--tracking-label);
   color: var(--color-text-muted);
   margin: 0;
-  opacity: 0.6;
 }
 
 .footer-links {
@@ -200,18 +198,16 @@ const trackEmailClick = () => {
   align-items: center;
   gap: 6px;
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-label-sm);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-label-md);
   color: var(--color-text-muted);
   text-decoration: none;
-  opacity: 0.7;
-  transition: opacity 100ms var(--ease-te-snap), color 100ms var(--ease-te-snap);
+  transition: color 100ms var(--ease-te-snap);
 }
 .footer-link:hover {
-  opacity: 1;
-  color: var(--color-border-hi);
+  color: var(--color-text);
 }
 .footer-link:focus-visible {
   outline: 2px solid var(--color-accent);

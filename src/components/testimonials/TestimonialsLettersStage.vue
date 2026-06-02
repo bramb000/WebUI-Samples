@@ -187,7 +187,7 @@ function letterProgress(globalP: number, idx: number) {
 }
 
 .letters-hud__hint {
-  opacity: 0.65;
+  color: var(--color-text-muted);
   margin: 0;
 }
 

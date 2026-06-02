@@ -35,7 +35,7 @@ export function useInsightCardGrain(
       : bleedPxOrOptions
   const bleedPx = opts.bleedPx ?? CARD_BLEED_PX
   const fillCssVar = opts.fillCssVar ?? '--case-insight-surface-fill'
-  const fillFallbackHex = opts.fillFallbackHex ?? '#c4565e'
+  const fillFallbackHex = opts.fillFallbackHex ?? '#6b3337'
   const grainOverlayStrengthVar =
     opts.grainOverlayStrengthVar ?? '--case-insight-grain-overlay-strength'
   const grainUrl = ref<string | null>(null)

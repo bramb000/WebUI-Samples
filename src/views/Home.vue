@@ -168,7 +168,7 @@ onBeforeUnmount(() => {
               variant="case-study"
               plate-typography="achievement"
               show-media
-              :hover-motion="true"
+              :hover-motion="false"
             />
           </div>
         </div>
@@ -245,6 +245,7 @@ onBeforeUnmount(() => {
   /* Fraction of one float period between each card’s phase (0.25 = 90° / full ripple for 4 cards) */
   --home-achievement-wave-phase-step: 0.2;
   --home-achievement-float-amp: 8px;
+  --home-achievement-card-width: var(--home-achievement-card-width-mobile);
   position: relative;
   z-index: 2;
   margin-top: calc(-1 * var(--home-achievements-overlap));
@@ -255,23 +256,39 @@ onBeforeUnmount(() => {
 /* Same shell inset as ProjectSelect .dl-shell + #roster-pane on mobile */
 
 .home-achievements__grid {
-  width: 100%;
+  width: min(
+    100%,
+    calc(2 * var(--home-achievement-card-width) + var(--home-achievement-grid-gap))
+  );
   margin-inline: auto;
   pointer-events: auto;
+  grid-template-columns: repeat(2, var(--home-achievement-card-width));
+  justify-content: center;
+  gap: var(--home-achievement-grid-gap);
   /* Work grid reserves scroll room; home strip does not */
   padding-bottom: clamp(8px, 1.5vw, 16px);
 }
 
+.home-achievement-card :deep(.thumbnail) {
+  width: var(--home-achievement-card-width);
+  max-width: 100%;
+  margin-inline: auto;
+}
+
 @media (min-width: 1025px) {
+  .home-achievements {
+    --home-achievement-card-width: 232px;
+  }
+
   .home-achievements__grid {
-    /* 3-up strip — proportional to work grid card width */
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* 3 × 232px cards + 2 × 16px gaps + 32px inline padding */
+    grid-template-columns: repeat(3, var(--home-achievement-card-width));
     width: min(
       100%,
       calc(
-        1.5 * (var(--roster-work-grid-pane-width) - var(--roster-work-grid-pane-padding-inline))
-        + var(--roster-work-grid-gap)
-        + var(--roster-work-grid-container-padding-inline)
+        3 * var(--home-achievement-card-width)
+        + 2 * var(--home-achievement-grid-gap)
+        + var(--grid-4)
       )
     );
     max-width: 100%;
@@ -279,7 +296,7 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Stable grid cell hit target; enter + float run on __motion so bob doesn’t steal hover */
+/* Achievement cards — static display (no hover, no drop shadow) */
 .home-achievement-card {
   position: relative;
   z-index: 1;
@@ -288,60 +305,26 @@ onBeforeUnmount(() => {
   padding-block: var(--home-achievement-float-amp, 8px);
   margin-block: calc(-1 * var(--home-achievement-float-amp, 8px));
   box-sizing: content-box;
-  /* Grid cell owns pointer events — not the bobbing motion layer */
-  pointer-events: auto;
-  cursor: default;
-}
-
-.home-achievement-card:hover {
-  z-index: 80;
-}
-
-/* Motion + card visuals ignore pointer events so hover doesn’t flicker at edges */
-.home-achievement-card__motion,
-.home-achievement-card__motion :deep(.thumbnail),
-.home-achievement-card__motion :deep(.thumbnail *) {
   pointer-events: none;
+}
+
+.home-achievement-card :deep(.thumbnail),
+.home-achievement-card :deep(.thumbnail .inner-card) {
+  animation: none !important;
+  transform: none !important;
+  transition: none;
+  filter: none;
   cursor: default;
 }
 
-/* Parent hit box drives the same crunch/pop + sway as RosterCard hover */
-.home-achievement-card:hover :deep(.thumbnail:not(.selected):not(.pressed)) {
-  animation: crunchAndPop 0.65s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
+.home-achievement-card :deep(.thumbnail .inner-card) {
+  box-shadow: none;
 }
 
-.home-achievement-card:not(:hover) :deep(.thumbnail:not(.selected):not(.pressed)) {
-  animation: settleBack 0.125s ease-out forwards;
-}
-
-.home-achievement-card:not(:hover) :deep(.thumbnail:not(.selected):not(.pressed) .inner-card) {
-  transition: transform 0.125s ease-out;
-}
-
-.home-achievement-card:hover :deep(.thumbnail .inner-card) {
-  animation: cardSway 4.1s ease-in-out infinite;
-  filter: url(#paper-crumple);
-  box-shadow: var(--roster-card-shadow-hover);
-}
-
-.home-achievement-card:hover :deep(.thumbnail:not(.selected) .inner-card::before),
-.home-achievement-card:hover :deep(.thumbnail:not(.selected) .inner-card::after) {
-  border-color: var(--roster-card-border-hover);
-}
-
-.home-achievement-card:hover :deep(.thumbnail .card-poly) {
-  stroke: var(--roster-graphite);
-  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--roster-graphite) 35%, transparent));
-}
-
-.home-achievement-card:hover :deep(.thumbnail .card-overlay) {
-  opacity: 0;
-}
-
-.home-achievement-card:hover :deep(.thumbnail .thumbnail-label),
-.home-achievement-card:hover :deep(.thumbnail .thumbnail-client) {
-  color: var(--roster-card-text);
-  text-shadow: 0 1px 6px color-mix(in srgb, var(--roster-card-surface-deep) 65%, transparent);
+.home-achievement-card :deep(.thumbnail .inner-card::before),
+.home-achievement-card :deep(.thumbnail .inner-card::after) {
+  display: none;
+  transition: none;
 }
 
 /* Achievement copy — vertically centred in the name plate */
@@ -474,7 +457,7 @@ onBeforeUnmount(() => {
   }
 
   .home-achievements__grid {
-    gap: var(--grid-2);
+    gap: var(--home-achievement-grid-gap);
     padding-inline: var(--home-padding-inline);
     padding-bottom: var(--grid-3);
   }

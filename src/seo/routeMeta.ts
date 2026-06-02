@@ -84,7 +84,7 @@ export const ROUTE_SEO: Record<string, RouteMetaSeo> = {
     robots: 'noindex, nofollow',
   },
   ProjectCozyCorner: {
-    title: 'Cozy Corner, A Warm Third Space | Design Engineer Case Study',
+    title: 'Building digital third spaces using SDKs and APIs | Design Engineer Case Study',
     description:
       'Design-engineer breakdown of a cozy pixel messaging app — Next.js, Supabase realtime, LiveKit voice, layered sprite avatars, and Canvas world sync.',
     keywords: ['design engineer', 'pixel UI', 'real-time chat', 'Next.js', 'social app UX'],

@@ -148,7 +148,7 @@ const projects = ref<Project[]>([
   {
     id: 'cozy-corner',
     discipline: 'product-design',
-    title: 'Cozy Corner, A Warm Third Space',
+    title: 'Building digital third spaces using SDKs and APIs',
     subtitle: 'Realtime chat, voice & shared world',
     tags: ['PIXEL', 'REALTIME', 'SOLO'],
     tagColors: ['#5c564c', '#5c564c', '#5c564c'],

@@ -64,7 +64,7 @@ const projects = [
   },
   {
     id: 'cozy-corner',
-    title: 'Cozy Corner, A Warm Third Space',
+    title: 'Building digital third spaces using SDKs and APIs',
     description: 'Real-time chat, voice rooms, shared world, and layered sprite avatars in a tactile pixel UI.',
     route: '/work/cozy-corner',
     category: 'Web Design'

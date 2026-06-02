@@ -22,7 +22,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
 
         <ProjectHero
-          title="Cozy Corner, A Warm Third Space"
+          title="Building digital third spaces using SDKs and APIs"
           description="A design-engineer exploration of real-time social presence: chat, voice, avatars, and a shared world wrapped in a tactile pixel UI."
           role="Design Engineer"
           timeline="3 Days"
