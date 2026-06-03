@@ -437,7 +437,7 @@ onBeforeUnmount(() => {
 @media (max-width: 767px) {
   .home-page {
     --home-padding-inline: var(--grid-3);
-    --home-achievements-overlap: var(--grid-5);
+    --home-achievements-overlap: 0;
   }
 
   .home-hero-stage {
@@ -447,11 +447,12 @@ onBeforeUnmount(() => {
   .home-hero-stage__content {
     min-height: auto;
     align-items: stretch;
-    padding-block: var(--grid-4) var(--grid-2);
+    padding-block: var(--grid-4) var(--grid-6);
   }
 
   .home-achievements {
-    margin-top: calc(-1 * var(--home-achievements-overlap));
+    margin-top: 0;
+    padding-top: var(--grid-5);
     padding-inline: 0;
     padding-bottom: var(--grid-3);
   }
