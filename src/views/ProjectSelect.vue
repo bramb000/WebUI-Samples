@@ -355,7 +355,7 @@ function onThumbEnter(_e: PointerEvent, id: string) {
   }
 
   // Flame: attachProjectFlameToThumbnail(e.currentTarget, innerCard)
-  startCrumple()
+  if (id !== activeId.value) startCrumple()
 
   // Prefetch next detail chunk for a shorter blank hold.
   embeddedProjectImportById[id]?.().catch(() => {})
@@ -387,7 +387,7 @@ function onThumbDown(e: PointerEvent, id: string) {
   }
   const thumb = e.currentTarget as HTMLElement
   // Flame: attachProjectFlameToThumbnail(thumb, innerCard)
-  startCrumple()
+  if (id !== activeId.value) startCrumple()
 
   try {
     thumb.setPointerCapture(e.pointerId)

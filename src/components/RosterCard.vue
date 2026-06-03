@@ -150,6 +150,7 @@ const isThumbVideo = computed(
 .thumbnail {
   --roster-plate-base: var(--roster-card-plate-base);
   --roster-grain-fallback: var(--roster-card-grain-base);
+  --roster-card-settle-duration: calc(0.125s / 2.5);
   aspect-ratio: 1 / 1.4;
   cursor: pointer;
   position: relative;
@@ -419,14 +420,14 @@ const isThumbVideo = computed(
 }
 
 .thumbnail:not(:hover):not(.selected):not(.pressed) {
-  animation: settleBack 0.125s ease-out forwards;
+  animation: settleBack var(--roster-card-settle-duration) ease-out forwards;
 }
 
 .thumbnail:not(:hover):not(.selected):not(.pressed) .inner-card {
-  transition: transform 0.125s ease-out;
+  transition: transform var(--roster-card-settle-duration) ease-out;
 }
 
-.thumbnail:hover .inner-card {
+.thumbnail:hover:not(.selected):not(.pressed) .inner-card {
   animation: cardSway 4.1s ease-in-out infinite;
   filter: url(#paper-crumple);
 }
@@ -443,10 +444,19 @@ const isThumbVideo = computed(
 
 .thumbnail.selected .inner-card {
   --roster-sketch-stroke: 4px;
+  animation: none;
+  transform: none;
+  filter: none;
   box-shadow:
     0 1px 0 color-mix(in srgb, white 55%, transparent) inset,
     0 0 12px color-mix(in srgb, var(--roster-graphite-deep) 14%, transparent),
     0 12px 26px rgba(26, 24, 20, 0.14);
+}
+
+.thumbnail.selected:hover .inner-card {
+  animation: none;
+  transform: none;
+  filter: none;
 }
 
 .thumbnail.selected .inner-card::before,
@@ -490,6 +500,14 @@ const isThumbVideo = computed(
 }
 .thumbnail.pressed .inner-card {
   filter: url(#paper-crumple);
+}
+
+.thumbnail.selected.pressed {
+  transform: scale(1.05);
+}
+
+.thumbnail.selected.pressed .inner-card {
+  filter: none;
 }
 
 .thumbnail.selected {
