@@ -18,8 +18,10 @@ const trackRef = ref<HTMLElement | null>(null)
 const headerRef = ref<HTMLElement | null>(null)
 const progress = ref(0)
 const isMobileLayout = ref(false)
+const isWideLayout = ref(false)
 let rafId = 0
 let mobileMq: MediaQueryList | null = null
+let wideMq: MediaQueryList | null = null
 
 function updateProgress() {
   const header = headerRef.value
@@ -30,7 +32,8 @@ function updateProgress() {
   const viewportH = window.visualViewport?.height ?? window.innerHeight
   const triggerY = viewportH * HEADER_TRIGGER_VP
   const headerTop = header.getBoundingClientRect().top
-  const revealDistance = viewportH * REVEAL_SCROLL_VP
+  const revealScale = isWideLayout.value ? 1.25 : 1
+  const revealDistance = viewportH * REVEAL_SCROLL_VP * revealScale
   const scrolledPastTrigger = triggerY - headerTop
   progress.value = clamp01(scrolledPastTrigger / revealDistance)
 }
@@ -45,13 +48,20 @@ function onScroll() {
 }
 
 function syncMobileLayout() {
-  isMobileLayout.value = window.matchMedia('(max-width: 767px)').matches
+  isMobileLayout.value = mobileMq?.matches ?? window.matchMedia('(max-width: 767px)').matches
+}
+
+function syncWideLayout() {
+  isWideLayout.value = wideMq?.matches ?? window.matchMedia('(min-aspect-ratio: 16/9)').matches
 }
 
 onMounted(() => {
   syncMobileLayout()
+  syncWideLayout()
   mobileMq = window.matchMedia('(max-width: 767px)')
+  wideMq = window.matchMedia('(min-aspect-ratio: 16/9)')
   mobileMq.addEventListener('change', syncMobileLayout)
+  wideMq.addEventListener('change', syncWideLayout)
   updateProgress()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', onScroll, { passive: true })
@@ -59,6 +69,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   mobileMq?.removeEventListener('change', syncMobileLayout)
+  wideMq?.removeEventListener('change', syncWideLayout)
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', onScroll)
   if (rafId)
@@ -89,6 +100,15 @@ function desktopAnchors(): Anchor[] {
   ]
 }
 
+/** >16:9 — pull letters into the readable band under the section title */
+function wideDesktopAnchors(): Anchor[] {
+  return [
+    { x: '34%', y: '58%', rot: -4.5 },
+    { x: '66%', y: '58%', rot: 5.0 },
+    { x: '50%', y: '78%', rot: -2.5 },
+  ]
+}
+
 function mobileAnchors(): Anchor[] {
   return [
     { x: '50%', y: '36%', rot: -2.5 },
@@ -97,7 +117,13 @@ function mobileAnchors(): Anchor[] {
   ]
 }
 
-const anchors = computed(() => (isMobileLayout.value ? mobileAnchors() : desktopAnchors()))
+const anchors = computed(() => {
+  if (isMobileLayout.value)
+    return mobileAnchors()
+  if (isWideLayout.value)
+    return wideDesktopAnchors()
+  return desktopAnchors()
+})
 
 function letterProgress(globalP: number, idx: number) {
   const stagger = idx * 0.06 * ANIMATION_LENGTH_SCALE
@@ -110,7 +136,10 @@ function letterProgress(globalP: number, idx: number) {
     id="testimonial-letters"
     ref="trackRef"
     class="letters-track"
-    :class="{ 'letters-track--mobile': isMobileLayout }"
+    :class="{
+      'letters-track--mobile': isMobileLayout,
+      'letters-track--wide': isWideLayout && !isMobileLayout,
+    }"
     aria-label="Testimonials"
   >
     <div
@@ -132,6 +161,7 @@ function letterProgress(globalP: number, idx: number) {
           :base-rot-deg="anchors[l.idx]?.rot"
           :enter-from="isMobileLayout ? 'left' : l.idx === 0 ? 'left' : l.idx === 1 ? 'top-right' : 'right'"
           :compact="isMobileLayout"
+          :wide-layout="isWideLayout && !isMobileLayout"
         />
       </div>
 
@@ -189,6 +219,18 @@ function letterProgress(globalP: number, idx: number) {
 .letters-hud__hint {
   color: var(--color-text-muted);
   margin: 0;
+}
+
+@media (min-aspect-ratio: 16/9) {
+  .letters-track--wide .letters-stage {
+    max-width: 80rem;
+    margin-inline: auto;
+    min-height: min(74vh, 52rem);
+  }
+
+  .letters-track--wide .letters-hud {
+    top: var(--grid-5);
+  }
 }
 
 @media (max-width: 767px) {

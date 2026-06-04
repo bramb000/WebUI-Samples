@@ -275,6 +275,13 @@ onBeforeUnmount(() => {
   margin-inline: auto;
 }
 
+/* >16:9 — keep hero + testimonials in a centered reading column (avoids empty ultrawide sweep) */
+@media (min-aspect-ratio: 16/9) {
+  .home-page__container {
+    max-width: min(80rem, 72vw);
+  }
+}
+
 @media (min-width: 1025px) {
   .home-achievements {
     --home-achievement-card-width: 232px;

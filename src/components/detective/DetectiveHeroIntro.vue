@@ -119,6 +119,8 @@ const showCursor = computed(() => !reducedMotion.value)
   display: inline-block;
   vertical-align: top;
   margin-inline-start: 0;
+  /* Reserve width for the longest tail (Windows can collapse inline-block + absolute overlays to 0) */
+  min-width: max-content;
 }
 
 .detective-hero-intro__cycle-ghost {

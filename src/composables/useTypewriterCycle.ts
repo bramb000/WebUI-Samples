@@ -1,10 +1,16 @@
-import { type Ref, onMounted, onUnmounted, ref, watch } from 'vue'
+import { type Ref, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 export type TypewriterCycleOptions = {
   typeMs?: number
   deleteMs?: number
   holdMs?: number
   reducedMotion?: Ref<boolean>
+}
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined')
+    return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 /** Cycles through strings with delete-then-type typewriter transitions. */
@@ -22,17 +28,40 @@ export function useTypewriterCycle(
   const displayed = ref(phrases[0] ?? '')
   const phraseIndex = ref(0)
   let timer: ReturnType<typeof setTimeout> | null = null
+  let rafHandle = 0
 
   function clearTimer() {
     if (timer) {
       clearTimeout(timer)
       timer = null
     }
+    if (rafHandle) {
+      cancelAnimationFrame(rafHandle)
+      rafHandle = 0
+    }
   }
 
+  /** rAF-based delay — setTimeout is throttled on some Windows power/efficiency modes. */
   function schedule(fn: () => void, ms: number) {
     clearTimer()
-    timer = setTimeout(fn, ms)
+    if (ms <= 0) {
+      fn()
+      return
+    }
+    const start = performance.now()
+    const tick = (now: number) => {
+      if (now - start >= ms) {
+        rafHandle = 0
+        fn()
+        return
+      }
+      rafHandle = requestAnimationFrame(tick)
+    }
+    rafHandle = requestAnimationFrame(tick)
+  }
+
+  function isReducedMotion() {
+    return reducedMotion?.value ?? prefersReducedMotion()
   }
 
   function stepType() {
@@ -64,7 +93,7 @@ export function useTypewriterCycle(
     if (phrases.length === 0)
       return
 
-    if (reducedMotion?.value) {
+    if (isReducedMotion()) {
       phraseIndex.value = 0
       displayed.value = phrases[0] ?? ''
       if (phrases.length > 1) {
@@ -83,8 +112,9 @@ export function useTypewriterCycle(
   }
 
   onMounted(() => {
-    // Defer one frame so co-located useReducedMotion() has synced from matchMedia.
-    requestAnimationFrame(() => start())
+    void nextTick(() => {
+      start()
+    })
   })
 
   onUnmounted(clearTimer)

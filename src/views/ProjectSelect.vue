@@ -12,7 +12,8 @@ import { attachProjectFlameToThumbnail, detachProjectFlame, tickProjectFlame } f
 import { useIsMobile } from '../composables/useIsMobile'
 import { useRosterCardPaint } from '../composables/useRosterCardPaint'
 import { PROJECT_ROUTE_BY_ID } from '../constants/projectRoutes'
-import { resolveWorkProjectSlug, workProjectQuery } from '../constants/workProjectSlug'
+import { resolveWorkProjectSlug, readWorkProjectSlugFromQuery, workProjectQuery } from '../constants/workProjectSlug'
+import { captureProjectSelected, type WorkProjectSelectSource } from '../analytics'
 import { rosterCardPaletteFromTokens } from '../constants/rosterCardPalette'
 import type { RosterDiscipline } from '../constants/rosterDiscipline'
 
@@ -399,11 +400,18 @@ function onThumbUp(id: string) {
   pressedId.value = null
   if (isMobile.value) {
     const path = PROJECT_ROUTE_BY_ID[id]
-    if (path) void router.push(path)
+    if (path) {
+      captureProjectSelected({
+        project_id: id,
+        source: 'roster_click',
+        slug_raw: routeProjectSlug(),
+      })
+      void router.push(path)
+    }
     return
   }
   // if (hoveredId.value == null) detachProjectFlame()
-  selectProject(id)
+  selectProject(id, { source: 'roster_click' })
 }
 
 function syncNavScrollListeners() {
@@ -417,13 +425,8 @@ function isEmbeddedProjectId(id: string): id is EmbeddedProjectId {
 }
 
 function routeProjectSlug(): string | null {
-  const q = route.query.project
-  if (typeof q === 'string' && q.trim())
-    return q
-  if (Array.isArray(q) && typeof q[0] === 'string' && q[0].trim())
-    return q[0]
-  const hash = route.hash.replace(/^#/, '').trim()
-  return hash || null
+  return readWorkProjectSlugFromQuery(route.query)
+    ?? (route.hash.replace(/^#/, '').trim() || null)
 }
 
 function syncRouteToProject(id: string) {
@@ -434,43 +437,74 @@ function syncRouteToProject(id: string) {
   router.replace({ path: '/work', query: workProjectQuery(id) })
 }
 
-function applyRouteProject(options: { animate?: boolean } = {}) {
-  const id = resolveWorkProjectSlug(routeProjectSlug())
+function applyRouteProject(options: { animate?: boolean; source?: 'deep_link' | 'url_sync' } = {}) {
+  const slugRaw = routeProjectSlug()
+  const id = resolveWorkProjectSlug(slugRaw)
   if (!id || !isEmbeddedProjectId(id))
     return
 
   if (isMobile.value) {
     const path = PROJECT_ROUTE_BY_ID[id]
-    if (path)
+    if (path) {
+      if (options.source) {
+        captureProjectSelected({
+          project_id: id,
+          source: options.source,
+          slug_raw: slugRaw,
+        })
+      }
       void router.replace(path)
+    }
     return
   }
 
-  if (id === activeId.value)
+  if (id === activeId.value) {
+    if (slugRaw && slugRaw !== id)
+      syncRouteToProject(id)
+    if (options.source === 'deep_link') {
+      captureProjectSelected({
+        project_id: id,
+        source: 'deep_link',
+        slug_raw: slugRaw,
+      })
+    }
     return
+  }
 
   if (options.animate === false) {
     activeId.value = id
     displayedId.value = id
     embeddedProjectImportById[id]?.().catch(() => {})
+    if (options.source) {
+      captureProjectSelected({
+        project_id: id,
+        source: options.source,
+        slug_raw: slugRaw,
+      })
+    }
+    if (slugRaw && slugRaw !== id)
+      syncRouteToProject(id)
     return
   }
 
-  selectProject(id, { syncRoute: false })
+  selectProject(id, { syncRoute: false, source: options.source ?? 'url_sync' })
 }
 
 watch(displayedEmbeddedComponent, syncNavScrollListeners)
 
 watch(
   () => [route.query.project, route.hash] as const,
-  () => applyRouteProject({ animate: true }),
+  () => applyRouteProject({ animate: true, source: 'url_sync' }),
 )
 
 onMounted(() => {
   observeGrid(gridContainerRef.value)
   scheduleRebake()
   syncNavScrollListeners()
-  applyRouteProject({ animate: false })
+  applyRouteProject({
+    animate: false,
+    source: routeProjectSlug() ? 'deep_link' : undefined,
+  })
   /* 24fps flame render loop — re-enable with attach/detach above
   if (isMobile.value) return
   const clockStart = performance.now()
@@ -489,11 +523,23 @@ onMounted(() => {
   raf = requestAnimationFrame(loop)
   */
 })
-function selectProject(id: string, options: { syncRoute?: boolean } = {}) {
+function selectProject(
+  id: string,
+  options: { syncRoute?: boolean; source?: WorkProjectSelectSource } = {},
+) {
   if (options.syncRoute !== false)
     syncRouteToProject(id)
   if (id === activeId.value)
     return
+
+  if (options.source) {
+    captureProjectSelected({
+      project_id: id,
+      source: options.source,
+      slug_raw: routeProjectSlug(),
+    })
+  }
+
   transitionToken++
   const token = transitionToken
   activeId.value = id
@@ -640,9 +686,24 @@ function onDone(trigger: number) {
   flex-direction: column;
 }
 
+@media (min-aspect-ratio: 16/9) {
+  .dl-shell {
+    --dl-reading-max: 1480px;
+  }
+
+  .dl-embedded {
+    padding-inline: var(--grid-3);
+    padding-block: var(--grid-4) var(--grid-6);
+  }
+}
+
 @media (min-aspect-ratio: 21/9) {
   .dl-shell {
     --dl-reading-max: 1420px;
+  }
+
+  .dl-embedded {
+    padding-inline: var(--grid-4);
   }
 }
 

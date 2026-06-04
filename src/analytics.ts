@@ -1,5 +1,11 @@
 import type { PostHog } from 'posthog-js'
 import type { Router } from 'vue-router'
+import {
+  type WorkProjectSelectSource,
+  workProjectAnalyticsProps,
+} from './constants/workProjectSlug'
+
+export type { WorkProjectSelectSource } from './constants/workProjectSlug'
 
 let pageStartTime = 0
 let maxScrollDepth = 0
@@ -59,6 +65,20 @@ export function captureEvent(
 
 /** Correlate session replay with live WebGL vs static fallbacks (canvas is often blank in replay). */
 export type VfxRenderMode = 'webgl' | 'static_fallback' | 'disabled' | 'init_failed'
+
+/** Roster / deep-link project selection on `/work`. */
+export function captureProjectSelected(properties: {
+  project_id: string
+  source: WorkProjectSelectSource
+  slug_raw?: string | null
+}) {
+  captureEvent('project_selected', {
+    project_id: properties.project_id,
+    source: properties.source,
+    path: '/work',
+    ...(properties.slug_raw ? { slug_raw: properties.slug_raw } : {}),
+  })
+}
 
 export function captureVfxRenderStatus(
   component: string,
@@ -148,7 +168,8 @@ function bindAnalytics(router: Router, posthog: PostHog) {
       posthog.capture('page_left', {
         path: from.path,
         time_on_page_seconds: timeOnPage,
-        max_scroll_depth_percent: maxScrollDepth
+        max_scroll_depth_percent: maxScrollDepth,
+        ...workProjectAnalyticsProps(from.path, from.query, from.hash),
       });
     }
     
@@ -161,6 +182,7 @@ function bindAnalytics(router: Router, posthog: PostHog) {
     if (!failure) {
       posthog.capture('$pageview', {
         $current_url: window.location.origin + to.fullPath,
+        ...workProjectAnalyticsProps(to.path, to.query, to.hash),
       })
     }
   })
