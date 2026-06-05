@@ -18,8 +18,6 @@ type Props = {
   enterFrom?: 'left' | 'right' | 'top-right'
   /** Narrow viewport — tighter slide-in and card footprint */
   compact?: boolean
-  /** Ultrawide — cap vw-based slide so letters finish in the readable band */
-  wideLayout?: boolean
 }
 
 const props = defineProps<Props>()
@@ -59,17 +57,14 @@ const styleVars = computed(() => {
   // Gentle slide-in toward the anchor.
   const from = props.enterFrom ?? 'top-right'
   const compact = props.compact ?? false
-  const wide = props.wideLayout ?? false
-  const enterSpread = compact ? 6 : wide ? 8 : 16
-  const enterSpreadUnit = compact || wide ? 'rem' : 'vw'
-  const enterOffset = (1 - e) * enterSpread
+  const enterSpread = compact ? 6 : 16
   const tx =
     from === 'left'
-      ? `${-enterOffset}${enterSpreadUnit}`
+      ? (1 - e) * -enterSpread
       : from === 'right'
-        ? `${enterOffset}${enterSpreadUnit}`
-        : `${(1 - e) * (compact ? 4 : wide ? 6 : 10)}${enterSpreadUnit}`
-  const ty = from === 'top-right' ? `${(1 - e) * (wide ? 1.5 : 3)}vh` : '0vh'
+        ? (1 - e) * enterSpread
+        : (1 - e) * (compact ? 4 : 10)
+  const ty = from === 'top-right' ? (1 - e) * -3 : 0
   const rot = (1 - e) * -10 // deg
   const scale = 0.82 + e * 0.06
   const alpha = 0.02 + e * 0.98
@@ -84,8 +79,8 @@ const styleVars = computed(() => {
   return {
     '--letter-ax': props.anchorX ?? '50vw',
     '--letter-ay': props.anchorY ?? '50%',
-    '--letter-tx': tx,
-    '--letter-ty': ty,
+    '--letter-tx': `${tx}vw`,
+    '--letter-ty': `${ty}vh`,
     '--letter-rot': `${rot + (props.baseRotDeg ?? 0)}deg`,
     '--letter-scale': String(scale),
     '--letter-alpha': String(alpha),
