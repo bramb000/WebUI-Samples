@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 
 const letters = computed(() =>
   TESTIMONIAL_BOOK_ENTRIES.filter((e) =>
-    e.name === 'Chris Clay' || e.name === 'Jill Priya Keshyap' || e.name === 'Tianhao Kang',
+    e.name === 'Kaiwen Young' || e.name === 'Jill Priya Keshyap' || e.name === 'Tianhao Kang',
   ).map((entry, idx) => ({
     id: `${entry.name}-${idx}`,
     ...entry,

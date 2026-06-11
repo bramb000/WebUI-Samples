@@ -70,7 +70,6 @@
 
 ## Testimonials (from home)
 
-- Chris Clay, VP of Design, Immutable — curiosity, grit, challenges status quo
 - Kaiwen Young, Director of UX, Ubisoft — passion, communication, team UX culture
 - Hiroshi Ogawa, Lead UI Engineer, Ubisoft — multi-platform UI foundation, cross-studio Japan/India
 - Daniel Paez, VP of Revenue, Immutable — audience motivations, elegant solutions under pressure

@@ -6,14 +6,8 @@ export type TestimonialEntry = {
   quote: string
 }
 
-/** Home testimonial book — order: Chris Clay, Kaiwen, Tianhao, Hiroshi, Dan */
+/** Home testimonial book — order: Kaiwen, Tianhao, Hiroshi, Jill */
 export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
-  {
-    name: 'Chris Clay',
-    role: 'VP of Design, Immutable',
-    quote:
-      'His curiosity and desire to improve himself extends to how he designs. He\'s constantly analysing what\'s working and how to improve it',
-  },
   {
     name: 'Kaiwen Young',
     role: 'Director of User Experience, Ubisoft',
