@@ -181,15 +181,18 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
     radii.y *= 1.0 + (hash11(u_seed.y + 5.0) - 0.5) * 0.068;
 
     float theta = atan(p.y, p.x);
-    vec2 tangent = vec2(-sin(theta), cos(theta));
+    vec2 dir = vec2(cos(theta), sin(theta));
+    vec2 tangent = vec2(-dir.y, dir.x);
+    // Direction-based noise — periodic around the loop (avoids atan seam gap).
+    vec2 nUv = dir * 2.4;
 
-    float tangW = (vnoise(vec2(theta * 1.55 + u_seed.x, 0.6)) - 0.5) * u_strokeNorm * 4.2;
+    float tangW = (vnoise(nUv * 0.65 + u_seed.xy) - 0.5) * u_strokeNorm * 4.2;
     vec2 pw = p + tangent * tangW;
 
     float wobble = 1.0
-      + (vnoise(vec2(theta * 0.82 + u_seed.x, 0.25)) - 0.5) * 0.092
-      + (vnoise(vec2(theta * 3.05 + u_seed.y, 1.15)) - 0.5) * 0.038
-      + (vnoise(vec2(theta * 7.6 + u_seed.z, 2.4)) - 0.5) * 0.015;
+      + (vnoise(nUv * 0.34 + u_seed.xy * 0.25) - 0.5) * 0.092
+      + (vnoise(nUv * 1.25 + u_seed.yz * 1.15) - 0.5) * 0.038
+      + (vnoise(nUv * 3.1 + u_seed.zx * 2.4) - 0.5) * 0.015;
 
     float ell = length(pw / radii) / max(wobble, 0.82);
     float d = ell - 1.0;
@@ -197,7 +200,7 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
     float pressure = sin(theta * 2.0 + u_seed.x * 0.85) * 0.5 + 0.5;
     pressure *= sin(theta * 3.0 + u_seed.y * 1.35 + 0.4) * 0.5 + 0.5;
     pressure = pow(max(pressure, 0.0), 0.46);
-    pressure *= mix(0.75, 1.2, vnoise(vec2(theta * 2.15 / 6.283 + u_seed.z, 3.2)));
+    pressure *= mix(0.75, 1.2, vnoise(nUv * 0.9 + u_seed.z * 3.2));
     float halfW = u_strokeNorm * mix(0.22, 1.1, pressure);
 
     float normDist = abs(d) / max(halfW, 1e-5);
@@ -218,7 +221,7 @@ const PENCIL_FRAME_FRAGMENT = /* glsl */ `
 
     float densityInner = mix(0.82, 1.0, graphite);
     densityInner *= mix(1.0, mix(0.55, 1.0, speck), edgeMask * 0.85);
-    densityInner *= mix(0.9, 1.0, vnoise(vec2(theta * 8.0, normDist * 11.0) + u_seed.xy));
+    densityInner *= mix(0.9, 1.0, vnoise(vec2(dot(nUv, u_seed.xy) * 4.0, normDist * 11.0)));
     float alpha = cov * mix(1.0, densityInner, strokeMask);
 
     float lumInner = mix(0.86, 1.02, graphite) * mix(1.0, 0.78, speck * edgeMask * 0.5);
@@ -370,7 +373,7 @@ const vertexShader = /* glsl */ `void main() {
   gl_Position = vec4(position, 1.0);
 }`
 
-const SHADER_REV = 20
+const SHADER_REV = 21
 
 let bakeRenderer: THREE.WebGLRenderer | null = null
 let bakeScene: THREE.Scene | null = null

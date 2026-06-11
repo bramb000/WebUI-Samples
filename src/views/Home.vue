@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import DetectiveHeroIntro from '../components/detective/DetectiveHeroIntro.vue'
+import IntroHero from '../components/IntroHero.vue'
 import TestimonialsLettersStage from '../components/testimonials/TestimonialsLettersStage.vue'
 import HeroBackgroundTexture from '../components/HeroBackgroundTexture.vue'
 import PrimaryButton from '../components/PrimaryButton.vue'
@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
     >
       <HeroBackgroundTexture class="home-hero-stage__texture" />
       <div class="home-page__container home-hero-stage__content">
-        <DetectiveHeroIntro />
+        <IntroHero />
       </div>
     </section>
 
@@ -235,7 +235,7 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
 }
 
-.home-hero-stage__content > :deep(.detective-hero-intro) {
+.home-hero-stage__content > :deep(.intro-hero) {
   flex: 1 1 auto;
 }
 
