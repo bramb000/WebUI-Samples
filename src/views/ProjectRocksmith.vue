@@ -397,7 +397,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <CaseTestimonialCard
           name="Kaiwen Young"
           role="Director of User Experience, Ubisoft"
-          quote="Bramha's passion, knowledge and communication style contributed greatly to the quality of our project and team UX culture."
+          quote="Bramha's passion, knowledge and communication style contributed greatly to the quality of our project and team culture."
         />
         <CaseTestimonialCard
           name="Rohit Suvarna"

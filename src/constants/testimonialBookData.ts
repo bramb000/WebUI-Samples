@@ -12,7 +12,7 @@ export const TESTIMONIAL_BOOK_ENTRIES: TestimonialEntry[] = [
     name: 'Kaiwen Young',
     role: 'Director of User Experience, Ubisoft',
     quote:
-      'Bramha\'s passion, knowledge and communication style contributed greatly to the quality of our project and team UX culture.',
+      'Bramha\'s passion, knowledge and communication style contributed greatly to the quality of our project and team culture.',
   },
   {
     name: 'Tianhao Kang',

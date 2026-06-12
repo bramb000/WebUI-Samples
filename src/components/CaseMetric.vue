@@ -45,6 +45,13 @@ const wrapStyle = computed(() => ({
   '--insight-accent': frameAccent.value,
   '--case-insight-surface-fill': surfaceFill.value,
 }))
+
+/** Metrics like +25% stay centred; prose headlines align left like insight cards. */
+const isNumericMetric = computed(() => {
+  const v = String(props.value).trim()
+  if (/\b[a-zA-Z]{4,}\b/.test(v)) return false
+  return /^[+\-~$]?[\d]/.test(v)
+})
 </script>
 
 <template>
@@ -56,12 +63,21 @@ const wrapStyle = computed(() => ({
     :hover-flame="false"
   >
     <div class="metric-wrap" :style="wrapStyle">
-      <div class="metric-content">
-        <div class="metric-lcd">
-          <div class="lcd-glare"></div>
-          <span class="metric-value">{{ value }}</span>
+      <div
+        class="metric-content"
+        :class="{ 'metric-content--prose': !isNumericMetric }"
+      >
+        <div
+          class="metric-lcd"
+          :class="{ 'metric-lcd--prose': !isNumericMetric }"
+        >
+          <div v-if="isNumericMetric" class="lcd-glare"></div>
+          <span
+            class="metric-value"
+            :class="{ 'metric-value--prose': !isNumericMetric }"
+          >{{ value }}</span>
         </div>
-        <div class="metric-label">
+        <div v-if="label" class="metric-label">
           <span class="metric-label-text">{{ label }}</span>
         </div>
       </div>
@@ -136,6 +152,11 @@ const wrapStyle = computed(() => ({
   box-sizing: border-box;
 }
 
+.metric-content--prose {
+  align-items: stretch;
+  padding: 12px 14px;
+}
+
 .metric-lcd {
   width: 80%;
   min-width: 80px;
@@ -144,6 +165,13 @@ const wrapStyle = computed(() => ({
   align-items: center;
   justify-content: center;
   position: relative;
+}
+
+.metric-lcd--prose {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  justify-content: flex-start;
 }
 
 .metric-value {
@@ -156,8 +184,23 @@ const wrapStyle = computed(() => ({
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
 }
 
-.metric-label {
+.metric-value--prose {
+  display: block;
+  width: 100%;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   line-height: 1.15;
+  text-align: left;
+  text-transform: none;
+  text-wrap: balance;
+  color: color-mix(in srgb, var(--insight-accent) 38%, var(--case-insight-on-fill) 62%);
+}
+
+.metric-label {
+  width: 100%;
+  padding: 0 12px;
+  line-height: 1.15;
+  text-align: left;
 }
 
 .metric-label-text {

@@ -8,8 +8,16 @@ import rocksmithOutdoors from '../../assets/images/rocksmith/research/007_rocksm
 
 export const rocksmithSummary: CaseStudySummaryData = {
   metrics: [
-    { value: '5', label: 'Platforms' },
-    { value: '1', label: 'UI System' },
+    {
+      value: 'Released on 5 platforms with 1 design system',
+      label: '',
+      theme: 'after',
+    },
+    {
+      value: 'GAConf Best Product for Motor and Cognitive Accessibility Winner 2022',
+      label: '',
+      theme: 'after',
+    },
   ],
   beats: [
     {
