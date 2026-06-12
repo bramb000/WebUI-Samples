@@ -13,11 +13,13 @@ import {
   COVER_HEIGHT,
   COVER_THICKNESS,
   COVER_WIDTH,
+  FRONT_COVER_OPEN_Z_OFFSET,
   LEAF_BEHIND_COVER_Z,
   LEAF_Z_STEP,
   LEFT_STACK_Z_BEHIND_BACK,
   PAGE_BEND_START_TURN,
   PAGE_HEIGHT,
+  PAGE_STACK_FLIP_TURN,
   PAGE_WIDTH,
   SPINE_WIDTH,
 } from './bookDimensions'
@@ -40,6 +42,7 @@ export type DetectiveBookScene = {
 
 export type DetectiveBookContent = {
   cover: BookCoverPage
+  backCover?: BookCoverPage
   leaves: BookLeaf[]
 }
 
@@ -67,6 +70,7 @@ export function createDetectiveBookScene(
   })
   if (!renderer.getContext())
     throw new Error('WebGL context could not be created')
+  renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
   const bookRoot = new THREE.Group()
@@ -125,12 +129,12 @@ export function createDetectiveBookScene(
     const coverOpen = coverTurnProgress()
     const stackOrder = BOOK_RENDER_ORDER.PAGE_MIN + (leaves.length - 1 - leafIndex)
 
-    if (turnProgress > 0.03 && turnProgress < 0.97) {
+    if (turnProgress >= 0.97) {
+      setLeafRenderOrder(leaf, BOOK_RENDER_ORDER.PAGE_MIN + leafIndex)
+    }
+    else if (turnProgress > PAGE_STACK_FLIP_TURN) {
       const turning = BOOK_RENDER_ORDER.PAGE_TURNING + leafIndex
       setLeafRenderOrder(leaf, coverOpen > 0.92 ? turning : BOOK_RENDER_ORDER.PAGE_MIN + 20 + leafIndex)
-    }
-    else if (turnProgress >= 0.97) {
-      setLeafRenderOrder(leaf, BOOK_RENDER_ORDER.PAGE_MIN + leafIndex)
     }
     else {
       setLeafRenderOrder(leaf, stackOrder)
@@ -142,7 +146,7 @@ export function createDetectiveBookScene(
   const leafCount = bookData.length
   const disposables: Array<THREE.Material | THREE.BufferGeometry | THREE.Texture> = []
 
-  const coverTextures = createBookCoverTextures(book.cover, renderer)
+  const coverTextures = createBookCoverTextures(book.cover, renderer, book.backCover)
   const stackDepth = bookStackDepth(bookData.length)
   const spineDepth = stackDepth + COVER_THICKNESS * 2
   const stackCenterZ = -COVER_THICKNESS - stackDepth / 2
@@ -263,8 +267,13 @@ export function createDetectiveBookScene(
       : BOOK_RENDER_ORDER.FRONT_COVER_CLOSED
     frontCoverGroup.renderOrder = coverOrder
     frontCover.renderOrder = coverOrder
-    for (const mat of frontCoverMats)
+    frontCover.visible = true
+    // Sit behind the leaf stack when open — visible as the left endpaper board without occluding right pages.
+    frontCoverGroup.position.z = coverOpen * FRONT_COVER_OPEN_Z_OFFSET
+    for (const mat of frontCoverMats) {
       mat.depthWrite = !coverFullyOpen
+      mat.depthTest = true
+    }
 
     const backStackBaseZ = backCoverZ - COVER_THICKNESS / 2 - LEFT_STACK_Z_BEHIND_BACK
 
@@ -272,8 +281,6 @@ export function createDetectiveBookScene(
       leaf.rotation.y += (leafTargetRotations[i]! - leaf.rotation.y) * motionLerp
 
       const visualTurn = Math.abs(leaf.rotation.y / Math.PI)
-      const targetTurn = Math.abs(leafTargetRotations[i]! / Math.PI)
-      const turnProgress = Math.min(1, Math.max(visualTurn, targetTurn))
       const lift = Math.sin(visualTurn * Math.PI)
       const bendAfterStart = Math.max(0, visualTurn - PAGE_BEND_START_TURN) / (1 - PAGE_BEND_START_TURN)
       const bend = visualTurn > PAGE_BEND_START_TURN ? Math.sin(bendAfterStart * Math.PI) : 0
@@ -281,9 +288,12 @@ export function createDetectiveBookScene(
       const zRight = LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP
       const zLeft = backStackBaseZ - (leaves.length - 1 - i) * LEAF_Z_STEP
       const zLift = reducedMotion ? 0 : lift * 10
-      let z = zRight * (1 - turnProgress) + zLeft * turnProgress + zLift
+      const stackBlend = visualTurn <= PAGE_STACK_FLIP_TURN
+        ? 0
+        : (visualTurn - PAGE_STACK_FLIP_TURN) / (1 - PAGE_STACK_FLIP_TURN)
+      let z = zRight * (1 - stackBlend) + zLeft * stackBlend + zLift
 
-      if (coverOpen < 0.98 && turnProgress < 0.04) {
+      if (coverOpen < 0.98 && visualTurn < 0.04) {
         z = Math.min(z, LEAF_BEHIND_COVER_Z - i * LEAF_Z_STEP - 2)
       }
 
@@ -293,6 +303,11 @@ export function createDetectiveBookScene(
       const backMat = (leaf.children[1] as THREE.Mesh).material as THREE.ShaderMaterial
       frontMat.uniforms.uBendIntensity!.value = bend
       backMat.uniforms.uBendIntensity!.value = bend
+
+      const frontMesh = leaf.children[0] as THREE.Mesh
+      const backMesh = leaf.children[1] as THREE.Mesh
+      frontMesh.visible = visualTurn < PAGE_STACK_FLIP_TURN
+      backMesh.visible = visualTurn >= PAGE_STACK_FLIP_TURN
 
       updateLeafRenderOrder(leaf, i)
     })

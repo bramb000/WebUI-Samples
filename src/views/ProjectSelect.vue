@@ -123,7 +123,7 @@ const projects = ref<Project[]>([
   {
     id: 'guild',
     discipline: 'product-design',
-    title: 'Repairing stickiness to increase revenue',
+    title: 'Repairing stickiness to increase revenue by 50%',
     subtitle: 'Retention & Live-Ops Systems',
     tags: ['MOBILE', 'UX', 'DATA'],
     tagColors: ['#5c564c', '#5c564c', '#5c564c'],
@@ -136,7 +136,7 @@ const projects = ref<Project[]>([
   {
     id: 'rocksmith',
     discipline: 'product-design',
-    title: 'Making guitar accessible to 1M+ users',
+    title: 'Accessible guitar lessons for 1M+ learners',
     subtitle: 'Cross-Platform UI System',
     tags: ['SYSTEMS', 'ACCESS', 'SHIPPED'],
     tagColors: ['#5c564c', '#5c564c', '#5c564c'],
@@ -161,6 +161,20 @@ const projects = ref<Project[]>([
     clientPrefix: false,
   },
   {
+    id: 'online-dice-simulator',
+    discipline: 'product-design',
+    title: 'Solo vibe coding a 600 MAU webapp',
+    subtitle: 'Mobile-first Rapier3D physics & low-power UX',
+    tags: ['3D PHYSICS', 'REACT THREE FIBER', 'SOLO'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
+    thumb: projectArt('online-dice-simulator', 73),
+    splash: projectArt('online-dice-simulator', 73),
+    tech: ['cube', 'code', 'spark', 'layers'],
+    roster: rosterMeta('Dice Simulator'),
+    clientName: 'personal project',
+    clientPrefix: false,
+  },
+  {
     id: 'login',
     discipline: 'ui-design',
     title: 'Login Micro-Interaction',
@@ -171,6 +185,18 @@ const projects = ref<Project[]>([
     splash: projectArt('login', 23),
     tech: ['spark', 'code', 'layers', 'cube'],
     roster: rosterMeta('Login Micro-Interaction'),
+  },
+  {
+    id: 'art-book',
+    discipline: 'ui-design',
+    title: 'Bringing art and stories to life',
+    subtitle: 'Tales of Hedgehog and Fox in WebGL',
+    tags: ['WEBGL', 'THREE.JS', 'STORY'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
+    thumb: projectArt('art-book', 61),
+    splash: projectArt('art-book', 61),
+    tech: ['cube', 'spark', 'layers', 'code'],
+    roster: rosterMeta('Art Book'),
   },
   {
     id: 'helldivers',
@@ -273,7 +299,7 @@ const microProjects = computed(() =>
 )
 
 const rosterSections = computed(() => [
-  { label: 'Case Studies', projects: caseStudyProjects.value, spaced: false },
+  { label: 'Commercial Projects', projects: caseStudyProjects.value, spaced: false },
   { label: 'Personal Projects', projects: microProjects.value, spaced: true },
 ])
 
@@ -301,7 +327,9 @@ const embeddedProjectImportById: Record<Project['id'], EmbeddedImporter> = {
   guild: () => import('./ProjectGuild.vue'),
   rocksmith: () => import('./ProjectRocksmith.vue'),
   'cozy-corner': () => import('./ProjectCozyCorner.vue'),
+  'online-dice-simulator': () => import('./ProjectDiceSimulator.vue'),
   login: () => import('./LoginInteraction.vue'),
+  'art-book': () => import('./ArtBookInteraction.vue'),
   helldivers: () => import('./ExperimentHelldivers.vue'),
   'account-tray': () => import('./AccountTrayView.vue'),
   'sales-modal': () => import('./SalesModalView.vue'),
@@ -315,7 +343,9 @@ const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
   guild: defineAsyncComponent(embeddedProjectImportById.guild),
   rocksmith: defineAsyncComponent(embeddedProjectImportById.rocksmith),
   'cozy-corner': defineAsyncComponent(embeddedProjectImportById['cozy-corner']),
+  'online-dice-simulator': defineAsyncComponent(embeddedProjectImportById['online-dice-simulator']),
   login: defineAsyncComponent(embeddedProjectImportById.login),
+  'art-book': defineAsyncComponent(embeddedProjectImportById['art-book']),
   helldivers: defineAsyncComponent(embeddedProjectImportById.helldivers),
   'account-tray': defineAsyncComponent(embeddedProjectImportById['account-tray']),
   'sales-modal': defineAsyncComponent(embeddedProjectImportById['sales-modal']),
@@ -331,7 +361,7 @@ const displayedEmbeddedComponent = computed(
   () => embeddedProjectComponentById[displayedId.value] ?? null,
 )
 const isCaseStudyEmbedded = computed(() =>
-  displayedId.value === 'guild' || displayedId.value === 'rocksmith' || displayedId.value === 'cozy-corner',
+  displayedId.value === 'guild' || displayedId.value === 'rocksmith' || displayedId.value === 'cozy-corner' || displayedId.value === 'online-dice-simulator',
 )
 
 const pressedId = ref<string | null>(null)

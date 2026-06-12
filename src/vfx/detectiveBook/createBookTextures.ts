@@ -30,6 +30,7 @@ export function createBookPageTexture(
     composed = mirrorCanvasHorizontal(composed)
 
   const texture = new THREE.CanvasTexture(composed)
+  texture.colorSpace = THREE.SRGBColorSpace
   texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
   texture.flipY = true
   texture.needsUpdate = true

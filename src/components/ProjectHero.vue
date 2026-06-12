@@ -66,13 +66,13 @@ defineProps<Props>();
 
 <style scoped>
 .project-hero {
-  padding: 48px 0 40px;
-  margin-bottom: 48px;
+  padding: 48px 0 0;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-@media (min-width: 768px) { .project-hero { padding: 64px 0 48px; } }
+@media (min-width: 768px) { .project-hero { padding: 64px 0 0; } }
 
 .hero-tags {
   display: flex;

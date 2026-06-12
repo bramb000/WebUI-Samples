@@ -1121,6 +1121,11 @@ h5, h6 {
   padding-top: 0;
 }
 
+/* Hero → Summary: avoid stacking hero margin + column gap + panel padding */
+.case-study-main > header.project-hero + section {
+  margin-top: -1.25rem;
+}
+
 /* Case study headings — consistent left alignment */
 .case-study-main :is(
   h1,

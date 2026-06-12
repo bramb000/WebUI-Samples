@@ -28,7 +28,7 @@ export const ROUTE_SEO: Record<string, RouteMetaSeo> = {
     keywords: ['game portfolio', 'UX designer for games', 'game designer portfolio'],
   },
   ProjectGuild: {
-    title: 'Guild of Guardians Case Study | Data-Driven Game UX',
+    title: 'Repairing stickiness to increase revenue by 50% | Guild of Guardians',
     description:
       'How data analysis and UX feature design raised D7 retention 25% and D7 LTV 12% on a live mobile RPG — relevant for game product manager and data analyst for games roles.',
     keywords: ['mobile RPG UX', 'game retention', 'data analyst for games', 'product manager for games', 'live ops'],
@@ -36,7 +36,7 @@ export const ROUTE_SEO: Record<string, RouteMetaSeo> = {
     ogType: 'article',
   },
   ProjectRocksmith: {
-    title: 'Rocksmith+ Case Study | Multi-Platform Game UX',
+    title: 'Accessible guitar lessons for 1M+ learners | Rocksmith+',
     description:
       'UX lead case study: one scalable UI system across 5 platforms for a music learning game. Game designer and UX designer for games — accessibility, input systems, and console/mobile parity.',
     keywords: ['game UX', 'multi-platform game UI', 'UX designer for games', 'Ubisoft', 'accessibility'],
@@ -46,6 +46,11 @@ export const ROUTE_SEO: Record<string, RouteMetaSeo> = {
   LoginInteraction1: {
     title: 'Login Interaction Experiment',
     description: 'Micro-interaction prototype — not indexed.',
+    robots: 'noindex, nofollow',
+  },
+  ArtBook: {
+    title: 'Bringing art and stories to life',
+    description: 'Three.js interactive storybook with click-to-turn pages — not indexed.',
     robots: 'noindex, nofollow',
   },
   NodeGraph: {
@@ -88,6 +93,13 @@ export const ROUTE_SEO: Record<string, RouteMetaSeo> = {
     description:
       'Design-engineer breakdown of a cozy pixel messaging app — Next.js, Supabase realtime, LiveKit voice, layered sprite avatars, and Canvas world sync.',
     keywords: ['design engineer', 'pixel UI', 'real-time chat', 'Next.js', 'social app UX'],
+    ogType: 'article',
+  },
+  ProjectDiceSimulator: {
+    title: 'Solo vibe coding a 600 MAU webapp | Online Dice Simulator',
+    description:
+      'Case study of a solo-developed online 3D dice simulator built in 3 days. Focuses on mobile-first VTT positioning, 3D Rapier WebGL physics, roving keyboard focus lists, and low-power performance settings.',
+    keywords: ['3d physics dice', 'online dice simulator', 'react three fiber', 'rapier3d', 'mobile first VTT', 'roving focus list', 'no 3d mode'],
     ogType: 'article',
   },
 }

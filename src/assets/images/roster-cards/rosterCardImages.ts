@@ -6,6 +6,7 @@ import guildCard from './Guild of Guardians.webp'
 import helldiversCard from './Helldivers UI.webp'
 import rocksmithCard from './Rocksmith.webp'
 import loginCard from './Login Interaction.webp'
+import artBookCard from '../book/tales/tale-cover.png'
 import voiceChatCard from './AI Voice Chat.webp'
 import pataponCard from './Rhythm Game.webp'
 import jediCard from './laser sword.webp'
@@ -16,6 +17,7 @@ export const ROSTER_CARD_IMAGE_BY_ID: Partial<Record<string, string>> = {
   rocksmith: rocksmithCard,
   helldivers: helldiversCard,
   login: loginCard,
+  'art-book': artBookCard,
   'voice-chat': voiceChatCard,
   patapon: pataponCard,
   jedi: jediCard,

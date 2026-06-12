@@ -5,6 +5,8 @@ import CaseImage from '../components/CaseImage.vue';
 import CaseLazyImage from '../components/CaseLazyImage.vue';
 import { guildLazyMedia } from '../assets/case-studies/guildLazyMedia';
 import VideoEmbed from '../components/VideoEmbed.vue';
+import CaseStudySummary from '../components/case-study/CaseStudySummary.vue';
+import { guildSummary } from '../constants/caseStudySummaries/guildSummary';
 import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
 import CaseBeforeAfter from '../components/CaseBeforeAfter.vue';
@@ -68,7 +70,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
     <!-- ─── HERO ─── -->
     <ProjectHero
-      title="Repairing stickiness to improve revenue"
+      title="Repairing stickiness to increase revenue by 50%"
       description="How data-driven feature design increased D7 retention by 25% and D7 LTV by 12% for a live mobile RPG."
       role="Feature Owner & Lead UX Designer"
       timeline="6 months"
@@ -80,33 +82,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </template>
     </ProjectHero>
 
-    <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
-      <h2 class="type-case-section-accent">Executive Summary</h2>
-      <div class="case-study-panel__metric-grid">
-        <CaseMetric value="+25%" label="Retention (D7)" theme="after" />
-        <CaseMetric value="+12%" label="Revenue (D7 LTV)" theme="after" />
-      </div>
-      <div class="case-study-panel__body type-case-body-lg">
-        <div>
-          <h4 class="type-case-kicker mb-2">01. The Problem</h4>
-          <p>The game suffered from a lower than standard D7 retention. Users reported that they needed to play 3-4 times a day to maximise their progression when most users only had time to play 1-2 times a day, creating an ill fit for user lifestyle needs.</p>
-        </div>
-        <div>
-          <h4 class="type-case-kicker mb-2">02. The Data</h4>
-          <p>Using SQL (BigQuery), I identified that the most engaged users were pulling the average session/day metric up and that the average experience felt worse to most users compared to what the dashboards indicated. Most users were playing once a day and therefore lagging behind in a progression system that needed them to play 3 times a day for the best results.</p>
-        </div>
-        <div>
-          <h4 class="type-case-kicker mb-2">03. The Solution</h4>
-          <ul class="list-disc pl-5 space-y-2">
-            <li><strong>Shifting Player Emotions:</strong> Designed an "AFK Reward Feature" that accumulated rewards while the player was away, transforming the mental model from <em>"I'm missing out"</em> when not playing to <em>"I have a gift waiting for me."</em></li>
-            <li><strong>Designing for Delight:</strong> Changing the game loop to reframe features that interrupted player focus to a loop that creates positive anticipation as a hook for long term retention.</li>
-            <li><strong>End to end delivery:</strong> Designed supporting features — composition recommendation, daily login calendar, and free rewards for achievements to maximise D7 retention.</li>
-            <li><strong>Bonus Win:</strong> Increase D7 LTV by 12% by surgically adding monetisation offers to new features.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <CaseStudySummary :summary="guildSummary" />
 
     <!-- ─── CONTEXT ─── -->
     <section class="space-y-8">
@@ -200,14 +176,14 @@ useCaseStudySketchPanels(caseStudyRoot);
           Being a live product, looking at data is always my first step. <strong>D7 retention is an indicator of how much the game has captured the players attention when they are not playing to bring them back and form habits.</strong> I was clear from the start — we are optimising for D7 retention and not D1 retention.
         </p>
         <p class="type-case-body-lg">
-          <strong>A good metric to track habit formation is sessions per day in the first seven days.</strong> By writing SQL to query our database in BigQuery, I could derive that <strong>the average session per day for new players who downloaded the game in the last 90 days was 1.3</strong>. While that sounds great, <strong>I trusted my instinct and background in statistics to look into the distribution of this number as averages can often be deceiving.</strong>
+          <strong>A good metric to track habit formation is sessions per day in the first seven days.</strong> By writing SQL to query our database in BigQuery, I could derive that <strong>the average session per day for new players who downloaded the game in the last 90 days was 1</strong>. While that sounds great, <strong>I trusted my instinct and background in statistics to look into the distribution of this number as averages can often be deceiving.</strong>
         </p>
         <p class="type-case-body-lg">
           What was surprising was that we had K-shaped behaviour — <strong>the players who retained were playing so much that they pulled the average up</strong> and practically blindsided the team.
         </p>
         <CaseImage :src="kShapeProblem" alt="K-shaped distribution of player sessions" caption="K-shaped behaviour: very few players had the 'average' experience" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
         <p class="type-case-body-lg">
-          In nerd terms, this is a bimodal distribution and very few players are actually having the "average" experience. Those below the average were definitely not sticking around, which was a clear indicator why having 1.3 sessions per day still resulted in such poor D7 retention.
+          In nerd terms, this is a bimodal distribution and very few players are actually having the "average" experience. Those below the average were definitely not sticking around, which was a clear indicator why having 1 session per day still resulted in such poor D7 retention.
         </p>
 
         <!-- Regression details -->

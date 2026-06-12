@@ -1,10 +1,23 @@
-export type BookImageKey =
+export type AlchemistBookImageKey =
   | 'cover'
   | 'understand'
   | 'analyze'
   | 'brew'
   | 'deliver'
   | 'end'
+
+export type TalesBookImageKey =
+  | 'tale-cover'
+  | 'tale-back'
+  | 'tale-07'
+  | 'tale-08'
+  | 'tale-09'
+  | 'tale-10'
+  | 'tale-11'
+  | 'tale-12'
+  | 'tale-13'
+
+export type BookImageKey = AlchemistBookImageKey | TalesBookImageKey
 
 /** Blank parchment leaf (e.g. first front / last back). */
 export type BookPageEmpty = {
@@ -24,6 +37,8 @@ export type BookCoverPage = {
   imageKey?: BookImageKey
   header?: string
   subtitle?: string
+  /** When true, image fills the board with no leather frame, scrim, or title overlay. */
+  fullBleed?: boolean
 }
 
 /** Spelled-out number header (centred) + calligraphy body (left-aligned) */
@@ -43,6 +58,12 @@ export type BookLeaf = { front: BookPageFace; back: BookPageFace }
 /** Baked onto the hardcover boards (not a scroll leaf). */
 export const ALCHEMIST_BOOK_COVER: BookPageLeft = {
   layout: 'left',
+  imageKey: 'cover',
+  header: 'My Product Philosophy',
+}
+
+/** Hardcover board content for the 3D scene. */
+export const ALCHEMIST_BOOK_COVER_BOARD: BookCoverPage = {
   imageKey: 'cover',
   header: 'My Product Philosophy',
 }

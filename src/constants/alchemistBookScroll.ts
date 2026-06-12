@@ -19,3 +19,15 @@ export function bookPageScrollProgress(globalProgress: number, leafCount: number
     return 0
   return (globalProgress - coverFraction) / (1 - coverFraction)
 }
+
+/** Highest discrete step index (cover closed = 0, fully read = max). */
+export function bookMaxStep(leafCount: number): number {
+  return leafCount + 1
+}
+
+/** Map a discrete step (0…max) to the global 0–1 progress used by the scene. */
+export function bookStepToProgress(step: number, leafCount: number): number {
+  const max = bookMaxStep(leafCount)
+  const clamped = Math.max(0, Math.min(max, step))
+  return clamped / max
+}

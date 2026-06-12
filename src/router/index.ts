@@ -68,6 +68,12 @@ const routes = [
         meta: seo('LoginInteraction1'),
     },
     {
+        path: '/work/art-book',
+        name: 'ArtBook',
+        component: () => import('../views/ArtBookInteraction.vue'),
+        meta: seo('ArtBook'),
+    },
+    {
         path: '/node-graph',
         name: 'NodeGraph',
         component: () => import('../views/NodeGraphView.vue'),
@@ -114,6 +120,12 @@ const routes = [
         name: 'ProjectCozyCorner',
         component: () => import('../views/ProjectCozyCorner.vue'),
         meta: { ...seo('ProjectCozyCorner'), sitemap: true, prerender: true },
+    },
+    {
+        path: '/work/online-dice-simulator',
+        name: 'ProjectDiceSimulator',
+        component: () => import('../views/ProjectDiceSimulator.vue'),
+        meta: { ...seo('ProjectDiceSimulator'), sitemap: true, prerender: true },
     },
     {
         path: '/micro-projects/sales-modal',

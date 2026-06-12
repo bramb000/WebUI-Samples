@@ -130,8 +130,8 @@ const wrapStyle = computed(() => ({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 12px 10px;
+  gap: 2px;
+  padding: 10px 10px 12px;
   flex: 0 1 auto;
   box-sizing: border-box;
 }
@@ -139,7 +139,7 @@ const wrapStyle = computed(() => ({
 .metric-lcd {
   width: 80%;
   min-width: 80px;
-  padding: 8px 12px;
+  padding: 4px 12px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,10 +156,15 @@ const wrapStyle = computed(() => ({
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
 }
 
+.metric-label {
+  line-height: 1.15;
+}
+
 .metric-label-text {
   font-family: var(--font-sans);
   font-size: var(--text-label-sm);
   font-weight: 700;
+  line-height: 1.15;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   color: color-mix(in srgb, var(--case-insight-on-fill-muted) 82%, var(--insight-accent) 18%);

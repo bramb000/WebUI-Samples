@@ -74,7 +74,7 @@ defineProps<{
 
 .baa-img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 16 / 10;
   display: block;
   border: 1px solid var(--color-border);
   border-radius: var(--dl-border-radius);
@@ -91,10 +91,9 @@ defineProps<{
 .baa-caption-block {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: calc(var(--grid-1) / 2);
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
 }
 
 .baa-caption {

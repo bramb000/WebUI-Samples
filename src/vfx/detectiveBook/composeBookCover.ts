@@ -8,6 +8,9 @@ import {
 
 const COVER_TEX_W = 512
 const COVER_TEX_H = 768
+/** Full-bleed PDF art — match ~2× source exports for sharper boards. */
+const COVER_ART_TEX_W = 1024
+const COVER_ART_TEX_H = 1536
 const SPINE_TEX_W = 128
 const SPINE_TEX_H = 768
 const EDGE_TEX_W = 64
@@ -123,7 +126,14 @@ function createCanvas(w: number, h: number): { canvas: HTMLCanvasElement, ctx: C
 
 /** Front board exterior — optional art panel + embossed title on leather. */
 export function composeFrontCoverExteriorCanvas(page: BookCoverPage): HTMLCanvasElement {
+  if (page.fullBleed && page.imageKey) {
+    const { canvas, ctx } = createCanvas(COVER_ART_TEX_W, COVER_ART_TEX_H)
+    drawBookImageFullBleed(ctx, page.imageKey, COVER_ART_TEX_W, COVER_ART_TEX_H)
+    return canvas
+  }
+
   const { canvas, ctx } = createCanvas(COVER_TEX_W, COVER_TEX_H)
+
   drawLeatherBase(ctx, COVER_TEX_W, COVER_TEX_H, 'exterior')
 
   const inset = bookVarPx('--book-cover-panel-inset', 36)
@@ -167,7 +177,13 @@ export function composeCoverInteriorCanvas(): HTMLCanvasElement {
   return canvas
 }
 
-export function composeBackCoverExteriorCanvas(): HTMLCanvasElement {
+export function composeBackCoverExteriorCanvas(page?: BookCoverPage): HTMLCanvasElement {
+  if (page?.fullBleed && page.imageKey) {
+    const { canvas, ctx } = createCanvas(COVER_ART_TEX_W, COVER_ART_TEX_H)
+    drawBookImageFullBleed(ctx, page.imageKey, COVER_ART_TEX_W, COVER_ART_TEX_H)
+    return canvas
+  }
+
   const { canvas, ctx } = createCanvas(COVER_TEX_W, COVER_TEX_H)
   drawLeatherBase(ctx, COVER_TEX_W, COVER_TEX_H, 'exterior')
   drawBeveledFrame(ctx, COVER_TEX_W, COVER_TEX_H, 40)

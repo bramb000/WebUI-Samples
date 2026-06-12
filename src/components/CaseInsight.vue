@@ -48,6 +48,16 @@ const wrapStyle = computed(() => ({
   '--insight-accent': frameAccent.value,
   '--case-insight-surface-fill': surfaceFill.value,
 }))
+
+/** Metrics like 5, +25%, ~90% stay centred; prose stats align left. */
+const isNumericStat = computed(() => {
+  const { stat } = props
+  if (stat == null || stat === '') return false
+  if (typeof stat === 'number') return true
+  const s = String(stat).trim()
+  if (/\b[a-zA-Z]{4,}\b/.test(s)) return false
+  return /^[+\-~$]?[\d]/.test(s)
+})
 </script>
 
 <template>
@@ -60,9 +70,16 @@ const wrapStyle = computed(() => ({
   >
     <div class="insight-wrap" :style="wrapStyle">
       <div class="insight-content">
-        <div v-if="stat || statLabel" class="insight-stat-block">
+        <div
+          v-if="stat || statLabel"
+          class="insight-stat-block"
+          :class="{ 'insight-stat-block--numeric': isNumericStat }"
+        >
           <div class="insight-stat">
-            <span class="insight-stat-value">{{ stat }}</span>
+            <span
+              class="insight-stat-value"
+              :class="{ 'insight-stat-value--numeric': isNumericStat }"
+            >{{ stat }}</span>
           </div>
           <div v-if="statLabel" class="insight-stat-label">
             <span class="stat-label-text">{{ statLabel }}</span>
@@ -146,27 +163,50 @@ const wrapStyle = computed(() => ({
 .insight-stat-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  align-items: stretch;
+  gap: 2px;
   flex: 0 0 auto;
 }
 
+.insight-stat-block--numeric {
+  align-items: center;
+}
+
 .insight-stat {
-  padding: 8px 16px;
+  padding: 4px 16px 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
+.insight-stat-block--numeric .insight-stat {
+  justify-content: center;
+}
+
+.insight-stat-label {
+  width: 100%;
+  padding: 0 16px;
+  text-align: left;
+}
+
 .insight-stat-value {
+  display: block;
+  width: 100%;
   font-family: var(--font-sans);
   font-size: var(--text-heading-accent);
   font-weight: 800;
   color: color-mix(in srgb, var(--insight-accent) 38%, var(--case-insight-on-fill) 62%);
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: 1.15;
+  text-align: left;
+  text-wrap: balance;
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.55);
+}
+
+.insight-stat-value--numeric {
+  text-align: center;
+  width: auto;
 }
 
 .stat-label-text {
@@ -175,8 +215,8 @@ const wrapStyle = computed(() => ({
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  line-height: 1.38;
-  text-align: center;
+  line-height: 1.15;
+  text-align: left;
   max-width: 42rem;
   text-wrap: balance;
   color: color-mix(in srgb, var(--case-insight-on-fill-muted) 82%, var(--insight-accent) 18%);

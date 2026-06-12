@@ -7,14 +7,14 @@ import { rosterCardImage } from '../assets/images/roster-cards/rosterCardImages'
 const featuredCaseStudies = [
   {
     id: 'guild',
-    title: 'Guild of Guardians — Retention & revenue',
+    title: 'Repairing stickiness to increase revenue by 50%',
     description: 'Data-driven UX on a live mobile RPG: +25% D7 retention, +12% D7 LTV.',
     route: '/work/guild-of-guardians',
     image: rosterCardImage('guild'),
   },
   {
     id: 'rocksmith',
-    title: 'Rocksmith+ — Multi-platform UX',
+    title: 'Accessible guitar lessons for 1M+ learners',
     description: 'One scalable UI system across five platforms for a music learning game.',
     route: '/work/rocksmith',
     image: rosterCardImage('rocksmith'),
@@ -32,6 +32,13 @@ const projects = [
     title: 'Login Micro-Interaction',
     description: 'A playful login screen featuring a Lottie animated avatar that tracks your input.',
     route: '/login-interaction-1',
+    category: 'Web Design'
+  },
+  {
+    id: 'art-book',
+    title: 'Bringing art and stories to life',
+    description: 'A Three.js hardcover storybook — Tales of Hedgehog and Fox with click-to-turn navigation.',
+    route: '/work/art-book',
     category: 'Web Design'
   },
   {
@@ -68,6 +75,13 @@ const projects = [
     description: 'Real-time chat, voice rooms, shared world, and layered sprite avatars in a tactile pixel UI.',
     route: '/work/cozy-corner',
     category: 'Web Design'
+  },
+  {
+    id: 'online-dice-simulator',
+    title: 'Solo vibe coding a 600 MAU webapp',
+    description: 'Mobile-first touch controls, 3D physics simulation (Rapier3D), and customization features yielding 1.5k MAU.',
+    route: '/work/online-dice-simulator',
+    category: 'Game Design'
   },
   {
     id: 'node-graph',

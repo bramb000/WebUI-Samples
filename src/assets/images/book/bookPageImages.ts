@@ -1,4 +1,7 @@
 import type { BookImageKey } from '../../../constants/alchemistBookData'
+import {
+  ALL_TALES_IMAGE_SRC_ENTRIES,
+} from './talesBookPageImages'
 
 export type { BookImageKey }
 
@@ -14,7 +17,7 @@ const BASENAME_TO_KEY: Record<string, BookImageKey> = {
 }
 
 const imageModules = import.meta.glob<{ default: string }>(
-  './*.{png,jpg,jpeg,webp}',
+  ['./**/*.{png,jpg,jpeg,webp}', './*.{png,jpg,jpeg,webp}'],
   { eager: false },
 )
 
@@ -31,10 +34,9 @@ const ALL_BOOK_IMAGE_KEYS: BookImageKey[] = [
 export const BOOK_PRELOAD_PRIORITY: BookImageKey[] = ['cover', 'understand']
 
 const cache = new Map<BookImageKey, HTMLImageElement>()
-const preloadPromises = new Map<string, Promise<void>>()
 let remainingIdleScheduled = false
 
-const PLACEHOLDER: Record<BookImageKey, { a: string, b: string }> = {
+const PLACEHOLDER: Partial<Record<BookImageKey, { a: string, b: string }>> = {
   cover: { a: '#2a2838', b: '#4a3f5c' },
   understand: { a: '#1e3a4a', b: '#3d6b7a' },
   analyze: { a: '#2e2a1a', b: '#5c4f2e' },
@@ -45,7 +47,17 @@ const PLACEHOLDER: Record<BookImageKey, { a: string, b: string }> = {
 
 function basenameFromGlobPath(path: string): string {
   const file = path.replace(/^\.\//, '')
-  return file.replace(/\.[^.]+$/, '')
+  const name = file.split('/').pop() ?? file
+  return name.replace(/\.[^.]+$/, '')
+}
+
+function resolveBookImageKey(base: string): BookImageKey | undefined {
+  const mapped = BASENAME_TO_KEY[base]
+  if (mapped)
+    return mapped
+  if (base.startsWith('tale-'))
+    return base as BookImageKey
+  return undefined
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -73,7 +85,7 @@ function pickBestLoaderPerKey(
 
   for (const [path, loader] of entries) {
     const base = basenameFromGlobPath(path)
-    const key = BASENAME_TO_KEY[base]
+    const key = resolveBookImageKey(base)
     if (!key)
       continue
     const ext = path.slice(path.lastIndexOf('.')).toLowerCase()
@@ -106,35 +118,52 @@ async function loadKeys(keys: BookImageKey[]): Promise<void> {
       }
     }),
   )
+
+  await Promise.all(
+    ALL_TALES_IMAGE_SRC_ENTRIES.map(async ([key, src]) => {
+      if (!want.has(key) || cache.has(key))
+        return
+      try {
+        const img = await loadImage(src)
+        cache.set(key, img)
+      }
+      catch (err) {
+        console.warn(`[book] Failed to load tale image for "${key}":`, err)
+      }
+    }),
+  )
 }
 
 /** Preload book images (+ fonts). Defaults to priority keys only when `keys` omitted. */
 export function preloadBookPageImages(options?: { keys?: BookImageKey[] }): Promise<void> {
   const keys = options?.keys ?? BOOK_PRELOAD_PRIORITY
-  const cacheKey = keys.slice().sort().join(',')
-  const existing = preloadPromises.get(cacheKey)
-  if (existing)
-    return existing
+  const missing = keys.filter(k => !cache.has(k))
+  if (missing.length === 0)
+    return Promise.resolve()
 
-  const promise = (async () => {
+  return (async () => {
     await document.fonts.ready
     await document.fonts.load('400 24px Caudex')
-    await loadKeys(keys)
+    await loadKeys(missing)
   })()
+}
 
-  preloadPromises.set(cacheKey, promise)
-  return promise
+export function isBookImageCached(key: BookImageKey): boolean {
+  const img = cache.get(key)
+  return Boolean(img?.complete && img.naturalWidth > 0)
 }
 
 /** Idle-load remaining spreads after first paint. */
-export function schedulePreloadRemainingBookPageImages(): void {
+export function schedulePreloadRemainingBookPageImages(
+  priority: BookImageKey[] = BOOK_PRELOAD_PRIORITY,
+  allKeys?: BookImageKey[],
+): void {
   if (remainingIdleScheduled)
     return
   remainingIdleScheduled = true
 
-  const rest = ALL_BOOK_IMAGE_KEYS.filter(
-    k => !BOOK_PRELOAD_PRIORITY.includes(k),
-  )
+  const pool = allKeys ?? ALL_BOOK_IMAGE_KEYS
+  const rest = pool.filter(k => !priority.includes(k))
   const run = () => {
     void preloadBookPageImages({ keys: rest })
   }
@@ -148,7 +177,6 @@ export function schedulePreloadRemainingBookPageImages(): void {
 /** Clear cache so remount picks up new files (e.g. after hot reload). */
 export function clearBookPageImageCache() {
   cache.clear()
-  preloadPromises.clear()
   remainingIdleScheduled = false
 }
 
@@ -158,7 +186,7 @@ function drawPlaceholder(
   w: number,
   h: number,
 ) {
-  const { a, b } = PLACEHOLDER[key]
+  const { a, b } = PLACEHOLDER[key] ?? { a: '#2a2838', b: '#4a3f5c' }
   const grad = ctx.createLinearGradient(0, 0, w, h)
   grad.addColorStop(0, a)
   grad.addColorStop(1, b)

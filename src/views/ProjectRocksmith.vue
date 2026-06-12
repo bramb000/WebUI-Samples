@@ -5,15 +5,14 @@ import CaseImage from '../components/CaseImage.vue';
 import CaseLazyImage from '../components/CaseLazyImage.vue';
 import { rocksmithLazyMedia } from '../assets/case-studies/rocksmithLazyMedia';
 import VideoEmbed from '../components/VideoEmbed.vue';
-import CaseMetric from '../components/CaseMetric.vue';
+import CaseStudySummary from '../components/case-study/CaseStudySummary.vue';
+import { rocksmithSummary } from '../constants/caseStudySummaries/rocksmithSummary';
 import CaseInsight from '../components/CaseInsight.vue';
 import CaseTestimonialCard from '../components/CaseTestimonialCard.vue';
 import TableOfContents from '../components/TableOfContents.vue';
 import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
 
 // Rocksmith Assets
-import traditionalRocksmith from '../assets/images/rocksmith/executive-summary/000_traditional-rocksmith.webp';
-import rocksmithMobile from '../assets/images/rocksmith/executive-summary/001_rocksmith-mobile.webp';
 import challengeGraphic from '../assets/images/rocksmith/context/002_challenge-2.png';
 import outcomeGraphic from '../assets/images/rocksmith/context/003_outcome-2.png';
 import outcomeAward from '../assets/images/rocksmith/context/004_outcome-1-2.png';
@@ -62,8 +61,8 @@ useCaseStudySketchPanels(caseStudyRoot);
       <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
     <!-- ─── HERO ─── -->
     <ProjectHero
-      title="Making guitar learning accessible to 1 million users"
-      description="Releasing a new learning game on 5 platforms with a single, scalable UI system."
+      title="Accessible guitar lessons for 1M+ learners"
+      description="Releasing a new learning game on 5 unique platforms with 1 design system. Unifying interactions and UI with technical cohesion and a strong design philosophy."
       role="UX Lead for Mobile & Multi-platform Interactions"
       timeline="~2 Years"
       client="Ubisoft"
@@ -74,33 +73,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </template>
     </ProjectHero>
 
-    <!-- ─── EXECUTIVE SUMMARY ─── -->
-    <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel">
-      <h2 class="type-case-section-accent">Executive Summary</h2>
-      <div class="case-study-panel__metric-grid">
-        <CaseMetric value="5" label="Platforms" />
-        <CaseMetric value="1" label="UI System" />
-      </div>
-      <div class="case-study-panel__body type-case-body-lg">
-        <div>
-          <h4 class="type-case-kicker mb-2">01. The Problem</h4>
-          <p><strong>Fragmentation:</strong> Rocksmith+ faced a massive scaling challenge: launching a PC-first MVP on Mobile and Console simultaneously. Without a unified framework, the team faced alienating users whose context would switch based on a device and burdening triple the maintenance cost for maintaining all the platforms.</p>
-        </div>
-        <div>
-          <h4 class="type-case-kicker mb-2">02. The Solution</h4>
-          <p><strong>Building a responsive UI system:</strong> I architected a technical UI system in the Snowdrop engine that scaled responsive UI across different PC monitors, TVs, tablets, and mobiles. This <strong>ensured visual parity</strong> across devices ranging from 4:3 iPads to 21:9 Ultra-wide monitors without bespoke adjustments.</p>
-          <p class="mt-4"><strong>Unified Input Philosophy:</strong> Mapped divergent inputs (Keyboard, Gamepad, Touch) to singular behavioral outcomes, <strong>reducing cognitive load</strong> for users switching between platforms.</p>
-          <p class="mt-4"><strong>Driving Global Collaboration:</strong> Orchestrated design collaboration between India, Japan, and the US <strong>to share user insights and create a holistic understanding of user needs across all platforms.</strong></p>
-        </div>
-      </div>
-      <!-- Before/After context -->
-      <div class="space-y-4">
-        <p class="type-case-body">This was the legacy Rocksmith experience — on a big screen with lots of space, with no choice except an expensive desktop or a game console.</p>
-        <CaseImage :src="traditionalRocksmith" alt="Traditional Rocksmith experience" caption="The traditional Rocksmith experience was always on a big screen" imgClass="w-full h-auto rounded-xl" />
-        <p class="type-case-body">Rocksmith+ gave users the option to learn guitar anywhere they wanted, on any device they wanted with 1 subscription. This unlocked a whole new segment of millions of users.</p>
-        <CaseImage :src="rocksmithMobile" alt="New Rocksmith+ mobile experience" caption="The new Rocksmith+ experience" imgClass="w-full h-auto rounded-xl" />
-      </div>
-    </section>
+    <CaseStudySummary :summary="rocksmithSummary" />
 
     <!-- ─── CONTEXT ─── -->
     <section class="space-y-8">
@@ -207,7 +180,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           I first began with working on a core responsive UI that would offer the base experience on all devices. It involved not only designing and validating layouts in Figma, but also working closely with UI engineers to build appropriate tools:
         </p>
-        <ol class="list-decimal pl-5 space-y-2 type-case-body">
+        <ol class="list-decimal pl-5 space-y-2 type-body">
           <li>UI component anchoring and scaling so that UI elements know exactly where to stay on the hundreds of devices (TVs, monitors, tablets, and phones of up to 8 standard aspect ratio configurations)</li>
           <li>Aspect ratio based scaling rules — percentage based scaling to maintain consistency without too many breakpoints</li>
           <li>Aspect ratio break point table for bespoke rules for brackets of devices</li>

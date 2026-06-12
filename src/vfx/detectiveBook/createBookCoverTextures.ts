@@ -13,6 +13,7 @@ function canvasToTexture(
   renderer: THREE.WebGLRenderer,
 ): THREE.CanvasTexture {
   const texture = new THREE.CanvasTexture(canvas)
+  texture.colorSpace = THREE.SRGBColorSpace
   texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
   texture.flipY = true
   texture.needsUpdate = true
@@ -42,10 +43,11 @@ export type BookCoverTextures = {
 export function createBookCoverTextures(
   coverPage: BookCoverPage,
   renderer: THREE.WebGLRenderer,
+  backCoverPage?: BookCoverPage,
 ): BookCoverTextures {
   const frontExterior = canvasToTexture(composeFrontCoverExteriorCanvas(coverPage), renderer)
   const frontInterior = canvasToTexture(composeCoverInteriorCanvas(), renderer)
-  const backExterior = canvasToTexture(composeBackCoverExteriorCanvas(), renderer)
+  const backExterior = canvasToTexture(composeBackCoverExteriorCanvas(backCoverPage), renderer)
   const backInterior = canvasToTexture(composeCoverInteriorCanvas(), renderer)
   const spineOuter = canvasToTexture(
     composeSpineCanvas(coverPage.header ?? ''),

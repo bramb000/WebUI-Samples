@@ -37,3 +37,9 @@ export const BOOK_RENDER_ORDER = {
 } as const
 
 export const COVER_FULLY_OPEN_THRESHOLD = 0.96
+
+/** Turn progress (0–1) at which a leaf moves from the right stack to the left stack. */
+export const PAGE_STACK_FLIP_TURN = 0.5
+
+/** Push the open front board behind the page stack so it frames the left side without covering right pages. */
+export const FRONT_COVER_OPEN_Z_OFFSET = -32

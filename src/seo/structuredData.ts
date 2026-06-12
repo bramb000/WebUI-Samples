@@ -30,13 +30,13 @@ export const creativeWorksGraph = {
   '@graph': [
     {
       '@type': 'CreativeWork',
-      name: 'Guild of Guardians — Retention & Revenue Case Study',
+      name: 'Repairing stickiness to increase revenue by 50%',
       url: absoluteUrl('/work/guild-of-guardians'),
       description: 'Data-driven UX on a live mobile RPG: +25% D7 retention, +12% D7 LTV.',
     },
     {
       '@type': 'CreativeWork',
-      name: 'Rocksmith+ — Multi-Platform Game UX',
+      name: 'Accessible guitar lessons for 1M+ learners',
       url: absoluteUrl('/work/rocksmith'),
       description: 'UX lead for a music learning game across five platforms with unified UI.',
     },

@@ -31,6 +31,7 @@ function drawLeftPage(
   page: BookPageLeft,
   parchment: HTMLCanvasElement,
 ) {
+  ctx.drawImage(parchment, 0, 0, CANVAS_W, CANVAS_H)
   drawMaskedFullBleedImage(ctx, parchment, page.imageKey, CANVAS_W, CANVAS_H)
 }
 
