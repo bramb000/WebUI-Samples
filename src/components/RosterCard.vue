@@ -69,8 +69,9 @@ const isThumbVideo = computed(
     role="option"
     :aria-selected="selected"
   >
-    <div
-      class="inner-card"
+    <div class="card-motion">
+      <div
+        class="inner-card"
       :class="{
         'inner-card--case-study': variant === 'case-study',
         'inner-card--case-study-solo': variant === 'case-study' && !clientName,
@@ -143,6 +144,7 @@ const isThumbVideo = computed(
         </span>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -173,8 +175,7 @@ const isThumbVideo = computed(
 }
 
 .inner-card {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 10;
   width: 100%;
   height: 100%;
@@ -394,9 +395,16 @@ const isThumbVideo = computed(
   margin-block: 0;
 }
 
+/* Stable hit target — scale/sway runs on inner layers only */
+.card-motion {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+}
+
 /* Display strip — stable hit target; glow only, no scale/sway loop */
-.thumbnail--calm-hover:hover:not(.selected):not(.pressed),
-.thumbnail--calm-hover:not(:hover):not(.selected):not(.pressed) {
+.thumbnail--calm-hover:hover:not(.selected):not(.pressed) .card-motion,
+.thumbnail--calm-hover:not(:hover):not(.selected):not(.pressed) .card-motion {
   animation: none;
   transform: none;
 }
@@ -411,15 +419,15 @@ const isThumbVideo = computed(
   z-index: auto;
 }
 
-.thumbnail--calm-hover.pressed {
+.thumbnail--calm-hover.pressed .card-motion {
   transform: none;
 }
 
-.thumbnail:hover:not(.selected):not(.pressed) {
+.thumbnail:hover:not(.selected):not(.pressed) .card-motion {
   animation: crunchAndPop 0.65s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
 }
 
-.thumbnail:not(:hover):not(.selected):not(.pressed) {
+.thumbnail:not(:hover):not(.selected):not(.pressed) .card-motion {
   animation: settleBack var(--roster-card-settle-duration) ease-out forwards;
 }
 
@@ -451,6 +459,11 @@ const isThumbVideo = computed(
     0 1px 0 color-mix(in srgb, white 55%, transparent) inset,
     0 0 12px color-mix(in srgb, var(--roster-graphite-deep) 14%, transparent),
     0 12px 26px rgba(26, 24, 20, 0.14);
+}
+
+.thumbnail.selected .card-motion {
+  animation: none;
+  transform: scale(1.05);
 }
 
 .thumbnail.selected:hover .inner-card {
@@ -494,7 +507,7 @@ const isThumbVideo = computed(
   text-shadow: 0 1px 6px color-mix(in srgb, var(--roster-card-surface-deep) 65%, transparent);
 }
 
-.thumbnail.pressed {
+.thumbnail.pressed .card-motion {
   animation: none;
   transform: scale(0.85);
 }
@@ -502,7 +515,7 @@ const isThumbVideo = computed(
   filter: url(#paper-crumple);
 }
 
-.thumbnail.selected.pressed {
+.thumbnail.selected.pressed .card-motion {
   transform: scale(1.05);
 }
 
@@ -512,8 +525,6 @@ const isThumbVideo = computed(
 
 .thumbnail.selected {
   z-index: 50;
-  animation: none;
-  transform: scale(1.05);
 }
 
 .thumbnail:hover,
@@ -528,8 +539,8 @@ const isThumbVideo = computed(
 }
 
 @keyframes settleBack {
-  0% { transform: scale(1.1); z-index: 60; }
-  100% { transform: scale(1); z-index: 1; }
+  0% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 @keyframes cardSway {
