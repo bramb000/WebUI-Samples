@@ -4,6 +4,8 @@
  */
 import rocksmithWebm from './home-work-rocksmith.webm'
 import rocksmithPoster from './home-work-rocksmith.webp'
+import guildWebm from './home-work-guild.webm'
+import guildPoster from './home-work-guild.webp'
 
 export type HomeWorkCardArt = {
   /** Looping WebM */
@@ -14,12 +16,12 @@ export type HomeWorkCardArt = {
   /** Skip recessed panel / opaque fill so alpha WebM shows through */
   transparentVisual?: boolean
   /** Soft edge blend when video bg is matched to --color-surface */
-  featherVisualEdges?: boolean
+  featherVisualEdges?: boolean | 'strong'
 }
 
 export const HOME_WORK_CARD_ART = {
   rocksmith: { video: rocksmithWebm, poster: rocksmithPoster, featherVisualEdges: true },
-  guild: { visualPlaceholder: true },
+  guild: { video: guildWebm, poster: guildPoster },
 } as const satisfies Record<string, HomeWorkCardArt>
 
 export type HomeWorkCardArtKey = keyof typeof HOME_WORK_CARD_ART

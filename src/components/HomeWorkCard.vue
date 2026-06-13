@@ -13,7 +13,7 @@ interface Props {
   visualPlaceholder?: boolean
   transparentVisual?: boolean
   /** Soft edge blend when video bg is matched to --color-surface */
-  featherVisualEdges?: boolean
+  featherVisualEdges?: boolean | 'strong'
 }
 
 const props = defineProps<Props>()
@@ -50,7 +50,7 @@ const hasVideo = computed(
       <video
         v-if="hasVideo"
         class="home-work-card__media"
-        :class="{ 'home-work-card__media--feathered': featherVisualEdges }"
+        :class="{ 'home-work-card__media--feathered': !!featherVisualEdges, 'home-work-card__media--feathered-strong': featherVisualEdges === 'strong' }"
         :src="video"
         :poster="poster"
         autoplay
@@ -64,7 +64,7 @@ const hasVideo = computed(
       <img
         v-else-if="poster"
         class="home-work-card__media"
-        :class="{ 'home-work-card__media--feathered': featherVisualEdges }"
+        :class="{ 'home-work-card__media--feathered': !!featherVisualEdges, 'home-work-card__media--feathered-strong': featherVisualEdges === 'strong' }"
         :src="poster"
         :alt="`${title} preview`"
         loading="lazy"
@@ -167,6 +167,12 @@ const hasVideo = computed(
       transparent
     );
   mask-composite: intersect;
+}
+
+.home-work-card__media--feathered-strong {
+  --feather-inset: clamp(14px, 4.5%, 28px);
+  filter: blur(0.65px);
+  transform: scale(1.014);
 }
 
 .home-work-card__visual--transparent,

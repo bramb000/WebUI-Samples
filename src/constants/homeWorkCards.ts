@@ -13,7 +13,7 @@ export type HomeWorkCardData = {
   video?: string
   visualPlaceholder?: boolean
   transparentVisual?: boolean
-  featherVisualEdges?: boolean
+  featherVisualEdges?: boolean | 'strong'
 }
 
 export const homeWorkCards: HomeWorkCardData[] = [
