@@ -33,6 +33,11 @@ const CARD_MIN_AREA = 8000
 /** Surgical card-corner / rim cleanup after gutter pass. */
 const BORDER_MAX_DARK = 100
 const BORDER_PASSES = 12
+/** Inter-card gutters — enclosed blacks edge flood cannot reach. */
+const GAP_MAX_DARK = 140
+/** Soft blend rim pixels toward cream to hide 1px seams after VP9. */
+const RIM_FEATHER_PASSES = 4
+const RIM_FEATHER_BLEND = 0.88
 
 function probeDuration(file) {
   const out = spawnSync('ffprobe', [
@@ -205,6 +210,73 @@ function paintCream(data, px) {
   data[i + 2] = CREAM[2]
 }
 
+function blendTowardCream(data, px, amount = RIM_FEATHER_BLEND) {
+  const i = px * 3
+  const keep = 1 - amount
+  data[i] = Math.round(data[i] * keep + CREAM[0] * amount)
+  data[i + 1] = Math.round(data[i + 1] * keep + CREAM[1] * amount)
+  data[i + 2] = Math.round(data[i + 2] * keep + CREAM[2] * amount)
+}
+
+/** Key enclosed inter-card gutters (not reachable from frame edges). */
+function fillGapZones(data, width, height, gaps, phone) {
+  for (const gap of gaps) {
+    for (let y = gap.minY; y <= gap.maxY; y++) {
+      for (let x = gap.minX; x <= gap.maxX; x++) {
+        const px = y * width + x
+        if (phone[px] || isCreamish(data, px))
+          continue
+        if (neighbors8(px, width, height).some(n => isColorful(data, n)))
+          continue
+        const max = Math.max(data[px * 3], data[px * 3 + 1], data[px * 3 + 2])
+        if (max <= GAP_MAX_DARK)
+          paintCream(data, px)
+      }
+    }
+  }
+}
+
+/** Feather dark pixels touching cream — card rims and gap seams only. */
+function featherCreamSeams(data, width, height, boxes, gaps, gutter, phone) {
+  const isCreamNeighbor = (n, cleared) =>
+    isCreamRegion(data, n, gutter) || cleared[n] || isCreamish(data, n)
+
+  for (let pass = 0; pass < RIM_FEATHER_PASSES; pass++) {
+    const cleared = new Uint8Array(width * height)
+    let changed = false
+
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const inGapZone = inGap(x, y, gaps)
+        const inCardPanel = inCard(x, y, boxes) && !inGapZone
+        if (!inGapZone && !inCardPanel)
+          continue
+
+        const px = y * width + x
+        if (phone[px] || isCreamish(data, px))
+          continue
+
+        if (!neighbors8(px, width, height).some(n => isCreamNeighbor(n, cleared)))
+          continue
+
+        const max = Math.max(data[px * 3], data[px * 3 + 1], data[px * 3 + 2])
+        if (max > GAP_MAX_DARK)
+          continue
+
+        if (neighbors8(px, width, height).some(n => isColorful(data, n)))
+          continue
+
+        blendTowardCream(data, px)
+        cleared[px] = 1
+        changed = true
+      }
+    }
+
+    if (!changed)
+      break
+  }
+}
+
 function findCardBboxes(data, width, height) {
   const seen = new Uint8Array(width * height)
   const boxes = []
@@ -358,7 +430,10 @@ function replaceEdgeConnectedBlack(data, width, height) {
       break
   }
 
+  const phone = buildPhoneContentMask(data, width, height)
+  fillGapZones(data, width, height, gaps, phone)
   removeCardBorderFringe(data, width, height, boxes, gaps, gutter)
+  featherCreamSeams(data, width, height, boxes, gaps, gutter, phone)
 }
 
 async function processFrame(buffer) {
