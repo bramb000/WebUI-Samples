@@ -1414,6 +1414,16 @@ main.work-stage {
   box-sizing: border-box;
 }
 
+/* Mobile: roster uses document scroll (see ProjectSelect mobile overrides) */
+@media (max-width: 767px) {
+  main.work-stage {
+    height: auto;
+    min-height: calc(100vh - var(--nav-height));
+    overflow: visible;
+    flex-shrink: 1;
+  }
+}
+
 /* ── Navigation (flat bar) ── */
 .dl-nav-ledge-bg {
   background: var(--color-bg);

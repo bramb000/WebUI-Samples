@@ -58,6 +58,8 @@ export type CaseStudySummaryData = {
     afterInsight?: CaseStudySummaryFlowInsight
   }
   flows?: CaseStudySummaryFlow[]
+  /** Set to `null` to hide the flows section heading */
+  flowsSectionTitle?: string | null
   comparisons?: CaseStudySummaryBeforeAfter[]
   processBoard?: CaseStudySummaryProcessItem[]
 }

@@ -223,6 +223,10 @@ const isNumericStat = computed(() => {
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
 }
 
+.insight-stat-block--numeric .stat-label-text {
+  text-align: center;
+}
+
 .insight-body {
   font-family: var(--font-sans);
   font-size: var(--text-body);

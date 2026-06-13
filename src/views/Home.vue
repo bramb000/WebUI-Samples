@@ -4,120 +4,121 @@ import IntroHero from '../components/IntroHero.vue'
 import TestimonialsLettersStage from '../components/testimonials/TestimonialsLettersStage.vue'
 import HeroBackgroundTexture from '../components/HeroBackgroundTexture.vue'
 import PrimaryButton from '../components/PrimaryButton.vue'
-import RosterCard from '../components/RosterCard.vue'
-import { homeAchievementCardArt } from '../assets/images/home-achievement-cards/homeAchievementCardImages'
-import { useRosterCardPaint } from '../composables/useRosterCardPaint'
-import { rosterCardPaletteFromTokens } from '../constants/rosterCardPalette'
-import type { RosterDiscipline } from '../constants/rosterDiscipline'
-import type { RosterCardRoster } from '../components/RosterCard.vue'
+import HomeWorkCard from '../components/HomeWorkCard.vue'
+import { homeWorkCards } from '../constants/homeWorkCards'
+// Achievements — restore when needed
+// import RosterCard from '../components/RosterCard.vue'
+// import { homeAchievementCardArt } from '../assets/images/home-achievement-cards/homeAchievementCardImages'
+// import { useRosterCardPaint } from '../composables/useRosterCardPaint'
+// import { rosterCardPaletteFromTokens } from '../constants/rosterCardPalette'
+// import type { RosterDiscipline } from '../constants/rosterDiscipline'
+// import type { RosterCardRoster } from '../components/RosterCard.vue'
 
 /** Matches NavBar fixed height in App layout */
 const NAV_OFFSET_PX = 72
 
-type AchievementCard = {
-  id: string
-  title: string
-  thumb: string
-  thumbPoster?: string
-  roster: RosterCardRoster
-}
+const workCardsEntered = ref(false)
 
-function achievementRoster(label: string): RosterCardRoster {
-  const { color1, color2 } = rosterCardPaletteFromTokens()
-  return {
-    points: '2,4 98,2 100,96 96,100 4,98 0,12',
-    color1,
-    color2,
-    label,
-  }
-}
-
-/** Must match `--home-achievement-float-duration` in scoped CSS */
-const ACHIEVEMENT_FLOAT_DURATION_S = 5.2
-const ACHIEVEMENT_JUMP_STAGGER_MS = 90
-/**
- * Phase offset per card as a fraction of one float period (sine cycle).
- * 0.25 ≈ 90° between neighbors — one full ripple across four cards.
- * Lower = subtler, more in-sync; higher = wider spatial wave.
- */
-const ACHIEVEMENT_FLOAT_PHASE_STEP = 0.2
-
-function achievementCardMotionStyle(index: number) {
-  const jumpStaggerMs = index * ACHIEVEMENT_JUMP_STAGGER_MS
-  // Negative delay = start mid-cycle so cards sit at different points on the same sine path
-  const floatPhaseS = -(index * ACHIEVEMENT_FLOAT_DURATION_S * ACHIEVEMENT_FLOAT_PHASE_STEP)
-  return {
-    '--home-card-stagger': `${jumpStaggerMs}ms`,
-    '--home-card-float-phase': `${floatPhaseS}s`,
-  }
-}
-
-const ACHIEVEMENT_DISCIPLINE: RosterDiscipline = 'product-design'
-
-const achievementCards: AchievementCard[] = [
-  {
-    id: 'home-achievement-guild',
-    title: 'Executed roadmaps to increase revenue by 20%+ for product with $5M+ annual revenue',
-    ...homeAchievementCardArt('guild'),
-    roster: achievementRoster('Guild'),
-  },
-  {
-    id: 'home-achievement-ai',
-    title: 'Using agentic AI and mix medium research methods to drive decision worth millions of dollars',
-    ...homeAchievementCardArt('ai'),
-    roster: achievementRoster('AI'),
-  },
-  {
-    id: 'home-achievement-global',
-    title: 'Managed teams in 5+ countries, timezone, and languages to ship globally successful products',
-    ...homeAchievementCardArt('global'),
-    roster: achievementRoster('Global'),
-  },
-]
-const gridRef = ref<HTMLElement | null>(null)
-const achievementsEntered = ref(false)
-const achievementsAnimate = ref(true)
-let rafId = 0
-
-function updateAchievementsMotion() {
-  achievementsAnimate.value = (window.scrollY || 0) <= 1
-}
-
-function onScroll() {
-  if (rafId)
-    return
-  rafId = requestAnimationFrame(() => {
-    rafId = 0
-    updateAchievementsMotion()
-  })
-}
-
-const {
-  plateGrainBakes,
-  rosterPaintMaskUrl,
-  setThumbRef,
-  observeGrid,
-  scheduleRebake,
-} = useRosterCardPaint()
+// ── Achievements (commented out for later) ──────────────────────────────────
+// type AchievementCard = {
+//   id: string
+//   title: string
+//   thumb: string
+//   thumbPoster?: string
+//   roster: RosterCardRoster
+// }
+//
+// function achievementRoster(label: string): RosterCardRoster {
+//   const { color1, color2 } = rosterCardPaletteFromTokens()
+//   return {
+//     points: '2,4 98,2 100,96 96,100 4,98 0,12',
+//     color1,
+//     color2,
+//     label,
+//   }
+// }
+//
+// /** Must match `--home-achievement-float-duration` in scoped CSS */
+// const ACHIEVEMENT_FLOAT_DURATION_S = 5.2
+// const ACHIEVEMENT_JUMP_STAGGER_MS = 90
+// const ACHIEVEMENT_FLOAT_PHASE_STEP = 0.2
+//
+// function achievementCardMotionStyle(index: number) {
+//   const jumpStaggerMs = index * ACHIEVEMENT_JUMP_STAGGER_MS
+//   const floatPhaseS = -(index * ACHIEVEMENT_FLOAT_DURATION_S * ACHIEVEMENT_FLOAT_PHASE_STEP)
+//   return {
+//     '--home-card-stagger': `${jumpStaggerMs}ms`,
+//     '--home-card-float-phase': `${floatPhaseS}s`,
+//   }
+// }
+//
+// const ACHIEVEMENT_DISCIPLINE: RosterDiscipline = 'product-design'
+//
+// const achievementCards: AchievementCard[] = [
+//   {
+//     id: 'home-achievement-guild',
+//     title: 'Executed roadmaps to increase revenue by 20%+ for product with $5M+ annual revenue',
+//     ...homeAchievementCardArt('guild'),
+//     roster: achievementRoster('Guild'),
+//   },
+//   {
+//     id: 'home-achievement-ai',
+//     title: 'Using agentic AI and mix medium research methods to drive decision worth millions of dollars',
+//     ...homeAchievementCardArt('ai'),
+//     roster: achievementRoster('AI'),
+//   },
+//   {
+//     id: 'home-achievement-global',
+//     title: 'Managed teams in 5+ countries, timezone, and languages to ship globally successful products',
+//     ...homeAchievementCardArt('global'),
+//     roster: achievementRoster('Global'),
+//   },
+// ]
+// const gridRef = ref<HTMLElement | null>(null)
+// const achievementsEntered = ref(false)
+// const achievementsAnimate = ref(true)
+// let rafId = 0
+//
+// function updateAchievementsMotion() {
+//   achievementsAnimate.value = (window.scrollY || 0) <= 1
+// }
+//
+// function onScroll() {
+//   if (rafId)
+//     return
+//   rafId = requestAnimationFrame(() => {
+//     rafId = 0
+//     updateAchievementsMotion()
+//   })
+// }
+//
+// const {
+//   plateGrainBakes,
+//   rosterPaintMaskUrl,
+//   setThumbRef,
+//   observeGrid,
+//   scheduleRebake,
+// } = useRosterCardPaint()
 
 onMounted(async () => {
-  observeGrid(gridRef.value)
-  scheduleRebake()
+  // observeGrid(gridRef.value)
+  // scheduleRebake()
   await nextTick()
   requestAnimationFrame(() => {
-    achievementsEntered.value = true
+    workCardsEntered.value = true
+    // achievementsEntered.value = true
   })
 
-  updateAchievementsMotion()
-  window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onScroll, { passive: true })
+  // updateAchievementsMotion()
+  // window.addEventListener('scroll', onScroll, { passive: true })
+  // window.addEventListener('resize', onScroll, { passive: true })
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll)
-  window.removeEventListener('resize', onScroll)
-  if (rafId)
-    cancelAnimationFrame(rafId)
+  // window.removeEventListener('scroll', onScroll)
+  // window.removeEventListener('resize', onScroll)
+  // if (rafId)
+  //   cancelAnimationFrame(rafId)
 })
 </script>
 
@@ -134,6 +135,33 @@ onBeforeUnmount(() => {
       </div>
     </section>
 
+    <section
+      class="home-work"
+      aria-label="Featured work"
+      :class="{ 'home-work--entered': workCardsEntered }"
+    >
+      <div class="home-page__container home-work__inner">
+        <HomeWorkCard
+          v-for="(card, index) in homeWorkCards"
+          :key="card.id"
+          class="home-work__card"
+          :class="{ 'home-work__card--entered': workCardsEntered }"
+          :style="{ '--home-work-card-stagger': `${index * 120}ms` }"
+          :year="card.year"
+          :company="card.company"
+          :title="card.title"
+          :description="card.description"
+          :to="card.to"
+          :poster="card.poster"
+          :video="card.video"
+          :visual-placeholder="card.visualPlaceholder"
+          :transparent-visual="card.transparentVisual"
+          :feather-visual-edges="card.featherVisualEdges"
+        />
+      </div>
+    </section>
+
+    <!-- Achievements — restore when needed
     <section
       class="home-achievements"
       aria-label="Achievements"
@@ -174,6 +202,7 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </section>
+    -->
 
     <section class="home-cta" aria-label="View work">
       <div class="home-page__container home-cta__inner">
@@ -190,7 +219,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .home-page {
   --home-hero-min-height: calc(100vh - var(--home-nav-offset, 72px));
-  --home-achievements-overlap: clamp(72px, 12vh, 140px);
+  --home-work-overlap: clamp(72px, 12vh, 140px);
   --home-padding-inline: clamp(var(--grid-3), 4vw, 3rem);
   position: relative;
   width: 100%;
@@ -239,10 +268,43 @@ onBeforeUnmount(() => {
   flex: 1 1 auto;
 }
 
-/* ── Achievements (overlap + motion) ── */
+/* ── Work cards (overlap hero like achievements) ── */
+.home-work {
+  position: relative;
+  z-index: 2;
+  margin-top: calc(-1 * var(--home-work-overlap));
+  padding-bottom: clamp(8px, 2vw, 24px);
+}
+
+.home-work__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--grid-3), 3vw, var(--grid-4));
+}
+
+.home-work__card {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--home-work-card-stagger, 0ms),
+    transform 0.82s var(--ease-mechanical-spring) var(--home-work-card-stagger, 0ms);
+}
+
+.home-work--entered .home-work__card--entered {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* >16:9 — keep hero + testimonials in a centered reading column (avoids empty ultrawide sweep) */
+@media (min-aspect-ratio: 16/9) {
+  .home-page__container {
+    max-width: min(80rem, 72vw);
+  }
+}
+
+/* ── Achievements (commented out for later) ────────────────────────────────
 .home-achievements {
   --home-achievement-float-duration: 5.2s;
-  /* Fraction of one float period between each card’s phase (0.25 = 90° / full ripple for 4 cards) */
   --home-achievement-wave-phase-step: 0.2;
   --home-achievement-float-amp: 8px;
   --home-achievement-card-width: var(--home-achievement-card-width-mobile);
@@ -252,8 +314,6 @@ onBeforeUnmount(() => {
   padding-bottom: clamp(8px, 2vw, 24px);
   pointer-events: none;
 }
-
-/* Same shell inset as ProjectSelect .dl-shell + #roster-pane on mobile */
 
 .home-achievements__grid {
   width: min(
@@ -265,7 +325,6 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(2, var(--home-achievement-card-width));
   justify-content: center;
   gap: var(--home-achievement-grid-gap);
-  /* Work grid reserves scroll room; home strip does not */
   padding-bottom: clamp(8px, 1.5vw, 16px);
 }
 
@@ -275,20 +334,12 @@ onBeforeUnmount(() => {
   margin-inline: auto;
 }
 
-/* >16:9 — keep hero + testimonials in a centered reading column (avoids empty ultrawide sweep) */
-@media (min-aspect-ratio: 16/9) {
-  .home-page__container {
-    max-width: min(80rem, 72vw);
-  }
-}
-
 @media (min-width: 1025px) {
   .home-achievements {
     --home-achievement-card-width: 232px;
   }
 
   .home-achievements__grid {
-    /* 3 × 232px cards + 2 × 16px gaps + 32px inline padding */
     grid-template-columns: repeat(3, var(--home-achievement-card-width));
     width: min(
       100%,
@@ -303,7 +354,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Achievement cards — static display (no hover, no drop shadow) */
 .home-achievement-card {
   position: relative;
   z-index: 1;
@@ -334,7 +384,6 @@ onBeforeUnmount(() => {
   transition: none;
 }
 
-/* Achievement copy — vertically centred in the name plate */
 .home-achievement-card :deep(.thumbnail-content) {
   justify-content: center;
 }
@@ -364,7 +413,6 @@ onBeforeUnmount(() => {
       calc(0.82s + var(--home-card-float-phase, 0s)) infinite;
 }
 
-/* Scroll away from top — ease back to resting pose instead of snapping. */
 .home-achievements--entered:not(.home-achievements--animate) .home-achievement-card__motion {
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -389,7 +437,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Sine-like bob — phase offsets on each card turn this into a traveling wave */
 @keyframes home-achievement-float {
   0% {
     transform: translateY(0) scale(1);
@@ -428,6 +475,7 @@ onBeforeUnmount(() => {
     transition: none !important;
   }
 }
+──────────────────────────────────────────────────────────────────────────── */
 
 /* ── CTA ── */
 .home-cta {
@@ -441,10 +489,18 @@ onBeforeUnmount(() => {
   justify-content: center;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .home-work__card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (max-width: 767px) {
   .home-page {
     --home-padding-inline: var(--grid-3);
-    --home-achievements-overlap: 0;
+    --home-work-overlap: 0;
   }
 
   .home-hero-stage {
@@ -457,6 +513,21 @@ onBeforeUnmount(() => {
     padding-block: var(--grid-4) var(--grid-6);
   }
 
+  .home-work {
+    margin-top: 0;
+    padding-top: var(--grid-5);
+    padding-bottom: var(--grid-3);
+  }
+
+  .home-cta {
+    padding-block: var(--grid-4) var(--grid-3);
+  }
+
+  .home-cta__inner {
+    padding-inline: var(--home-padding-inline);
+  }
+
+  /* Achievements mobile — restore with achievements section
   .home-achievements {
     margin-top: 0;
     padding-top: var(--grid-5);
@@ -475,17 +546,9 @@ onBeforeUnmount(() => {
     margin-block: 0;
   }
 
-  .home-cta {
-    padding-block: var(--grid-4) var(--grid-3);
-  }
-
-  .home-cta__inner {
-    padding-inline: var(--home-padding-inline);
-  }
-
-  /* Keep the entrance stagger on mobile; skip the infinite float loop (battery + small viewports). */
   .home-achievements--entered.home-achievements--animate .home-achievement-card__motion {
     animation: home-achievement-jump 0.82s var(--ease-mechanical-spring) var(--home-card-stagger, 0ms) forwards;
   }
+  */
 }
 </style>

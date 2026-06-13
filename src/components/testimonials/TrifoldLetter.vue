@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 type Props = {
   quote: string
@@ -31,13 +31,12 @@ const enter = computed(() => easeOutCubic(p.value))
 const viewportScale = ref(1)
 
 function recomputeViewportScale() {
-  // Match the demo: ensure the fully-open 3-panel letter can fit on smaller screens.
   const vw = window.innerWidth
   const vh = window.visualViewport?.height ?? window.innerHeight
+  const compact = props.compact ?? false
 
-  // One panel (folded) is ~240px tall at max; open is ~3× that plus shadow + breathing room.
-  const maxNeededHeight = 720
-  const maxNeededWidth = 520
+  const maxNeededHeight = compact ? 280 : 720
+  const maxNeededWidth = compact ? 280 : 520
   const scaleY = vh / maxNeededHeight
   const scaleX = vw / maxNeededWidth
   viewportScale.value = Math.min(1, scaleX, scaleY)
@@ -47,6 +46,8 @@ onMounted(() => {
   recomputeViewportScale()
   window.addEventListener('resize', recomputeViewportScale, { passive: true })
 })
+
+watch(() => props.compact, recomputeViewportScale)
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', recomputeViewportScale)
@@ -76,6 +77,15 @@ const styleVars = computed(() => {
   // Scene tilt: folded has a slight perspective; open lays flatter.
   const sceneRotX = -20 * (1 - e)
   const sceneRotY = 10 * (1 - e)
+
+  if (compact) {
+    return {
+      '--letter-alpha': String(alpha),
+      '--letter-enter-y': `${(1 - e) * 14}px`,
+      '--letter-rot': `${props.baseRotDeg ?? 0}deg`,
+    } as Record<string, string>
+  }
+
   return {
     '--letter-ax': props.anchorX ?? '50vw',
     '--letter-ay': props.anchorY ?? '50%',
@@ -94,8 +104,25 @@ const styleVars = computed(() => {
 </script>
 
 <template>
-  <article class="trifold-letter" :style="styleVars" aria-label="Testimonial letter">
-    <div class="trifold-letter__paper">
+  <article
+    class="trifold-letter"
+    :class="{ 'trifold-letter--compact': compact }"
+    :style="styleVars"
+    aria-label="Testimonial letter"
+  >
+    <div v-if="compact" class="trifold-letter__flat">
+      <div class="letter-body">
+        <blockquote class="trifold-letter__quote type-body-lg">
+          “{{ quote }}”
+        </blockquote>
+        <footer class="trifold-letter__attribution">
+          <div class="type-case-testimonial-name">{{ name }}</div>
+          <div class="type-case-testimonial-role">{{ role }}</div>
+        </footer>
+      </div>
+    </div>
+
+    <div v-else class="trifold-letter__paper">
       <section class="panel top-panel" aria-hidden="true">
         <div class="face front">
           <div class="text-content">
@@ -260,8 +287,38 @@ const styleVars = computed(() => {
   border-top: 1px solid color-mix(in srgb, var(--paper-on-fill-border) 55%, transparent);
 }
 
+.trifold-letter--compact {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: min(88vw, 320px);
+  max-width: none;
+  height: auto;
+  transform: translateY(var(--letter-enter-y, 0)) rotate(var(--letter-rot, 0deg));
+  z-index: auto;
+}
+
+.trifold-letter__flat {
+  box-sizing: border-box;
+  padding: var(--grid-3);
+  background: var(--paper-surface-fill);
+  border: 1px solid color-mix(in srgb, var(--paper-on-fill-border) 52%, transparent);
+}
+
+.trifold-letter--compact .letter-body {
+  height: auto;
+}
+
+.trifold-letter--compact .trifold-letter__attribution {
+  margin-top: 0;
+}
+
+.trifold-letter--compact .trifold-letter__quote {
+  max-width: none;
+}
+
 @media (max-width: 767px) {
-  .trifold-letter {
+  .trifold-letter:not(.trifold-letter--compact) {
     width: min(78vw, 280px);
     height: min(20vh, 160px);
   }

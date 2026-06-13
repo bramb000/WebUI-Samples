@@ -6,28 +6,39 @@ import TrifoldLetter from './TrifoldLetter.vue'
 /** Scroll-driven reveal runs this much longer than the base tuning. */
 const ANIMATION_LENGTH_SCALE = 1.45
 
-/**
- * Reveal begins when the “Testimonials” header top crosses this viewport line
- * (0.66 — achievements + CTA still in view when reveal begins).
- */
+/** Desktop: reveal begins when header crosses this viewport line. */
 const HEADER_TRIGGER_VP = 0.66
-/** Viewport heights of scroll after trigger to reach full unfold (1). */
-const REVEAL_SCROLL_VP = 0.38 * ANIMATION_LENGTH_SCALE
+/** Mobile: start reveal when the card stack crosses the bottom edge. */
+const MOBILE_STACK_ENTER_VP = 1.0
+const MOBILE_REVEAL_SCROLL_VP = 0.32
 
 const trackRef = ref<HTMLElement | null>(null)
+const stackRef = ref<HTMLElement | null>(null)
 const headerRef = ref<HTMLElement | null>(null)
 const progress = ref(0)
 const isMobileLayout = ref(false)
 let rafId = 0
 let mobileMq: MediaQueryList | null = null
 
+/** Viewport heights of scroll after trigger to reach full unfold (1). */
+const REVEAL_SCROLL_VP = 0.38 * ANIMATION_LENGTH_SCALE
+
 function updateProgress() {
+  const viewportH = window.visualViewport?.height ?? window.innerHeight
+
+  if (isMobileLayout.value && stackRef.value) {
+    const stackTop = stackRef.value.getBoundingClientRect().top
+    const enterLine = viewportH * MOBILE_STACK_ENTER_VP
+    const revealDistance = viewportH * MOBILE_REVEAL_SCROLL_VP
+    progress.value = clamp01((enterLine - stackTop) / revealDistance)
+    return
+  }
+
   const header = headerRef.value
   if (!header) {
     progress.value = 0
     return
   }
-  const viewportH = window.visualViewport?.height ?? window.innerHeight
   const triggerY = viewportH * HEADER_TRIGGER_VP
   const headerTop = header.getBoundingClientRect().top
   const revealDistance = viewportH * REVEAL_SCROLL_VP
@@ -46,6 +57,7 @@ function onScroll() {
 
 function syncMobileLayout() {
   isMobileLayout.value = mobileMq?.matches ?? window.matchMedia('(max-width: 767px)').matches
+  updateProgress()
 }
 
 onMounted(() => {
@@ -55,12 +67,16 @@ onMounted(() => {
   updateProgress()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', onScroll, { passive: true })
+  window.visualViewport?.addEventListener('scroll', onScroll, { passive: true })
+  window.visualViewport?.addEventListener('resize', onScroll, { passive: true })
 })
 
 onBeforeUnmount(() => {
   mobileMq?.removeEventListener('change', syncMobileLayout)
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', onScroll)
+  window.visualViewport?.removeEventListener('scroll', onScroll)
+  window.visualViewport?.removeEventListener('resize', onScroll)
   if (rafId)
     cancelAnimationFrame(rafId)
 })
@@ -91,15 +107,19 @@ function desktopAnchors(): Anchor[] {
 
 function mobileAnchors(): Anchor[] {
   return [
-    { x: '50%', y: '36%', rot: -2.5 },
-    { x: '50%', y: '54%', rot: 2.5 },
-    { x: '50%', y: '72%', rot: -1.5 },
+    { x: '50%', y: '25%', rot: -2.5 },
+    { x: '50%', y: '50%', rot: 2.5 },
+    { x: '50%', y: '75%', rot: -1.5 },
   ]
 }
 
 const anchors = computed(() => (isMobileLayout.value ? mobileAnchors() : desktopAnchors()))
 
 function letterProgress(globalP: number, idx: number) {
+  if (isMobileLayout.value) {
+    const stagger = idx * 0.05
+    return clamp01((globalP - stagger) / 0.65)
+  }
   const stagger = idx * 0.06 * ANIMATION_LENGTH_SCALE
   return clamp01((globalP - stagger) / 0.9)
 }
@@ -115,10 +135,25 @@ function letterProgress(globalP: number, idx: number) {
   >
     <div
       class="letters-stage w-full"
+      :class="{ 'letters-stage--mobile': isMobileLayout }"
     >
       <div class="letters-stage__bg" aria-hidden="true" />
 
-      <div class="letters-stack" aria-hidden="true">
+      <div class="letters-hud pointer-events-none">
+        <h2
+          ref="headerRef"
+          class="type-parchment-ui letters-hud__hint"
+        >
+          Testimonials
+        </h2>
+      </div>
+
+      <div
+        ref="stackRef"
+        class="letters-stack"
+        :class="{ 'letters-stack--mobile': isMobileLayout }"
+        aria-hidden="true"
+      >
         <TrifoldLetter
           v-for="l in letters"
           :key="l.id"
@@ -133,15 +168,6 @@ function letterProgress(globalP: number, idx: number) {
           :enter-from="isMobileLayout ? 'left' : l.idx === 0 ? 'left' : l.idx === 1 ? 'top-right' : 'right'"
           :compact="isMobileLayout"
         />
-      </div>
-
-      <div class="letters-hud pointer-events-none">
-        <h2
-          ref="headerRef"
-          class="type-parchment-ui letters-hud__hint"
-        >
-          Testimonials
-        </h2>
       </div>
     </div>
   </section>
@@ -194,17 +220,35 @@ function letterProgress(globalP: number, idx: number) {
 @media (max-width: 767px) {
   .letters-track--mobile {
     padding-inline: var(--grid-3);
+    padding-bottom: var(--grid-6);
     box-sizing: border-box;
   }
 
-  .letters-stage {
-    min-height: min(78vh, 44rem);
-    padding-block: var(--grid-4) 0;
+  .letters-stage--mobile .letters-hud {
+    position: relative;
+    top: auto;
+    margin-bottom: var(--grid-4);
+    padding-inline: 0;
+    order: -1;
   }
 
-  .letters-hud {
-    top: var(--grid-3);
-    padding-inline: 0;
+  .letters-stage--mobile {
+    min-height: auto;
+    padding-block: var(--grid-4) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .letters-stack--mobile {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--grid-4);
+    width: 100%;
+    padding-bottom: var(--grid-2);
   }
 
   .letters-hud__hint {

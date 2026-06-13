@@ -988,6 +988,8 @@ function onDone(trigger: number) {
 
   .dl-shell {
     padding-inline: 12px;
+    flex: none;
+    min-height: auto;
   }
 
   .dl-grid {

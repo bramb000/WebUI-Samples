@@ -33,6 +33,7 @@ export const rocksmithSummary: CaseStudySummaryData = {
       text: 'Intense research to retain focus on <strong>most important user needs</strong> to keep all teams aligned',
     },
   ],
+  flowsSectionTitle: null,
   flows: [
     {
       phase: 'before',

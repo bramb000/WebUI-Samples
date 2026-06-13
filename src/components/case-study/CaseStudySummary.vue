@@ -81,8 +81,11 @@ defineProps<{
     </div>
 
     <div v-else-if="summary.flows?.length" class="case-study-summary__flows">
-      <h3 class="type-case-kicker-muted case-study-summary__flows-title">
-        User flows
+      <h3
+        v-if="summary.flowsSectionTitle !== null"
+        class="type-case-kicker-muted case-study-summary__flows-title"
+      >
+        {{ summary.flowsSectionTitle ?? 'User flows' }}
       </h3>
       <div class="case-study-summary__flow-layout">
         <div class="case-study-summary__flow-media-row">

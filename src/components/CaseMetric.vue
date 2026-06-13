@@ -203,6 +203,14 @@ const isNumericMetric = computed(() => {
   text-align: left;
 }
 
+.metric-content:not(.metric-content--prose) .metric-label {
+  text-align: center;
+}
+
+.metric-content:not(.metric-content--prose) .metric-label-text {
+  text-align: center;
+}
+
 .metric-label-text {
   font-family: var(--font-sans);
   font-size: var(--text-label-sm);
