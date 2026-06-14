@@ -223,6 +223,10 @@ const isNumericStat = computed(() => {
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
 }
 
+.insight-stat-block--numeric .insight-stat-label {
+  text-align: center;
+}
+
 .insight-stat-block--numeric .stat-label-text {
   text-align: center;
 }
@@ -234,6 +238,7 @@ const isNumericStat = computed(() => {
   color: var(--case-insight-on-fill);
   flex: 0 0 auto;
   min-height: 0;
+  text-align: left;
 }
 
 .insight-body :deep(p),
@@ -242,6 +247,7 @@ const isNumericStat = computed(() => {
 .insight-body :deep(.type-case-body-lg),
 .insight-body :deep(.type-case-caption) {
   color: var(--case-insight-on-fill-muted);
+  text-align: left;
 }
 
 .insight-body :deep(strong) {

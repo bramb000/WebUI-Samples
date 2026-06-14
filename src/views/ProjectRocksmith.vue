@@ -8,6 +8,8 @@ import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseStudySummary from '../components/case-study/CaseStudySummary.vue';
 import { rocksmithSummary } from '../constants/caseStudySummaries/rocksmithSummary';
 import CaseInsight from '../components/CaseInsight.vue';
+import CaseBeforeAfter from '../components/CaseBeforeAfter.vue';
+import CaseImageFlow from '../components/CaseImageFlow.vue';
 import CaseTestimonialCard from '../components/CaseTestimonialCard.vue';
 import TableOfContents from '../components/TableOfContents.vue';
 import { useCaseStudySketchPanels } from '../composables/useCaseStudySketchPanels';
@@ -43,6 +45,10 @@ import guitarController from '../assets/images/rocksmith/solution/033_guitar-con
 import scrollAmbiguity from '../assets/images/rocksmith/solution/035_r-scroll-ambiguity.webp';
 import controlSchemeConsole from '../assets/images/rocksmith/solution/038_rocksmith-screenshot-2025-12-24-07-50-27-43.webp';
 import controlSchemeDesktop from '../assets/images/rocksmith/solution/039_rocksmith-screenshot-2025-12-24-09-01-25-06.webp';
+import realToneCable from '../assets/images/rocksmith/solution/040_real-tone-cable.webp';
+import wirelessMarketing from '../assets/images/rocksmith/solution/041_wireless-marketing.webp';
+import connectInstrumentChoice from '../assets/images/rocksmith/solution/043_connect-instrument-choice.webp';
+import connectTunerQr from '../assets/images/rocksmith/solution/044_connect-tuner-qr.webp';
 
 // Accessibility Colorblind Profiles
 import accessibilityColorblind1 from '../assets/images/rocksmith/accessibility/colorblind-accessibility-profile-1.webp';
@@ -166,10 +172,56 @@ useCaseStudySketchPanels(caseStudyRoot);
           <strong>What I quickly realised was that the UI cannot be one size fits all for these many user segments.</strong> Users need tons of customisability to change the experience to their needs:
         </p>
         <ol class="list-decimal pl-5 space-y-2 type-case-body">
+          <li>The ability to start a session with no hassle or hardware for new learners</li>
           <li>The ability to zoom in and zoom out on the guitar lessons based on device distance</li>
           <li>The ability to scale the UI so that buttons are bigger if the device is farther away</li>
           <li>Other less frequently used but important controls such as changing field of view</li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ─── SOLUTION: WIRELESS CONNECTIVITY ─── -->
+    <section class="space-y-8">
+      <h2 class="type-case-section">Wireless Connectivity</h2>
+      <div class="space-y-8">
+        <p class="type-case-body-lg">
+          <strong>Research made the hypothesis clear.</strong> To grow past hardcore enthusiasts, Rocksmith+ had to go wireless.
+        </p>
+
+        <CaseBeforeAfter
+          :before-image="realToneCable"
+          :after-image="wirelessMarketing"
+          before-alt="Rocksmith Real Tone Cable retail packaging"
+          after-alt="Rocksmith+ wireless guitar learning marketing asset"
+          before-caption="Before: legacy Rocksmith required a proprietary Real Tone cable"
+          after-caption="After: wireless guitar learning. No extra gear needed."
+          image-fit="contain"
+        />
+
+        <ul class="list-disc pl-5 space-y-2 type-case-body-lg">
+          <li><strong>Phone.</strong> Play through your mic. No cable purchase. Open the app and start.</li>
+          <li><strong>Big screen.</strong> Desktop or PS5. Connect your phone. The game listens through the mic.</li>
+          <li><strong>Product + marketing.</strong> One promise everywhere. Hassle-free wireless shaped the connection flow and campaign creative.</li>
+        </ul>
+
+        <div class="space-y-4">
+          <h3 class="type-case-subsection">Connection flow</h3>
+          <CaseImageFlow
+            :step1-src="connectInstrumentChoice"
+            step1-alt="Rocksmith+ setup screen asking how to connect an instrument, with Real Tone Cable and Tuner app options"
+            step1-caption="Step 1: pick your sound setup"
+            :step2-src="connectTunerQr"
+            step2-alt="Rocksmith+ getting connected screen with QR code to download the Tuner app"
+            step2-caption="Step 2: scan, install, connect"
+          />
+        </div>
+
+        <p class="type-case-body-lg">
+          <strong>I led the entire design of the mobile app.</strong> The connection flow was built around getting users playing fast, with minimal friction.
+        </p>
+
+        <VideoEmbed src="https://www.youtube.com/embed/0kZgTNYDo6c" title="Rocksmith+ connection guide" />
+        <p class="type-case-caption text-center">Connection guide for pairing your phone and getting started wirelessly</p>
       </div>
     </section>
 

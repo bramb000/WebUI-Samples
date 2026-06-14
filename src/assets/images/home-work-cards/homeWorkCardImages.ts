@@ -21,7 +21,7 @@ export type HomeWorkCardArt = {
 
 export const HOME_WORK_CARD_ART = {
   rocksmith: { video: rocksmithWebm, poster: rocksmithPoster, featherVisualEdges: true },
-  guild: { video: guildWebm, poster: guildPoster, featherVisualEdges: true },
+  guild: { video: guildWebm, poster: guildPoster },
 } as const satisfies Record<string, HomeWorkCardArt>
 
 export type HomeWorkCardArtKey = keyof typeof HOME_WORK_CARD_ART

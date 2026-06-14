@@ -34,7 +34,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <ProjectHero
           title="Solo vibe coding a 600 MAU webapp"
           description="A design-engineer case study on solving physical space constraints at game nights to grow a mobile-first rolling utility from a local board game club to 600 MAU."
-          role="Creator (Solo Design & Engineering)"
+          role="Design Engineer"
           timeline="3 Days"
           :tags="['3D Physics', 'Mobile-First Design', 'React Three Fiber', 'Rapier3D']"
         >
@@ -330,7 +330,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   border: 10px solid var(--color-border-heavy, #222);
   border-radius: 36px;
   background: #000;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
   overflow: hidden;
 }
 
@@ -360,7 +360,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   border: 18px solid var(--color-border-heavy, #222);
   border-radius: 28px;
   background: #000;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
   overflow: hidden;
   aspect-ratio: 4 / 3;
 }
@@ -397,7 +397,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   border-bottom: 0;
   border-radius: 16px 16px 0 0;
   background: #000;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
   margin-bottom: 24px; /* reserve space for absolute lip below + spacing */
   overflow: visible; /* show lip outside */
 }
@@ -409,7 +409,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   height: 12px;
   background: linear-gradient(to bottom, #747477 0%, #48484a 100%);
   border-radius: 0 0 16px 16px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   position: absolute;
   top: 100%;
   left: -12px;
