@@ -90,7 +90,7 @@ onUnmounted(() => observer?.disconnect())
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  border: 1px solid var(--color-border);
+  border: var(--dl-border-width) solid var(--color-border);
   border-radius: var(--dl-border-radius);
   display: block;
 }

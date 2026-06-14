@@ -151,12 +151,12 @@ const isNumericStat = computed(() => {
 .insight-content {
   position: relative;
   z-index: 1;
-  padding: 12px;
+  padding: var(--grid-2);
   display: flex;
   flex-direction: column;
   flex: 0 1 auto;
   align-items: stretch;
-  gap: 8px;
+  gap: var(--grid-1);
   box-sizing: border-box;
 }
 
@@ -164,7 +164,7 @@ const isNumericStat = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 2px;
+  gap: calc(var(--grid-1) / 2);
   flex: 0 0 auto;
 }
 
@@ -173,7 +173,7 @@ const isNumericStat = computed(() => {
 }
 
 .insight-stat {
-  padding: 4px 16px 0;
+  padding: var(--grid-1) var(--grid-2) 0;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -186,7 +186,7 @@ const isNumericStat = computed(() => {
 
 .insight-stat-label {
   width: 100%;
-  padding: 0 16px;
+  padding: 0 var(--grid-2);
   text-align: left;
 }
 
@@ -217,7 +217,7 @@ const isNumericStat = computed(() => {
   letter-spacing: 0.14em;
   line-height: 1.15;
   text-align: left;
-  max-width: 42rem;
+  max-width: var(--case-study-prose-max);
   text-wrap: balance;
   color: color-mix(in srgb, var(--case-insight-on-fill-muted) 82%, var(--insight-accent) 18%);
   text-shadow: 0 1px 2px rgb(0 0 0 / 0.45);

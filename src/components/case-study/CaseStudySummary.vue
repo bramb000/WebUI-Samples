@@ -39,7 +39,7 @@ defineProps<{
         :key="`${beat.kicker}-${index}`"
         class="case-study-summary__beat"
       >
-        <h3 class="type-case-kicker mb-1">
+        <h3 class="type-case-kicker case-study-kicker-gap">
           {{ beat.kicker }}
         </h3>
         <p class="type-case-body" v-html="beat.text" />
@@ -137,7 +137,7 @@ defineProps<{
       :items="summary.processBoard"
     />
 
-    <p class="case-study-summary__continue type-body">
+    <p class="case-study-summary__continue type-case-caption">
       Scroll for the full case study ↓
     </p>
   </section>
@@ -158,13 +158,13 @@ defineProps<{
 @media (min-width: 768px) {
   .case-study-summary__beats {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: var(--grid-3);
   }
 }
 
 .case-study-summary__beat {
-  padding: 14px 16px;
-  border: 1px solid var(--color-border);
+  padding: var(--grid-2) var(--dl-panel-gap);
+  border: var(--dl-border-width) solid var(--color-border);
   border-radius: var(--dl-border-radius);
   background: color-mix(in srgb, var(--color-surface) 88%, var(--color-elevated));
 }
@@ -176,7 +176,7 @@ defineProps<{
 .case-study-summary__flow-transform {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
 }
 
 .case-study-summary__flow-transform-clip :deep(.summary-flow-media__clip) {
@@ -187,11 +187,11 @@ defineProps<{
 .case-study-summary__flow-transform-insights {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
 }
 
 .case-study-summary__flow-transform-insights--single {
-  max-width: 22rem;
+  max-width: var(--case-study-body-max);
 }
 
 @media (min-width: 768px) {
@@ -203,7 +203,7 @@ defineProps<{
 .case-study-summary__flows {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
 }
 
 .case-study-summary__flows-title {
@@ -213,14 +213,14 @@ defineProps<{
 .case-study-summary__flow-layout {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
 }
 
 .case-study-summary__flow-media-row,
 .case-study-summary__flow-insights-row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: var(--grid-3);
   align-items: stretch;
 }
 
@@ -228,14 +228,14 @@ defineProps<{
   .case-study-summary__flow-media-row,
   .case-study-summary__flow-insights-row {
     grid-template-columns: 1fr 1fr;
-    gap: 28px;
+    gap: var(--grid-4);
   }
 }
 
 .case-study-summary__flow-col {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--grid-2);
   min-width: 0;
 }
 
@@ -247,13 +247,13 @@ defineProps<{
 .case-study-summary__comparisons {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
 }
 
 .case-study-summary__comparison-stack {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--grid-4);
 }
 
 .case-study-summary__continue {

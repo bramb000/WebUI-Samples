@@ -914,13 +914,15 @@ function onDone(trigger: number) {
   background: color-mix(in srgb, var(--paper-surface-rim) 50%, transparent);
   border-radius: 999px;
 }
+.dl-embedded--case :deep(.case-study-page) {
+  padding-bottom: var(--case-study-page-end-embedded);
+}
 .dl-embedded--case :deep(.animate-fade-in) {
-  padding-bottom: 120px;
   /* Parchment tokens (embedded case is not under `[data-surface="paper"]`) — matches `style.css` paper surface */
   --color-text: var(--paper-on-fill-text);
   --color-text-muted: var(--paper-on-fill-text-muted);
   --color-surface: var(--paper-surface-fill-deep);
-  --color-elevated: #f2ece2;
+  --color-elevated: var(--paper-surface-rim-hi);
   --color-border: var(--paper-surface-rim);
 }
 .dl-embedded--case :deep(.case-study-layout) {
@@ -934,13 +936,13 @@ function onDone(trigger: number) {
   top: clamp(20px, 2.5vw, 32px);
   overflow: visible;
 }
-.dl-embedded:not(.dl-embedded--case) :deep(.max-w-4xl) {
+.dl-embedded:not(.dl-embedded--case) :deep(.case-study-prose-width) {
   max-width: 100%;
 }
-.dl-embedded:not(.dl-embedded--case) :deep(.space-y-8) {
+.dl-embedded:not(.dl-embedded--case) :deep(.case-study-section) {
   padding-bottom: 2rem;
 }
-.dl-embedded:not(.dl-embedded--case) :deep(.space-y-8 > header) {
+.dl-embedded:not(.dl-embedded--case) :deep(.case-study-section > header) {
   flex-wrap: wrap;
   gap: 1rem;
 }

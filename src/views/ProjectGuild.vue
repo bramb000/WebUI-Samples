@@ -64,10 +64,10 @@ useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
-  <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
-    <div class="case-study-layout xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
+  <div ref="caseStudyRoot" class="animate-fade-in case-study-page relative">
+    <div class="case-study-layout">
       <!-- Main Content Container -->
-      <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
+      <div class="case-study-main">
     <!-- ─── HERO ─── -->
     <ProjectHero
       title="Repairing stickiness to increase revenue by 50%"
@@ -75,7 +75,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       role="Feature Owner & Lead UX Designer"
       timeline="6 months"
       client="Immutable"
-      :tags="['Mobile RPG', 'Data Analysis', 'Feature Design', 'Live Product']"
+      :tags="['Mobile RPG', 'Data Analysis', 'Live Product']"
     >
       <template #team>
         <p class="type-case-team">1 UI Artist &middot; 1 UI Engineer &middot; 1 Full Stack Engineer</p>
@@ -85,9 +85,9 @@ useCaseStudySketchPanels(caseStudyRoot);
     <CaseStudySummary :summary="guildSummary" />
 
     <!-- ─── CONTEXT ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Context</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-lead">
           <strong>Guild of Guardians is a squad RPG</strong> game where users create teams of 5 heroes to duke it out against monsters, enemies, and other players. In the first 7 to 10 days, the users are expected to play the Adventure mode where they explore the story, learn about the characters, and fight some easy monsters to learn about the game.
         </p>
@@ -97,24 +97,24 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           On top of this, we did not have a dedicated data analyst and user researcher to help us figure out what is happening.
         </p>
-        <CaseImage :src="challengeGraphic" alt="Challenge overview" caption="The challenges I set out to solve" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="outcomeGraphic" alt="Outcomes achieved" caption="And these outcomes were achieved" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="challengeGraphic" alt="Challenge overview" caption="The challenges I set out to solve" />
+        <CaseImage :src="outcomeGraphic" alt="Outcomes achieved" caption="And these outcomes were achieved" />
       </div>
     </section>
 
     <!-- ─── ACTION: TLDR ─── -->
-    <section class="max-w-4xl mx-auto space-y-6">
-      <h2 class="type-case-section-block">Action</h2>
+    <section class="case-study-prose-width case-study-section">
+      <h2 class="type-case-section">Action</h2>
       <h3 class="type-case-subsection">TLDR</h3>
       <p class="type-case-body-lg">Problems analysed through a mixture of quantitative and qualitative data analysis:</p>
-      <ol class="list-decimal pl-5 space-y-1 type-case-body-lg">
+      <ol class="case-study-list case-study-list--decimal type-case-body">
         <li>Poor structure of sessions → it always ended on a negative note</li>
         <li>Lack of recommendations when players get stuck</li>
         <li>Lack of visual goal setting</li>
         <li>Lack of celebration of milestones</li>
       </ol>
       <p class="type-case-body-lg">How I led the team to fix it:</p>
-      <ol class="list-decimal pl-5 space-y-1 type-case-body-lg">
+      <ol class="case-study-list case-study-list--decimal type-case-body">
         <li>Make UX and game economy changes to make sure player ends game session on a happy note with anticipation for the next time</li>
         <li>Add a strategy recommendation system that nudges and guides while maintaining player autonomy</li>
         <li>Create visual UI that creates a path and goal setting</li>
@@ -123,20 +123,20 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── BEFORE / AFTER GALLERY ─── -->
-    <section class="space-y-6">
-      <h3 class="type-case-subsection max-w-4xl">Before &amp; After — Quick Overview</h3>
-      <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
+    <section class="case-study-section">
+      <h3 class="type-case-subsection case-study-prose-width case-study-prose-width--start">Before &amp; After — Quick Overview</h3>
+      <p class="case-study-prose-width type-case-body-lg">Old user flow to use adventure energy, get rewards, upgrade, and fight:</p>
       <VideoEmbed src="https://www.youtube.com/embed/nJ4OENCLzkE" title="Old User Flow" />
-      <div class="max-w-xl mx-auto py-4">
+      <div class="case-study-embed-width">
         <CaseInsight stat="7-10 clicks and open app 3 times a day" statLabel="to get rewards that you have already earned" theme="before" />
       </div>
-      <p class="max-w-4xl mx-auto text-lg font-sans leading-relaxed">New user flow — rewards as soon you open the game:</p>
+      <p class="case-study-prose-width type-case-body-lg">New user flow — rewards as soon you open the game:</p>
       <VideoEmbed src="https://www.youtube.com/embed/reWvwvFF8CQ" title="New User Flow" />
-      <div class="max-w-xl mx-auto py-4">
+      <div class="case-study-embed-width">
         <CaseInsight stat="2 clicks and open app 2 times a day" statLabel="to get rewards that you have already earned" theme="after" />
       </div>
       <!-- Before/After Comparions -->
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <CaseBeforeAfter
           :beforeImage="galBeforeGoal"
           :afterImage="galAfterGoal"
@@ -169,9 +169,9 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── DATA DEEP DIVE ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">The Data</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           Being a live product, looking at data is always my first step. <strong>D7 retention is an indicator of how much the game has captured the players attention when they are not playing to bring them back and form habits.</strong> I was clear from the start — we are optimising for D7 retention and not D1 retention.
         </p>
@@ -181,47 +181,47 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           What was surprising was that we had K-shaped behaviour — <strong>the players who retained were playing so much that they pulled the average up</strong> and practically blindsided the team.
         </p>
-        <CaseImage :src="kShapeProblem" alt="K-shaped distribution of player sessions" caption="K-shaped behaviour: very few players had the 'average' experience" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
+        <CaseImage :src="kShapeProblem" alt="K-shaped distribution of player sessions" caption="K-shaped behaviour: very few players had the 'average' experience" imgClass="case-media-frame--accent" />
         <p class="type-case-body-lg">
           In nerd terms, this is a bimodal distribution and very few players are actually having the "average" experience. Those below the average were definitely not sticking around, which was a clear indicator why having 1 session per day still resulted in such poor D7 retention.
         </p>
 
         <!-- Regression details -->
-        <div class="panel-recessed p-6 space-y-4">
+        <div class="panel-recessed case-study-panel-inset case-study-subsection-block">
           <h4 class="type-case-kicker-muted">Logistic Regression Analysis</h4>
-          <p class="text-base font-sans leading-relaxed">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong class="font-bold">24% of the variance</strong> in a complex model like retention.</p>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+          <p class="type-case-body-lg">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong class="font-bold">24% of the variance</strong> in a complex model like retention.</p>
+          <div class="case-study-table-scroll">
+            <table class="case-study-table">
               <thead>
-                <tr style="border-bottom:1px solid var(--color-border)">
-                  <th class="text-left p-2 type-case-kicker-muted">Metric</th>
-                  <th class="text-left p-2 type-case-kicker-muted">Coefficient (β)</th>
-                  <th class="text-left p-2 type-case-kicker-muted">Odds Ratio</th>
-                  <th class="text-left p-2 type-case-kicker-muted">T-Statistic</th>
-                  <th class="text-left p-2 type-case-kicker-muted">R²</th>
+                <tr>
+                  <th class="type-case-kicker-muted">Metric</th>
+                  <th class="type-case-kicker-muted">Coefficient (β)</th>
+                  <th class="type-case-kicker-muted">Odds Ratio</th>
+                  <th class="type-case-kicker-muted">T-Statistic</th>
+                  <th class="type-case-kicker-muted">R²</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style="border-bottom:1px solid var(--color-border)" class="hover:bg-black/5 transition-colors">
-                  <td class="p-2 type-case-body font-medium">Intercept (β₀)</td>
-                  <td class="p-2 type-case-body">0.00334</td>
-                  <td class="p-2 opacity-50">N/A</td>
-                  <td class="p-2 opacity-50">N/A</td>
-                  <td class="p-2 opacity-50">N/A</td>
+                <tr>
+                  <td class="type-case-body font-medium">Intercept (β₀)</td>
+                  <td class="type-case-body">0.00334</td>
+                  <td class="case-study-table__cell--empty">N/A</td>
+                  <td class="case-study-table__cell--empty">N/A</td>
+                  <td class="case-study-table__cell--empty">N/A</td>
                 </tr>
-                <tr class="hover:bg-black/5 transition-colors">
-                  <td class="p-2 type-case-body font-medium">Sessions/Day (β₁)</td>
-                  <td class="p-2 font-bold text-accent">0.1501</td>
-                  <td class="p-2 type-case-body">1.162</td>
-                  <td class="p-2 type-case-body">98.78</td>
-                  <td class="p-2 font-bold text-accent">0.2416</td>
+                <tr>
+                  <td class="type-case-body font-medium">Sessions/Day (β₁)</td>
+                  <td class="font-bold text-accent">0.1501</td>
+                  <td class="type-case-body">1.162</td>
+                  <td class="type-case-body">98.78</td>
+                  <td class="font-bold text-accent">0.2416</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <div class="py-4">
+        <div class="case-study-inset-y--2">
           <CaseInsight stat="Even just 1 additional day" statLabel="was 16% higher likelihood of retaining to 7 days" theme="before" />
         </div>
 
@@ -232,17 +232,17 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── SURVEY INSIGHTS ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Survey Research</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           To make certain that I was chasing the correct lead, I ran a survey to understand the user stories behind the data.
         </p>
 
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
+        <div class="case-insight-grid case-insight-grid--cols-2">
           <CaseInsight stat="73%" statLabel="played in-between life activities" theme="before">
             <p><strong>Unstructured downtime entertainment:</strong></p>
-            <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
+            <ul class="case-study-list case-study-list--disc case-study-list--inset type-case-caption italic">
               <li>"When picking up my child"</li>
               <li>"When I'm on the toilet"</li>
               <li>"When commuting"</li>
@@ -250,7 +250,7 @@ useCaseStudySketchPanels(caseStudyRoot);
           </CaseInsight>
           <CaseInsight stat="54%" statLabel="Timers negatively impacted lifestyle" theme="before">
             <p><strong>Game timers felt punishing and interrupted flow:</strong></p>
-            <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
+            <ul class="case-study-list case-study-list--disc case-study-list--inset type-case-caption italic">
               <li>"Punishes me for having a job"</li>
               <li>"Interrupted just as it got good"</li>
               <li>"Use lunch break for boring quests"</li>
@@ -261,120 +261,120 @@ useCaseStudySketchPanels(caseStudyRoot);
           </CaseInsight>
           <CaseInsight stat="36%" statLabel="passively waited for timer notifications" theme="before">
             <p><strong>Negative anticipation:</strong></p>
-            <ul class="list-disc pl-5 mt-2 space-y-1 type-case-caption italic">
+            <ul class="case-study-list case-study-list--disc case-study-list--inset type-case-caption italic">
               <li>"Forget until notification reminds me"</li>
               <li>"Burned a few times trying to time it"</li>
               <li>"Anxiety trying to play at work"</li>
             </ul>
           </CaseInsight>
         </div>
-        <p class="text-lg font-sans leading-relaxed italic underline">These were all retained, active players. The experience felt worse to new players.</p>
+        <p class="type-case-body-lg italic underline">These were all retained, active players. The experience felt worse to new players.</p>
         <p class="type-case-body-lg"><strong>The mismatch in the energy system and user lifestyle was creating negative feelings, and driving anticipation from loss rather than positive anticipation from expectation.</strong></p>
 
         <!-- Persona -->
         <p class="type-case-body-lg">
           <strong>This exercise helped me craft a clear persona that represented the data and the feelings — The Casual Connoisseur.</strong> They are characterised by someone who spends thousands of hours in a game, but will play casually at the start as a trial before committing.
         </p>
-        <CaseImage :src="persona" alt="The Casual Connoisseur persona" caption="The Casual Connoisseur — our target persona" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="persona" alt="The Casual Connoisseur persona" caption="The Casual Connoisseur — our target persona" />
       </div>
     </section>
 
     <!-- ─── AFK REWARDS DESIGN ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">AFK Rewards Design</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           <strong>In the original flow, users had to come back to take an action and be rewarded.</strong> This did not generate any anticipation or excitement at the end of your previous session.
         </p>
-        <CaseImage :src="gameLoopNegative" alt="Before game loop" caption="Before — an energy system creates a forced action that discourages returning behaviour" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
+        <CaseImage :src="gameLoopNegative" alt="Before game loop" caption="Before — an energy system creates a forced action that discourages returning behaviour" imgClass="case-media-frame--accent" />
         <p class="type-case-body-lg">
           I redesigned the game loop to start sessions on a happy note and <strong>end sessions on moments of anticipation for future rewards.</strong>
         </p>
-        <CaseImage :src="gameLoopPositive" alt="After game loop" caption="After — a positive loop that encourages habit formation" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
+        <CaseImage :src="gameLoopPositive" alt="After game loop" caption="After — a positive loop that encourages habit formation" imgClass="case-media-frame--accent" />
 
         <p class="type-case-body-lg">
           <strong>My proposal was to reposition the current energy system into an AFK (away from keyboard) reward system</strong> that collects resources while the user is away. When they are ready to leave the game, we seed the anticipation by telling users they will have rewards waiting for them.
         </p>
 
         <!-- Wireframing process -->
-        <CaseImage :src="wireframeFlow" alt="Wireframing the new screens" caption="Wireframing the new screens and the golden path" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="handSketches" alt="Hand-drawn throwaway concepts" caption="Some hand-drawn throwaway concepts" imgClass="w-full h-auto rounded-xl" />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="afkTest1" alt="Information heavy concept" caption="Pushing information heavy concepts" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="afkTest2" alt="Iterating on variants" caption="Iterating on variants" imgClass="w-full h-auto rounded-lg" />
+        <CaseImage :src="wireframeFlow" alt="Wireframing the new screens" caption="Wireframing the new screens and the golden path" />
+        <CaseImage :src="handSketches" alt="Hand-drawn throwaway concepts" caption="Some hand-drawn throwaway concepts" />
+        <div class="case-study-media-grid">
+          <CaseImage :src="afkTest1" alt="Information heavy concept" caption="Pushing information heavy concepts" />
+          <CaseImage :src="afkTest2" alt="Iterating on variants" caption="Iterating on variants" />
         </div>
-        <CaseImage :src="wireframe" alt="Final candidate wireframe" caption="One of the final candidate wireframes" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
+        <CaseImage :src="wireframe" alt="Final candidate wireframe" caption="One of the final candidate wireframes" imgClass="case-media-frame--accent" />
 
         <!-- High fidelity -->
-        <CaseLazyImage :loader="guildLazyMedia.afkMockupFinal" alt="High fidelity AFK rewards mockup" caption="After — An AFK feature that helps users keep getting rewards while they are away. Created in Figma" img-class="w-full h-auto rounded-xl" />
-        <CaseImage :src="afkMockupRough" alt="Rough in-engine mockup" caption="A very rough in-engine mockup — originally every interaction was a button" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="guildLazyMedia.afkMockupFinal" alt="High fidelity AFK rewards mockup" caption="After — An AFK feature that helps users keep getting rewards while they are away. Created in Figma" />
+        <CaseImage :src="afkMockupRough" alt="Rough in-engine mockup" caption="A very rough in-engine mockup — originally every interaction was a button" />
 
         <p class="type-case-body-lg">
           While I expected basic usability with this version, <strong>my team's artist made a great remark that this screen was missing feelings of delight and joy.</strong> After conducting competitive analysis we found that most games in this genre have an incredibly high bar of polish for their rewards screen — the "dopamine" factor.
         </p>
 
         <!-- Chest animations -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseLazyImage :loader="guildLazyMedia.chestLoop" alt="Treasure chest loop" caption="A delightfully full treasure chest that makes the user feel the game has been 'productive' in their absence" img-class="w-full h-auto rounded-lg" />
-          <CaseLazyImage :loader="guildLazyMedia.chestFill" alt="Chest fills up animation" caption="The chest fills up giving a sense of delight" img-class="w-full h-auto rounded-lg" />
+        <div class="case-study-media-grid">
+          <CaseLazyImage :loader="guildLazyMedia.chestLoop" alt="Treasure chest loop" caption="A delightfully full treasure chest that makes the user feel the game has been 'productive' in their absence" />
+          <CaseLazyImage :loader="guildLazyMedia.chestFill" alt="Chest fills up animation" caption="The chest fills up giving a sense of delight" />
         </div>
 
         <!-- Usability iteration -->
         <p class="type-case-body-lg">
           <strong>The chest on the screen did not look like a button and did not look clickable</strong> — in early internal testing users were confused on how to actually collect rewards.
         </p>
-        <CaseLazyImage :loader="guildLazyMedia.afkTutorial" alt="Tutorial iteration" caption="Iteration 1 — A quick tutorial that coached users about non-button clickable elements (this was a no-go)" img-class="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="guildLazyMedia.floatingBadge" alt="Floating badge solution" caption="Final Iteration — Adding a button-shaped badge with gentle motion made it clearer the chest is clickable" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="guildLazyMedia.afkTutorial" alt="Tutorial iteration" caption="Iteration 1 — A quick tutorial that coached users about non-button clickable elements (this was a no-go)" />
+        <CaseLazyImage :loader="guildLazyMedia.floatingBadge" alt="Floating badge solution" caption="Final Iteration — Adding a button-shaped badge with gentle motion made it clearer the chest is clickable" />
         <p class="type-case-body-lg">
           During testing, we found a <strong>100% completion rate</strong> for actions related to collecting rewards from any screen in the game.
         </p>
-        <CaseImage :src="userFlowFigma" alt="Final user flow" caption="The final mocked up user flow in an interactable Figma prototype" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="userFlowFigma" alt="Final user flow" caption="The final mocked up user flow in an interactable Figma prototype" />
 
         <!-- Final video -->
         <VideoEmbed src="https://www.youtube.com/embed/snkVRbZXBeM" title="Complete AFK Rewards Experience" />
         <p class="type-case-caption text-center">The complete AFK Rewards experience</p>
 
         <!-- Post-launch survey -->
-        <h3 class="type-case-subsection pt-8">Post-Launch Survey</h3>
+        <h3 class="type-case-subsection type-case-subsection--offset">Post-Launch Survey</h3>
         <p class="type-case-body-lg"><span class="underline">Question 1 — "What do you think of the new AFK Rewards?"</span></p>
-        <ol class="list-decimal pl-5 space-y-1 text-base font-sans italic">
+        <ol class="case-study-list case-study-list--decimal type-case-body italic">
           <li>"I don't have to think about this game during work, which means I can fully focus on it after work"</li>
           <li>"The new system is far less annoying, I only have to open once a day"</li>
           <li>"It's nice to get all my rewards at the start and then just go into playing"</li>
           <li>"Thank god y'all removed the arbitrary timer"</li>
         </ol>
-        <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="w-full h-auto rounded-xl panel-recessed p-4 mb-6" />
+        <CaseImage :src="surveyEnjoyment" alt="Survey results" imgClass="case-media-frame--accent case-study-margin-bottom--3" />
         <CaseInsight stat="72%" statLabel="Completely agreed that this flow improved the overall game" theme="after" />
-        <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="w-full h-auto rounded-xl panel-recessed p-4 mt-8 mb-6" />
+        <CaseImage :src="surveyTimers" alt="Timer survey results" imgClass="case-media-frame--accent case-study-margin-top--4 case-study-margin-bottom--3" />
         <CaseInsight stat="81%" statLabel="Agreed that the new timers fit their lifestyle better" theme="after" />
       </div>
     </section>
 
     <!-- ─── EXIT SCREEN ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Exit Flow &amp; Anticipation</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           To close off the new game loop, I <strong>added a quit screen</strong> that set goals and anticipation to encourage the user to come back.
         </p>
-        <CaseImage :src="exitScreenBefore" alt="Before exit screen" caption="Before — A simple exit screen that does not create anticipation" imgClass="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="guildLazyMedia.exitScreenAnim" alt="Animated exit screen WIP" caption="WIP — An animated exit screen I made in Figma to share the idea with the team" img-class="w-full h-auto rounded-xl" />
+        <CaseImage :src="exitScreenBefore" alt="Before exit screen" caption="Before — A simple exit screen that does not create anticipation" />
+        <CaseLazyImage :loader="guildLazyMedia.exitScreenAnim" alt="Animated exit screen WIP" caption="WIP — An animated exit screen I made in Figma to share the idea with the team" />
         <p class="type-case-body-lg">
           Using UI data, I found <strong>only 12% players closed it using the in-game dialogue</strong>. With so few players seeing this screen, I could not justify the ROI of spending lots of effort to develop animations.
         </p>
-        <CaseImage :src="exitScreenAfter" alt="After exit screen" caption="After — An exit screen that creates a timeline and clear goal for return time" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="exitScreenAfter" alt="After exit screen" caption="After — An exit screen that creates a timeline and clear goal for return time" />
       </div>
     </section>
 
     <!-- ─── RECOMMENDATION SYSTEM ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Recommendation System</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           I found through analysing further data that <strong>users would get stuck at specific dungeons and quit the game after trying a few more times</strong>. This was a highly correlated factor to low D7 retention.
         </p>
-        <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
+        <CaseImage :src="playerDropoff" alt="Player drop-off graph" caption="Average attempts per dungeon vs players who quit after failing — many dungeons where users were hitting their head against a wall" imgClass="case-media-frame--accent" />
+        <div class="case-insight-grid case-insight-grid--cols-2 case-study-inset-y--2">
           <CaseInsight stat="46% of churned users" statLabel="had attempted and lost at the same dungeon 2+ times in their first week" theme="before" />
           <CaseInsight stat="22% of churned users" statLabel="had attempted and lost 3+ times" theme="before" />
         </div>
@@ -382,16 +382,16 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           After analysing what heroes they were using, <strong>it turned out they were using weaker strategic teams despite being at an adequate power level.</strong>
         </p>
-        <CaseImage :src="guardianUsageData" alt="Guardian usage data" caption="Clear difference in heroes used by successful vs unsuccessful players" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
-        <div class="py-4">
+        <CaseImage :src="guardianUsageData" alt="Guardian usage data" caption="Clear difference in heroes used by successful vs unsuccessful players" imgClass="case-media-frame--accent" />
+        <div class="case-study-inset-y--2">
           <CaseInsight stat="about 50% users who quit" statLabel="Made no changes to their comp between attempt #1 and #2" theme="before" />
         </div>
 
         <p class="type-case-body-lg">
           We arrived at adding a <strong>recommendation system</strong> using server-wide hero usage data.
         </p>
-        <CaseImage :src="recommendedWireframe" alt="Recommended heroes wireframe" caption="Initial wireframe for recommended heroes" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
-        <div class="py-4">
+        <CaseImage :src="recommendedWireframe" alt="Recommended heroes wireframe" caption="Initial wireframe for recommended heroes" imgClass="case-media-frame--accent" />
+        <div class="case-study-inset-y--2">
           <CaseBeforeAfter
             :beforeImage="recsBeforeImg"
             :afterImage="recsAfterImg"
@@ -400,7 +400,7 @@ useCaseStudySketchPanels(caseStudyRoot);
             caption="Recommendations guiding players using community data without forcing teams."
           />
         </div>
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 py-4">
+        <div class="case-insight-grid case-insight-grid--cols-2 case-study-inset-y--2">
           <CaseInsight stat="~70% users" statLabel="Changed their comp after loss #1 (up from 50%)" theme="after" />
           <CaseInsight stat="And 63% of those users" statLabel="Completed the dungeon on Attempt #2" theme="after" />
         </div>
@@ -408,14 +408,14 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── VISUAL PROGRESSION ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Goals &amp; Progression</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           Players quit after losing because whenever they lost in a dungeon, they had to begin from the start. I collaborated directly with the game designer to add a new <strong>checkpoint dungeon progression system</strong>.
         </p>
-        <CaseImage :src="progressionWireframe" alt="Visual progression wireframe" caption="Initial wireframe of visual goal setting" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
-        <div class="py-4">
+        <CaseImage :src="progressionWireframe" alt="Visual progression wireframe" caption="Initial wireframe of visual goal setting" imgClass="case-media-frame--accent" />
+        <div class="case-study-inset-y--2">
           <CaseBeforeAfter
             :beforeImage="progBeforeImg"
             :afterImage="progAfterImg"
@@ -426,26 +426,26 @@ useCaseStudySketchPanels(caseStudyRoot);
         </div>
 
         <!-- Daily Calendar -->
-        <h3 class="type-case-subsection pt-8">7-Day Reward Calendar</h3>
+        <h3 class="type-case-subsection type-case-subsection--offset">7-Day Reward Calendar</h3>
         <p class="type-case-body-lg">
           I created a <strong>7 day reward letting players pick 1 legendary guardian</strong>, giving players choice and autonomy at the end of a long commitment. The UI was specifically designed as a countdown calendar.
         </p>
-        <CaseImage :src="dailyCalendar" alt="Daily reward calendar" caption="Daily instant gratification rewards + a big delayed gratification reward at the end of the week" imgClass="w-full h-auto rounded-xl" />
-        <div class="py-4">
+        <CaseImage :src="dailyCalendar" alt="Daily reward calendar" caption="Daily instant gratification rewards + a big delayed gratification reward at the end of the week" />
+        <div class="case-study-inset-y--2">
           <CaseInsight stat="+3% increase" statLabel="in day 6 to day 7 retention" theme="after" />
         </div>
       </div>
     </section>
 
     <!-- ─── LEGENDARY HERO & MONETISATION ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Delight &amp; Monetisation</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           I added an explicit scripted moment to get the first legendary hero after defeating the first boss — <strong>a moment of delight to feel celebratory and achieved</strong>. This decision was not informed by pre-prepared data, so <strong>we A/B tested this implementation.</strong>
         </p>
-        <CaseImage :src="legendaryHero" alt="Legendary hero design" caption="I created this design in Figma with existing design system components" imgClass="w-full h-auto rounded-xl" />
-        <div class="py-4">
+        <CaseImage :src="legendaryHero" alt="Legendary hero design" caption="I created this design in Figma with existing design system components" />
+        <div class="case-study-inset-y--2">
           <CaseInsight stat="+38% higher likelihood" statLabel="A user who received the hero would retain compared to one who did not" theme="after" />
         </div>
 
@@ -453,20 +453,20 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           After the success, I added an <strong>introductory offer</strong> paired with the delight moment. It performed <strong>162% better</strong> against the old offer and <strong>increased odds of a purchasing player retaining to D7 by 65%.</strong>
         </p>
-        <CaseImage :src="oldOffer" alt="Old offer" caption="Before — The old offer had no context. 99% of players closed the popup in under 1 second" imgClass="w-full h-auto rounded-xl" />
-        <div class="py-4">
+        <CaseImage :src="oldOffer" alt="Old offer" caption="Before — The old offer had no context. 99% of players closed the popup in under 1 second" />
+        <div class="case-study-inset-y--2">
           <CaseInsight stat="99.9% users" statLabel="Closed this popup instantly" theme="before" />
         </div>
-        <CaseImage :src="newOffer" alt="New offer" caption="After — The new offer with context and clear value proposition" imgClass="w-full h-auto rounded-xl" />
-        <div class="py-4">
+        <CaseImage :src="newOffer" alt="New offer" caption="After — The new offer with context and clear value proposition" />
+        <div class="case-study-inset-y--2">
           <CaseInsight stat="More than double purchases" statLabel="compared to the old offer" theme="after" />
         </div>
 
         <!-- Iteration stages -->
-        <h3 class="type-case-subsection pt-8">Iteration Process</h3>
-        <CaseImage :src="offerWireframe" alt="Stage 1 wireframe" caption="Stage 1 — Low fidelity wireframes focusing on user flow and value proposition" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="offerIteration2" alt="Stage 2 iteration" caption="Stage 2 — Polished by UI artist. We did not release this iteration" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="offerIteration3" alt="Stage 3 iteration" caption="Stage 3 — 61% better than old offer, but I wanted more lore and context" imgClass="w-full h-auto rounded-xl" />
+        <h3 class="type-case-subsection type-case-subsection--offset">Iteration Process</h3>
+        <CaseImage :src="offerWireframe" alt="Stage 1 wireframe" caption="Stage 1 — Low fidelity wireframes focusing on user flow and value proposition" />
+        <CaseImage :src="offerIteration2" alt="Stage 2 iteration" caption="Stage 2 — Polished by UI artist. We did not release this iteration" />
+        <CaseImage :src="offerIteration3" alt="Stage 3 iteration" caption="Stage 3 — 61% better than old offer, but I wanted more lore and context" />
         <p class="type-case-body-lg">
           <strong>The final version outperformed Stage 3 by 4% on claiming the free hero and by over 50% on purchasing the offer!</strong>
         </p>
@@ -480,7 +480,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <CaseMetric value="+25%" label="D7 Retention Uplift" theme="after" />
         <CaseMetric value="+12%" label="D7 LTV (Revenue)" theme="after" />
       </div>
-      <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
+      <div class="case-study-panel__body case-study-body-width type-case-body-lg">
         <p>
           The bimodal distribution eventually regressed to a normal distribution, and fewer overall players churned after solving user pain points.
         </p>
@@ -488,12 +488,12 @@ useCaseStudySketchPanels(caseStudyRoot);
           Impact on D7 retention followed an 80/20 principle — major impact came from the earliest, biggest changes. At that point, I proposed to dissolve the "D7 Retention" strike team and reallocate people to other features.
         </p>
       </div>
-      <CaseImage :src="smootherBellCurve" alt="Normal distribution after changes" caption="The 'average' is lower but the outcome is more consistent for more players" imgClass="w-full h-auto rounded-xl" />
-      <CaseImage :src="retentionGrowth" alt="Retention growth over time" caption="Mocked visualisation of approximated retention data (real data is proprietary)" imgClass="w-full h-auto rounded-xl" />
+      <CaseImage :src="smootherBellCurve" alt="Normal distribution after changes" caption="The 'average' is lower but the outcome is more consistent for more players" />
+      <CaseImage :src="retentionGrowth" alt="Retention growth over time" caption="Mocked visualisation of approximated retention data (real data is proprietary)" />
     </section>
 
     <!-- ─── LEARNINGS ─── -->
-    <section class="max-w-4xl mx-auto space-y-6">
+    <section class="case-study-prose-width case-study-section">
       <h2 class="type-case-section-block">Learnings</h2>
       <p class="type-case-body-lg">
         <strong>This was a major block of work that took multiple months and was shipped over multiple releases.</strong> The discovery phase started by understanding what users are lacking is beyond the screen — it's a mismatch of the game's user experience and their habits and lifestyle.
@@ -508,8 +508,8 @@ useCaseStudySketchPanels(caseStudyRoot);
 
     <!-- ─── TESTIMONIALS ─── -->
     <section>
-      <h2 class="type-case-section-block mb-12">Testimonials</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+      <h2 class="type-case-section-block case-study-testimonials-heading">Testimonials</h2>
+      <div class="case-study-card-grid">
         <CaseTestimonialCard
           name="Josiah Wallace"
           role="Senior Game Design Manager"
@@ -526,7 +526,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
       
       <!-- ToC Sidebar Container -->
-      <div class="toc-sidebar-column hidden xl:block xl:col-span-3 xl:col-start-10 relative">
+      <div class="toc-sidebar-column">
         <div class="toc-sidebar-sticky">
           <TableOfContents />
         </div>

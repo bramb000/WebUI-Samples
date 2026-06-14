@@ -56,14 +56,14 @@ withDefaults(
 .baa-wrap {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
   width: 100%;
 }
 
 .baa-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: var(--dl-panel-gap);
   position: relative;
 }
 
@@ -71,7 +71,7 @@ withDefaults(
   .baa-grid {
     grid-template-columns: 1fr 1fr;
     align-items: start;
-    gap: 24px;
+    gap: var(--grid-3);
   }
 
   .baa-grid--contain {
@@ -83,7 +83,7 @@ withDefaults(
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: var(--grid-1);
 }
 
 .baa-wrap--contain .baa-col {
@@ -95,7 +95,7 @@ withDefaults(
   width: 100%;
   aspect-ratio: 16 / 10;
   display: block;
-  border: 1px solid var(--color-border);
+  border: var(--dl-border-width) solid var(--color-border);
   border-radius: var(--dl-border-radius);
   object-fit: cover;
 }

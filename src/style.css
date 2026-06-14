@@ -29,6 +29,7 @@
   --color-text-muted:  #5c564c;
   /* Structure + 10% primary — dark graphite grey */
   --color-border:      #b8b2a6;
+  --color-border-heavy: var(--color-accent-dark);
   --color-border-hi:   #4a5058;
   --color-accent:      #2f3339;
   --color-accent-dark: #1c1f23;
@@ -36,6 +37,14 @@
   --color-hover-bg:    #e0d8c8;
   --color-lcd:         #e8e4dc;
   --color-lcd-text:    #2f3339;
+
+  /* Device mockup chrome (Dice case study screenshot frames) */
+  --device-mockup-bezel:              var(--color-border-heavy);
+  --device-mockup-screen:             var(--color-accent-dark);
+  --device-mockup-lip-gradient-top:   #747477;
+  --device-mockup-lip-gradient-bottom:#48484a;
+  --device-mockup-lip-notch:          #2a2a2c;
+  --device-mockup-inset-glow:         color-mix(in srgb, white 10%, transparent);
 
   /* ── Typefaces ── */
   /* Headers + hero role line — Comic Relief (@see https://fonts.google.com/specimen/Comic+Relief) */
@@ -96,6 +105,25 @@
   --dl-panel-padding-block:  calc(var(--grid-5) / 2);
   --dl-panel-gap:            calc(var(--grid-4) / 2);
   --dl-panel-gap-lg:         calc(var(--grid-6) / 2);
+
+  /* Case study page shell + prose measure */
+  --case-study-container-max:       80rem;
+  --case-study-prose-max:           56rem;
+  --case-study-body-max:            48rem;
+  --case-study-embed-max:           36rem;
+  --case-study-media-xs:            20rem;
+  --case-study-media-sm:            24rem;
+  --case-study-media-md:            28rem;
+  --case-study-media-phone:         320px;
+  --case-study-layout-gap:          var(--grid-4);
+  --case-study-gutter-inline:       var(--grid-3);
+  --case-study-lightbox-caption-max: 37.5rem;
+  --case-study-page-end:             calc(var(--grid-unit) * 12);
+  --case-study-page-end-embedded:    calc(var(--case-study-page-end) + var(--grid-3));
+  --case-study-list-indent:          calc(var(--grid-unit) * 2.5);
+  --case-study-hero-title-max:       50rem;
+  --case-study-hero-padding-top:     var(--grid-6);
+  --case-study-hero-padding-top-md:  var(--grid-8);
 
   /* CTA outline — torn-tape silhouette at rest, fills on hover */
   --cta-outline-stroke:       4px;
@@ -541,6 +569,9 @@ h5, h6 {
   letter-spacing: var(--tracking-display-wide);
   line-height: var(--leading-snug);
   color: var(--color-accent);
+}
+.type-case-subsection--offset {
+  padding-top: var(--grid-4);
 }
 .type-case-kicker {
   font-family: var(--font-display);
@@ -1104,17 +1135,291 @@ h5, h6 {
   margin-inline: 0;
   padding-inline: clamp(8px, 1.4vw, 18px);
   box-sizing: border-box;
-  /* Beat Tailwind `xl:grid-cols-12` — embedded scrollport is narrower than `max-w-7xl` */
+  /* Beat Tailwind grid — embedded scrollport is narrower than standalone container */
   grid-template-columns: minmax(0, 1fr) clamp(9.75rem, 27%, 14.5rem) !important;
   gap: clamp(10px, 1.8vw, 22px);
   align-items: start;
 }
 
 /* Case study vertical rhythm — one gap between sections (avoid space-y-24 + pt-16 stacking) */
+.case-study-layout {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--case-study-container-max);
+  margin-inline: auto;
+  padding-inline: var(--case-study-gutter-inline);
+}
+
+@media (min-width: 1280px) {
+  .case-study-layout {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--case-study-layout-gap);
+    padding-inline: 0;
+  }
+
+  .case-study-main {
+    grid-column: 1 / span 8;
+  }
+
+  .toc-sidebar-column {
+    display: block;
+    grid-column: 10 / span 3;
+    position: relative;
+  }
+}
+
+.toc-sidebar-column {
+  display: none;
+}
+
 .case-study-main {
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  min-width: 0;
+}
+
+/** Centered prose measure (Action, Learnings, flow intros) */
+.case-study-prose-width {
+  width: 100%;
+  max-width: var(--case-study-prose-max);
+  margin-inline: auto;
+}
+
+.case-study-prose-width--start {
+  margin-inline: 0;
+}
+
+/** Results / panel body copy column */
+.case-study-body-width {
+  width: 100%;
+  max-width: var(--case-study-body-max);
+  margin-inline: auto;
+}
+
+.case-study-embed-width {
+  width: 100%;
+  max-width: var(--case-study-embed-max);
+  margin-inline: auto;
+  padding-block: var(--grid-2);
+}
+
+.case-study-media-width--xs,
+.case-study-media-width--sm,
+.case-study-media-width--md,
+.case-study-media-width--phone {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.case-study-media-width--xs { max-width: var(--case-study-media-xs); }
+.case-study-media-width--sm { max-width: var(--case-study-media-sm); }
+.case-study-media-width--md { max-width: var(--case-study-media-md); }
+.case-study-media-width--phone { max-width: var(--case-study-media-phone); }
+
+/** Case study page shell — bottom scroll breathing room */
+.case-study-page {
+  padding-bottom: var(--case-study-page-end);
+}
+
+/** Vertical margin utilities (prefer over Tailwind `m*` in case studies) */
+.case-study-margin-top--1 { margin-top: var(--grid-1); }
+.case-study-margin-top--2 { margin-top: var(--grid-2); }
+.case-study-margin-top--3 { margin-top: var(--grid-3); }
+.case-study-margin-top--4 { margin-top: var(--grid-4); }
+
+.case-study-margin-bottom--3 { margin-bottom: var(--grid-3); }
+.case-study-margin-bottom--4 { margin-bottom: var(--grid-4); }
+
+.case-study-margin-y--3 { margin-block: var(--grid-3); }
+.case-study-margin-y--4 { margin-block: var(--grid-4); }
+
+.case-study-inset-y--2 { padding-block: var(--grid-2); }
+
+.case-study-kicker-gap { margin-bottom: calc(var(--grid-1) / 2); }
+
+/** Nested list offset inside insight cards */
+.case-study-list--inset {
+  margin-top: var(--grid-1);
+}
+
+/** Section + nested content stacks — prefer over ad-hoc `space-y-*` in case studies */
+.case-study-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-4);
+}
+
+.case-study-section__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-4);
+}
+
+.case-study-subsection-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dl-panel-gap);
+}
+
+/** Standard media frame for case study figures (replaces mixed rounded-xl / panel-recessed) */
+.case-media-frame {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--dl-border-width) solid var(--color-border);
+  border-radius: var(--dl-border-radius);
+  box-shadow: var(--dl-glow-global);
+}
+
+.case-media-frame--accent {
+  border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border) 55%);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-accent) 18%, transparent),
+    var(--dl-glow-global);
+}
+
+/** Zoom affordance on case study figures (pair with `.case-media-frame` or custom img classes) */
+.case-media-interactive {
+  cursor: zoom-in;
+  transition:
+    transform 200ms var(--ease-te-snap),
+    box-shadow 200ms var(--ease-te-snap);
+}
+
+.case-media-interactive:hover {
+  transform: scale(1.01);
+  box-shadow: var(--dl-shadow-deep);
+}
+
+.case-media-placeholder {
+  width: 100%;
+  min-height: 12rem;
+  border: var(--dl-border-width) solid var(--color-border);
+  border-radius: var(--dl-border-radius);
+  background: var(--color-elevated);
+}
+
+.case-study-figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-1);
+}
+
+.case-lightbox-media {
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--dl-border-radius);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+}
+
+/** Embedded YouTube / iframe clips in case studies */
+.case-video-embed {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--dl-border-radius);
+  border: var(--dl-border-width) solid color-mix(in srgb, var(--color-border) 35%, transparent);
+  background: var(--color-accent-dark);
+  box-shadow: var(--dl-shadow-deep);
+}
+
+.case-video-embed__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.case-video-embed__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/** Two-up image / insight grids inside case study sections */
+.case-study-media-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-2);
+}
+
+@media (min-width: 640px) {
+  .case-study-media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.case-study-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--grid-4);
+  max-width: var(--case-study-prose-max);
+}
+
+@media (min-width: 768px) {
+  .case-study-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.case-study-testimonials-heading {
+  margin-bottom: var(--grid-6);
+}
+
+.case-study-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-1);
+  padding-inline-start: var(--case-study-list-indent);
+  list-style-position: outside;
+}
+
+.case-study-list--disc {
+  list-style-type: disc;
+}
+
+.case-study-list--decimal {
+  list-style-type: decimal;
+}
+
+/** Inset panel padding (regression table, callout blocks) */
+.case-study-panel-inset {
+  padding: var(--grid-3);
+}
+
+/** Horizontal scroll wrapper for data tables */
+.case-study-table-scroll {
+  overflow-x: auto;
+}
+
+.case-study-table {
+  width: 100%;
+  font-size: var(--text-body-sm);
+  border-collapse: collapse;
+}
+
+.case-study-table :is(th, td) {
+  padding: var(--grid-1);
+  text-align: left;
+}
+
+.case-study-table thead tr,
+.case-study-table tbody tr {
+  border-bottom: var(--dl-border-width) solid var(--color-border);
+}
+
+.case-study-table tbody tr {
+  transition: background-color 0.2s var(--ease-te-snap);
+}
+
+.case-study-table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
+}
+
+.case-study-table__cell--empty {
+  opacity: 0.5;
 }
 
 .case-study-main > section {
@@ -1123,7 +1428,7 @@ h5, h6 {
 
 /* Hero → Summary: avoid stacking hero margin + column gap + panel padding */
 .case-study-main > header.project-hero + section {
-  margin-top: -1.25rem;
+  margin-top: calc(var(--case-study-list-indent) * -1);
 }
 
 /* Case study headings — consistent left alignment */
@@ -1155,13 +1460,14 @@ h5, h6 {
 .case-testimonial-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--grid-2);
+  padding: var(--grid-4);
 }
 
 .case-testimonial-card__attrib {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--grid-1);
   margin: 0;
 }
 
@@ -1176,13 +1482,37 @@ h5, h6 {
 
 .case-insight-grid {
   display: grid;
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--dl-panel-gap-lg);
   align-items: start;
   /* Room for baked deckled rim (::before bleed) between cards */
-  padding: 4px;
+  padding: calc(var(--grid-1) / 2);
   position: relative;
   z-index: 2;
   isolation: isolate;
+}
+
+@media (min-width: 768px) {
+  .case-insight-grid--cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .case-insight-grid--cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/** Dense screenshot gallery (e.g. user testing thumbnails) */
+.case-study-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-1);
+}
+
+@media (min-width: 768px) {
+  .case-study-gallery-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .case-insight-grid > * {
@@ -1224,8 +1554,8 @@ h5, h6 {
        Use fixed positioning to keep the TOC anchored. */
     position: fixed !important;
     top: calc(var(--nav-height) + var(--grid-4)) !important;
-    /* Align to the right edge of the `max-w-7xl` case-study container. */
-    right: max(var(--grid-6), calc((100vw - 80rem) / 2));
+    /* Align to the right edge of the case-study container. */
+    right: max(var(--grid-6), calc((100vw - var(--case-study-container-max)) / 2));
     width: 18rem;
     z-index: 30;
     height: fit-content;
@@ -1235,7 +1565,7 @@ h5, h6 {
 
 /* Case study TOC — vertically centred inside parchment scrollport when sticky */
 .dl-embedded--case .toc-sidebar-column {
-  /* Override `hidden xl:block` — TOC must stay visible in the narrow embedded scrollport */
+  /* TOC stays visible in the narrow embedded scrollport */
   display: flex !important;
   flex-direction: column;
   align-items: stretch;
@@ -1345,7 +1675,7 @@ h5, h6 {
   z-index: 0;
 }
 
-/* Decorative frame on enlarged images only — excluded from procedural WebGL (see composable). */
+/* Legacy — use `.case-media-frame--accent` on case study images instead */
 img.panel-recessed {
   background: transparent !important;
   border: none !important;

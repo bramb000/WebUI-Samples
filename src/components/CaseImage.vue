@@ -21,7 +21,7 @@ const { isOpen, open, close } = useCaseLightbox()
 </script>
 
 <template>
-  <figure class="case-image space-y-2">
+  <figure class="case-image case-study-figure">
     <button
       type="button"
       class="case-image__trigger"
@@ -36,10 +36,7 @@ const { isOpen, open, close } = useCaseLightbox()
         :loading="props.priority ? 'eager' : 'lazy'"
         :fetchpriority="props.priority ? 'high' : 'auto'"
         decoding="async"
-        :class="[
-          'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
-          props.imgClass,
-        ]"
+        :class="['case-media-interactive', props.imgClass ?? 'case-media-frame']"
       />
     </button>
     <figcaption
@@ -61,7 +58,7 @@ const { isOpen, open, close } = useCaseLightbox()
         :src="props.src"
         :alt="props.alt"
         :title="props.caption"
-        class="lightbox-image"
+        class="lightbox-image case-lightbox-media"
       />
     </CaseLightboxOverlay>
   </figure>
@@ -76,13 +73,5 @@ const { isOpen, open, close } = useCaseLightbox()
   background: none;
   cursor: zoom-in;
   text-align: inherit;
-}
-
-.lightbox-image {
-  max-width: 90vw;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 0.75rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 </style>

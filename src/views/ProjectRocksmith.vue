@@ -61,10 +61,10 @@ useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
-  <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
-    <div class="case-study-layout xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
+  <div ref="caseStudyRoot" class="animate-fade-in case-study-page relative">
+    <div class="case-study-layout">
       <!-- Main Content Container -->
-      <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
+      <div class="case-study-main">
     <!-- ─── HERO ─── -->
     <ProjectHero
       title="Accessible guitar lessons for 1M+ learners"
@@ -82,30 +82,30 @@ useCaseStudySketchPanels(caseStudyRoot);
     <CaseStudySummary :summary="rocksmithSummary" />
 
     <!-- ─── CONTEXT ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Context</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-lead">
           I joined the team in 2020 when Rocksmith+ was in pre-launch production and <strong>Ubisoft wanted a global release on mobile, PC, and next-gen game consoles</strong> (PlayStation 5 and Xbox Series X). Very few people on the UX team had prior experience building mobile user experiences and responsive UIs and interactions for multiple platforms.
         </p>
         <p class="type-case-body-lg">
           The MVP for Rocksmith+ was also built only for PC. My goal was to deliver it on Mobile and Tablets in addition to Consoles to invite a whole new audience of guitar learners from around the globe.
         </p>
-        <CaseImage :src="challengeGraphic" alt="Challenges faced" caption="The challenges I faced at the start" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="outcomeGraphic" alt="Outcomes achieved" caption="And drove to these outcomes" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="outcomeAward" alt="Accessibility award" imgClass="w-full h-auto rounded-xl max-w-xs mx-auto" />
+        <CaseImage :src="challengeGraphic" alt="Challenges faced" caption="The challenges I faced at the start" />
+        <CaseImage :src="outcomeGraphic" alt="Outcomes achieved" caption="And drove to these outcomes" />
+        <CaseImage :src="outcomeAward" alt="Accessibility award" imgClass="case-study-media-width--xs" />
       </div>
     </section>
 
     <!-- ─── RESEARCH ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Research</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           The first piece of work started with extensive user testing. I requested internal and external volunteers to play a crude, ported version of the PC game on iPad without any scaling and no interactions except simple taps. <strong>My first few initial tests were to discover how people set up a portable device compared to playing on a PC or a TV</strong> to understand the context and environment in which Rocksmith+ would be experienced.
         </p>
         <p class="type-case-body-lg">The tests gleaned insights using three primary methods:</p>
-        <ol class="list-decimal pl-5 space-y-2 type-case-body">
+        <ol class="case-study-list case-study-list--decimal type-case-body">
           <li>Observational studies and contextual interviews with internal and external volunteers (4–6 waves with panels sized 12–15)</li>
           <li>Diary Studies to see if and how user needs evolved as users went from beginners to power users (10 users)</li>
           <li>Surveys after each playtest to track key success signals via ability to learn on mobile as compared to PC, satisfaction of experience, and NPS surveys</li>
@@ -113,25 +113,25 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           Throughout virtual and in-person testing sessions I made notes of various environments users learn guitar in:
         </p>
-        <ol class="list-decimal pl-5 space-y-2 type-case-body">
+        <ol class="case-study-list case-study-list--decimal type-case-body">
           <li>Placing their phone on various physical contexts ranging from kitchen countertops to dedicated desks</li>
           <li>Plugging in their guitars into a myriad of equipment — from pedals to headphones so a parent can practice without disturbing the children</li>
           <li>Placing devices at different distances to have room to play their instruments</li>
         </ol>
 
         <!-- Context photos -->
-        <CaseImage :src="kitchenContext" alt="Kitchen counter setup" caption="A setup showcasing the use of a kitchen counter and an iPad" imgClass="w-full h-auto rounded-xl max-w-md mx-auto" />
-        <CaseLazyImage :loader="rocksmithLazyMedia.userContext" alt="User context with notes" caption="A user showing a mixture of physical note taking in their general context" img-class="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="rocksmithLazyMedia.outdoorsContext" alt="Outdoor setup" caption="One user wanted to push the limits of where they could learn" img-class="w-full h-auto rounded-xl" />
+        <CaseImage :src="kitchenContext" alt="Kitchen counter setup" caption="A setup showcasing the use of a kitchen counter and an iPad" imgClass="case-study-media-width--md" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.userContext" alt="User context with notes" caption="A user showing a mixture of physical note taking in their general context" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.outdoorsContext" alt="Outdoor setup" caption="One user wanted to push the limits of where they could learn" />
 
         <p class="type-case-body-lg">Another important highlight was the amount of personalisation needed:</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="simpleSetup" alt="Simple user setup" caption="A simple user — acoustic guitar and just the device" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="complexSetup" alt="Complex user setup" caption="A hardcore user — electric bass, 2+ musical accessories, and an iPad" imgClass="w-full h-auto rounded-lg" />
+        <div class="case-study-media-grid">
+          <CaseImage :src="simpleSetup" alt="Simple user setup" caption="A simple user — acoustic guitar and just the device" />
+          <CaseImage :src="complexSetup" alt="Complex user setup" caption="A hardcore user — electric bass, 2+ musical accessories, and an iPad" />
         </div>
 
         <!-- Research statistics -->
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
+        <div class="case-insight-grid case-insight-grid--cols-2">
           <CaseInsight stat="~90%" statLabel="potential new users" theme="before">
             <p>Wanted a hassle-free and wireless experience.</p>
           </CaseInsight>
@@ -143,7 +143,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           We also included questions related to eyesight. I wanted to know how many users suffered from eyesight issues including near/far sightedness and colour vision deficiency. <strong>I personally suffer from near sightedness and colour vision deficiency which impassioned my desire for an accessible UI.</strong>
         </p>
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
+        <div class="case-insight-grid case-insight-grid--cols-2">
           <CaseInsight stat="~63%" statLabel="of total responders" theme="before">
             <p>Suffered from at least 1 eyesight issue.</p>
           </CaseInsight>
@@ -156,7 +156,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           I wanted to know how many contexts the general user stories would have and how many devices a user imagined themselves playing on.
         </p>
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-3">
+        <div class="case-insight-grid case-insight-grid--cols-3">
           <CaseInsight stat="87%" statLabel="correlation" theme="before">
             <p>Between size of device and complexity of setup.</p>
           </CaseInsight>
@@ -171,7 +171,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           <strong>What I quickly realised was that the UI cannot be one size fits all for these many user segments.</strong> Users need tons of customisability to change the experience to their needs:
         </p>
-        <ol class="list-decimal pl-5 space-y-2 type-case-body">
+        <ol class="case-study-list case-study-list--decimal type-case-body">
           <li>The ability to start a session with no hassle or hardware for new learners</li>
           <li>The ability to zoom in and zoom out on the guitar lessons based on device distance</li>
           <li>The ability to scale the UI so that buttons are bigger if the device is farther away</li>
@@ -181,9 +181,9 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── SOLUTION: WIRELESS CONNECTIVITY ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Wireless Connectivity</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           <strong>Research made the hypothesis clear.</strong> To grow past hardcore enthusiasts, Rocksmith+ had to go wireless.
         </p>
@@ -198,13 +198,13 @@ useCaseStudySketchPanels(caseStudyRoot);
           image-fit="contain"
         />
 
-        <ul class="list-disc pl-5 space-y-2 type-case-body-lg">
+        <ul class="case-study-list case-study-list--disc type-case-body">
           <li><strong>Phone.</strong> Play through your mic. No cable purchase. Open the app and start.</li>
           <li><strong>Big screen.</strong> Desktop or PS5. Connect your phone. The game listens through the mic.</li>
           <li><strong>Product + marketing.</strong> One promise everywhere. Hassle-free wireless shaped the connection flow and campaign creative.</li>
         </ul>
 
-        <div class="space-y-4">
+        <div class="case-study-subsection-block">
           <h3 class="type-case-subsection">Connection flow</h3>
           <CaseImageFlow
             :step1-src="connectInstrumentChoice"
@@ -226,13 +226,13 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── SOLUTION: RESPONSIVE UI ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Responsive UI</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           I first began with working on a core responsive UI that would offer the base experience on all devices. It involved not only designing and validating layouts in Figma, but also working closely with UI engineers to build appropriate tools:
         </p>
-        <ol class="list-decimal pl-5 space-y-2 type-body">
+        <ol class="case-study-list case-study-list--decimal type-case-body">
           <li>UI component anchoring and scaling so that UI elements know exactly where to stay on the hundreds of devices (TVs, monitors, tablets, and phones of up to 8 standard aspect ratio configurations)</li>
           <li>Aspect ratio based scaling rules — percentage based scaling to maintain consistency without too many breakpoints</li>
           <li>Aspect ratio break point table for bespoke rules for brackets of devices</li>
@@ -246,69 +246,69 @@ useCaseStudySketchPanels(caseStudyRoot);
           <strong>It would automatically know how much to zoom in or out and how to move left and right</strong> to make sure all the 3D objects appeared at the correct places on the screen no matter the aspect ratio and screen resolution. <strong>The MVP achieved usable display results on all 5 target aspect ratios encompassing 90% of expected devices out of the box.</strong>
         </p>
 
-        <CaseLazyImage :loader="rocksmithLazyMedia.threeDto2dDiagram" alt="3D to 2D coordinate system diagram" caption="Converting a 3D object into 2D coordinates, then applying responsive UI component rules, and making the 3D object adjust on different screens" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.threeDto2dDiagram" alt="3D to 2D coordinate system diagram" caption="Converting a 3D object into 2D coordinates, then applying responsive UI component rules, and making the 3D object adjust on different screens" />
 
-        <CaseLazyImage :loader="rocksmithLazyMedia.comparisonOther" alt="Other games UI overlap issue" caption="You can see the overlap between 2D and 3D elements when the screen becomes narrower in other games. Fun fact — this is exactly why many games put their characters in the center of the screen" img-class="w-full h-auto rounded-xl" />
-        <CaseImage :src="comparisonRocksmith" alt="Rocksmith+ no overlap" caption="Because the 3D element is effectively treated as a 2D element, it adjusts without any special rules when playing on phones or tablets" imgClass="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.comparisonOther" alt="Other games UI overlap issue" caption="You can see the overlap between 2D and 3D elements when the screen becomes narrower in other games. Fun fact — this is exactly why many games put their characters in the center of the screen" />
+        <CaseImage :src="comparisonRocksmith" alt="Rocksmith+ no overlap" caption="Because the 3D element is effectively treated as a 2D element, it adjusts without any special rules when playing on phones or tablets" />
 
-        <CaseLazyImage :loader="rocksmithLazyMedia.responsiveUi" alt="Responsive UI in action" caption="The new UI was responsive in runtime without any overlapping of 3D and 2D elements" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.responsiveUi" alt="Responsive UI in action" caption="The new UI was responsive in runtime without any overlapping of 3D and 2D elements" />
 
         <VideoEmbed src="https://www.youtube.com/embed/AvvCJ_hIMjo" title="Responsive UI Live Test" />
         <p class="type-case-caption text-center">Live test demonstrating the 3D-to-2D anchoring system, ensuring all elements remain legible and correctly positioned</p>
 
-        <CaseImage :src="gpdWin4" alt="Rocksmith on GPD Win4" caption="Fun fact — the UI system worked so well that one user got it working on their GPD Win4 handheld gaming machine" imgClass="w-full h-auto rounded-xl max-w-sm mx-auto" />
+        <CaseImage :src="gpdWin4" alt="Rocksmith on GPD Win4" caption="Fun fact — the UI system worked so well that one user got it working on their GPD Win4 handheld gaming machine" imgClass="case-study-media-width--sm" />
 
         <!-- Testing gallery -->
-        <h3 class="type-case-subsection pt-4">User Testing Gallery</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-          <CaseImage :src="userTestingIpadHome" alt="iPad showing Rocksmith+ home screen during user testing on a carpet surface" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingPhoneHome" alt="Phone in landscape showing Rocksmith+ home screen with song carousels during user testing" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingIpadSongDetail" alt="iPad showing Rocksmith+ song detail page for Glow In The Dark by MOTHICA" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingPhoneSongDetail" alt="Phone in landscape showing Rocksmith+ song detail page with arrangement and difficulty controls" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingIpadTuning" alt="iPad showing Rocksmith+ 3D guitar tuning interface with highlighted E string" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingPhoneTuning" alt="Phone in landscape showing Rocksmith+ 3D guitar tuning interface during user testing" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingIpadGameplay" alt="iPad showing Rocksmith+ gameplay with color-coded note highway on the virtual fretboard" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="userTestingPhoneGameplay" alt="Phone in landscape showing Rocksmith+ gameplay with scrolling notes on the virtual fretboard" imgClass="w-full h-auto rounded-lg" />
+        <h3 class="type-case-subsection type-case-subsection--offset">User Testing Gallery</h3>
+        <div class="case-study-gallery-grid">
+          <CaseImage :src="userTestingIpadHome" alt="iPad showing Rocksmith+ home screen during user testing on a carpet surface" />
+          <CaseImage :src="userTestingPhoneHome" alt="Phone in landscape showing Rocksmith+ home screen with song carousels during user testing" />
+          <CaseImage :src="userTestingIpadSongDetail" alt="iPad showing Rocksmith+ song detail page for Glow In The Dark by MOTHICA" />
+          <CaseImage :src="userTestingPhoneSongDetail" alt="Phone in landscape showing Rocksmith+ song detail page with arrangement and difficulty controls" />
+          <CaseImage :src="userTestingIpadTuning" alt="iPad showing Rocksmith+ 3D guitar tuning interface with highlighted E string" />
+          <CaseImage :src="userTestingPhoneTuning" alt="Phone in landscape showing Rocksmith+ 3D guitar tuning interface during user testing" />
+          <CaseImage :src="userTestingIpadGameplay" alt="iPad showing Rocksmith+ gameplay with color-coded note highway on the virtual fretboard" />
+          <CaseImage :src="userTestingPhoneGameplay" alt="Phone in landscape showing Rocksmith+ gameplay with scrolling notes on the virtual fretboard" />
         </div>
       </div>
     </section>
 
     <!-- ─── ACCESSIBILITY ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Accessibility &amp; UI Scaling</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           Accessibility was a core tenet of the experience. <strong>One of the first accessibility features we developed was allowing users to modify the scale of their UI</strong> to fine tune their mobile and tablet experience based on how far they kept their device. The distance between user and device changed heavily based on skill level, instrument type, and physical setup.
         </p>
-        <CaseImage :src="accessibilityScale" alt="UI scaling in action" caption="Users could customise UI scale based on their distance from the device" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="accessibilityScale" alt="UI scaling in action" caption="Users could customise UI scale based on their distance from the device" />
         <p class="type-case-body-lg">
           <strong>This customisation system was easy to build as my team had already worked on a dynamic system to make our 3D UI responsive.</strong> The original system, being built on solid technical foundations, meant that users could change their configuration at run time — whenever they wanted and however many times they wanted.
         </p>
 
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="accessibilityColorblind1" alt="Colorblind accessibility profile 1" imgClass="w-full h-auto rounded-xl object-cover" />
-          <CaseImage :src="accessibilityColorblind2" alt="Colorblind accessibility profile 2" imgClass="w-full h-auto rounded-xl object-cover" />
-          <CaseImage :src="accessibilityColorblind3" alt="Colorblind accessibility profile 3" imgClass="w-full h-auto rounded-xl object-cover" />
-          <CaseImage :src="accessibilityColorblind4" alt="Colorblind accessibility profile 4" imgClass="w-full h-auto rounded-xl object-cover" />
+        <div class="case-study-media-grid">
+          <CaseImage :src="accessibilityColorblind1" alt="Colorblind accessibility profile 1" imgClass="object-cover" />
+          <CaseImage :src="accessibilityColorblind2" alt="Colorblind accessibility profile 2" imgClass="object-cover" />
+          <CaseImage :src="accessibilityColorblind3" alt="Colorblind accessibility profile 3" imgClass="object-cover" />
+          <CaseImage :src="accessibilityColorblind4" alt="Colorblind accessibility profile 4" imgClass="object-cover" />
         </div>
       </div>
     </section>
 
     <!-- ─── UNIFIED INPUT ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Unified Input System</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           Since one subscription of Rocksmith+ gave access on every platform, we expected users to use the app on multiple platforms — think Netflix. <strong>We needed consistent outcomes from the same input on different platforms.</strong>
         </p>
         <p class="type-case-body-lg">
           From all our extensive user studies, one thing was absolutely clear — <strong>users will only have one hand free as they had a guitar in the other.</strong> Whether a mouse, a game controller, or a touch screen, the entire interface had to be usable with only 1 hand.
         </p>
-        <CaseImage :src="marketingOnHand" alt="One hand interface" imgClass="w-full h-auto rounded-xl max-w-xs mx-auto" />
+        <CaseImage :src="marketingOnHand" alt="One hand interface" imgClass="case-study-media-width--xs" />
 
         <!-- Research stats -->
-        <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2">
+        <div class="case-insight-grid case-insight-grid--cols-2">
           <CaseInsight stat="86%" statLabel="of participants" theme="before">
             <p>Wished the interactions were similar to Netflix or Spotify on mobile.</p>
           </CaseInsight>
@@ -326,15 +326,15 @@ useCaseStudySketchPanels(caseStudyRoot);
         <p class="type-case-body-lg">
           <strong>Since users were occupied with guitar chords and memorising complex techniques, it made no sense to add the cognitive load of also learning how to interact with this app on multiple platforms.</strong>
         </p>
-        <CaseImage :src="cognitiveLoad" alt="Cognitive load problem" caption="The user knows what they want, but how do they recreate it on a different platform?" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="cognitiveLoad" alt="Cognitive load problem" caption="The user knows what they want, but how do they recreate it on a different platform?" />
 
         <!-- Interaction Matrix -->
         <p class="type-case-body-lg">
           <strong>I created a 3-dimensional interaction matrix that mapped outcome → component → action</strong> on each platform and conducted many surveys to build an exhaustive list of commonly mapped translations between interactions. For example, hovering with a mouse cursor on desktop was majorly translated as touch and hold for mobile users.
         </p>
-        <CaseImage :src="interactionMatrix" alt="Interaction matrix abstraction" caption="A sample abstraction of the complex interaction matrix" imgClass="w-full h-auto rounded-xl" />
-        <CaseImage :src="inputSystem" alt="Unified input system" caption="How 3 different actions consistently lead to the same outcome on any platform" imgClass="w-full h-auto rounded-xl" />
-        <div class="mt-8">
+        <CaseImage :src="interactionMatrix" alt="Interaction matrix abstraction" caption="A sample abstraction of the complex interaction matrix" />
+        <CaseImage :src="inputSystem" alt="Unified input system" caption="How 3 different actions consistently lead to the same outcome on any platform" />
+        <div class="case-study-margin-top--4">
           <CaseInsight stat="80%" statLabel="average completion rate per user" theme="after">
             <p>Users could consistently achieve the same activities across platforms despite changing devices.</p>
           </CaseInsight>
@@ -343,19 +343,19 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── COMPONENT ADAPTATIONS ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Platform UI Adaptations</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           <strong>The original Rocksmith+ experience was built with only PC in mind</strong>, so many components had to undergo changes to be intuitive for mobile and console UI interactions. For example, on PC you scroll through a carousel by clicking arrows. On touch devices, you simply swipe.
         </p>
         <p class="type-case-body-lg">
           <strong>A large part of my role was making all these small changes to the global design system and its component libraries to improve intuitiveness on mobile, PC, and consoles.</strong>
         </p>
-        <CaseImage :src="mobileComponent" alt="Mobile touch UI" caption="Touch focused UI rarely has arrows to scroll — the content extends slightly off-screen to hint at scrollability" imgClass="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="rocksmithLazyMedia.pcInteractions" alt="PC carousel interactions" caption="On PC, carousel carets are critical for horizontal scrolling with a mouse that usually only supports vertical scroll" img-class="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="rocksmithLazyMedia.mobileInteractions" alt="Mobile scroll interactions" caption="Mobile scroll containers support free form horizontal and vertical scroll without buttons" img-class="w-full h-auto rounded-xl" />
-        <div class="mt-8">
+        <CaseImage :src="mobileComponent" alt="Mobile touch UI" caption="Touch focused UI rarely has arrows to scroll — the content extends slightly off-screen to hint at scrollability" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.pcInteractions" alt="PC carousel interactions" caption="On PC, carousel carets are critical for horizontal scrolling with a mouse that usually only supports vertical scroll" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.mobileInteractions" alt="Mobile scroll interactions" caption="Mobile scroll containers support free form horizontal and vertical scroll without buttons" />
+        <div class="case-study-margin-top--4">
           <CaseInsight stat="~90%" statLabel="of participants" theme="after">
             <p>Felt confident about the mobile UI because it looked similar to an app they already used (e.g., Netflix, Spotify).</p>
           </CaseInsight>
@@ -364,47 +364,47 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── CONSOLE NAVIGATION ─── -->
-    <section class="space-y-8">
+    <section class="case-study-section">
       <h2 class="type-case-section">Console Navigation Challenge</h2>
-      <div class="space-y-8">
+      <div class="case-study-section__content">
         <p class="type-case-body-lg">
           Another major issue <strong>I tackled was menu navigation for consoles.</strong> The original prototypes included expanders with nested scrolls to hide secondary information. While common on desktop and mobile, on consoles this created a major issue.
         </p>
-        <CaseImage :src="nestedScroll" alt="Nested scroll problem" caption="An example of nested scroll — two scroll bars denoting independent scrollable containers" imgClass="w-full h-auto rounded-xl panel-recessed p-4" />
+        <CaseImage :src="nestedScroll" alt="Nested scroll problem" caption="An example of nested scroll — two scroll bars denoting independent scrollable containers" imgClass="case-media-frame--accent" />
         <p class="type-case-body-lg">
           <strong>On consoles, you cannot independently focus on a separate item</strong> — all directional input is mapped to the item in focus. You can only scroll the expanded container all the way up till you reach the header to close it.
         </p>
         <p class="type-case-body-lg">
           <strong>My first gut reaction was to try mapping one stick for the nested container and the other for the root container.</strong>
         </p>
-        <CaseImage :src="nestedScrollSolution" alt="Failed solution" caption="Mapping two sticks to two containers — a solution that failed" imgClass="w-full h-auto rounded-xl" />
+        <CaseImage :src="nestedScrollSolution" alt="Failed solution" caption="Mapping two sticks to two containers — a solution that failed" />
         <p class="type-case-body-lg">This solution had 2 core problems:</p>
-        <ol class="list-decimal pl-5 space-y-2 type-case-body">
+        <ol class="case-study-list case-study-list--decimal type-case-body">
           <li><strong>Not a natural pattern in video game menu UIs.</strong> No mainstream games use two sticks for two UI elements — not intuitive to users</li>
           <li><strong>One of our main goals was one-hand operation</strong> as the other hand holds a guitar. <strong>This pattern required 2 hands</strong></li>
         </ol>
-        <CaseImage :src="guitarController" alt="Guitar + controller" caption="Having to put down the guitar to hold the controller with both hands was a no-go" imgClass="w-full h-auto rounded-xl max-w-sm mx-auto" />
+        <CaseImage :src="guitarController" alt="Guitar + controller" caption="Having to put down the guitar to hold the controller with both hands was a no-go" imgClass="case-study-media-width--sm" />
 
         <!-- Final solution -->
         <p class="type-case-body-lg">
           Going back to the drawing board, a technical designer proposed using a <strong>two-axis design pattern — vertical axis for moving between components, horizontal axis for accessing information.</strong> I created multiple quick iterations in Figma to explore commonalities across platforms.
         </p>
-        <CaseLazyImage :loader="rocksmithLazyMedia.skillsScroll" alt="Skills horizontal scroll" caption="Skills moved into a horizontal scroll — the first component to get this treatment" img-class="w-full h-auto rounded-xl" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.skillsScroll" alt="Skills horizontal scroll" caption="Skills moved into a horizontal scroll — the first component to get this treatment" />
 
         <p class="type-case-body-lg">
           <strong>I worked very closely with a Senior Engineer on building consistent focusing in a two-axis interaction</strong> — whenever users would vertically scroll, the item closest to the current item in focus would gain focus.
         </p>
-        <CaseImage :src="scrollAmbiguity" alt="Scroll ambiguity" caption="When you scroll up from here, what item do you expect to focus on?" imgClass="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="rocksmithLazyMedia.vertScroll" alt="Vertical scroll uniform" caption="Uniform grid — simply focus tile number 3 in the next row" img-class="w-full h-auto rounded-xl" />
-        <CaseLazyImage :loader="rocksmithLazyMedia.vertScrollNonUniform" alt="Vertical scroll non-uniform" caption="Non-uniform grid — the focused element is closest in proximity to the previous element" img-class="w-full h-auto rounded-xl" />
+        <CaseImage :src="scrollAmbiguity" alt="Scroll ambiguity" caption="When you scroll up from here, what item do you expect to focus on?" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.vertScroll" alt="Vertical scroll uniform" caption="Uniform grid — simply focus tile number 3 in the next row" />
+        <CaseLazyImage :loader="rocksmithLazyMedia.vertScrollNonUniform" alt="Vertical scroll non-uniform" caption="Non-uniform grid — the focused element is closest in proximity to the previous element" />
 
         <p class="type-case-body-lg">
           When we specifically asked playtesting moderator "comparing to other main menus such as your console's game library, did you have any issues with the Rocksmith+ main menu?" — <strong>100% of results came in as "no"</strong>. This was a big success.
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CaseImage :src="controlSchemeConsole" alt="Console control scheme" caption="Control scheme for consoles" imgClass="w-full h-auto rounded-lg" />
-          <CaseImage :src="controlSchemeDesktop" alt="Desktop control scheme" caption="Control scheme for desktop" imgClass="w-full h-auto rounded-lg" />
+        <div class="case-study-media-grid">
+          <CaseImage :src="controlSchemeConsole" alt="Console control scheme" caption="Control scheme for consoles" />
+          <CaseImage :src="controlSchemeDesktop" alt="Desktop control scheme" caption="Control scheme for desktop" />
         </div>
       </div>
     </section>
@@ -412,7 +412,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     <!-- ─── RESULTS ─── -->
     <section class="panel-recessed--no-pencil-frame noise-overlay case-study-panel case-study-panel--loose">
       <h2 class="type-case-section-major">Result</h2>
-      <div class="case-study-panel__body max-w-3xl mx-auto type-case-body-lg">
+      <div class="case-study-panel__body case-study-body-width type-case-body-lg">
         <p>
           Rocksmith+ launched in open beta and swiftly followed a global launch in 2022. The mobile version was able to unlock a completely new market of on-the-go learners who did not have the money, time, or privilege of learning to play the guitar on a computer or a game console.
         </p>
@@ -427,7 +427,7 @@ useCaseStudySketchPanels(caseStudyRoot);
     </section>
 
     <!-- ─── LEARNINGS ─── -->
-    <section class="max-w-4xl mx-auto space-y-6">
+    <section class="case-study-prose-width case-study-section">
       <h2 class="type-case-section-block">Learnings</h2>
       <p class="type-case-body-lg">
         Working in a global team based out of San Francisco, Osaka, and Pune, I quickly learnt that project-wide impact on accessibility and a multi-device philosophy won't automatically result in a great product simply with my personal contributions. A large part of team alignment came from <strong>rooting discussion in user needs and coaching the team what a truly multi-device experience means</strong> — which included numerous coaching and workshop sessions on mobile interactions and games.
@@ -439,8 +439,8 @@ useCaseStudySketchPanels(caseStudyRoot);
 
     <!-- ─── TESTIMONIALS ─── -->
     <section>
-      <h2 class="type-case-section-block mb-12">Testimonials</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+      <h2 class="type-case-section-block case-study-testimonials-heading">Testimonials</h2>
+      <div class="case-study-card-grid">
         <CaseTestimonialCard
           name="Hiroshi Ogawa"
           role="Lead UI Engineer, Ubisoft"
@@ -467,7 +467,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
       
       <!-- ToC Sidebar Container -->
-      <div class="toc-sidebar-column hidden xl:block xl:col-span-3 xl:col-start-10 relative">
+      <div class="toc-sidebar-column">
         <div class="toc-sidebar-sticky">
           <TableOfContents />
         </div>

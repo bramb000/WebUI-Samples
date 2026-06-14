@@ -24,11 +24,11 @@ useCaseStudySketchPanels(caseStudyRoot);
 </script>
 
 <template>
-  <div ref="caseStudyRoot" class="animate-fade-in pb-24 relative">
-    <div class="case-study-layout xl:grid xl:grid-cols-12 xl:gap-8 w-full max-w-7xl mx-auto px-6 xl:px-0">
+  <div ref="caseStudyRoot" class="animate-fade-in case-study-page relative">
+    <div class="case-study-layout">
       
       <!-- Main Content Column -->
-      <div class="case-study-main xl:col-span-8 xl:col-start-1 min-w-0">
+      <div class="case-study-main">
         
         <!-- ─── HERO ─── -->
         <ProjectHero
@@ -44,31 +44,31 @@ useCaseStudySketchPanels(caseStudyRoot);
         </ProjectHero>
 
         <!-- ─── USER EXPERIENCE ─── -->
-        <section class="space-y-6">
+        <section class="case-study-section">
           <h2 class="type-case-section">User Experience</h2>
           <p class="type-case-lead">
             Observational study was my primary user research tool, observing and interviewing approximately 60 players across multiple session environments and game systems like <em>Dungeons &amp; Dragons</em> and <em>Pathfinder</em>. This research revealed a chronological series of physical and social constraints.
           </p>
           
-          <div class="space-y-6 type-case-body-lg">
-            <div class="space-y-4">
+          <div class="case-study-section__content type-case-body-lg">
+            <div class="case-study-subsection-block">
               <CaseImage
                 :src="crowdedTableImg"
                 alt="A top-down view of a crowded board game dining table during a D&D session with character sheets, books, miniatures, snacks, soda cans, and dice"
                 caption="The Setup Space — Typical face-to-face game tables are heavily crowded with reference books, sheets, miniatures, and snacks."
-                img-class="w-full h-auto rounded-xl border border-[var(--color-border)]"
+               
               />
               <p>
                 <strong>Phase 1: The Messy Table.</strong> Face-to-face board game nights are intensely tactile but highly cluttered. Dining tables are packed flat with character sheets, pencils, rulebooks, miniatures, snack bowls, and drinks. Rolling physical dice in this space was constant chaos—dice routinely knocked over fragile miniature setups, fell off table edges, or landed in beverage cups.
               </p>
             </div>
 
-            <div class="space-y-4">
+            <div class="case-study-subsection-block">
               <CaseImage
                 :src="laptopsTableImg"
                 alt="Players hunched over open, bulky laptops at a board game table, blocking views and creating a physical and social barrier"
                 caption="The Laptop Barrier — Attempting to run digital dice and sheet utilities on laptops consumes valuable physical space and isolates players."
-                img-class="w-full h-auto rounded-xl border border-[var(--color-border)]"
+               
               />
               <p>
                 <strong>Phase 2: The Failed Laptop Workaround.</strong> To mitigate physical space issues, some players attempted to use laptops to manage character sheets and roll digital dice. However, this introduced a severe secondary pain point. Laptop screens created a literal social barrier, blocking line-of-sight between players and the Game Master. Additionally, open laptops consumed massive table footprints, leaving zero space for players to reach physical boards or components.
@@ -85,7 +85,7 @@ useCaseStudySketchPanels(caseStudyRoot);
             Conducting interviews and playtest observations with 60 users revealed several key issues (highlighted in red below) that shifted our product and interface design:
           </p>
           
-          <div class="case-insight-grid grid grid-cols-1 md:grid-cols-3 mt-6 gap-6">
+          <div class="case-insight-grid case-insight-grid--cols-3 case-study-margin-top--3">
             <CaseInsight stat="25%" statLabel="Tablet Focus" theme="before">
               <p class="type-case-body"><strong>Space constraints were real.</strong> While mobile was the primary target, 25% of observed users reported also wanting to use their tablets flat on the table alongside character sheets rather than phones.</p>
             </CaseInsight>
@@ -98,26 +98,26 @@ useCaseStudySketchPanels(caseStudyRoot);
           </div>
 
           <h3 class="type-case-subsection">How Insights Informed the Design</h3>
-          <div class="space-y-4 type-case-body-lg">
+          <div class="case-study-subsection-block type-case-body-lg">
             <p>
               Rather than building a standard desktop-oriented web layout, the playtesting insights directly shaped the physical ergonomics of the app:
             </p>
-            <ul class="list-disc pl-5 space-y-2 type-case-body">
+            <ul class="case-study-list case-study-list--disc type-case-body">
               <li><strong>Flat/Propped Table Ergonomics</strong>: Because 25% of users wanted to roll from tablets and many others kept their phones resting flat on the table, the interface was designed to be operated flat. Font sizes are scaled, and buttons have massive hit areas so players can operate the app from an angle without picking the device up.</li>
               <li><strong>One-Hand Thumb Reach Zone</strong>: The primary rolling controls and tray pickers are clustered at the bottom of the viewport, ensuring players can keep one hand free to hold food, cards, or reference sheets.</li>
             </ul>
           </div>
 
-          <div class="my-8 grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
-            <div class="max-w-[320px] mx-auto w-full">
+          <div class="case-study-margin-y--4 case-study-media-grid items-start">
+            <div class="case-study-media-width--phone">
               <CaseImage
                 :src="touchHeatmapImg"
                 alt="Heatmap infographic of a mobile phone screen showing thumb reachability zones (green for easy lower reach, yellow for moderate, red for hard)"
                 caption="Thumb Reachability — Green zone highlights easy-reach thumb interactions."
-                img-class="w-full h-auto rounded-xl border border-[var(--color-border)]"
+               
               />
             </div>
-            <div class="max-w-[320px] mx-auto w-full">
+            <div class="case-study-media-width--phone">
               <CaseImage
                 class="device-iphone-wrapper"
                 :src="heroImg"
@@ -129,15 +129,15 @@ useCaseStudySketchPanels(caseStudyRoot);
         </section>
 
         <!-- ─── USER INTERFACE ─── -->
-        <section class="space-y-6">
+        <section class="case-study-section">
           <h2 class="type-case-section">User Interface</h2>
           
-          <div class="space-y-4 type-case-body-lg">
+          <div class="case-study-subsection-block type-case-body-lg">
             <h3 class="type-case-subsection">Procreate Inspiration: Canvas Minimalism &amp; Tactile Gestures</h3>
             <p>
               To make the interface feel less like a clinical configuration form and more like a tactile, high-response instrument, I drew significant inspiration from <strong>Procreate's interaction model</strong>. Procreate successfully handles complex artistic tools on mobile devices by keeping the drawing canvas entirely clear, utilizing fluid gesture-driven overlays and slide-in panels that respect user focus and state context.
             </p>
-            <ul class="list-disc pl-5 space-y-2 type-case-body">
+            <ul class="case-study-list case-study-list--disc type-case-body">
               <li><strong>Zero-Friction Clear Gesture</strong>: Borrowing Procreate's iconic two-finger tap to undo, a quick double-tap anywhere on the 3D rolling canvas instantly clears all active dice and resets the board.</li>
               <li><strong>Tactile Flick-to-Roll</strong>: Instead of relying strictly on tapping a static "Roll" button, players can flick/swipe their finger directly across the 3D canvas or shake their phone (utilizing browser-native Accelerometer APIs) to toss the dice. The swipe gesture's drag direction and velocity map directly to the initial physical forces and torque applied to the 3D bodies.</li>
               <li><strong>Radial Settings Context Menu</strong>: Long-pressing a die in the tray picker invokes a radial touch dial, allowing players to customize materials, colors, or tweak quantity modifiers in a single continuous touch-drag-release sequence without leaving the canvas.</li>
@@ -147,7 +147,7 @@ useCaseStudySketchPanels(caseStudyRoot);
             <p>
               To eliminate cognitive friction during fast-paced play, I established a strict design rule: <strong>the application chrome must not reflow when state changes.</strong> When rolling, selected dice counts change, or errors occur, elements must not push other layout components around.
             </p>
-            <ul class="list-disc pl-5 space-y-2 type-case-body">
+            <ul class="case-study-list case-study-list--disc type-case-body">
               <li><strong>Persistent Control Targets</strong>: Clear/remove buttons and counts are always mounted in the DOM. When they are inactive or zero, they use CSS <code>invisible</code> rather than conditional rendering, preserving their exact layout footprint.</li>
               <li><strong>Fixed Cast Cells</strong>: To handle mobile viewport sizing, dice selection cells use a strict <code>--cast-cell-size</code> (84px on mobile, 60px on desktop) instead of adapting dynamically to viewport width, avoiding squishing.</li>
               <li><strong>Tray Isolation</strong>: The interface control tray overlays the 3D viewport instead of resizing it, guaranteeing that Three.js does not trigger expensive camera updates or canvas resize layouts during gameplay.</li>
@@ -165,7 +165,7 @@ useCaseStudySketchPanels(caseStudyRoot);
             <p>
               To resolve playtest bookkeeping struggles (55% users struggling with manual math) and GM stalls, we implemented a dedicated <strong>Dice Presets Manager</strong>. Players can save complex formulas (e.g., D&D Wizard Fireball 8d6, Warhammer Attack 10d6, Pathfinder Initiative 1d20+5) to quickly jump between rolling contexts and games. This maintains steady pacing and automates calculations instantly.
             </p>
-            <div class="my-6 max-w-[320px] mx-auto">
+            <div class="case-study-margin-y--3 case-study-media-width--phone">
               <CaseImage
                 class="device-iphone-wrapper"
                 :src="presetsImg"
@@ -181,7 +181,7 @@ useCaseStudySketchPanels(caseStudyRoot);
           </div>
 
           <!-- Video Demo Mobile -->
-          <div class="my-6 max-w-[320px] mx-auto">
+          <div class="case-study-margin-y--3 case-study-media-width--phone">
             <CaseLazyImage
               class="device-iphone-wrapper"
               :loader="rollMobileLoader"
@@ -191,11 +191,11 @@ useCaseStudySketchPanels(caseStudyRoot);
             />
           </div>
 
-          <h3 class="type-case-subsection pt-4">Accessibility &amp; Keyboard Support</h3>
+          <h3 class="type-case-subsection type-case-subsection--offset">Accessibility &amp; Keyboard Support</h3>
           <p class="type-case-lead">
             Accessibility was built into the foundation rather than treated as a checklist item.
           </p>
-          <div class="space-y-4 type-case-body-lg">
+          <div class="case-study-subsection-block type-case-body-lg">
             <p>
               <strong>Roving Keyboard Focus</strong>: To support players using external keyboards, adaptive switches, or controllers, I implemented a custom roving focus system (<code>useCastGridRovingFocus</code> and <code>RovingFocusList</code>). Buttons and dice tiles are managed dynamically, allowing users to navigate through selection cards and roll trays using arrow keys, rather than tabs.
             </p>
@@ -207,11 +207,11 @@ useCaseStudySketchPanels(caseStudyRoot);
             </p>
           </div>
 
-          <h3 class="type-case-subsection pt-4">Performance Tuning &amp; &ldquo;No 3D Mode&rdquo;</h3>
+          <h3 class="type-case-subsection type-case-subsection--offset">Performance Tuning &amp; &ldquo;No 3D Mode&rdquo;</h3>
           <p class="type-case-lead">
             A key design-engineering constraint was managing battery consumption during extended sessions.
           </p>
-          <div class="space-y-4 type-case-body-lg">
+          <div class="case-study-subsection-block type-case-body-lg">
             <p>
               To address this, I implemented a dedicated <strong>No 3D Mode</strong> bypass. Enabling this option disables the WebGL renderer and Rapier3D physics entirely. Roll calculations are completed instantly in JavaScript and displayed via simple, styled text cards.
             </p>
@@ -224,7 +224,7 @@ useCaseStudySketchPanels(caseStudyRoot);
           </div>
 
           <!-- Video Demo Desktop -->
-          <div class="my-6">
+          <div class="case-study-margin-y--3">
             <CaseLazyImage
               class="device-macbook-wrapper"
               :loader="rollDesktopLoader"
@@ -234,11 +234,11 @@ useCaseStudySketchPanels(caseStudyRoot);
             />
           </div>
 
-          <h3 class="type-case-subsection pt-4">Tech Stack</h3>
+          <h3 class="type-case-subsection type-case-subsection--offset">Tech Stack</h3>
           <p class="type-case-body-lg">
             The project utilizes a high-performance React frontend coupled with WebGL physics and a serverless Supabase backend:
           </p>
-          <div class="case-insight-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="case-insight-grid">
             <CaseInsight stat="Frontend Architecture" statLabel="React 19 · TypeScript · Vite · Tailwind v4" theme="after">
               <p class="type-case-body">Modern React stack utilizing Tailwind CSS v4's compiler for styling. Roving focus and accessibility are built using Radix UI primitives.</p>
             </CaseInsight>
@@ -253,7 +253,7 @@ useCaseStudySketchPanels(caseStudyRoot);
             </CaseInsight>
           </div>
           
-          <div class="my-8">
+          <div class="case-study-margin-y--4">
             <CaseImage
               class="device-macbook-wrapper"
               :src="desktopImg"
@@ -264,12 +264,12 @@ useCaseStudySketchPanels(caseStudyRoot);
         </section>
 
         <!-- ─── PRODUCT DECISIONS ─── -->
-        <section class="space-y-6">
+        <section class="case-study-section">
           <h2 class="type-case-section">Product Decisions</h2>
           <p class="type-case-lead">
             Product success depended on key decisions around <strong>distribution</strong>, <strong>monetization</strong>, and <strong>organic viral growth</strong>.
           </p>
-          <div class="space-y-4 type-case-body-lg">
+          <div class="case-study-subsection-block type-case-body-lg">
             <h3 class="type-case-subsection">Distribution: PWA Webapp Over Native Stores</h3>
             <p>
               To maximize adoption in a social, physical game setting, I opted to build a Progressive Web App (PWA) distributed directly via the web rather than native iOS or Android app stores. During a game night, the loop and friction of navigating to an app store, authenticating, and downloading a native app acts as a massive barrier to spontaneous adoption.
@@ -305,7 +305,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
 
       <!-- Table of Contents Sidebar -->
-      <div class="toc-sidebar-column hidden xl:block xl:col-span-3 xl:col-start-10 relative">
+      <div class="toc-sidebar-column">
         <div class="toc-sidebar-sticky">
           <TableOfContents />
         </div>
@@ -327,16 +327,16 @@ useCaseStudySketchPanels(caseStudyRoot);
   width: 100%;
   max-width: 320px;
   margin: 0 auto;
-  border: 10px solid var(--color-border-heavy, #222);
+  border: 10px solid var(--device-mockup-bezel);
   border-radius: 36px;
-  background: #000;
-  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
+  background: var(--device-mockup-screen);
+  box-shadow: inset 0 0 4px var(--device-mockup-inset-glow);
   overflow: hidden;
 }
 
 .device-iphone-wrapper :deep(.case-image__trigger),
 .device-iphone-wrapper :deep(.case-loop__trigger) {
-  margin-bottom: 16px; /* Spacing between mockup and caption */
+  margin-bottom: var(--grid-2);
 }
 
 .device-iphone-wrapper :deep(img),
@@ -357,17 +357,17 @@ useCaseStudySketchPanels(caseStudyRoot);
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  border: 18px solid var(--color-border-heavy, #222);
+  border: 18px solid var(--device-mockup-bezel);
   border-radius: 28px;
-  background: #000;
-  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
+  background: var(--device-mockup-screen);
+  box-shadow: inset 0 0 4px var(--device-mockup-inset-glow);
   overflow: hidden;
   aspect-ratio: 4 / 3;
 }
 
 .device-ipad-wrapper :deep(.case-image__trigger),
 .device-ipad-wrapper :deep(.case-loop__trigger) {
-  margin-bottom: 16px; /* Spacing between mockup and caption */
+  margin-bottom: var(--grid-2);
 }
 
 .device-ipad-wrapper :deep(img),
@@ -393,12 +393,12 @@ useCaseStudySketchPanels(caseStudyRoot);
 .device-macbook-wrapper :deep(.case-lazy-image__placeholder),
 .device-macbook-wrapper :deep(.case-loop__placeholder) {
   position: relative;
-  border: 12px solid #1c1c1d;
+  border: 12px solid var(--device-mockup-bezel);
   border-bottom: 0;
   border-radius: 16px 16px 0 0;
-  background: #000;
+  background: var(--device-mockup-screen);
   box-shadow: none;
-  margin-bottom: 24px; /* reserve space for absolute lip below + spacing */
+  margin-bottom: var(--grid-3);
   overflow: visible; /* show lip outside */
 }
 
@@ -407,7 +407,11 @@ useCaseStudySketchPanels(caseStudyRoot);
   content: '';
   display: block;
   height: 12px;
-  background: linear-gradient(to bottom, #747477 0%, #48484a 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--device-mockup-lip-gradient-top) 0%,
+    var(--device-mockup-lip-gradient-bottom) 100%
+  );
   border-radius: 0 0 16px 16px;
   box-shadow: none;
   position: absolute;
@@ -426,7 +430,7 @@ useCaseStudySketchPanels(caseStudyRoot);
   transform: translateX(-50%);
   width: 70px;
   height: 6px;
-  background: #2a2a2c;
+  background: var(--device-mockup-lip-notch);
   border-radius: 0 0 6px 6px;
   z-index: 11;
 }

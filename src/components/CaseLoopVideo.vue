@@ -3,7 +3,7 @@
  * Looping case-study clip — prefer WebM over GIF. Defers decode until near viewport unless priority.
  * Holds the last frame for 5s before restarting (no native loop attribute).
  */
-import { onMounted, onUnmounted, ref, useId } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useId } from 'vue'
 import CaseLightboxOverlay from './CaseLightboxOverlay.vue'
 import { useCaseLightbox } from '../composables/useCaseLightbox'
 
@@ -25,10 +25,10 @@ const captionId = useId()
 let observer: IntersectionObserver | null = null
 const holdTimeouts = new Map<HTMLVideoElement, ReturnType<typeof setTimeout>>()
 
-const mediaClass = [
-  'w-full h-auto rounded-xl cursor-zoom-in transition-transform duration-200 hover:scale-[1.01] hover:shadow-lg',
-  props.imgClass,
-]
+const mediaClass = computed(() => [
+  'case-media-interactive',
+  props.imgClass ?? 'case-media-frame',
+])
 
 function clearHoldFor(video: HTMLVideoElement) {
   const timeout = holdTimeouts.get(video)
@@ -73,7 +73,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <figure ref="root" class="case-loop space-y-2">
+  <figure ref="root" class="case-loop case-study-figure">
     <button
       v-if="shouldPlay"
       type="button"
@@ -98,7 +98,7 @@ onUnmounted(() => {
     </button>
     <div
       v-else
-      class="case-loop__placeholder w-full min-h-[12rem] rounded-xl bg-[var(--color-elevated)]"
+      class="case-loop__placeholder case-media-placeholder"
       :style="props.poster ? { backgroundImage: `url(${props.poster})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined"
       :aria-label="`Loading video: ${props.alt}`"
       role="img"
@@ -121,7 +121,7 @@ onUnmounted(() => {
         v-if="shouldPlay"
         :src="props.src"
         :poster="props.poster"
-        class="lightbox-video"
+        class="lightbox-video case-lightbox-media"
         autoplay
         muted
         playsinline
@@ -144,13 +144,5 @@ onUnmounted(() => {
   background: none;
   cursor: zoom-in;
   text-align: inherit;
-}
-
-.lightbox-video {
-  max-width: 90vw;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 0.75rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 </style>

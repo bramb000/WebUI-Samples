@@ -146,21 +146,21 @@ const isNumericMetric = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 10px 10px 12px;
+  gap: calc(var(--grid-1) / 2);
+  padding: var(--grid-2) var(--grid-2) var(--grid-2);
   flex: 0 1 auto;
   box-sizing: border-box;
 }
 
 .metric-content--prose {
   align-items: stretch;
-  padding: 12px 14px;
+  padding: var(--grid-2) calc(var(--grid-2) + var(--grid-1) / 2);
 }
 
 .metric-lcd {
   width: 80%;
   min-width: 80px;
-  padding: 4px 12px 0;
+  padding: var(--grid-1) var(--grid-2) 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,7 +198,7 @@ const isNumericMetric = computed(() => {
 
 .metric-label {
   width: 100%;
-  padding: 0 12px;
+  padding: 0 var(--grid-2);
   line-height: 1.15;
   text-align: left;
 }

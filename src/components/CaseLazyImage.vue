@@ -74,7 +74,7 @@ onUnmounted(() => {
     />
     <div
       v-else
-      class="case-lazy-image__placeholder w-full min-h-[12rem] rounded-xl bg-[var(--color-elevated)] animate-pulse"
+      class="case-lazy-image__placeholder case-media-placeholder animate-pulse"
       :aria-label="`Loading: ${alt}`"
       role="img"
     />

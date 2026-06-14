@@ -32,7 +32,7 @@ defineProps<Props>();
     <!-- Title & Intro -->
     <div class="hero-title-block">
       <h1 class="type-hero-title">{{ title }}</h1>
-      <p class="type-body-lg text-muted">{{ description }}</p>
+      <p class="type-case-body-lg text-muted">{{ description }}</p>
     </div>
 
     <!-- Metadata Grid -->
@@ -66,22 +66,26 @@ defineProps<Props>();
 
 <style scoped>
 .project-hero {
-  padding: 48px 0 0;
+  padding: var(--case-study-hero-padding-top) 0 0;
   margin-bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--grid-3);
 }
-@media (min-width: 768px) { .project-hero { padding: 64px 0 0; } }
+@media (min-width: 768px) {
+  .project-hero {
+    padding-top: var(--case-study-hero-padding-top-md);
+  }
+}
 
 .hero-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: calc(var(--grid-1) * 0.75);
 }
 
 .project-hero .dl-plaque {
-  padding: 4px 12px;
+  padding: calc(var(--grid-1) / 2) var(--grid-2);
   background: transparent;
   border: 1px solid color-mix(in srgb, var(--color-border) 30%, transparent);
   color: var(--color-text);
@@ -100,7 +104,7 @@ defineProps<Props>();
 .hero-client-tag {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--grid-1);
 }
 
 .hero-client-logo {
@@ -113,14 +117,14 @@ defineProps<Props>();
 .hero-title-block {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 800px;
+  gap: var(--grid-2);
+  max-width: var(--case-study-hero-title-max);
 }
 .project-hero .type-hero-title {
   margin: 0;
   text-shadow: 0 0 30px color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
-.project-hero .type-body-lg {
+.project-hero .type-case-body-lg {
   margin: 0;
 }
 
@@ -137,10 +141,10 @@ defineProps<Props>();
 }
 
 .hero-meta-cell {
-  padding: 16px 20px;
+  padding: var(--grid-2) var(--case-study-list-indent);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--grid-1);
 }
 .hero-meta-cell--wide { grid-column: 1 / -1; }
 @media (min-width: 768px) {
@@ -150,7 +154,7 @@ defineProps<Props>();
 .meta-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: calc(var(--grid-1) * 0.75);
 }
 .project-hero .type-meta-value {
   margin: 0;

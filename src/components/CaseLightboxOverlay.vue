@@ -130,25 +130,25 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgb(0 0 0 / 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  padding: 2rem;
+  padding: var(--grid-4);
 }
 
 .lightbox-close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.5rem;
+  top: calc(var(--grid-3) - var(--grid-1) / 2);
+  right: var(--grid-4);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   font-weight: 700;
   color: var(--text-on-tint);
   background: color-mix(in srgb, var(--text-on-tint) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--text-on-tint) 28%, transparent);
+  border: var(--dl-border-width) solid color-mix(in srgb, var(--text-on-tint) 28%, transparent);
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: calc(var(--grid-unit) * 5);
+  height: calc(var(--grid-unit) * 5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +168,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: var(--grid-2);
   max-width: 90vw;
   max-height: 90vh;
 }
@@ -176,7 +176,7 @@ onBeforeUnmount(() => {
 .lightbox-caption {
   color: var(--text-on-tint-muted);
   text-align: center;
-  max-width: 600px;
+  max-width: var(--case-study-lightbox-caption-max);
   margin: 0;
 }
 
