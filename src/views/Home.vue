@@ -156,7 +156,6 @@ onBeforeUnmount(() => {
           :video="card.video"
           :visual-placeholder="card.visualPlaceholder"
           :transparent-visual="card.transparentVisual"
-          :feather-visual-edges="card.featherVisualEdges"
         />
       </div>
     </section>

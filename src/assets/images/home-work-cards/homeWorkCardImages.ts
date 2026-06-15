@@ -15,12 +15,10 @@ export type HomeWorkCardArt = {
   visualPlaceholder?: boolean
   /** Skip recessed panel / opaque fill so alpha WebM shows through */
   transparentVisual?: boolean
-  /** Soft edge blend when video bg is matched to --color-surface */
-  featherVisualEdges?: boolean | 'strong'
 }
 
 export const HOME_WORK_CARD_ART = {
-  rocksmith: { video: rocksmithWebm, poster: rocksmithPoster, featherVisualEdges: true },
+  rocksmith: { video: rocksmithWebm, poster: rocksmithPoster },
   guild: { video: guildWebm, poster: guildPoster },
 } as const satisfies Record<string, HomeWorkCardArt>
 

@@ -29,6 +29,10 @@ export type ChiselRimBakeOptions = {
   panelFill?: boolean
   /** Flat fill + rim in one tone (parchment / insight cards). */
   monotoneFill?: boolean
+  /** Monotone plates: fill only — no carved border ring (hero video parchment match). */
+  plateFillOnly?: boolean
+  /** Override angular chisel depth without enabling {@link cleanRim}. */
+  chiselDepth?: number
 }
 
 export const CARD_BLEED_PX = 16
@@ -61,6 +65,7 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
   uniform float u_flatRim;
   uniform float u_outwardRim;
   uniform float u_monotoneFill;
+  uniform float u_plateFillOnly;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -172,7 +177,7 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
       float fillAlpha = 1.0 - smoothstep(-0.004, 0.008, dBox);
       if (u_monotoneFill > 0.5) {
         finalColor = u_fillColor;
-        alpha = max(fillAlpha, borderAlpha);
+        alpha = u_plateFillOnly > 0.5 ? fillAlpha : max(fillAlpha, borderAlpha);
       } else {
         vec3 interior = u_fillColor;
         finalColor = mix(interior, finalColor, borderAlpha);
@@ -241,6 +246,7 @@ function ensureBakeGl() {
     u_flatRim: { value: 0 },
     u_outwardRim: { value: 0 },
     u_monotoneFill: { value: 0 },
+    u_plateFillOnly: { value: 0 },
   }
 
   bakeMaterial = new THREE.ShaderMaterial({
@@ -276,12 +282,15 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   vh = Math.max(4, Math.ceil(vh * scale))
 
   bakeRenderer.setSize(vw, vh, false)
-  bakeRenderer.setClearColor(0x000000, 0)
   bakeRenderer.setScissorTest(false)
   bakeRenderer.setViewport(0, 0, vw, vh)
-  bakeRenderer.clear(true, true, true)
 
   const color = new THREE.Color(opts.colorHex)
+  const opaquePlate = !!(opts.monotoneFill && opts.panelFill)
+  // Monotone plates: clear to fill so semi-transparent chisel AA doesn't pick up black halos.
+  bakeRenderer.setClearColor(color.getHex(), opaquePlate ? 1 : 0)
+  bakeRenderer.clear(true, true, true)
+
   const cardL = bleed
   const cardT = bleed
   const cardW = widthCss
@@ -299,6 +308,7 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   bakeMaterial.uniforms.u_hoverFlameState.value = 0
   bakeMaterial.uniforms.u_panelFill.value = opts.panelFill ? 1 : 0
   bakeMaterial.uniforms.u_monotoneFill.value = opts.monotoneFill ? 1 : 0
+  bakeMaterial.uniforms.u_plateFillOnly.value = opts.plateFillOnly ? 1 : 0
   bakeMaterial.uniforms.u_flatRim.value = opts.flatRim ? 1 : 0
   bakeMaterial.uniforms.u_outwardRim.value = opts.outwardRim ? 1 : 0
   const depthEffect = opts.depthEffect ?? 0.164
@@ -353,6 +363,9 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   if (flatRim && !cleanRim) {
     bakeMaterial.uniforms.u_chiselDepth.value = 0
     bakeMaterial.uniforms.u_wobble.value = 0
+  }
+  if (opts.chiselDepth !== undefined) {
+    bakeMaterial.uniforms.u_chiselDepth.value = opts.chiselDepth
   }
 
   bakeRenderer.render(bakeScene, bakeCamera)

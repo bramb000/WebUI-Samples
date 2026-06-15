@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
+import CaseCreamInsight from './CaseCreamInsight.vue'
 
 interface Props {
   year: string
@@ -12,14 +13,16 @@ interface Props {
   video?: string
   visualPlaceholder?: boolean
   transparentVisual?: boolean
-  /** Soft edge blend when video bg is matched to --color-surface */
-  featherVisualEdges?: boolean | 'strong'
 }
 
 const props = defineProps<Props>()
 
 const hasVideo = computed(
   () => !!props.video && /\.webm($|\?)/i.test(props.video),
+)
+
+const showCreamPanel = computed(
+  () => !props.transparentVisual && !props.visualPlaceholder,
 )
 </script>
 
@@ -37,20 +40,15 @@ const hasVideo = computed(
       </div>
     </div>
 
-    <div
+    <CaseCreamInsight
+      v-if="showCreamPanel"
       class="home-work-card__visual"
-      :class="{
-        'panel-recessed panel-recessed--borderless': !transparentVisual && !visualPlaceholder,
-        'home-work-card__visual--transparent': transparentVisual,
-        'home-work-card__visual--placeholder': visualPlaceholder,
-        'home-work-card__visual--feathered': featherVisualEdges,
-      }"
-      :aria-hidden="visualPlaceholder || undefined"
+      media-only
+      :grain-key="title"
     >
       <video
         v-if="hasVideo"
         class="home-work-card__media"
-        :class="{ 'home-work-card__media--feathered': !!featherVisualEdges, 'home-work-card__media--feathered-strong': featherVisualEdges === 'strong' }"
         :src="video"
         :poster="poster"
         autoplay
@@ -64,7 +62,38 @@ const hasVideo = computed(
       <img
         v-else-if="poster"
         class="home-work-card__media"
-        :class="{ 'home-work-card__media--feathered': !!featherVisualEdges, 'home-work-card__media--feathered-strong': featherVisualEdges === 'strong' }"
+        :src="poster"
+        :alt="`${title} preview`"
+        loading="lazy"
+        decoding="async"
+      />
+    </CaseCreamInsight>
+
+    <div
+      v-else
+      class="home-work-card__visual"
+      :class="{
+        'home-work-card__visual--transparent': transparentVisual,
+        'home-work-card__visual--placeholder': visualPlaceholder,
+      }"
+      :aria-hidden="visualPlaceholder || undefined"
+    >
+      <video
+        v-if="hasVideo"
+        class="home-work-card__media"
+        :src="video"
+        :poster="poster"
+        autoplay
+        loop
+        muted
+        playsinline
+        disablepictureinpicture
+        preload="metadata"
+        :aria-label="title"
+      />
+      <img
+        v-else-if="poster"
+        class="home-work-card__media"
         :src="poster"
         :alt="`${title} preview`"
         loading="lazy"
@@ -85,13 +114,12 @@ const hasVideo = computed(
   padding: clamp(var(--grid-3), 3vw, var(--grid-4));
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
+  border-radius: var(--dl-border-radius);
+  transition: border-color 150ms ease;
 }
 
 .home-work-card:hover {
   border-color: var(--color-accent);
-  box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 
 .home-work-card__body {
@@ -126,57 +154,14 @@ const hasVideo = computed(
 .home-work-card__visual {
   position: relative;
   aspect-ratio: 4 / 3;
-  overflow: hidden;
   align-self: center;
-}
-
-.home-work-card__media--feathered {
-  --feather-inset: clamp(10px, 3.5%, 20px);
-  transform: scale(1.012);
-  transform-origin: center;
-  filter: blur(0.45px);
-  -webkit-mask-image:
-    linear-gradient(
-      to right,
-      transparent,
-      #000 var(--feather-inset),
-      #000 calc(100% - var(--feather-inset)),
-      transparent
-    ),
-    linear-gradient(
-      to bottom,
-      transparent,
-      #000 var(--feather-inset),
-      #000 calc(100% - var(--feather-inset)),
-      transparent
-    );
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(
-      to right,
-      transparent,
-      #000 var(--feather-inset),
-      #000 calc(100% - var(--feather-inset)),
-      transparent
-    ),
-    linear-gradient(
-      to bottom,
-      transparent,
-      #000 var(--feather-inset),
-      #000 calc(100% - var(--feather-inset)),
-      transparent
-    );
-  mask-composite: intersect;
-}
-
-.home-work-card__media--feathered-strong {
-  --feather-inset: clamp(14px, 4.5%, 28px);
-  filter: blur(0.65px);
-  transform: scale(1.014);
+  min-width: 0;
+  overflow: visible;
 }
 
 .home-work-card__visual--transparent,
 .home-work-card__visual--placeholder {
+  overflow: hidden;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -191,10 +176,7 @@ const hasVideo = computed(
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.home-work-card__visual:not(.home-work-card__visual--transparent) .home-work-card__media {
-  background: var(--color-surface);
+  background-color: var(--home-work-video-cream);
 }
 
 @media (max-width: 767px) {

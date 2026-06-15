@@ -147,6 +147,8 @@
   /* Rim matches fill — procedural stroke reads as deckled paper, not brass */
   --paper-surface-rim:        #ebe4d6;
   --paper-surface-rim-hi:     #f2ece2;
+  /* Hero work-card video letterbox — sampled from keyed home-work-*.webp assets */
+  --home-work-video-cream:    #ebe2d3;
   --paper-on-fill-text:       #1a1814;
   --paper-on-fill-text-muted: #5c564c;
   --paper-on-fill-border:     #b8a88a;
@@ -195,6 +197,14 @@
   --case-insight-grain-overlay-strength: 0.42;
   --case-insight-grain-opacity:          0.64;
   --case-insight-grain-blend:            multiply;
+  /* Cream insight panels — subtle parchment variation (sync hex in caseInsightTheme.ts) */
+  --case-insight-cream-accent:           #d8cfbe;
+  --case-insight-cream-surface:          var(--paper-surface-fill);
+  --case-insight-cream-on-fill:          var(--paper-on-fill-text);
+  --case-insight-cream-on-fill-muted:    var(--paper-on-fill-text-muted);
+  --case-insight-cream-grain-overlay-strength: var(--paper-grain-overlay-strength);
+  --case-insight-cream-grain-opacity:    var(--paper-grain-opacity);
+  --case-insight-cream-grain-blend:      var(--paper-grain-blend);
   /* Roster card name-plate typography (work grid default) */
   --text-roster-card-title:   clamp(11px, 3.4cqi, 14px);
   --text-roster-card-client:  clamp(9px, 2.8cqi, 11px);
@@ -1529,9 +1539,15 @@ h5, h6 {
   --case-insight-surface-fill: var(--case-insight-surface-before);
 }
 
+.cream-insight-frame,
+.cream-insight-wrap {
+  --case-insight-surface-fill: var(--case-insight-cream-surface);
+}
+
 /* Lift plates above section noise; grain is masked inside ProceduralChiselFrame */
 .insight-frame,
-.metric-frame {
+.metric-frame,
+.cream-insight-frame {
   position: relative;
   z-index: 2;
   isolation: isolate;

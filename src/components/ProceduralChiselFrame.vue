@@ -15,6 +15,13 @@ const props = withDefaults(
     /** Gutter beyond bounds for chisel rim bleed (parchment uses a larger bleed). */
     bleedPx?: number
     borderPx?: number
+    /**
+     * Chisel stroke only — interior fill comes from {@link plateFill} on the body
+     * (hero videos: flat cream must match keyed letterbox pixels, not baked tone).
+     */
+    plateStrokeOnly?: boolean
+    /** CSS color for plate interior when {@link plateStrokeOnly} */
+    plateFill?: string
     /** Multiply grain baked to full plate + bleed; masked by the chisel bake. */
     textureGrainUrl?: string | null
   }>(),
@@ -23,6 +30,8 @@ const props = withDefaults(
     hoverFlame: false,
     bleedPx: CARD_BLEED_PX,
     borderPx: 8,
+    plateStrokeOnly: false,
+    plateFill: 'var(--home-work-video-cream)',
     textureGrainUrl: null,
   },
 )
@@ -60,19 +69,20 @@ async function rebakeRim() {
   const r = el.getBoundingClientRect()
   if (r.width < 2 || r.height < 2) return
   const trimmed = props.color.trim()
-  const hex = /^#[0-9a-fA-F]{6}$/.test(trimmed) || /^#[0-9a-fA-F]{3}$/.test(trimmed)
-    ? trimmed
-    : resolveCssColorToHex(el, props.color, '#c4565e')
+  const hex =
+    /^#[0-9a-fA-F]{6}$/.test(trimmed) || /^#[0-9a-fA-F]{3}$/.test(trimmed)
+      ? trimmed
+      : resolveCssColorToHex(el, props.color, '#c4565e')
   const url = bakeChiselRimImage({
     widthCss: r.width,
     heightCss: r.height,
     colorHex: hex,
     bleedPx: props.bleedPx,
-    depthEffect: 0,
+    depthEffect: props.plateStrokeOnly ? 0 : undefined,
     flatRim: false,
-    panelFill: true,
-    monotoneFill: true,
-    organicAmpPx: CARD_ORGANIC_AMP_PX,
+    panelFill: !props.plateStrokeOnly,
+    monotoneFill: !props.plateStrokeOnly,
+    organicAmpPx: props.plateStrokeOnly ? 0 : CARD_ORGANIC_AMP_PX,
     borderPx: props.borderPx,
   })
   if (!cancelled && url) rimUrl.value = url
@@ -97,7 +107,14 @@ onMounted(() => {
 })
 
 watch(
-  () => [props.color, props.borderPx, props.bleedPx] as const,
+  () =>
+    [
+      props.color,
+      props.borderPx,
+      props.bleedPx,
+      props.plateStrokeOnly,
+      props.plateFill,
+    ] as const,
   () => scheduleRebake(),
 )
 
@@ -111,7 +128,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="rootRef" class="chisel-frame" :style="rimStyle">
+  <div
+    ref="rootRef"
+    class="chisel-frame"
+    :class="{ 'chisel-frame--stroke-only-plate': plateStrokeOnly }"
+    :style="rimStyle"
+  >
     <div
       v-if="textureGrainUrl && rimUrl"
       class="chisel-frame__texture"
@@ -189,5 +211,9 @@ onBeforeUnmount(() => {
   min-width: 0;
   width: 100%;
   min-height: 0;
+}
+
+.chisel-frame--stroke-only-plate .chisel-frame__body {
+  background: v-bind('plateFill');
 }
 </style>
