@@ -56,3 +56,27 @@ export function resolveCssColorToHex(
 
   return fallback
 }
+
+/** Resolves `var(--token)`, `calc(...)`, `12px`, etc. to CSS pixels for WebGL SDF bakes. */
+export function resolveCssLengthPx(
+  el: HTMLElement,
+  cssLength: string,
+  fallback: number,
+): number {
+  const t = cssLength.trim()
+  const pxMatch = /^([\d.]+)px$/.exec(t)
+  if (pxMatch) {
+    const n = Number(pxMatch[1])
+    return Number.isFinite(n) ? n : fallback
+  }
+
+  const probe = document.createElement('div')
+  probe.style.cssText =
+    `position:absolute;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;border-top-left-radius:${t}`
+  el.appendChild(probe)
+  const computed = getComputedStyle(probe).borderTopLeftRadius
+  el.removeChild(probe)
+
+  const parsed = Number.parseFloat(computed)
+  return Number.isFinite(parsed) ? parsed : fallback
+}

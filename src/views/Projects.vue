@@ -236,7 +236,7 @@ const trackFeaturedCaseStudyClick = (id: string) => {
   padding: 1rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--dl-border-radius);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
@@ -249,7 +249,7 @@ const trackFeaturedCaseStudyClick = (id: string) => {
   width: 7rem;
   height: 7rem;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: var(--dl-border-radius-sm);
   flex-shrink: 0;
 }
 

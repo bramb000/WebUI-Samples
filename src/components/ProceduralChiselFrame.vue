@@ -4,8 +4,9 @@ import {
   bakeChiselRimImage,
   CARD_BLEED_PX,
   CARD_ORGANIC_AMP_PX,
+  CHISEL_PLATE_CORNER_RADIUS_CSS,
 } from '../vfx/chiselRimBake'
-import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
+import { resolveCssColorToHex, resolveCssLengthPx } from '../vfx/resolveCssColorToHex'
 
 const props = withDefaults(
   defineProps<{
@@ -78,12 +79,17 @@ async function rebakeRim() {
     heightCss: r.height,
     colorHex: hex,
     bleedPx: props.bleedPx,
-    depthEffect: props.plateStrokeOnly ? 0 : undefined,
+    depthEffect: 0,
     flatRim: false,
     panelFill: !props.plateStrokeOnly,
     monotoneFill: !props.plateStrokeOnly,
     organicAmpPx: props.plateStrokeOnly ? 0 : CARD_ORGANIC_AMP_PX,
     borderPx: props.borderPx,
+    cornerRadiusCss: resolveCssLengthPx(
+      el,
+      'var(--dl-border-radius)',
+      CHISEL_PLATE_CORNER_RADIUS_CSS,
+    ),
   })
   if (!cancelled && url) rimUrl.value = url
 }

@@ -33,9 +33,13 @@ export type ChiselRimBakeOptions = {
   plateFillOnly?: boolean
   /** Override angular chisel depth without enabling {@link cleanRim}. */
   chiselDepth?: number
+  /** CSS corner radius — sync with `--dl-border-radius` (default {@link CHISEL_PLATE_CORNER_RADIUS_CSS}). */
+  cornerRadiusCss?: number
 }
 
 export const CARD_BLEED_PX = 16
+/** Keep in sync with `--dl-border-radius` in style.css */
+export const CHISEL_PLATE_CORNER_RADIUS_CSS = 12
 /** Insight/metric cards: no organic deckle on the baked rim. */
 export const CARD_ORGANIC_AMP_PX = 0
 const MAX_BAKE_EDGE_PX = 1024
@@ -66,6 +70,7 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
   uniform float u_outwardRim;
   uniform float u_monotoneFill;
   uniform float u_plateFillOnly;
+  uniform float u_cornerRadius;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -113,9 +118,21 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
     return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
   }
 
+  float sdRoundBox(vec2 p, vec2 b, float r) {
+    r = min(r, min(b.x, b.y));
+    vec2 q = abs(p) - b + r;
+    return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
+  }
+
+  float plateSdf(vec2 q, vec2 halfSize) {
+    return u_cornerRadius > 0.0001
+      ? sdRoundBox(q, halfSize, u_cornerRadius)
+      : sdBox(q, halfSize);
+  }
+
   float getBorderDistance(vec2 p) {
     vec2 q = p - u_pCardCenter;
-    float dBox = sdBox(q, u_innerHalf);
+    float dBox = plateSdf(q, u_innerHalf);
     float rim = abs(dBox) - u_borderWidth;
     float dOut = max(0.0, dBox);
     float outerBand = smoothstep(u_borderWidth * 0.15, u_borderWidth * 2.8, dOut);
@@ -152,7 +169,7 @@ const CHISEL_BAKE_FRAGMENT = /* glsl */ `
     );
 
     vec2 q = p - u_pCardCenter;
-    float dBox = sdBox(q, u_innerHalf);
+    float dBox = plateSdf(q, u_innerHalf);
     float dFinal = getBorderDistance(p);
     vec3 finalColor = u_color;
     if (u_monotoneFill < 0.5) {
@@ -247,6 +264,7 @@ function ensureBakeGl() {
     u_outwardRim: { value: 0 },
     u_monotoneFill: { value: 0 },
     u_plateFillOnly: { value: 0 },
+    u_cornerRadius: { value: 0 },
   }
 
   bakeMaterial = new THREE.ShaderMaterial({
@@ -282,14 +300,12 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   vh = Math.max(4, Math.ceil(vh * scale))
 
   bakeRenderer.setSize(vw, vh, false)
+  bakeRenderer.setClearColor(0x000000, 0)
   bakeRenderer.setScissorTest(false)
   bakeRenderer.setViewport(0, 0, vw, vh)
+  bakeRenderer.clear(true, true, true)
 
   const color = new THREE.Color(opts.colorHex)
-  const opaquePlate = !!(opts.monotoneFill && opts.panelFill)
-  // Monotone plates: clear to fill so semi-transparent chisel AA doesn't pick up black halos.
-  bakeRenderer.setClearColor(color.getHex(), opaquePlate ? 1 : 0)
-  bakeRenderer.clear(true, true, true)
 
   const cardL = bleed
   const cardT = bleed
@@ -333,9 +349,18 @@ export function bakeChiselRimImage(opts: ChiselRimBakeOptions): string | null {
   bakeMaterial.uniforms.u_pCardCenter.value.set((uvx * 2 - 1) * aspect, uvy * 2 - 1)
 
   const inset = opts.flatRim ? 1.0 : 1.0
-  bakeMaterial.uniforms.u_innerHalf.value.set(
-    aspect * (cardW / wE) * inset,
-    (cardH / hE) * inset,
+  const innerHalfX = aspect * (cardW / wE) * inset
+  const innerHalfY = (cardH / hE) * inset
+  bakeMaterial.uniforms.u_innerHalf.value.set(innerHalfX, innerHalfY)
+
+  const cornerRadiusCss = opts.cornerRadiusCss ?? CHISEL_PLATE_CORNER_RADIUS_CSS
+  const rNormX = (cornerRadiusCss * 2 * aspect) / wE
+  const rNormY = (cornerRadiusCss * 2) / hE
+  bakeMaterial.uniforms.u_cornerRadius.value = Math.min(
+    rNormX,
+    rNormY,
+    innerHalfX,
+    innerHalfY,
   )
 
   const shortPx = Math.min(cardW * pr * scale, cardH * pr * scale)

@@ -4,6 +4,8 @@
  * on dense case-study pages and can blank the tab.
  */
 import * as THREE from 'three'
+import { CHISEL_PLATE_CORNER_RADIUS_CSS } from './chiselRimBake'
+import { resolveCssLengthPx } from './resolveCssColorToHex'
 
 export type ChiselFrameOptions = {
   colorHex: string
@@ -22,6 +24,8 @@ export type ChiselFrameOptions = {
   flatRim?: boolean
   /** Monotone parchment-style interior: flat fill, no grain, no depth lighting seam. */
   monotoneFill?: boolean
+  /** CSS corner radius — sync with `--dl-border-radius`. */
+  cornerRadiusCss?: number
 }
 
 type Entry = {
@@ -36,6 +40,7 @@ type Entry = {
   skipAncestorClip: boolean
   flatRim: boolean
   monotoneFill: boolean
+  cornerRadiusCss: number
   hoverTarget: number
   hoverSmoothed: number
 }
@@ -141,6 +146,7 @@ const CHISEL_FRAGMENT = /* glsl */ `
   uniform vec3 u_fillColor;
   uniform float u_flatRim;
   uniform float u_monotoneFill;
+  uniform float u_cornerRadius;
 
   vec2 hash( vec2 p ) {
     p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
@@ -188,9 +194,21 @@ const CHISEL_FRAGMENT = /* glsl */ `
     return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
   }
 
+  float sdRoundBox(vec2 p, vec2 b, float r) {
+    r = min(r, min(b.x, b.y));
+    vec2 q = abs(p) - b + r;
+    return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
+  }
+
+  float plateSdf(vec2 q, vec2 halfSize) {
+    return u_cornerRadius > 0.0001
+      ? sdRoundBox(q, halfSize, u_cornerRadius)
+      : sdBox(q, halfSize);
+  }
+
   float getBorderDistance(vec2 p) {
     vec2 q = p - u_pCardCenter;
-    float dBox = sdBox(q, u_innerHalf);
+    float dBox = plateSdf(q, u_innerHalf);
 
     float rim = abs(dBox) - u_borderWidth;
 
@@ -236,7 +254,7 @@ const CHISEL_FRAGMENT = /* glsl */ `
     );
 
     vec2 q = p - u_pCardCenter;
-    float dBox = sdBox(q, u_innerHalf);
+    float dBox = plateSdf(q, u_innerHalf);
     float dFinal = getBorderDistance(p);
     float densityMap = fbm(p * 4.0);
     float paintThickness = smoothstep(-1.0, 1.0, densityMap);
@@ -387,6 +405,7 @@ function ensureGl() {
     u_fillColor: { value: new THREE.Color(0x0c0c0c) },
     u_flatRim: { value: 0.0 },
     u_monotoneFill: { value: 0.0 },
+    u_cornerRadius: { value: 0.0 },
   }
 
   material = new THREE.ShaderMaterial({
@@ -493,9 +512,17 @@ function ensureGl() {
       material.uniforms.u_pCardCenter.value.set(pccx, pccy)
 
       const inset = entry.flatRim ? 1.0 : 0.996
-      material.uniforms.u_innerHalf.value.set(
-        aspect * (r.width / wE) * inset,
-        (r.height / hE) * inset,
+      const innerHalfX = aspect * (r.width / wE) * inset
+      const innerHalfY = (r.height / hE) * inset
+      material.uniforms.u_innerHalf.value.set(innerHalfX, innerHalfY)
+
+      const rNormX = (entry.cornerRadiusCss * 2 * aspect) / wE
+      const rNormY = (entry.cornerRadiusCss * 2) / hE
+      material.uniforms.u_cornerRadius.value = Math.min(
+        rNormX,
+        rNormY,
+        innerHalfX,
+        innerHalfY,
       )
 
       const shortPx = Math.min(r.width * pr, r.height * pr)
@@ -579,6 +606,9 @@ export function registerChiselFrame(
     skipAncestorClip: cfg.skipAncestorClip ?? false,
     flatRim: cfg.flatRim ?? false,
     monotoneFill: cfg.monotoneFill ?? false,
+    cornerRadiusCss:
+      cfg.cornerRadiusCss
+      ?? resolveCssLengthPx(el, 'var(--dl-border-radius)', CHISEL_PLATE_CORNER_RADIUS_CSS),
     hoverTarget: 0,
     hoverSmoothed: 0,
   })

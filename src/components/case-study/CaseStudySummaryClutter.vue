@@ -71,7 +71,7 @@ function clumpCoord(value: number, factor = 0.84) {
   width: 100%;
   height: auto;
   border: var(--dl-border-width) solid var(--color-border);
-  border-radius: calc(var(--dl-border-radius) - 2px);
+  border-radius: max(2px, calc(var(--dl-border-radius) - var(--grid-unit)));
   box-shadow:
     0 10px 28px color-mix(in srgb, var(--color-text) 14%, transparent),
     0 0 0 1px color-mix(in srgb, var(--color-accent) 18%, transparent);

@@ -6,7 +6,8 @@ import {
   registerChiselFrame,
   unregisterChiselFrame,
 } from '../vfx/chiselFrameOverlay'
-import { bakeChiselRimImage } from '../vfx/chiselRimBake'
+import { bakeChiselRimImage, CHISEL_PLATE_CORNER_RADIUS_CSS } from '../vfx/chiselRimBake'
+import { resolveCssLengthPx } from '../vfx/resolveCssColorToHex'
 
 /** Rim + fill match parchment (`--paper-surface-fill`) */
 const PAPER_STROKE = '#ebe4d6'
@@ -71,6 +72,11 @@ async function rebakeMaskRim() {
     panelFill: true,
     monotoneFill: true,
     borderPx: 8,
+    cornerRadiusCss: resolveCssLengthPx(
+      el,
+      'var(--dl-border-radius)',
+      CHISEL_PLATE_CORNER_RADIUS_CSS,
+    ),
   })
   if (!cancelled && url) maskRimUrl.value = url
 }
@@ -87,6 +93,11 @@ function startLiveFrame() {
     flatRim: false,
     bleedPx: PANEL_BLEED_PX,
     skipAncestorClip: true,
+    cornerRadiusCss: resolveCssLengthPx(
+      el,
+      'var(--dl-border-radius)',
+      CHISEL_PLATE_CORNER_RADIUS_CSS,
+    ),
   })
   captureVfxRenderStatus('work_panel_chisel', { mode: 'webgl' })
 }

@@ -279,6 +279,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: clamp(var(--grid-3), 3vw, var(--grid-4));
+  overflow: visible;
 }
 
 .home-work__card {

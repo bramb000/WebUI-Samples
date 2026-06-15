@@ -88,16 +88,19 @@
 
   /* UI design tokens */
   --dl-border-width:  2px;
-  --dl-border-radius: 4px;
+  /** Card, panel, and framed UI corner curvature (was 4px; frames follow the same token). */
+  --dl-border-radius: calc(var(--grid-unit) * 1.5);
+  --dl-border-radius-sm: max(2px, calc(var(--dl-border-radius) * 0.5));
+  /* Chisel bake fallback — keep aligned with --dl-border-radius (see chiselRimBake.ts) */
   --dl-shadow-deep:   0px 6px 18px rgba(26, 24, 20, 0.08);
   --dl-glow-global:   0 1px 0 rgba(26, 24, 20, 0.06);
 
   /* Square frame — case study panels, metric/insight cards, testimonial cards, chips */
   --dl-frame-width:   4px;
-  --dl-frame-radius:  0;
+  --dl-frame-radius:  var(--dl-border-radius);
   --dl-frame-color:   var(--color-border);
   --dl-card-frame-width:  var(--dl-frame-width);
-  --dl-card-frame-radius: var(--dl-frame-radius);
+  --dl-card-frame-radius: var(--dl-border-radius);
   --dl-card-frame-color:  var(--case-insight-surface-fill, var(--color-accent));
 
   /* Case study panel interior (see `.case-study-panel`) */
@@ -511,7 +514,7 @@ h5, h6 {
 }
 .label-segment {
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--dl-border-radius-sm);
   padding: 2px 8px;
   background: color-mix(in srgb, var(--color-border) 8%, transparent);
   color: var(--color-border-hi);
@@ -954,7 +957,7 @@ h5, h6 {
   overflow: hidden;
 }
 
-/** Uniform square border (panels, cards, chips) — width/radius/color from `:root` tokens */
+/** Uniform framed border (panels, cards, chips) — width/radius/color from `:root` tokens */
 .dl-square-frame {
   box-sizing: border-box;
   border: var(--dl-frame-width) solid var(--dl-frame-color);
@@ -1786,7 +1789,7 @@ main.work-stage {
   padding: 4px 12px;
   border: 1px solid color-mix(in srgb, var(--color-accent) 14%, transparent);
   /* Avoid clip-path here — it can visually “mask” the nav on some pages. */
-  border-radius: 4px;
+  border-radius: var(--dl-border-radius);
   overflow: visible;
 }
 
