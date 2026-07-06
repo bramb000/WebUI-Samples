@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRouteSeo } from './seo/applyRouteSeo';
 import NavBar from './components/NavBar.vue';
@@ -8,16 +8,33 @@ import GlobalBackgroundTexture from './components/GlobalBackgroundTexture.vue';
 import SeoStructuredData from './components/SeoStructuredData.vue';
 const route = useRoute();
 useRouteSeo(route);
-const isHeroSelect = computed(() => route.path === '/work');
+
+/** Keep `/work` viewport shell until the route leave transition finishes (avoids detail-pane flash). */
+const workStageActive = ref(route.path === '/work');
+
+watch(
+  () => route.path,
+  (path) => {
+    if (path === '/work')
+      workStageActive.value = true
+  },
+)
+
+function onPageTransitionAfterLeave() {
+  if (route.path !== '/work')
+    workStageActive.value = false
+}
+
+const showWorkStage = computed(() => workStageActive.value);
 const isHome = computed(() => route.path === '/');
 const isAbout = computed(() => route.path === '/about');
 const isFullScreen = computed(() => route.query.fullscreen === 'true');
 /** Fixed nav does not reserve flow space — offset main except `/work` (uses `.work-stage`). */
-const mainBelowNav = computed(() => !isFullScreen.value && !isHeroSelect.value);
+const mainBelowNav = computed(() => !isFullScreen.value && !showWorkStage.value);
 const isConstrainedMain = computed(
   () =>
     !isFullScreen.value
-    && !isHeroSelect.value
+    && !showWorkStage.value
     && !isHome.value
     && !isAbout.value
     && !route.path.startsWith('/work/'),
@@ -41,19 +58,24 @@ const isConstrainedMain = computed(
     <main :class="[
       'flex-grow w-full',
       mainBelowNav ? 'main-below-nav' : '',
-      isHeroSelect ? 'work-stage' : '',
+      showWorkStage ? 'work-stage' : '',
       isConstrainedMain ? 'max-w-7xl mx-auto px-6 md:px-12 py-12' : '',
       isHome || isAbout ? 'py-0' : '',
     ]">
       <router-view v-slot="{ Component }">
-        <transition v-if="!isFullScreen" name="fade" mode="out-in">
+        <transition
+          v-if="!isFullScreen"
+          name="fade"
+          mode="out-in"
+          @after-leave="onPageTransitionAfterLeave"
+        >
           <component :is="Component" :key="route.path" />
         </transition>
         <component v-else :is="Component" :key="route.path" />
       </router-view>
     </main>
 
-    <Footer v-if="!isFullScreen && !isHeroSelect" />
+    <Footer v-if="!isFullScreen && !showWorkStage" />
 
     <!-- Global SVG filters -->
     <svg style="visibility: hidden; position: absolute;" width="0" height="0">

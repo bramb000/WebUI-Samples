@@ -66,7 +66,7 @@ function scheduleRebake() {
 async function rebakeRim() {
   if (cancelled) return
   const el = rootRef.value
-  if (!el) return
+  if (!el || !el.isConnected) return
   const r = el.getBoundingClientRect()
   if (r.width < 2 || r.height < 2) return
   const trimmed = props.color.trim()
