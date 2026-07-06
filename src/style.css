@@ -1276,6 +1276,13 @@ h5, h6 {
   gap: var(--dl-panel-gap);
 }
 
+/** Summary beat tiles, hero meta, inset callouts — shared plate */
+.case-study-beat-tile {
+  border: var(--dl-border-width) solid var(--color-border);
+  border-radius: var(--dl-border-radius);
+  background: color-mix(in srgb, var(--color-surface) 88%, var(--color-elevated));
+}
+
 /** Standard media frame for case study figures (replaces mixed rounded-xl / panel-recessed) */
 .case-media-frame {
   display: block;

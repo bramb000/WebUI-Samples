@@ -1,4 +1,36 @@
 <script setup lang="ts">
+/**
+ * Work-detail panel shell — reuses insight-card chisel plate (ProceduralChiselFrame + grain)
+ * with parchment cream tokens (`CASE_INSIGHT_THEME.cream`).
+ *
+ * Previous live WebGL chisel / deckled shader implementation is preserved below in comments.
+ */
+import { computed, ref } from 'vue'
+import { CASE_INSIGHT_THEME } from '../constants/caseInsightTheme'
+import { useInsightCardGrain } from '../composables/useInsightCardGrain'
+import ProceduralChiselFrame from './ProceduralChiselFrame.vue'
+
+withDefaults(
+  defineProps<{
+    /** `/work` detail column — symmetric gutter on block axis */
+    workStageInset?: boolean
+  }>(),
+  { workStageInset: false },
+)
+
+const surfaceHex = CASE_INSIGHT_THEME.cream.surface
+
+const frameRef = ref<{ rootEl: HTMLElement | null } | null>(null)
+const frameEl = computed(() => frameRef.value?.rootEl ?? null)
+
+const grainSeed = ref(8401)
+const { grainUrl } = useInsightCardGrain(frameEl, grainSeed, {
+  fillCssVar: '--case-insight-cream-surface',
+  fillFallbackHex: surfaceHex,
+  grainOverlayStrengthVar: '--case-insight-cream-grain-overlay-strength',
+})
+
+/* ── Live WebGL chisel / deckled shader (preserved — disabled) ─────────────────
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { captureVfxRenderStatus } from '../analytics'
 import { useInsightCardGrain } from '../composables/useInsightCardGrain'
@@ -9,18 +41,8 @@ import {
 import { bakeChiselRimImage, CHISEL_PLATE_CORNER_RADIUS_CSS } from '../vfx/chiselRimBake'
 import { resolveCssLengthPx } from '../vfx/resolveCssColorToHex'
 
-/** Rim + fill match parchment (`--paper-surface-fill`) */
 const PAPER_STROKE = '#ebe4d6'
-/** Deckled edge bleeds into `.panel-chisel-bg` padding gutter */
 const PANEL_BLEED_PX = 36
-
-withDefaults(
-  defineProps<{
-    /** `/work` detail column — symmetric 8pt gutter + bleed on block axis */
-    workStageInset?: boolean
-  }>(),
-  { workStageInset: false },
-)
 
 const trackRef = ref<HTMLElement | null>(null)
 let frameId: number | null = null
@@ -28,7 +50,6 @@ let cancelled = false
 let maskRebakeTimer = 0
 let resizeObserver: ResizeObserver | null = null
 
-/** Baked alpha mask only — live WebGL draws the visible plate */
 const maskRimUrl = ref<string | null>(null)
 
 const grainSeed = ref(8401)
@@ -130,6 +151,7 @@ onBeforeUnmount(() => {
   }
   maskRimUrl.value = null
 })
+────────────────────────────────────────────────────────────────────────────── */
 </script>
 
 <template>
@@ -138,6 +160,19 @@ onBeforeUnmount(() => {
     :class="{ 'panel-chisel-bg--work-stage': workStageInset }"
     data-surface="paper"
   >
+    <ProceduralChiselFrame
+      ref="frameRef"
+      class="panel-chisel-bg__frame"
+      :color="surfaceHex"
+      :texture-grain-url="grainUrl"
+      :hover-flame="false"
+    >
+      <div class="panel-chisel-bg__content">
+        <slot />
+      </div>
+    </ProceduralChiselFrame>
+
+    <!-- Live WebGL texture layer (preserved — disabled)
     <div ref="trackRef" class="panel-chisel-bg__sheet">
       <div
         v-if="grainUrl && maskRimUrl"
@@ -151,6 +186,7 @@ onBeforeUnmount(() => {
         <slot />
       </div>
     </div>
+    -->
   </div>
 </template>
 
@@ -165,14 +201,55 @@ onBeforeUnmount(() => {
   min-height: 0;
   min-width: 0;
   overflow: visible;
-  color: var(--color-text);
+  color: var(--paper-on-fill-text);
   box-sizing: border-box;
-  padding: var(--grid-5);
+  padding: var(--grid-2);
+  --case-insight-surface-fill: var(--case-insight-cream-surface);
 }
 
 .panel-chisel-bg--work-stage {
-  padding-block: var(--panel-chisel-bleed, 36px);
+  padding-block: var(--work-detail-gutter, var(--grid-2));
   padding-inline: var(--work-panel-padding-inline, var(--grid-3));
+}
+
+.panel-chisel-bg__frame {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.panel-chisel-bg__frame :deep(.chisel-frame__body) {
+  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.panel-chisel-bg__frame :deep(.chisel-frame__texture-img) {
+  mix-blend-mode: var(--case-insight-cream-grain-blend);
+  opacity: var(--case-insight-cream-grain-opacity);
+}
+
+.panel-chisel-bg__content {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ── Flat CSS fallback (preserved — disabled) ────────────────────────────────
+.panel-chisel-bg {
+  overflow: hidden;
 }
 
 .panel-chisel-bg__sheet {
@@ -184,11 +261,30 @@ onBeforeUnmount(() => {
   min-height: 0;
   min-width: 0;
   width: 100%;
+  overflow: hidden;
+  border: var(--dl-border-width) solid var(--paper-on-fill-border);
+  border-radius: var(--dl-border-radius);
+  background: var(--paper-surface-fill);
+  box-shadow: var(--dl-glow-global);
+}
+────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Live WebGL chisel / deckled shader styles (preserved — disabled) ──────────
+.panel-chisel-bg {
+  overflow: visible;
+  padding: var(--grid-5);
+}
+
+.panel-chisel-bg--work-stage {
+  padding-block: var(--panel-chisel-bleed, 36px);
+  padding-inline: var(--work-panel-padding-inline, var(--grid-3));
+}
+
+.panel-chisel-bg__sheet {
   overflow: visible;
   background: transparent;
 }
 
-/* Paint grain — masked to plate shape; live WebGL draws fill + deckle underneath */
 .panel-chisel-bg__texture {
   position: absolute;
   inset: calc(-1 * var(--panel-chisel-bleed, 36px));
@@ -214,17 +310,5 @@ onBeforeUnmount(() => {
   opacity: var(--paper-grain-opacity, 0.48);
   user-select: none;
 }
-
-.panel-chisel-bg__content {
-  position: relative;
-  z-index: 2;
-  flex: 1 1 auto;
-  min-height: 0;
-  min-width: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+────────────────────────────────────────────────────────────────────────────── */
 </style>

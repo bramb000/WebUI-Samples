@@ -694,7 +694,7 @@ function onDone(trigger: number) {
   width: 100%;
   height: 100%;
   min-height: 0;
-  /* Clip horizontal bleed; allow deckled panel rim above the grid */
+  /* Clip horizontal bleed from roster column */
   overflow-x: clip;
   overflow-y: visible;
   background: var(--color-bg);
@@ -866,7 +866,6 @@ function onDone(trigger: number) {
   overflow: visible;
   /* Same canvas as the rest of the site — no `.dl-bg` overlay in this column */
   background: var(--color-bg);
-  /* 16px — matches bottom; deckle bleed sits in panel block padding below */
   padding-block: var(--work-detail-gutter, var(--grid-2));
   padding-inline: 0;
   box-sizing: border-box;

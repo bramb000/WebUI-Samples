@@ -3,11 +3,13 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { Play } from 'lucide-vue-next'
 import { HERO_COMPANY_LOGOS } from '../assets/images/clients/clientLogos'
 import { useCampaignRole } from '../composables/useCampaignRole'
+import ShubaDuckViewer from './ShubaDuckViewer.vue'
 import { getCachedPencilFrameImage, PENCIL_FRAME_BLEED_PX, quantizePencilBakeDimensions } from '../vfx/pencilFrameBake'
 import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
 /** Flip to `true` when the intro video asset is ready. */
 const INTRO_VIDEO_ENABLED = false
+const HERO_DUCK_ENABLED = true
 
 interface Props {
   videoSrc?: string
@@ -22,6 +24,8 @@ const videoStageRef = ref<HTMLElement | null>(null)
 const isPlaying = ref(false)
 
 const hasVideo = computed(() => Boolean(props.videoSrc))
+const showHeroMedia = computed(() => HERO_DUCK_ENABLED || INTRO_VIDEO_ENABLED)
+const showIntroVideoChrome = computed(() => INTRO_VIDEO_ENABLED && !HERO_DUCK_ENABLED)
 
 type PencilRingLayer = {
   key: string
@@ -120,7 +124,7 @@ function scheduleRebake() {
 }
 
 onMounted(async () => {
-  if (!INTRO_VIDEO_ENABLED)
+  if (!showIntroVideoChrome.value)
     return
 
   await nextTick()
@@ -147,7 +151,7 @@ onBeforeUnmount(() => {
   <header class="intro-hero">
     <div
       class="intro-hero__grid"
-      :class="{ 'intro-hero__grid--with-video': INTRO_VIDEO_ENABLED }"
+      :class="{ 'intro-hero__grid--with-media': showHeroMedia }"
     >
       <div class="intro-hero__copy">
         <div class="type-hero-stack intro-hero__headline">
@@ -186,53 +190,59 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <!-- Intro video — set INTRO_VIDEO_ENABLED when asset is ready -->
-      <div v-if="INTRO_VIDEO_ENABLED" class="intro-hero__media">
-        <p class="type-hero-tagline intro-hero__media-label">
-          Let me introduce myself
-        </p>
+      <ShubaDuckViewer
+        v-if="HERO_DUCK_ENABLED"
+        class="intro-hero__duck"
+        :scale="0.75"
+      />
 
-        <div ref="videoStageRef" class="intro-hero__video-stage">
-          <span
-            v-for="ring in pencilRings"
-            :key="ring.key"
-            class="intro-hero__pencil-ring"
-            aria-hidden="true"
-            :style="{
-              width: `${ring.sizePx}px`,
-              height: `${ring.sizePx}px`,
-              backgroundImage: `url('${ring.url}')`,
-            }"
-          />
+      <!-- Intro video — circular stage preserved for when INTRO_VIDEO_ENABLED -->
+      <div v-else-if="INTRO_VIDEO_ENABLED" class="intro-hero__media">
+          <p class="type-hero-tagline intro-hero__media-label">
+            Let me introduce myself
+          </p>
 
-          <div class="intro-hero__video-disc">
-            <video
-              v-if="hasVideo"
-              ref="videoRef"
-              class="intro-hero__video"
-              :src="videoSrc"
-              :poster="videoPoster"
-              playsinline
-              @ended="onVideoEnded"
+          <div ref="videoStageRef" class="intro-hero__video-stage">
+            <span
+              v-for="ring in pencilRings"
+              :key="ring.key"
+              class="intro-hero__pencil-ring"
+              aria-hidden="true"
+              :style="{
+                width: `${ring.sizePx}px`,
+                height: `${ring.sizePx}px`,
+                backgroundImage: `url('${ring.url}')`,
+              }"
             />
-            <div v-else class="intro-hero__video-placeholder" aria-hidden="true" />
 
-            <button
-              type="button"
-              class="intro-hero__play"
-              :class="{ 'intro-hero__play--hidden': hasVideo && isPlaying }"
-              :disabled="!hasVideo"
-              :aria-label="hasVideo ? 'Play introduction video' : 'Introduction video coming soon'"
-              @click="toggleVideo"
-            >
-              <Play class="intro-hero__play-icon" aria-hidden="true" />
-            </button>
+            <div class="intro-hero__video-disc">
+              <video
+                v-if="hasVideo"
+                ref="videoRef"
+                class="intro-hero__video"
+                :src="videoSrc"
+                :poster="videoPoster"
+                playsinline
+                @ended="onVideoEnded"
+              />
+              <div v-else class="intro-hero__video-placeholder" aria-hidden="true" />
+
+              <button
+                type="button"
+                class="intro-hero__play"
+                :class="{ 'intro-hero__play--hidden': hasVideo && isPlaying }"
+                :disabled="!hasVideo"
+                :aria-label="hasVideo ? 'Play introduction video' : 'Introduction video coming soon'"
+                @click="toggleVideo"
+              >
+                <Play class="intro-hero__play-icon" aria-hidden="true" />
+              </button>
+            </div>
           </div>
-        </div>
 
-        <p v-if="!hasVideo" class="type-body-sm intro-hero__video-note">
-          Video coming soon
-        </p>
+          <p v-if="!hasVideo" class="type-body-sm intro-hero__video-note">
+            Video coming soon
+          </p>
       </div>
     </div>
   </header>
@@ -256,8 +266,22 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
 }
 
-.intro-hero__grid--with-video {
-  grid-template-columns: minmax(0, 38rem) minmax(15rem, 20rem);
+.intro-hero__grid--with-media {
+  grid-template-columns: minmax(0, 38rem) auto;
+}
+
+.intro-hero__duck {
+  display: block;
+  width: clamp(13.5rem, 30vw, 18rem);
+  height: clamp(16.5rem, 36vw, 22.5rem);
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  line-height: 0;
 }
 
 .intro-hero__copy {
@@ -444,14 +468,17 @@ onBeforeUnmount(() => {
     gap: var(--grid-5);
   }
 
-  .intro-hero__grid--with-video {
+  .intro-hero__grid--with-media {
     grid-template-columns: minmax(0, 38rem);
   }
 
-  .intro-hero__media {
+  .intro-hero__duck {
     order: -1;
-    max-width: 18rem;
-    margin-inline: auto;
+    justify-self: center;
+  }
+
+  .intro-hero__copy {
+    order: 0;
   }
 }
 

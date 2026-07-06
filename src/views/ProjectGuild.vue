@@ -187,7 +187,7 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
 
         <!-- Regression details -->
-        <div class="panel-recessed case-study-panel-inset case-study-subsection-block">
+        <div class="case-study-beat-tile case-study-panel-inset case-study-subsection-block">
           <h4 class="type-case-kicker-muted">Logistic Regression Analysis</h4>
           <p class="type-case-body-lg">I ran a logistic regression test on D7 retention as the dependent binary variable and sessions per day as the independent continuous variable. It explained <strong class="font-bold">24% of the variance</strong> in a complex model like retention.</p>
           <div class="case-study-table-scroll">

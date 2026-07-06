@@ -37,7 +37,7 @@ defineProps<{
       <article
         v-for="(beat, index) in summary.beats"
         :key="`${beat.kicker}-${index}`"
-        class="case-study-summary__beat"
+        class="case-study-summary__beat case-study-beat-tile"
       >
         <h3 class="type-case-kicker case-study-kicker-gap">
           {{ beat.kicker }}
@@ -164,9 +164,6 @@ defineProps<{
 
 .case-study-summary__beat {
   padding: var(--grid-2) var(--dl-panel-gap);
-  border: var(--dl-border-width) solid var(--color-border);
-  border-radius: var(--dl-border-radius);
-  background: color-mix(in srgb, var(--color-surface) 88%, var(--color-elevated));
 }
 
 .case-study-summary__feature {

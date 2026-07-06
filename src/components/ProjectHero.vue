@@ -35,9 +35,9 @@ defineProps<Props>();
       <p class="type-case-body-lg text-muted">{{ description }}</p>
     </div>
 
-    <!-- Metadata Grid -->
+    <!-- Metadata Grid — matches `.case-study-summary__beat` tile styling -->
     <div
-      class="hero-meta-grid panel-recessed panel-recessed--borderless panel-recessed--pencil-frame"
+      class="hero-meta-grid case-study-beat-tile"
       :class="{ 'hero-meta-grid--no-team': !$slots.team }"
     >
       <div class="hero-meta-cell">
@@ -128,7 +128,7 @@ defineProps<Props>();
   margin: 0;
 }
 
-/* Metadata panel */
+/* Metadata panel — same plate as summary beat tiles (01 · Problem, etc.) */
 .hero-meta-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
