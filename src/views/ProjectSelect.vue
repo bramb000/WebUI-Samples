@@ -749,8 +749,6 @@ function onDone(trigger: number) {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(circle at 15% 15%, rgba(47, 51, 57, 0.05) 0%, transparent 45%),
-    radial-gradient(circle at 85% 25%, rgba(74, 80, 88, 0.03) 0%, transparent 55%),
     repeating-linear-gradient(90deg, rgba(26, 24, 20, 0.025) 0 1px, transparent 1px 80px),
     repeating-linear-gradient(0deg, rgba(26, 24, 20, 0.015) 0 1px, transparent 1px 80px);
   opacity: 0.45;

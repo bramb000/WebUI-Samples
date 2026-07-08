@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <figure class="case-testimonial-card panel-recessed">
+  <figure class="case-testimonial-card case-study-beat-tile">
     <figcaption class="case-testimonial-card__attrib">
       <p class="case-testimonial-card__name type-case-testimonial-name">{{ name }}</p>
       <p class="case-testimonial-card__role type-case-testimonial-role">{{ role }}</p>
