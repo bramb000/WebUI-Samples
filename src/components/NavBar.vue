@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, provide, ref, watch } from 'vue';
+import { computed, /* defineAsyncComponent, */ provide, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { captureEvent, captureVfxRenderStatus } from '../analytics';
-import { useLowPowerMode } from '../composables/useLowPowerMode';
+import { captureEvent /*, captureVfxRenderStatus */ } from '../analytics';
+// import { useLowPowerMode } from '../composables/useLowPowerMode';
 import { NAV_SCROLL_REFRESH_KEY, useNavAutoHide } from '../composables/useNavAutoHide';
-import { setWispHover, triggerWispClick } from '../composables/wispState';
+// Hover flame (WebGL wisp on CTA / nav buttons) — temporarily disabled
+// import { setWispHover, triggerWispClick } from '../composables/wispState';
 
-const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
-const lowPower = useLowPowerMode();
-const showWisp = computed(() => !lowPower.value);
+// const WebGLWisp = defineAsyncComponent(() => import('./WebGLWisp.vue'));
+// const lowPower = useLowPowerMode();
+// const showWisp = computed(() => !lowPower.value);
 
 const route = useRoute();
 const isMenuOpen = ref(false);
@@ -17,10 +18,10 @@ const { scrolledAway: navScrolledAway, refresh: refreshNavScroll } = useNavAutoH
 provide(NAV_SCROLL_REFRESH_KEY, refreshNavScroll);
 const isNavHidden = computed(() => navScrolledAway.value && !isMenuOpen.value);
 
-watch(showWisp, (show) => {
-  if (!show)
-    captureVfxRenderStatus('nav_wisp', { mode: 'disabled', reason: 'low_power' })
-}, { immediate: true })
+// watch(showWisp, (show) => {
+//   if (!show)
+//     captureVfxRenderStatus('nav_wisp', { mode: 'disabled', reason: 'low_power' })
+// }, { immediate: true })
 
 watch(isMenuOpen, (isOpen) => {
   if (isOpen) {
@@ -50,8 +51,8 @@ function prefetchRoute(importer: () => Promise<unknown>) {
   void importer();
 }
 
-function onNavLinkEnter(link: NavLink, el: HTMLElement) {
-  setWispHover(el);
+function onNavLinkEnter(link: NavLink, _el: HTMLElement) {
+  // setWispHover(el);
   if (link.href === '/work')
     prefetchRoute(() => import('../views/ProjectSelect.vue'));
 }
@@ -70,7 +71,9 @@ function onExternalNavClick(source: string) {
   <nav
     class="dl-nav-bar w-full flex justify-between md:justify-center items-center py-4 px-6 md:px-12"
   >
+    <!-- Hover flame (WebGL wisp) — temporarily disabled
     <WebGLWisp v-if="showWisp" />
+    -->
 
     <div class="flex items-center justify-between md:justify-center w-full">
       <div class="flex items-center gap-6">
@@ -83,6 +86,11 @@ function onExternalNavClick(source: string) {
         </router-link>
 
         <div class="hidden md:inline-flex seg-strip">
+          <!-- Hover flame handlers disabled on these links:
+               @mouseleave="() => setWispHover(null)"
+               @mousedown="triggerWispClick"
+               and on external: @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
+          -->
           <template v-for="link in navLinks" :key="link.name">
             <router-link
               v-if="!link.external"
@@ -90,8 +98,6 @@ function onExternalNavClick(source: string) {
               :class="['seg-btn', route.path === link.href || (link.href !== '/' && route.path.startsWith(link.href)) ? 'active' : '']"
               :title="link.name"
               @mouseenter="(e) => onNavLinkEnter(link, e.currentTarget as HTMLElement)"
-              @mouseleave="() => setWispHover(null)"
-              @mousedown="triggerWispClick"
             >
               <span>{{ link.name }}</span>
             </router-link>
@@ -104,9 +110,6 @@ function onExternalNavClick(source: string) {
               class="seg-btn"
               :title="link.name"
               @click="onExternalNavClick('navbar_desktop')"
-              @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
-              @mouseleave="() => setWispHover(null)"
-              @mousedown="triggerWispClick"
             >
               <span>{{ link.name }}</span>
             </a>

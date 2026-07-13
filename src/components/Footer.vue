@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { captureEvent } from '../analytics'
-import { setWispHover, triggerWispClick } from '../composables/wispState'
+// Hover flame (WebGL wisp on CTA button) — temporarily disabled
+// import { setWispHover, triggerWispClick } from '../composables/wispState'
 import PrimaryButton from './PrimaryButton.vue';
 
 const trackSocialClick = (platform: string) => {
@@ -38,14 +39,16 @@ const trackEmailClick = () => {
       </div>
 
       <!-- CTA Button -->
+      <!-- Hover flame handlers disabled:
+           @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
+           @mouseleave="() => setWispHover(null)"
+           @mousedown="triggerWispClick"
+      -->
       <div class="footer-cta-btn-row">
         <PrimaryButton
           href="https://www.linkedin.com/in/bramdal/"
           target="_blank"
           @click="trackSocialClick('linkedin_footer_cta')"
-          @mouseenter="(e) => setWispHover(e.currentTarget as HTMLElement)"
-          @mouseleave="() => setWispHover(null)"
-          @mousedown="triggerWispClick"
         >
           Get in touch
         </PrimaryButton>
