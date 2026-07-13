@@ -16,6 +16,8 @@ const props = defineProps<{
   caption?: string
   imgClass?: string
   priority?: boolean
+  /** Native seamless loop (no end-frame hold). */
+  loop?: boolean
 }>()
 
 const { isOpen, open, close } = useCaseLightbox()
@@ -39,6 +41,8 @@ function clearHoldFor(video: HTMLVideoElement) {
 }
 
 function onVideoEnded(event: Event) {
+  if (props.loop)
+    return
   const video = event.target as HTMLVideoElement
   clearHoldFor(video)
   holdTimeouts.set(
@@ -88,6 +92,7 @@ onUnmounted(() => {
         autoplay
         muted
         playsinline
+        :loop="props.loop"
         disablepictureinpicture
         :preload="props.priority ? 'auto' : 'none'"
         :aria-label="props.alt"
@@ -125,6 +130,7 @@ onUnmounted(() => {
         autoplay
         muted
         playsinline
+        :loop="props.loop"
         disablepictureinpicture
         :aria-label="props.alt"
         :title="props.caption"

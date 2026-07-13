@@ -11,6 +11,8 @@ const props = defineProps<{
   priority?: boolean
   /** Set when loader resolves to .webm */
   video?: boolean
+  /** Native seamless loop for video (no end-frame hold). */
+  loop?: boolean
 }>()
 
 const src = ref<string | null>(null)
@@ -63,6 +65,7 @@ onUnmounted(() => {
       :caption="caption"
       :img-class="imgClass"
       :priority="priority"
+      :loop="loop"
     />
     <CaseImage
       v-else-if="src"

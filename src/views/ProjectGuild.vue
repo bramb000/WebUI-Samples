@@ -27,6 +27,8 @@ import afkTest1 from '../assets/images/guild/tldr/016_afk-rewards-test-1-thumbna
 import afkTest2 from '../assets/images/guild/tldr/017_afk-rewards-test-2-thumbnail.webp';
 import wireframe from '../assets/images/guild/tldr/018_wireframe.png';
 import afkMockupRough from '../assets/images/guild/tldr/020_afk-mockup-rough-in-engine.webp';
+import afkFigmaComponents from '../assets/images/guild/tldr/048_afk-figma-component-exploration.jpg';
+import exitFigmaMotion from '../assets/images/guild/tldr/050_exit-figma-motion-exploration.jpg';
 import userFlowFigma from '../assets/images/guild/tldr/025_figma-user-flow-2.webp';
 import surveyEnjoyment from '../assets/images/guild/tldr/026_screenshot-2026-01-10-075400-2.png';
 import surveyTimers from '../assets/images/guild/tldr/027_timer-survey-question.png';
@@ -325,6 +327,28 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseLazyImage :loader="guildLazyMedia.afkTutorial" alt="Tutorial iteration" caption="Iteration 1 — A quick tutorial that coached users about non-button clickable elements (this was a no-go)" />
         <CaseLazyImage :loader="guildLazyMedia.floatingBadge" alt="Floating badge solution" caption="Final Iteration — Adding a button-shaped badge with gentle motion made it clearer the chest is clickable" />
+
+        <div class="case-study-beat-tile case-study-panel-inset case-study-subsection-block">
+          <h4 class="type-case-kicker-muted">Building in Figma</h4>
+          <p class="type-case-body-lg">
+            I built reusable Figma components for the AFK rewards UI so I could explore interaction variants quickly—keeping the MVP aligned with the design system that would ship in the final game, and striking a balance between speed and polish.
+          </p>
+          <CaseImage
+            :src="afkFigmaComponents"
+            alt="Figma assets panel with reusable Primary and Secondary CTA components used across AFK rewards screen variants"
+            caption="Reusable CTAs in Figma let me swap collect patterns across variants without rebuilding the screen each time"
+          />
+          <p class="type-case-body-lg">
+            Components and variables made rapid experimentation cheap without sacrificing shipping-grade quality—so what I tested in Figma stayed handoff-ready for engineering.
+          </p>
+          <CaseLazyImage
+            :loader="guildLazyMedia.afkFigmaComponentsDemo"
+            alt="Screen recording of iterating AFK rewards UI in Figma with shared components and variables"
+            caption="Tweaking components and variables in Figma to explore options while keeping a clean path to engineering handoff"
+            loop
+          />
+        </div>
+
         <p class="type-case-body-lg">
           During testing, we found a <strong>100% completion rate</strong> for actions related to collecting rewards from any screen in the game.
         </p>
@@ -359,6 +383,19 @@ useCaseStudySketchPanels(caseStudyRoot);
         </p>
         <CaseImage :src="exitScreenBefore" alt="Before exit screen" caption="Before — A simple exit screen that does not create anticipation" />
         <CaseLazyImage :loader="guildLazyMedia.exitScreenAnim" alt="Animated exit screen WIP" caption="WIP — An animated exit screen I made in Figma to share the idea with the team" />
+
+        <div class="case-study-beat-tile case-study-panel-inset case-study-subsection-block">
+          <h4 class="type-case-kicker-muted">Building in Figma</h4>
+          <p class="type-case-body-lg">
+            I rapidly prototyped the exit-screen motion in Figma—linking frame-by-frame states to test timing and feel—so I could experiment cheaply before committing engineering time.
+          </p>
+          <CaseImage
+            :src="exitFigmaMotion"
+            alt="Figma prototype frames showing animated exit screen motion tests linked with Smart Animate"
+            caption="Animation tests in Figma let me validate the motion language before any engineering investment"
+          />
+        </div>
+
         <p class="type-case-body-lg">
           Using UI data, I found <strong>only 12% players closed it using the in-game dialogue</strong>. With so few players seeing this screen, I could not justify the ROI of spending lots of effort to develop animations.
         </p>
