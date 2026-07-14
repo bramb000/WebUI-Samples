@@ -24,6 +24,7 @@ jobs:
       VITE_SITE_URL: https://bramha.work
       VITE_POSTHOG_KEY: phc_nPKGlNSyr9gpzBWzOCCPiRzhzQzAAo00ASWlZ51nlRC
       VITE_POSTHOG_HOST: https://us.i.posthog.com
+      VITE_CASE_STUDY_PASSWORD: ${{ secrets.VITE_CASE_STUDY_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
