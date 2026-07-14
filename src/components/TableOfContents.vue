@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import TocProceduralRow from './TocProceduralRow.vue'
+import { useCaseStudyUnlock } from '../composables/useCaseStudyUnlock'
 
 interface TocItem {
   id: string
@@ -214,8 +215,13 @@ function collectHeadings() {
     return
   }
 
-  /** Primary case-study sections only (h2) — exclude h3 subsections e.g. TLDR under Action. */
-  const headings = Array.from(caseRoot.querySelectorAll('section > h2')) as HTMLElement[]
+  /**
+   * Primary case-study sections only (h2) — exclude h3 subsections e.g. TLDR under Action.
+   * Also pick nested Summary headings; skip password-gate chrome.
+   */
+  const headings = Array.from(
+    caseRoot.querySelectorAll('section > h2, section.case-study-summary h2'),
+  ).filter((el) => !el.closest('.case-study-password-gate')) as HTMLElement[]
   if (headings.length === 0) {
     return
   }
@@ -349,6 +355,15 @@ watch(
   () => items.value.length,
   () => { void layoutTocFit() },
 )
+
+const { unlocked: caseStudyUnlocked } = useCaseStudyUnlock()
+
+/** Deep sections mount/unmount with the soft gate — re-scan when unlock changes. */
+watch(caseStudyUnlocked, async () => {
+  await nextTick()
+  await nextTick()
+  collectHeadings()
+})
 
 function pauseScrollSpy(ms = 720) {
   scrollSpyPaused = true

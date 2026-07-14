@@ -6,6 +6,7 @@ import CaseLazyImage from '../components/CaseLazyImage.vue';
 import { rocksmithLazyMedia } from '../assets/case-studies/rocksmithLazyMedia';
 import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseStudySummary from '../components/case-study/CaseStudySummary.vue';
+import CaseStudyPasswordGate from '../components/case-study/CaseStudyPasswordGate.vue';
 import { rocksmithSummary } from '../constants/caseStudySummaries/rocksmithSummary';
 import CaseInsight from '../components/CaseInsight.vue';
 import CaseBeforeAfter from '../components/CaseBeforeAfter.vue';
@@ -81,6 +82,7 @@ useCaseStudySketchPanels(caseStudyRoot);
 
     <CaseStudySummary :summary="rocksmithSummary" />
 
+    <CaseStudyPasswordGate>
     <!-- ─── CONTEXT ─── -->
     <section class="case-study-section">
       <h2 class="type-case-section">Context</h2>
@@ -464,6 +466,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
     </section>
 
+    </CaseStudyPasswordGate>
       </div>
       
       <!-- ToC Sidebar Container -->

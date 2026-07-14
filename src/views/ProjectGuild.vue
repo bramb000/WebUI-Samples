@@ -6,6 +6,7 @@ import CaseLazyImage from '../components/CaseLazyImage.vue';
 import { guildLazyMedia } from '../assets/case-studies/guildLazyMedia';
 import VideoEmbed from '../components/VideoEmbed.vue';
 import CaseStudySummary from '../components/case-study/CaseStudySummary.vue';
+import CaseStudyPasswordGate from '../components/case-study/CaseStudyPasswordGate.vue';
 import { guildSummary } from '../constants/caseStudySummaries/guildSummary';
 import CaseMetric from '../components/CaseMetric.vue';
 import CaseInsight from '../components/CaseInsight.vue';
@@ -86,6 +87,7 @@ useCaseStudySketchPanels(caseStudyRoot);
 
     <CaseStudySummary :summary="guildSummary" />
 
+    <CaseStudyPasswordGate>
     <!-- ─── CONTEXT ─── -->
     <section class="case-study-section">
       <h2 class="type-case-section">Context</h2>
@@ -560,6 +562,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       </div>
     </section>
 
+    </CaseStudyPasswordGate>
       </div>
       
       <!-- ToC Sidebar Container -->
