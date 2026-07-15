@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { Play } from 'lucide-vue-next'
 import { HERO_COMPANY_LOGOS } from '../assets/images/clients/clientLogos'
 import { useCampaignRole } from '../composables/useCampaignRole'
-import ShubaDuckViewer from './ShubaDuckViewer.vue'
+import HeroDuckFrameChips from './HeroDuckFrameChips.vue'
 import { getCachedPencilFrameImage, PENCIL_FRAME_BLEED_PX, quantizePencilBakeDimensions } from '../vfx/pencilFrameBake'
 import { resolveCssColorToHex } from '../vfx/resolveCssColorToHex'
 
@@ -190,7 +190,7 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <ShubaDuckViewer
+      <HeroDuckFrameChips
         v-if="HERO_DUCK_ENABLED"
         class="intro-hero__duck"
         :scale="0.75"
@@ -271,17 +271,10 @@ onBeforeUnmount(() => {
 }
 
 .intro-hero__duck {
-  display: block;
-  width: clamp(13.5rem, 30vw, 18rem);
-  height: clamp(16.5rem, 36vw, 22.5rem);
   flex-shrink: 0;
   margin: 0;
   padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
   overflow: visible;
-  line-height: 0;
 }
 
 .intro-hero__copy {

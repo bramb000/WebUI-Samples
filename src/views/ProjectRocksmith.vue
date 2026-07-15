@@ -73,7 +73,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       role="UX Lead for Mobile & Multi-platform Interactions"
       timeline="~2 Years"
       client="Ubisoft"
-      :tags="['PC Game', 'Console Game', 'Accessibility']"
+      :tags="['User research', 'Accessibility Design', 'Physical Experiences']"
     >
       <template #team>
         <p class="type-case-team">UX Director &middot; 2 UX Designers &middot; 2 UI Artists &middot; 2 UI Engineers</p>

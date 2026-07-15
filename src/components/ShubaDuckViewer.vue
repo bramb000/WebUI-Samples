@@ -388,6 +388,7 @@ onBeforeUnmount(teardown)
   line-height: 0;
   perspective: 720px;
   perspective-origin: 42% 55%;
+  pointer-events: none;
 }
 
 .shuba-duck-viewer__canvas {
@@ -402,6 +403,7 @@ onBeforeUnmount(teardown)
   outline: none;
   background: transparent;
   box-shadow: none;
+  pointer-events: none;
 }
 
 /* Prebaked cream chisel plate, hollowed + tilted in perspective */

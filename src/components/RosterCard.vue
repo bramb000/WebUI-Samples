@@ -33,6 +33,13 @@ interface Props {
   pressed?: boolean
   /** When false, skips scale/sway hover keyframes (e.g. home achievement strip). */
   hoverMotion?: boolean
+  /** Chips that unfurl from the tile on hover. */
+  hoverTags?: readonly string[]
+  /**
+   * Where side chips may hang.
+   * `right` — left-column cards (avoids clipping on the roster panel edge).
+   */
+  hoverTagLane?: 'both' | 'right'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -43,10 +50,25 @@ const props = withDefaults(defineProps<Props>(), {
   hoverMotion: true,
   clientPrefix: true,
   showMedia: false,
+  hoverTagLane: 'both',
 })
 
 const isThumbVideo = computed(
   () => props.showMedia && !!props.thumb && /\.webm($|\?)/i.test(props.thumb),
+)
+
+/** Work-grid hover chips — temporarily disabled (wired via hoverTags / hoverTagLane). */
+const WORK_GRID_HOVER_CHIPS_ENABLED = false
+
+const TAG_PLACEMENTS_BOTH = ['side-left-high', 'side-right-mid', 'side-left-low'] as const
+const TAG_PLACEMENTS_RIGHT = ['side-right-high', 'side-right-mid', 'side-right-low'] as const
+
+const tagPlacements = computed(() =>
+  props.hoverTagLane === 'right' ? TAG_PLACEMENTS_RIGHT : TAG_PLACEMENTS_BOTH,
+)
+
+const showHoverTags = computed(
+  () => WORK_GRID_HOVER_CHIPS_ENABLED && Boolean(props.hoverTags?.length),
 )
 </script>
 
@@ -70,6 +92,7 @@ const isThumbVideo = computed(
     :aria-selected="selected"
   >
     <div class="card-motion">
+      <div class="card-sway">
       <div
         class="inner-card"
       :class="{
@@ -144,6 +167,23 @@ const isThumbVideo = computed(
         </span>
       </div>
     </div>
+
+      <ul
+        v-if="showHoverTags"
+        class="roster-card-tags"
+        aria-hidden="true"
+      >
+        <li
+          v-for="(tag, index) in hoverTags"
+          :key="tag"
+          class="roster-card-tag"
+          :class="`roster-card-tag--${tagPlacements[index % tagPlacements.length]}`"
+          :style="{ '--tag-stagger': `${index * 70}ms` }"
+        >
+          <span class="roster-card-tag__label">{{ tag }}</span>
+        </li>
+      </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -160,6 +200,7 @@ const isThumbVideo = computed(
   min-width: 0;
   isolation: isolate;
   container-type: inline-size;
+  overflow: visible;
 }
 
 .thumbnail--case-study {
@@ -400,6 +441,15 @@ const isThumbVideo = computed(
   position: absolute;
   inset: 0;
   transform-origin: center center;
+  overflow: visible;
+}
+
+/* Shares hover sway with the chips so side gaps stay true to the tile face */
+.card-sway {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+  overflow: visible;
 }
 
 /* Display strip — stable hit target; glow only, no scale/sway loop */
@@ -409,7 +459,8 @@ const isThumbVideo = computed(
   transform: none;
 }
 
-.thumbnail--calm-hover:hover .inner-card {
+.thumbnail--calm-hover:hover .inner-card,
+.thumbnail--calm-hover:hover .card-sway {
   animation: none;
   filter: none;
 }
@@ -431,12 +482,16 @@ const isThumbVideo = computed(
   animation: settleBack var(--roster-card-settle-duration) ease-out forwards;
 }
 
-.thumbnail:not(:hover):not(.selected):not(.pressed) .inner-card {
+.thumbnail:not(:hover):not(.selected):not(.pressed) .inner-card,
+.thumbnail:not(:hover):not(.selected):not(.pressed) .card-sway {
   transition: transform var(--roster-card-settle-duration) ease-out;
 }
 
-.thumbnail:hover:not(.selected):not(.pressed) .inner-card {
+.thumbnail:hover:not(.selected):not(.pressed) .card-sway {
   animation: cardSway 4.1s ease-in-out infinite;
+}
+
+.thumbnail:hover:not(.selected):not(.pressed) .inner-card {
   filter: url(#paper-crumple);
 }
 
@@ -461,12 +516,18 @@ const isThumbVideo = computed(
     0 12px 26px rgba(26, 24, 20, 0.14);
 }
 
+.thumbnail.selected .card-sway {
+  animation: none;
+  transform: none;
+}
+
 .thumbnail.selected .card-motion {
   animation: none;
   transform: scale(1.05);
 }
 
-.thumbnail.selected:hover .inner-card {
+.thumbnail.selected:hover .inner-card,
+.thumbnail.selected:hover .card-sway {
   animation: none;
   transform: none;
   filter: none;
@@ -550,10 +611,126 @@ const isThumbVideo = computed(
   100% { transform: rotate(0deg); }
 }
 
+.roster-card-tags {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.roster-card-tag {
+  position: absolute;
+  perspective: 420px;
+  width: max-content;
+  max-width: min(7.5rem, 78cqw);
+}
+
+/* Hang off left / right — pull 25% inward so labels hug the tile */
+.roster-card-tag--side-left-high {
+  top: 14%;
+  right: calc(100% + 1px);
+  bottom: auto;
+  left: auto;
+  transform: translateX(25%) rotate(-6deg);
+  transform-origin: right center;
+}
+
+.roster-card-tag--side-right-mid {
+  top: 42%;
+  left: calc(100% + 1px);
+  bottom: auto;
+  right: auto;
+  transform: translateX(-25%) rotate(5deg);
+  transform-origin: left center;
+}
+
+.roster-card-tag--side-left-low {
+  top: 70%;
+  right: calc(100% + 1px);
+  bottom: auto;
+  left: auto;
+  transform: translateX(25%) rotate(-4deg);
+  transform-origin: right center;
+}
+
+.roster-card-tag--side-right-high {
+  top: 16%;
+  left: calc(100% + 1px);
+  bottom: auto;
+  right: auto;
+  transform: translateX(-25%) rotate(7deg);
+  transform-origin: left center;
+}
+
+.roster-card-tag--side-right-low {
+  top: 72%;
+  left: calc(100% + 1px);
+  bottom: auto;
+  right: auto;
+  transform: translateX(-25%) rotate(5deg);
+  transform-origin: left center;
+}
+
+.roster-card-tag__label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  background: var(--color-elevated);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border-hi);
+  border-radius: max(2px, calc(var(--dl-border-radius-sm) * 0.65));
+  box-shadow: var(--dl-glow-global);
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+  text-align: center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 220ms ease var(--tag-stagger, 0ms),
+    transform 420ms cubic-bezier(0.22, 1.15, 0.32, 1) var(--tag-stagger, 0ms);
+}
+
+.roster-card-tag--side-left-high .roster-card-tag__label,
+.roster-card-tag--side-left-low .roster-card-tag__label {
+  transform-origin: right center;
+  transform: rotateY(82deg) scale(0.92);
+}
+
+.roster-card-tag--side-right-mid .roster-card-tag__label,
+.roster-card-tag--side-right-high .roster-card-tag__label,
+.roster-card-tag--side-right-low .roster-card-tag__label {
+  transform-origin: left center;
+  transform: rotateY(-82deg) scale(0.92);
+}
+
+.thumbnail:hover .roster-card-tag--side-left-high .roster-card-tag__label,
+.thumbnail:hover .roster-card-tag--side-left-low .roster-card-tag__label,
+.thumbnail:hover .roster-card-tag--side-right-mid .roster-card-tag__label,
+.thumbnail:hover .roster-card-tag--side-right-high .roster-card-tag__label,
+.thumbnail:hover .roster-card-tag--side-right-low .roster-card-tag__label {
+  opacity: 1;
+  transform: rotateY(0deg) scale(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .inner-card::before,
   .inner-card::after {
     filter: none;
+  }
+
+  .roster-card-tag__label {
+    transition: opacity 160ms ease;
+    transform: none !important;
   }
 }
 

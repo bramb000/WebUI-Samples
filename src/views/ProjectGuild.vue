@@ -78,7 +78,7 @@ useCaseStudySketchPanels(caseStudyRoot);
       role="Feature Owner & Lead UX Designer"
       timeline="6 months"
       client="Immutable"
-      :tags="['Mobile RPG', 'Data Analysis', 'Live Product']"
+      :tags="['Data driven decisions', 'Unity Game Engine', 'Deep Experimentation']"
     >
       <template #team>
         <p class="type-case-team">1 UI Artist &middot; 1 UI Engineer &middot; 1 Full Stack Engineer</p>

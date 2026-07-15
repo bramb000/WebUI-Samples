@@ -26,6 +26,8 @@ type Project = {
   subtitle: string
   tags: [string, string, string]
   tagColors: [string, string, string]
+  /** Hover chips that unfurl from the roster tile — only selected projects for now. */
+  hoverTags?: readonly string[]
   thumb: string
   splash: string
   tech: [TechIcon, TechIcon, TechIcon, TechIcon]
@@ -125,8 +127,9 @@ const projects = ref<Project[]>([
     discipline: 'product-design',
     title: 'Repairing stickiness to increase revenue by 50%',
     subtitle: 'Retention & Live-Ops Systems',
-    tags: ['MOBILE', 'UX', 'DATA'],
+    tags: ['Data driven decisions', 'Unity Game Engine', 'Deep Experimentation'],
     tagColors: ['#5c564c', '#5c564c', '#5c564c'],
+    // hoverTags: ['Data driven decisions', 'Unity Game Engine', 'Deep Experimentation'],
     thumb: projectArt('guild', 17),
     splash: projectArt('guild', 17),
     tech: ['layers', 'cube', 'code', 'spark'],
@@ -138,8 +141,9 @@ const projects = ref<Project[]>([
     discipline: 'product-design',
     title: 'Accessible guitar lessons for 1M+ learners',
     subtitle: 'Cross-Platform UI System',
-    tags: ['SYSTEMS', 'ACCESS', 'SHIPPED'],
+    tags: ['User research', 'Accessibility Design', 'Physical Experiences'],
     tagColors: ['#5c564c', '#5c564c', '#5c564c'],
+    // hoverTags: ['User research', 'Accessibility Design', 'Physical Experiences'],
     thumb: projectArt('rocksmith', 19),
     splash: projectArt('rocksmith', 19),
     tech: ['code', 'layers', 'spark', 'cube'],
@@ -638,6 +642,7 @@ function onDone(trigger: number) {
               >
                 <h3 class="type-eyebrow">{{ section.label }}</h3>
               </div>
+              <!-- Work-grid hover chips temporarily disabled (:hover-tags / :hover-tag-lane) -->
               <RosterCard
                 v-for="p in section.projects"
                 :key="p.id"
