@@ -90,12 +90,24 @@ const CHIPS = [
 
 <style scoped>
 .hero-duck-chips {
+  --duck-chip-font: clamp(0.55rem, 5.2cqi, 0.7rem);
+  --duck-chip-pad-y: clamp(0.12rem, 1.4cqi, 0.25rem);
+  --duck-chip-pad-x: clamp(0.28rem, 2.8cqi, 0.5rem);
+  --duck-chip-radius: clamp(2px, 1.2cqi, 6px);
+  --duck-chip-border: max(1px, 0.35cqi);
+  --duck-chip-float: clamp(2px, 1.4cqi, 5px);
+  --duck-chip-cursor: clamp(14px, 9cqi, 22px);
+  --duck-chip-attach-top: clamp(0.65rem, 6.5cqi, 1.05rem);
+  --duck-chip-attach-left: clamp(0.55rem, 5.8cqi, 0.95rem);
+
   position: relative;
   width: clamp(13.5rem, 30vw, 18rem);
   height: clamp(16.5rem, 36vw, 22.5rem);
   flex-shrink: 0;
   overflow: visible;
   cursor: default;
+  container-type: inline-size;
+  container-name: duck-chips;
 }
 
 .hero-duck-chips--goose {
@@ -121,25 +133,26 @@ const CHIPS = [
 .hero-duck-chips__item {
   position: absolute;
   z-index: 4;
+  max-width: min(46cqi, 9rem);
   animation: hero-duck-chip-float 4.8s ease-in-out infinite;
   animation-delay: var(--chip-float-delay, 0ms);
 }
 
 .hero-duck-chips__item--top-left {
   top: 2%;
-  left: -18%;
+  left: -12%;
   transform: rotate(-4deg);
 }
 
 .hero-duck-chips__item--top-right {
   top: 8%;
-  right: -22%;
+  right: -14%;
   transform: rotate(3deg);
 }
 
 .hero-duck-chips__item--bottom-left {
   bottom: 10%;
-  left: -16%;
+  left: -10%;
   transform: rotate(2deg);
 }
 
@@ -163,70 +176,79 @@ const CHIPS = [
 
 .hero-duck-chips__figma-cursor {
   display: block;
+  width: var(--duck-chip-cursor);
+  height: var(--duck-chip-cursor);
   filter: drop-shadow(0 1px 2px rgba(26, 24, 20, 0.18));
 }
 
 .hero-duck-chips__chip--attached {
   position: absolute;
-  top: 1.05rem;
-  left: 0.95rem;
+  top: var(--duck-chip-attach-top);
+  left: var(--duck-chip-attach-left);
   white-space: nowrap;
+  max-width: none;
 }
 
 .hero-duck-chips__chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: calc(var(--grid-1) / 2) var(--grid-2);
+  padding: var(--duck-chip-pad-y) var(--duck-chip-pad-x);
   background: var(--color-elevated);
   color: var(--color-accent);
-  border: var(--dl-border-width) solid var(--color-border-hi);
-  border-radius: var(--dl-border-radius-sm);
+  border: var(--duck-chip-border) solid var(--color-border-hi);
+  border-radius: var(--duck-chip-radius);
   box-shadow: var(--dl-glow-global);
   font-family: var(--font-sans);
-  font-size: var(--text-label);
+  font-size: var(--duck-chip-font);
   font-weight: 700;
-  letter-spacing: var(--tracking-label-md);
+  letter-spacing: 0.02em;
   line-height: 1.2;
   white-space: nowrap;
+  text-align: center;
 }
 
 @keyframes hero-duck-chip-float {
   0%, 100% { translate: 0 0; }
-  50% { translate: 0 -5px; }
+  50% { translate: 0 calc(var(--duck-chip-float) * -1); }
 }
 
-@media (max-width: 960px) {
+/* Narrow stage (mobile / stacked hero) — keep all chips, pull in + allow wrap */
+@container duck-chips (max-width: 15.5rem) {
+  .hero-duck-chips__item {
+    max-width: min(42cqi, 7rem);
+  }
+
   .hero-duck-chips__item--top-left {
-    left: -8%;
+    top: 0;
+    left: -4%;
   }
 
   .hero-duck-chips__item--top-right {
-    right: -10%;
+    top: 4%;
+    right: -4%;
   }
 
   .hero-duck-chips__item--bottom-left {
-    left: -6%;
+    bottom: 6%;
+    left: -2%;
+  }
+
+  .hero-duck-chips__chip:not(.hero-duck-chips__chip--attached) {
+    white-space: normal;
   }
 }
 
 @media (max-width: 767px) {
-  .hero-duck-chips__item--top-right,
-  .hero-duck-chips__item--bottom-left {
-    display: none;
+  .hero-duck-chips {
+    width: clamp(11.5rem, 58vw, 15rem);
+    height: clamp(14rem, 70vw, 18.5rem);
   }
+}
 
-  .hero-duck-chips__chip {
-    font-size: var(--text-body-sm);
-    white-space: normal;
-    max-width: 7.5rem;
-    text-align: center;
-  }
-
-  .hero-duck-chips__chip--attached {
-    white-space: nowrap;
-    max-width: none;
-    text-align: left;
+@media (prefers-reduced-motion: reduce) {
+  .hero-duck-chips__item {
+    animation: none;
   }
 }
 </style>
