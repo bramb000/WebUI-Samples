@@ -10,6 +10,7 @@ export const PROJECT_ROUTE_BY_ID: Record<string, string> = {
   'voice-chat': '/work/voice-chat',
   'cozy-corner': '/work/cozy-corner',
   'online-dice-simulator': '/work/online-dice-simulator',
+  planoverse: '/work/planoverse',
   'node-graph': '/node-graph',
   patapon: '/experiment/patapon',
   jedi: '/experiment/jedi',

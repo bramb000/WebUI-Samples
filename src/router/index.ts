@@ -128,6 +128,12 @@ const routes = [
         meta: { ...seo('ProjectDiceSimulator'), sitemap: true, prerender: true },
     },
     {
+        path: '/work/planoverse',
+        name: 'ProjectPlanoverse',
+        component: () => import('../views/ProjectPlanoverse.vue'),
+        meta: { ...seo('ProjectPlanoverse'), sitemap: true, prerender: true },
+    },
+    {
         path: '/micro-projects/sales-modal',
         redirect: '/work/sales-modal',
     },

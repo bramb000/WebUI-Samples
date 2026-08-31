@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import CaseMetric from '../CaseMetric.vue'
 import CaseBeforeAfter from '../CaseBeforeAfter.vue'
 import CaseInsight from '../CaseInsight.vue'
@@ -7,18 +6,11 @@ import CasePencilChip from '../CasePencilChip.vue'
 import CaseStudySummaryFlowMedia from './CaseStudySummaryFlowMedia.vue'
 import CaseStudySummaryClutter from './CaseStudySummaryClutter.vue'
 import type { CaseStudySummaryData } from '../../types/caseStudySummary'
-import { useCaseStudyUnlock } from '../../composables/useCaseStudyUnlock'
-
 defineProps<{
   summary: CaseStudySummaryData
 }>()
 
-const { unlocked } = useCaseStudyUnlock()
-const continueCaption = computed(() =>
-  unlocked.value
-    ? 'Scroll for the full case study ↓'
-    : 'Enter the password below for the full case study ↓',
-)
+const continueCaption = 'Scroll for the full case study ↓'
 </script>
 
 <template>

@@ -22,6 +22,8 @@ const MIRROR_FILE = {
   '/work/guild-of-guardians': 'guild-of-guardians.txt',
   '/work/rocksmith': 'rocksmith.txt',
   '/work/cozy-corner': 'cozy-corner.txt',
+  '/work/online-dice-simulator': 'online-dice-simulator.txt',
+  '/work/planoverse': 'planoverse.txt',
 }
 
 function htmlPathForRoute(route) {

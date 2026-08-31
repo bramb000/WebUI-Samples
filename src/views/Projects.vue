@@ -77,6 +77,13 @@ const projects = [
     category: 'Web Design'
   },
   {
+    id: 'planoverse',
+    title: 'B2B competitive intelligence for retail companies',
+    description: '8-week Planoverse pilot: daily Woolworths vs Coles shelf intelligence from in-store mobile APIs.',
+    route: '/work/planoverse',
+    category: 'Product Design'
+  },
+  {
     id: 'online-dice-simulator',
     title: 'Solo vibe coding a 600 MAU webapp',
     description: 'Mobile-first touch controls, 3D physics simulation (Rapier3D), and customization features yielding 1.5k MAU.',

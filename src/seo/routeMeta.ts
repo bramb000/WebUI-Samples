@@ -102,6 +102,13 @@ export const ROUTE_SEO: Record<string, RouteMetaSeo> = {
     keywords: ['3d physics dice', 'online dice simulator', 'react three fiber', 'rapier3d', 'mobile first VTT', 'roving focus list', 'no 3d mode'],
     ogType: 'article',
   },
+  ProjectPlanoverse: {
+    title: 'B2B competitive intelligence for retail | Planoverse',
+    description:
+      'Product builder case study: 8-week Planoverse pilot turning Woolworths and Coles in-store mobile APIs into daily shelf intelligence. Bay share, macro store maps, and cross-banner product matching.',
+    keywords: ['retail competitive intelligence', 'B2B SaaS', 'product matching', 'grocery analytics', 'data pipeline', 'Planoverse'],
+    ogType: 'article',
+  },
 }
 
 export const DEFAULT_ROUTE_SEO: RouteMetaSeo = {

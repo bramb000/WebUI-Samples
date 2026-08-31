@@ -8,6 +8,7 @@ export const INDEXABLE_PATHS = [
   '/work/rocksmith',
   '/work/cozy-corner',
   '/work/online-dice-simulator',
+  '/work/planoverse',
 ]
 
 export const SITEMAP_ENTRIES = [
@@ -19,4 +20,5 @@ export const SITEMAP_ENTRIES = [
   { loc: '/work/rocksmith', changefreq: 'monthly', priority: '0.9' },
   { loc: '/work/cozy-corner', changefreq: 'monthly', priority: '0.85' },
   { loc: '/work/online-dice-simulator', changefreq: 'monthly', priority: '0.85' },
+  { loc: '/work/planoverse', changefreq: 'monthly', priority: '0.85' },
 ]

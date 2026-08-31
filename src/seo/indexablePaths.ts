@@ -8,6 +8,7 @@ export const INDEXABLE_PATHS = [
   '/work/rocksmith',
   '/work/cozy-corner',
   '/work/online-dice-simulator',
+  '/work/planoverse',
 ] as const
 
 export type IndexablePath = (typeof INDEXABLE_PATHS)[number]

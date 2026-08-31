@@ -152,7 +152,7 @@ const projects = ref<Project[]>([
   },
   {
     id: 'cozy-corner',
-    discipline: 'product-design',
+    discipline: 'ui-design',
     title: 'Building digital third spaces using SDKs and APIs',
     subtitle: 'Realtime chat, voice & shared world',
     tags: ['PIXEL', 'REALTIME', 'SOLO'],
@@ -161,12 +161,26 @@ const projects = ref<Project[]>([
     splash: projectArt('cozy-corner', 59),
     tech: ['layers', 'code', 'spark', 'cube'],
     roster: rosterMeta('Cozy Corner'),
-    clientName: 'client work',
+    clientName: 'personal project',
+    clientPrefix: false,
+  },
+  {
+    id: 'planoverse',
+    discipline: 'product-design',
+    title: 'B2B competitive intelligence for retail companies',
+    subtitle: 'Daily shelf data from mobile APIs',
+    tags: ['B2B SAAS', 'DATA PIPELINE', 'RETAIL'],
+    tagColors: ['#5c564c', '#5c564c', '#5c564c'],
+    thumb: projectArt('planoverse', 41),
+    splash: projectArt('planoverse', 41),
+    tech: ['layers', 'code', 'spark', 'cube'],
+    roster: rosterMeta('Planoverse'),
+    clientName: 'Planoverse',
     clientPrefix: false,
   },
   {
     id: 'online-dice-simulator',
-    discipline: 'product-design',
+    discipline: 'ui-design',
     title: 'Solo vibe coding a 600 MAU webapp',
     subtitle: 'Mobile-first Rapier3D physics & low-power UX',
     tags: ['3D PHYSICS', 'REACT THREE FIBER', 'SOLO'],
@@ -331,6 +345,7 @@ const embeddedProjectImportById: Record<Project['id'], EmbeddedImporter> = {
   guild: () => import('./ProjectGuild.vue'),
   rocksmith: () => import('./ProjectRocksmith.vue'),
   'cozy-corner': () => import('./ProjectCozyCorner.vue'),
+  planoverse: () => import('./ProjectPlanoverse.vue'),
   'online-dice-simulator': () => import('./ProjectDiceSimulator.vue'),
   login: () => import('./LoginInteraction.vue'),
   'art-book': () => import('./ArtBookInteraction.vue'),
@@ -347,6 +362,7 @@ const embeddedProjectComponentById: Record<Project['id'], EmbeddedLoader> = {
   guild: defineAsyncComponent(embeddedProjectImportById.guild),
   rocksmith: defineAsyncComponent(embeddedProjectImportById.rocksmith),
   'cozy-corner': defineAsyncComponent(embeddedProjectImportById['cozy-corner']),
+  planoverse: defineAsyncComponent(embeddedProjectImportById.planoverse),
   'online-dice-simulator': defineAsyncComponent(embeddedProjectImportById['online-dice-simulator']),
   login: defineAsyncComponent(embeddedProjectImportById.login),
   'art-book': defineAsyncComponent(embeddedProjectImportById['art-book']),
@@ -365,7 +381,7 @@ const displayedEmbeddedComponent = computed(
   () => embeddedProjectComponentById[displayedId.value] ?? null,
 )
 const isCaseStudyEmbedded = computed(() =>
-  displayedId.value === 'guild' || displayedId.value === 'rocksmith' || displayedId.value === 'cozy-corner' || displayedId.value === 'online-dice-simulator',
+  displayedId.value === 'guild' || displayedId.value === 'rocksmith' || displayedId.value === 'cozy-corner' || displayedId.value === 'planoverse' || displayedId.value === 'online-dice-simulator',
 )
 
 const pressedId = ref<string | null>(null)
